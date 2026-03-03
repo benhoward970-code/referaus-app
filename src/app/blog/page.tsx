@@ -1,4 +1,5 @@
 "use client";
+import { subscribeNewsletter } from "@/lib/supabase";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -115,8 +116,8 @@ export default function BlogPage() {
           <div className="rounded-2xl bg-blue-600/[0.06] border border-blue-500/20 p-10 text-center">
             <h3 className="text-2xl font-bold mb-2">Stay in the loop</h3>
             <p className="text-sm text-white/45 mb-6 max-w-md mx-auto">Get NDIS tips, provider updates, and platform news delivered to your inbox. No spam, unsubscribe anytime.</p>
-            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input type="email" placeholder="your@email.com" className="flex-1 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+            <form onSubmit={async (e) => { e.preventDefault(); const email = new FormData(e.currentTarget).get("email") as string; await subscribeNewsletter(email); (e.target as HTMLFormElement).reset(); alert("Subscribed!"); }} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input type="email" name="email" required placeholder="your@email.com" className="flex-1 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
               <button type="submit" className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all shrink-0">Subscribe</button>
             </form>
           </div>

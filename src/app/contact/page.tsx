@@ -1,4 +1,5 @@
 "use client";
+import { submitContact } from "@/lib/supabase";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -61,15 +62,15 @@ export default function ContactPage() {
                   <p className="text-sm text-white/45">We will get back to you within 24 hours.</p>
                 </div>
               ) : (
-                <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} className="space-y-4">
+                <form onSubmit={async (e) => { e.preventDefault(); const form = new FormData(e.currentTarget); await submitContact({ name: form.get("name") as string, email: form.get("email") as string, subject: form.get("subject") as string, message: form.get("message") as string }); setSent(true); }} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="text-xs font-medium text-white/50 mb-1.5 block">Name</label>
-                      <input type="text" required placeholder="Your name" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+                      <input type="text" name="name" required placeholder="Your name" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
                     </div>
                     <div>
                       <label className="text-xs font-medium text-white/50 mb-1.5 block">Email</label>
-                      <input type="email" required placeholder="you@example.com" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+                      <input type="email" name="email" required placeholder="you@example.com" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
                     </div>
                   </div>
                   <div>
@@ -84,7 +85,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <label className="text-xs font-medium text-white/50 mb-1.5 block">Message</label>
-                    <textarea required rows={5} placeholder="How can we help?" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40 resize-none" />
+                    <textarea name="message" required rows={5} placeholder="How can we help?" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40 resize-none" />
                   </div>
                   <button type="submit" className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25">
                     Send Message

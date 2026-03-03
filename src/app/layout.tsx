@@ -3,6 +3,8 @@ import { Space_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { AuthProvider } from "@/components/AuthProvider";
 
 const heading = Space_Grotesk({
   variable: "--font-cabinet",
@@ -26,10 +28,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${heading.variable} ${body.variable}`}>
-      <body className="font-sans antialiased bg-background text-foreground">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+      <body className="font-sans antialiased bg-background text-foreground noise">
+        <AuthProvider>
+          <AnimatedBackground />
+          <Navbar />
+          <main className="relative z-10">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
