@@ -45,7 +45,19 @@ export async function submitEnquiry(data: {
     console.log("[Demo] Enquiry submitted:", data);
     return { success: true, demo: true };
   }
-  const { error } = await supabase.from("enquiries").insert(data);
+    // Map v2 frontend fields to actual DB schema
+  const row = {
+    participant_name: data.name,
+    provider_name: data.provider_name,
+    subject: data.service || "General Enquiry",
+    messages: JSON.stringify([{
+      from: "participant",
+      name: data.name,
+      email: data.email,
+      phone: data.phone || null,
+      text: data.message,
+      sent_at: new Date().toISOString(),
+    }
   return { success: !error, error };
 }
 
