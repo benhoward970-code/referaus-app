@@ -11,7 +11,7 @@ export function Footer() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">N</span>
               </div>
-              <span className="font-bold text-lg">NexaConnect</span>
+              <span className="font-bold text-lg">Refer</span>
             </div>
             <p className="text-sm text-white/50 leading-relaxed">
               Connecting NDIS participants with trusted providers across Newcastle &amp; the Hunter Region.
@@ -54,7 +54,7 @@ export function Footer() {
 
         <div className="border-t border-white/[0.06] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/30">
-            © 2026 NexaConnect Pty Ltd. ABN XX XXX XXX XXX. All rights reserved.
+            © 2026 Refer Pty Ltd. ABN XX XXX XXX XXX. All rights reserved.
           </p>
           <p className="text-xs text-white/30">
             Made in Newcastle, Australia 🇦🇺

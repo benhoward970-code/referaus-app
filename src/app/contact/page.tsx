@@ -4,12 +4,12 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const faqs = [
-  { q: "Is NexaConnect free for NDIS participants?", a: "Yes, always. Participants can browse providers, read reviews, send enquiries and book appointments completely free. We charge providers, not participants." },
+  { q: "Is Refer free for NDIS participants?", a: "Yes, always. Participants can browse providers, read reviews, send enquiries and book appointments completely free. We charge providers, not participants." },
   { q: "How do you verify providers?", a: "Premium and Professional providers go through our verification process which includes checking NDIS registration, ABN verification, insurance documentation, and quality indicators." },
-  { q: "What area does NexaConnect cover?", a: "We currently focus on Newcastle, Lake Macquarie, Maitland, Cessnock, and the broader Hunter Region in NSW. We plan to expand across NSW in 2026." },
-  { q: "Can I leave a review for a provider?", a: "Yes! If you are an NDIS participant who has used a provider listed on NexaConnect, you can leave a verified review. All reviews are moderated to ensure they are genuine." },
+  { q: "What area does Refer cover?", a: "We currently focus on Newcastle, Lake Macquarie, Maitland, Cessnock, and the broader Hunter Region in NSW. We plan to expand across NSW in 2026." },
+  { q: "Can I leave a review for a provider?", a: "Yes! If you are an NDIS participant who has used a provider listed on Refer, you can leave a verified review. All reviews are moderated to ensure they are genuine." },
   { q: "How do I list my service as a provider?", a: "Click Get Started, choose Provider, and follow the onboarding wizard. A free listing takes about 5 minutes. You can upgrade to Professional or Premium anytime." },
-  { q: "How do enquiries work?", a: "When a participant sends an enquiry through NexaConnect, the provider receives an email notification with the participant's message. Providers can respond directly via email or through the dashboard." },
+  { q: "How do enquiries work?", a: "When a participant sends an enquiry through Refer, the provider receives an email notification with the participant's message. Providers can respond directly via email or through the dashboard." },
   { q: "Is my data safe?", a: "We take privacy seriously. Your data is encrypted, stored securely in Australia, and never sold to third parties. See our Privacy Policy for full details." },
 ];
 
@@ -106,7 +106,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium mb-1">Email</p>
-                    <p className="text-sm text-white/45">hello@nexaconnect.com.au</p>
+                    <p className="text-sm text-white/45">hello@refer.org.au</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -133,7 +133,7 @@ export default function ContactPage() {
             <div className="rounded-2xl bg-blue-600/[0.06] border border-blue-500/20 p-8">
               <h3 className="text-lg font-bold mb-2">Are you a provider?</h3>
               <p className="text-sm text-white/45 mb-4">Need help with your listing, analytics, or account? Our provider support team is here to help.</p>
-              <a href="mailto:providers@nexaconnect.com.au" className="text-sm text-blue-400 font-medium hover:text-blue-300">providers@nexaconnect.com.au</a>
+              <a href="mailto:providers@refer.org.au" className="text-sm text-blue-400 font-medium hover:text-blue-300">providers@refer.org.au</a>
             </div>
           </motion.div>
         </div>

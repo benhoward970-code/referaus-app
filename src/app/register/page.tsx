@@ -61,7 +61,7 @@ export default function RegisterPage() {
             <span className="text-white font-bold text-lg">N</span>
           </div>
           <h1 className="text-2xl font-black tracking-tight mb-2">Create your account</h1>
-          <p className="text-sm text-white/45">Join NexaConnect today</p>
+          <p className="text-sm text-white/45">Join Refer today</p>
         </div>
         <div className="glass rounded-2xl p-8">
           <div className="flex rounded-xl bg-white/[0.04] p-1 mb-6">

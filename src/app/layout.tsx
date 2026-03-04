@@ -21,7 +21,7 @@ const body = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "NexaConnect - Find NDIS Providers in Newcastle and Hunter Region",
+  title: "Refer - Find NDIS Providers in Newcastle and Hunter Region",
   description: "Search, compare and connect with trusted NDIS disability service providers in Newcastle, Lake Macquarie and the Hunter Region. Free for participants.",
 };
 

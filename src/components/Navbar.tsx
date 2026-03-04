@@ -13,7 +13,7 @@ export function Navbar() {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
             <span className="text-white font-bold text-sm">N</span>
           </div>
-          <span className="font-bold text-lg tracking-tight">NexaConnect</span>
+          <span className="font-bold text-lg tracking-tight">Refer</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

@@ -41,7 +41,7 @@ export default function LoginPage() {
             <span className="text-white font-bold text-lg">N</span>
           </div>
           <h1 className="text-2xl font-black tracking-tight mb-2">Welcome back</h1>
-          <p className="text-sm text-white/45">Sign in to your NexaConnect account</p>
+          <p className="text-sm text-white/45">Sign in to your Refer account</p>
         </div>
         <div className="glass rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-4">

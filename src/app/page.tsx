@@ -75,9 +75,9 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Sarah M.", role: "NDIS Participant, Merewether", text: "NexaConnect made finding the right support worker so easy. I found Sunshine Support within minutes and they have been incredible!" },
-  { name: "Dr. James P.", role: "Provider, PhysioPlus Maitland", text: "Since joining NexaConnect, our enquiries from Lake Macquarie have tripled. Game-changer for Hunter Region providers." },
-  { name: "Priya S.", role: "Parent, Charlestown", text: "Finding quality early intervention for my son was stressful until NexaConnect. Little Stars was exactly what we needed." },
+  { name: "Sarah M.", role: "NDIS Participant, Merewether", text: "Refer made finding the right support worker so easy. I found Sunshine Support within minutes and they have been incredible!" },
+  { name: "Dr. James P.", role: "Provider, PhysioPlus Maitland", text: "Since joining Refer, our enquiries from Lake Macquarie have tripled. Game-changer for Hunter Region providers." },
+  { name: "Priya S.", role: "Parent, Charlestown", text: "Finding quality early intervention for my son was stressful until Refer. Little Stars was exactly what we needed." },
 ];
 
 export default function Home() {
@@ -345,7 +345,7 @@ export default function Home() {
               <span className="gradient-text">perfect provider?</span>
             </h2>
             <p className="text-lg text-white/40 mb-10 max-w-lg mx-auto">
-              Join hundreds of NDIS participants in the Hunter Region who have found better support through NexaConnect.
+              Join hundreds of NDIS participants in the Hunter Region who have found better support through Refer.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

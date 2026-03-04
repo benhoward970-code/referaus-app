@@ -11,13 +11,13 @@ const values = [
 
 const timeline = [
   { year: "2025", title: "The Problem", desc: "We saw NDIS participants in Newcastle struggling to find quality providers. Google searches, outdated directories, word of mouth. There had to be a better way." },
-  { year: "2026", title: "NexaConnect Launches", desc: "We built the platform we wished existed. Clean, simple, focused on the Hunter Region. Real reviews from real participants." },
+  { year: "2026", title: "Refer Launches", desc: "We built the platform we wished existed. Clean, simple, focused on the Hunter Region. Real reviews from real participants." },
   { year: "2026+", title: "Growing Together", desc: "Expanding across NSW while keeping the local focus that makes us different. Every provider vetted, every review verified." },
 ];
 
 const team = [
   { name: "Ben Deasey", role: "Founder & CEO", desc: "Passionate about using technology to improve disability services in Australia." },
-  { name: "NexaConnect Team", role: "Engineering & Design", desc: "A small, dedicated team building the future of NDIS provider discovery." },
+  { name: "Refer Team", role: "Engineering & Design", desc: "A small, dedicated team building the future of NDIS provider discovery." },
 ];
 
 export default function AboutPage() {
@@ -34,7 +34,7 @@ export default function AboutPage() {
               discovery <span className="gradient-text">simple</span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
-              NexaConnect was born from a simple frustration: finding the right NDIS provider in Newcastle should not be this hard. We are changing that.
+              Refer was born from a simple frustration: finding the right NDIS provider in Newcastle should not be this hard. We are changing that.
             </p>
           </motion.div>
         </div>
@@ -102,7 +102,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12">
             <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Team</span>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">The people behind NexaConnect</h2>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">The people behind Refer</h2>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {team.map((t, i) => (
@@ -126,7 +126,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-black tracking-tight mb-4">
             Ready to <span className="gradient-text">get started?</span>
           </h2>
-          <p className="text-white/45 mb-8">Whether you are a participant looking for support or a provider wanting to grow, NexaConnect is here for you.</p>
+          <p className="text-white/45 mb-8">Whether you are a participant looking for support or a provider wanting to grow, Refer is here for you.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/providers" className="px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:shadow-lg hover:shadow-blue-600/25">
               Browse Providers
