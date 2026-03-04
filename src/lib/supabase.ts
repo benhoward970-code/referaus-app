@@ -45,7 +45,7 @@ export async function submitEnquiry(data: {
     console.log("[Demo] Enquiry submitted:", data);
     return { success: true, demo: true };
   }
-    // Map v2 frontend fields to actual DB schema
+  // Map v2 frontend fields to actual DB schema
   const row = {
     participant_name: data.name,
     provider_name: data.provider_name,
@@ -57,7 +57,10 @@ export async function submitEnquiry(data: {
       phone: data.phone || null,
       text: data.message,
       sent_at: new Date().toISOString(),
-    }
+    }]),
+    status: "open",
+  };
+  const { error } = await supabase.from("enquiries").insert(row);
   return { success: !error, error };
 }
 
