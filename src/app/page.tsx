@@ -158,7 +158,7 @@ export default function Home() {
                 <div className="text-2xl sm:text-3xl font-black text-gray-900 mb-1">
                   {s.display || <AnimatedCounter target={s.value} suffix={s.suffix} />}
                 </div>
-                <div className="text-xs text-gray-400">{s.label}</div>
+                <div className="text-xs text-gray-500">{s.label}</div>
               </div>
             ))}
           </motion.div>
@@ -208,7 +208,7 @@ export default function Home() {
                   {f.icon}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -240,13 +240,13 @@ export default function Home() {
                 className="glass rounded-2xl p-8 relative overflow-hidden group"
               >
                 {/* Step number watermark */}
-                <div className="absolute top-4 right-4 text-5xl font-black text-gray-100">{item.step}</div>
+                <div className="absolute top-4 right-4 text-5xl font-black text-gray-200">{item.step}</div>
 
                 <div className="w-14 h-14 rounded-xl bg-blue-50 text-blue-400 flex items-center justify-center mb-5 mx-auto group-hover:bg-blue-100 transition-colors">
                   {item.icon}
                 </div>
                 <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
 
                 {/* Shimmer */}
                 <div className="absolute inset-0 shimmer rounded-2xl" />
@@ -324,7 +324,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold">{t.name}</p>
-                    <p className="text-xs text-gray-400">{t.role}</p>
+                    <p className="text-xs text-gray-500">{t.role}</p>
                   </div>
                 </div>
               </motion.div>
