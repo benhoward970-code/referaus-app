@@ -3,14 +3,11 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { providers } from "@/lib/providers";
-import { ProviderCard } from "@/components/ProviderCard";
-import { FloatingParticles } from "@/components/AnimatedBackground";
 
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
-
   useEffect(() => {
     if (!inView) return;
     let start = 0;
@@ -18,350 +15,247 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
     const step = (timestamp: number) => {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * target));
+      setCount(Math.floor((1 - Math.pow(1 - progress, 3)) * target));
       if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   }, [inView, target]);
-
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
-const stats = [
-  { value: 10, suffix: "+", label: "Verified Providers" },
-  { value: 500, suffix: "+", label: "Reviews" },
-  { value: 0, suffix: "", label: "Cost to Participants", display: "Free" },
-  { value: 100, suffix: "%", label: "Hunter Region" },
-];
-
 const features = [
-  {
-    icon: <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>,
-    title: "Smart Search",
-    desc: "Filter by service, location, availability, and verified status. Find what you need in seconds.",
-    color: "blue",
-  },
-  {
-    icon: <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
-    title: "Verified Providers",
-    desc: "Identity-verified and NDIS-registered. Every premium provider checked.",
-    color: "orange",
-  },
-  {
-    icon: <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>,
-    title: "Real Reviews",
-    desc: "Genuine reviews from NDIS participants. No fakes, no paid placements.",
-    color: "blue",
-  },
-  {
-    icon: <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
-    title: "Instant Connect",
-    desc: "Send enquiries directly. Get responses in hours, not days.",
-    color: "orange",
-  },
-  {
-    icon: <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>,
-    title: "Direct Booking",
-    desc: "Book appointments directly with premium providers. Zero phone tag.",
-    color: "blue",
-  },
-  {
-    icon: <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>,
-    title: "Provider Analytics",
-    desc: "Powerful insights dashboard. Understand and grow your business.",
-    color: "orange",
-  },
+  { icon: "🔍", title: "Smart Search", desc: "Search by location, NDIS support category, availability, and ratings. Find providers who offer what you need, near where you are." },
+  { icon: "⭐", title: "Real Reviews", desc: "Verified reviews from real NDIS participants. No fake ratings, no paid placements. See what people actually think." },
+  { icon: "💬", title: "Direct Messaging", desc: "Message providers instantly. Ask questions, check availability, discuss your needs — before you pick up the phone." },
+  { icon: "📋", title: "Detailed Profiles", desc: "Every provider shows services, areas covered, qualifications, availability, and what participants say about them." },
+  { icon: "📍", title: "Location-Based", desc: "Find providers near you. Search by suburb, region, or postcode. See distance and service areas at a glance." },
+  { icon: "🆓", title: "Free for Participants", desc: "Always. No sign-up fees, no premium tiers, no hidden costs. Browse, search, message, connect — completely free." },
 ];
 
 const testimonials = [
-  { name: "Sarah M.", role: "NDIS Participant, Merewether", text: "Refer made finding the right support worker so easy. I found Sunshine Support within minutes and they have been incredible!" },
-  { name: "Dr. James P.", role: "Provider, PhysioPlus Maitland", text: "Since joining Refer, our enquiries from Lake Macquarie have tripled. Game-changer for Hunter Region providers." },
-  { name: "Priya S.", role: "Parent, Charlestown", text: "Finding quality early intervention for my son was stressful until Refer. Little Stars was exactly what we needed." },
+  { name: "Sarah M.", role: "Participant, Merewether", text: "Refer made finding the right support worker so easy. I found Sunshine Support within minutes and they have been incredible with our son." },
+  { name: "Dr. James P.", role: "PhysioPlus Maitland", text: "Since listing on Refer, our enquiries from the Hunter Region have tripled. The direct messaging means we actually connect with participants." },
+  { name: "Priya S.", role: "Parent, Charlestown", text: "I spent weeks calling around. A friend told me about Refer — I found Little Stars in ten minutes, messaged them, had an appointment within the week." },
 ];
 
 export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        <FloatingParticles />
+      <section className="min-h-screen flex flex-col justify-center px-6 pt-24 pb-16 max-w-[1200px] mx-auto relative">
+        <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(249,115,22,0.06)_0%,transparent_70%)] pointer-events-none" />
+        <div className="absolute top-[40%] left-[-15%] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(37,99,235,0.04)_0%,transparent_70%)] pointer-events-none" />
 
-        {/* Hero glow line */}
-        <div className="absolute top-16 left-0 right-0 glow-line" />
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+          className="font-mono text-[0.7rem] text-blue-600 tracking-[0.2em] uppercase mb-6 flex items-center gap-3">
+          <span className="w-8 h-px bg-orange-500" />
+          referaus.com — Australia&apos;s NDIS Marketplace
+        </motion.p>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="inline-flex items-center gap-2 text-xs font-medium px-4 py-2 rounded-full glass text-blue-600 mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-              Now live in Newcastle and Hunter Region
-            </span>
-          </motion.div>
+        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
+          className="serif-i text-[clamp(3rem,8vw,5.5rem)] leading-[1.05] mb-6 max-w-[800px]">
+          Find the right{" "}
+          <span className="text-orange-500">NDIS provider</span>{" "}
+          for you
+        </motion.h1>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-5xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[0.95] mb-8"
-          >
-            Find Your
-            <br />
-            <span className="gradient-text">Perfect NDIS</span>
-            <br />
-            Provider
-          </motion.h1>
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-gray-500 text-lg max-w-[550px] mb-8 font-light leading-relaxed">
+          Search, compare, and connect with NDIS providers in your area. Real reviews from real participants. Direct messaging. No middleman.
+        </motion.p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-xl text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed"
-          >
-            Browse trusted providers across Newcastle, Lake Macquarie and the Hunter.
-            Read real reviews, compare services, and connect for free.
-          </motion.p>
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex gap-4 flex-wrap">
+          <Link href="/providers" className="px-8 py-3.5 rounded-lg bg-orange-500 text-white font-semibold hover:bg-orange-600 transition-all hover:-translate-y-0.5">
+            Find a Provider
+          </Link>
+          <Link href="/register" className="px-8 py-3.5 rounded-lg border border-gray-200 text-gray-700 font-medium hover:border-blue-600 hover:text-blue-600 transition-all">
+            List Your Practice
+          </Link>
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
-            <Link
-              href="/providers"
-              className="group relative px-8 py-4 rounded-2xl bg-blue-600 text-gray-900 font-semibold text-base transition-all hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] hover:bg-blue-500 overflow-hidden"
-            >
-              <span className="relative z-10">Browse Providers</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-            <Link
-              href="/register"
-              className="px-8 py-4 rounded-2xl glass hover:bg-gray-100 text-gray-900 font-medium text-base transition-all"
-            >
-              List Your Service
-            </Link>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-24 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto"
-          >
-            {stats.map((s) => (
-              <div key={s.label} className="glass rounded-2xl p-5 text-center">
-                <div className="text-2xl sm:text-3xl font-black text-gray-900 mb-1">
-                  {s.display || <AnimatedCounter target={s.value} suffix={s.suffix} />}
-                </div>
-                <div className="text-xs text-gray-500">{s.label}</div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent" />
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}
+          className="flex gap-12 mt-16 pt-8 border-t border-gray-100">
+          {[
+            { num: 250, suffix: "+", label: "Providers Listed" },
+            { num: 1200, suffix: "+", label: "Participants Connected" },
+            { num: 15000, suffix: "+", label: "Successful Referrals" },
+          ].map((s) => (
+            <div key={s.label}>
+              <div className="serif-i text-[2.5rem] text-blue-600"><AnimatedCounter target={s.num} suffix={s.suffix} /></div>
+              <div className="text-[0.75rem] text-gray-400 uppercase tracking-[0.1em] mt-1">{s.label}</div>
+            </div>
+          ))}
+        </motion.div>
       </section>
 
-      {/* Glow divider */}
-      <div className="glow-line" />
-
-      {/* Features */}
-      <section className="py-32 px-6 relative">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">
-              Platform Features
-            </span>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight">
-              Everything you need to
-              <br />
-              <span className="gradient-text">find the right support</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {features.map((f, i) => (
-              <motion.div
-                key={f.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className={`group glass rounded-2xl p-8 card-glow ${f.color === "orange" ? "card-glow-orange" : ""} cursor-default`}
-              >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-colors ${
-                  f.color === "orange"
-                    ? "bg-orange-50 text-orange-400 group-hover:bg-orange-100"
-                    : "bg-blue-50 text-blue-400 group-hover:bg-blue-100"
-                }`}>
-                  {f.icon}
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{f.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <div className="divider max-w-[800px] mx-auto" />
 
       {/* How it works */}
-      <section className="py-32 px-6 relative">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <span className="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 block">How it works</span>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight mb-16">
-              Three steps to <span className="gradient-text">better support</span>
-            </h2>
-          </motion.div>
+      <section className="py-24 px-6 max-w-[1200px] mx-auto">
+        <p className="section-label mb-3">How It Works</p>
+        <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Three steps. That&apos;s it.</h2>
+        <p className="text-gray-500 max-w-[600px] mb-12 font-light">No sign-up required to browse. Find the support you need in minutes, not weeks.</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { step: "01", title: "Search", desc: "Browse our directory by service, location, or keyword.", icon: <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg> },
-              { step: "02", title: "Compare", desc: "Read reviews, check availability, compare side by side.", icon: <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg> },
-              { step: "03", title: "Connect", desc: "Send an enquiry or book directly with your provider.", icon: <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> },
-            ].map((item, i) => (
-              <motion.div
-                key={item.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="glass rounded-2xl p-8 relative overflow-hidden group"
-              >
-                {/* Step number watermark */}
-                <div className="absolute top-4 right-4 text-5xl font-black text-gray-200">{item.step}</div>
-
-                <div className="w-14 h-14 rounded-xl bg-blue-50 text-blue-400 flex items-center justify-center mb-5 mx-auto group-hover:bg-blue-100 transition-colors">
-                  {item.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
-
-                {/* Shimmer */}
-                <div className="absolute inset-0 shimmer rounded-2xl" />
-              </motion.div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { num: "1", title: "Search", desc: "Enter your location and what kind of support you need. Filter by category, rating, availability, and distance." },
+            { num: "2", title: "Compare", desc: "Browse provider profiles with real reviews from other participants. See services, specialties, and ratings." },
+            { num: "3", title: "Connect", desc: "Send an enquiry or message the provider directly. No phone tag, no waiting on hold. Get a response and start." },
+          ].map((step, i) => (
+            <motion.div key={step.num} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }}
+              className="text-center py-8">
+              <div className="serif-i text-[3.5rem] text-orange-500 leading-none">{step.num}</div>
+              <div className="font-bold text-lg mt-4 mb-2">{step.title}</div>
+              <div className="text-gray-500 text-sm leading-relaxed">{step.desc}</div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      <div className="glow-line" />
+      <div className="divider max-w-[800px] mx-auto" />
 
-      {/* Featured providers */}
-      <section className="py-32 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Featured</span>
-              <h2 className="text-4xl font-black tracking-tight">Top-rated providers</h2>
+      {/* Features */}
+      <section className="py-24 px-6 max-w-[1200px] mx-auto">
+        <p className="section-label mb-3">Why Refer</p>
+        <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Built for the NDIS community</h2>
+        <p className="text-gray-500 max-w-[600px] mb-12 font-light">Everything participants and providers need to find each other — nothing they don&apos;t.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {features.map((f, i) => (
+            <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+              className="card relative overflow-hidden p-8">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-lg">{f.icon}</div>
+              <h3 className="font-semibold text-[1.05rem] mb-2">{f.title}</h3>
+              <p className="text-gray-500 text-[0.85rem] leading-relaxed">{f.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Stats bar */}
+      <section className="bg-blue-600 text-white py-12 px-6">
+        <div className="max-w-[1200px] mx-auto flex justify-around text-center flex-wrap gap-8">
+          {[
+            { num: "15,000+", label: "Referrals Made" },
+            { num: "250+", label: "Verified Providers" },
+            { num: "98%", label: "Connection Rate" },
+            { num: "< 2hrs", label: "Avg Response Time" },
+          ].map((s) => (
+            <div key={s.label}>
+              <div className="serif-i text-[3rem]">{s.num}</div>
+              <div className="text-sm opacity-80 mt-1">{s.label}</div>
             </div>
-            <Link href="/providers" className="text-sm text-blue-400 hover:text-blue-600 transition-colors hidden sm:block">
-              View all providers
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {providers.slice(0, 6).map((p, i) => (
-              <motion.div
-                key={p.slug}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-              >
-                <ProviderCard provider={p} />
-              </motion.div>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
+
+      {/* Browse Providers */}
+      <section className="py-24 px-6 max-w-[1200px] mx-auto">
+        <div className="flex items-end justify-between mb-12">
+          <div>
+            <p className="section-label mb-3">Browse Providers</p>
+            <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight">Top-rated in your area</h2>
+          </div>
+          <Link href="/providers" className="text-sm text-blue-600 hover:text-blue-700 transition-colors hidden sm:block">
+            View all providers →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {providers.slice(0, 6).map((p, i) => (
+            <motion.div key={p.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
+              <Link href={`/providers/${p.slug}`} className="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all">
+                <div className={`p-5 text-white ${i % 3 === 0 ? "bg-gradient-to-r from-blue-600 to-blue-500" : i % 3 === 1 ? "bg-gradient-to-r from-orange-500 to-orange-400" : "bg-gradient-to-r from-purple-600 to-purple-500"}`}>
+                  <div className="font-bold text-lg">{p.name}</div>
+                  <div className="text-sm opacity-80">{p.category}</div>
+                </div>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-orange-500 text-sm">{"★".repeat(Math.floor(p.rating))}</span>
+                    <span className="text-xs text-gray-400">{p.rating} ({p.reviewCount} reviews)</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {p.services.slice(0, 3).map((s) => (
+                      <span key={s} className="text-[0.7rem] px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-500">{s}</span>
+                    ))}
+                  </div>
+                  <div className="text-sm text-gray-400 flex items-center gap-1.5">📍 {p.location}</div>
+                </div>
+                <div className="text-center py-3 border-t border-gray-100 text-blue-600 font-semibold text-sm hover:bg-blue-600 hover:text-white transition-all">
+                  View Profile & Connect →
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <div className="divider max-w-[800px] mx-auto" />
 
       {/* Testimonials */}
-      <section className="py-32 px-6 relative">
-        <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <span className="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 block">Testimonials</span>
-            <h2 className="text-4xl font-black tracking-tight">
-              Trusted by the <span className="gradient-text">Hunter community</span>
-            </h2>
-          </motion.div>
+      <section className="py-24 px-6 max-w-[1200px] mx-auto">
+        <p className="section-label mb-3">What People Say</p>
+        <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-12">Real stories from real people</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="glass rounded-2xl p-8"
-              >
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="#F97316"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                  ))}
-                </div>
-                <p className="text-sm text-gray-600 leading-relaxed mb-6">{t.text}</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-orange-100 flex items-center justify-center">
-                    <span className="text-sm font-bold text-blue-400">{t.name[0]}</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">{t.name}</p>
-                    <p className="text-xs text-gray-500">{t.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {testimonials.map((t, i) => (
+            <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+              className="bg-gray-50 border border-gray-100 rounded-xl p-8 relative">
+              <div className="serif-i text-[4rem] text-orange-500 opacity-20 absolute top-2 left-5 leading-none">"</div>
+              <div className="flex gap-0.5 mb-4">
+                {[...Array(5)].map((_, j) => <span key={j} className="text-orange-500 text-sm">★</span>)}
+              </div>
+              <p className="text-gray-600 text-sm leading-relaxed mb-6">{t.text}</p>
+              <div className="font-semibold text-sm">{t.name}</div>
+              <div className="text-xs text-gray-400">{t.role}</div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      <div className="glow-line" />
+      <div className="divider max-w-[800px] mx-auto" />
 
-      {/* CTA */}
-      <section className="py-32 px-6 relative">
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight mb-6">
-              Ready to find your
-              <br />
-              <span className="gradient-text">perfect provider?</span>
-            </h2>
-            <p className="text-lg text-gray-500 mb-10 max-w-lg mx-auto">
-              Join hundreds of NDIS participants in the Hunter Region who have found better support through Refer.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/providers"
-                className="px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-gray-900 font-semibold transition-all hover:shadow-[0_0_40px_rgba(59,130,246,0.3)]"
-              >
-                Browse Providers
-              </Link>
-              <Link
-                href="/pricing"
-                className="px-8 py-4 rounded-2xl glass hover:bg-gray-100 text-orange-400 font-medium transition-all"
-              >
-                Provider Plans
+      {/* Provider Pricing */}
+      <section className="py-24 px-6 max-w-[1200px] mx-auto">
+        <p className="section-label mb-3">For Providers</p>
+        <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Grow your practice</h2>
+        <p className="text-gray-500 max-w-[600px] mb-12 font-light">Get found by participants actively looking for your services. Free to list. Upgrade when you&apos;re ready.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[
+            { tier: "Free", price: "$0", desc: "Get listed and start receiving enquiries.", features: ["Basic provider listing", "Show services and areas", "Enquiry notifications", "Up to 5 reviews"], cta: "Get Listed Free", style: "outline" },
+            { tier: "Pro", price: "$99", desc: "Stand out and connect directly with participants.", features: ["Priority in search results", "Direct messaging", "Profile analytics", "Unlimited reviews", "Highlighted badge", "Area alerts"], cta: "Start Free Trial", style: "orange", popular: true },
+            { tier: "Premium", price: "$249", desc: "Maximum visibility and dedicated support.", features: ["Everything in Pro", "Featured placement", "Multi-location support", "Custom branded profile", "Referral tracking", "Account manager"], cta: "Contact Sales", style: "outline" },
+          ].map((plan) => (
+            <div key={plan.tier} className={`bg-white border rounded-xl p-8 relative ${plan.popular ? "border-orange-500 shadow-lg shadow-orange-500/10" : "border-gray-200"}`}>
+              {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[0.6rem] font-bold px-3 py-0.5 rounded-full tracking-wider">MOST POPULAR</div>}
+              <div className="text-sm text-gray-500 uppercase tracking-wider">{plan.tier}</div>
+              <div className="serif-i text-[3rem] my-2">{plan.price}<span className="text-base text-gray-400 font-sans not-italic">/mo</span></div>
+              <p className="text-sm text-gray-500 mb-6">{plan.desc}</p>
+              <ul className="space-y-2 mb-8">
+                {plan.features.map((f) => (
+                  <li key={f} className="text-sm text-gray-500 flex items-center gap-2">
+                    <span className="text-orange-500 font-bold">✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/register" className={`block text-center py-3 rounded-lg font-semibold text-sm transition-all ${plan.style === "orange" ? "bg-orange-500 text-white hover:bg-orange-600" : "border border-gray-200 text-gray-700 hover:border-blue-600 hover:text-blue-600"}`}>
+                {plan.cta}
               </Link>
             </div>
-          </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="max-w-[1200px] mx-auto px-6 pb-24">
+        <div className="bg-gradient-to-br from-orange-500 to-orange-400 text-white rounded-2xl p-12 text-center">
+          <h2 className="serif-i text-[clamp(1.8rem,4vw,2.8rem)] mb-4">Ready to find the right provider?</h2>
+          <p className="opacity-90 max-w-[500px] mx-auto mb-8">Join thousands of NDIS participants who found better support through Refer. Free, fast, and it works.</p>
+          <Link href="/providers" className="inline-block px-8 py-3.5 bg-white text-orange-500 font-bold rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all">
+            Search Providers Now
+          </Link>
         </div>
       </section>
     </>

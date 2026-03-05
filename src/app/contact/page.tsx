@@ -106,7 +106,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium mb-1">Email</p>
-                    <p className="text-sm text-gray-500">hello@refer.org.au</p>
+                    <p className="text-sm text-gray-500">hello@referaus.com</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -133,7 +133,7 @@ export default function ContactPage() {
             <div className="rounded-2xl bg-blue-600/[0.06] border border-blue-500/20 p-8">
               <h3 className="text-lg font-bold mb-2">Are you a provider?</h3>
               <p className="text-sm text-gray-500 mb-4">Need help with your listing, analytics, or account? Our provider support team is here to help.</p>
-              <a href="mailto:providers@refer.org.au" className="text-sm text-blue-400 font-medium hover:text-blue-300">providers@refer.org.au</a>
+              <a href="mailto:providers@referaus.com" className="text-sm text-blue-400 font-medium hover:text-blue-300">providers@referaus.com</a>
             </div>
           </motion.div>
         </div>
