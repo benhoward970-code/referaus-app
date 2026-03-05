@@ -16,18 +16,18 @@ const faqs = [
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-white/[0.06]">
+    <div className="border-b border-gray-200">
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between py-5 text-left">
         <span className="text-sm font-medium pr-4">{q}</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
-          className={`shrink-0 text-white/30 transition-transform duration-200 ${open ? "rotate-180" : ""}`}>
+          className={`shrink-0 text-gray-500 transition-transform duration-200 ${open ? "rotate-180" : ""}`}>
           <path d="M19 9l-7 7-7-7" />
         </svg>
       </button>
       <AnimatePresence>
         {open && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}>
-            <p className="text-sm text-white/45 leading-relaxed pb-5">{a}</p>
+            <p className="text-sm text-gray-500 leading-relaxed pb-5">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -46,36 +46,36 @@ export default function ContactPage() {
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
             Get in <span className="gradient-text">touch</span>
           </h1>
-          <p className="text-lg text-white/50 max-w-xl">Have a question, feedback, or need support? We would love to hear from you.</p>
+          <p className="text-lg text-gray-500 max-w-xl">Have a question, feedback, or need support? We would love to hear from you.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-24">
           {/* Contact form */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <div className="rounded-2xl bg-surface border border-white/[0.06] p-8">
+            <div className="rounded-2xl bg-surface border border-gray-200 p-8">
               {sent ? (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center mx-auto mb-4">
                     <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
                   </div>
                   <h3 className="text-xl font-bold mb-2">Message sent!</h3>
-                  <p className="text-sm text-white/45">We will get back to you within 24 hours.</p>
+                  <p className="text-sm text-gray-500">We will get back to you within 24 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={async (e) => { e.preventDefault(); const form = new FormData(e.currentTarget); await submitContact({ name: form.get("name") as string, email: form.get("email") as string, subject: form.get("subject") as string, message: form.get("message") as string }); setSent(true); }} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-medium text-white/50 mb-1.5 block">Name</label>
-                      <input type="text" name="name" required placeholder="Your name" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+                      <label className="text-xs font-medium text-gray-500 mb-1.5 block">Name</label>
+                      <input type="text" name="name" required placeholder="Your name" className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-white/50 mb-1.5 block">Email</label>
-                      <input type="email" name="email" required placeholder="you@example.com" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+                      <label className="text-xs font-medium text-gray-500 mb-1.5 block">Email</label>
+                      <input type="email" name="email" required placeholder="you@example.com" className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-white/50 mb-1.5 block">Subject</label>
-                    <select className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white/70 text-sm focus:outline-none focus:border-blue-500/40 appearance-none">
+                    <label className="text-xs font-medium text-gray-500 mb-1.5 block">Subject</label>
+                    <select className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none">
                       <option className="bg-[#111827]">General Enquiry</option>
                       <option className="bg-[#111827]">Provider Support</option>
                       <option className="bg-[#111827]">Participant Help</option>
@@ -84,10 +84,10 @@ export default function ContactPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-white/50 mb-1.5 block">Message</label>
-                    <textarea name="message" required rows={5} placeholder="How can we help?" className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40 resize-none" />
+                    <label className="text-xs font-medium text-gray-500 mb-1.5 block">Message</label>
+                    <textarea name="message" required rows={5} placeholder="How can we help?" className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40 resize-none" />
                   </div>
-                  <button type="submit" className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25">
+                  <button type="submit" className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-gray-900 font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25">
                     Send Message
                   </button>
                 </form>
@@ -97,7 +97,7 @@ export default function ContactPage() {
 
           {/* Contact info */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-6">
-            <div className="rounded-2xl bg-surface border border-white/[0.06] p-8">
+            <div className="rounded-2xl bg-surface border border-gray-200 p-8">
               <h3 className="text-lg font-bold mb-6">Other ways to reach us</h3>
               <div className="space-y-5">
                 <div className="flex items-start gap-4">
@@ -106,7 +106,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium mb-1">Email</p>
-                    <p className="text-sm text-white/45">hello@refer.org.au</p>
+                    <p className="text-sm text-gray-500">hello@refer.org.au</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -115,7 +115,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium mb-1">Location</p>
-                    <p className="text-sm text-white/45">Newcastle, NSW, Australia</p>
+                    <p className="text-sm text-gray-500">Newcastle, NSW, Australia</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -124,7 +124,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium mb-1">Response Time</p>
-                    <p className="text-sm text-white/45">Within 24 hours, usually much faster</p>
+                    <p className="text-sm text-gray-500">Within 24 hours, usually much faster</p>
                   </div>
                 </div>
               </div>
@@ -132,7 +132,7 @@ export default function ContactPage() {
 
             <div className="rounded-2xl bg-blue-600/[0.06] border border-blue-500/20 p-8">
               <h3 className="text-lg font-bold mb-2">Are you a provider?</h3>
-              <p className="text-sm text-white/45 mb-4">Need help with your listing, analytics, or account? Our provider support team is here to help.</p>
+              <p className="text-sm text-gray-500 mb-4">Need help with your listing, analytics, or account? Our provider support team is here to help.</p>
               <a href="mailto:providers@refer.org.au" className="text-sm text-blue-400 font-medium hover:text-blue-300">providers@refer.org.au</a>
             </div>
           </motion.div>
@@ -145,7 +145,7 @@ export default function ContactPage() {
               <span className="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 block">FAQ</span>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Frequently asked questions</h2>
             </div>
-            <div className="rounded-2xl bg-surface border border-white/[0.06] p-8">
+            <div className="rounded-2xl bg-surface border border-gray-200 p-8">
               {faqs.map((faq) => (
                 <FaqItem key={faq.q} q={faq.q} a={faq.a} />
               ))}

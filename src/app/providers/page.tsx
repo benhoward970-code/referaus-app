@@ -32,7 +32,7 @@ export default function ProvidersPage() {
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
             Browse <span className="gradient-text">Providers</span>
           </h1>
-          <p className="text-white/50 text-lg max-w-xl">
+          <p className="text-gray-500 text-lg max-w-xl">
             {providers.length} NDIS providers across Newcastle &amp; the Hunter Region
           </p>
         </motion.div>
@@ -47,7 +47,7 @@ export default function ProvidersPage() {
           {/* Search */}
           <div className="relative flex-1">
             <svg
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500"
               width="18"
               height="18"
               fill="none"
@@ -62,7 +62,7 @@ export default function ProvidersPage() {
               placeholder="Search providers, services..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-white/[0.08] text-white placeholder-white/30 text-sm focus:outline-none focus:border-blue-500/40 transition-colors"
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-900 placeholder-white/30 text-sm focus:outline-none focus:border-blue-500/40 transition-colors"
             />
           </div>
 
@@ -70,7 +70,7 @@ export default function ProvidersPage() {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="px-4 py-3 rounded-xl bg-surface border border-white/[0.08] text-white/70 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer min-w-[180px]"
+            className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer min-w-[180px]"
           >
             {categories.map((c) => (
               <option key={c} value={c} className="bg-[#111827]">
@@ -83,7 +83,7 @@ export default function ProvidersPage() {
           <select
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="px-4 py-3 rounded-xl bg-surface border border-white/[0.08] text-white/70 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer min-w-[180px]"
+            className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer min-w-[180px]"
           >
             {locations.map((l) => (
               <option key={l} value={l} className="bg-[#111827]">
@@ -96,8 +96,8 @@ export default function ProvidersPage() {
         {/* Results */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-white/40 text-lg mb-2">No providers found</p>
-            <p className="text-white/25 text-sm">Try adjusting your search or filters</p>
+            <p className="text-gray-500 text-lg mb-2">No providers found</p>
+            <p className="text-gray-500 text-sm">Try adjusting your search or filters</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -117,3 +117,4 @@ export default function ProvidersPage() {
     </div>
   );
 }
+

@@ -44,7 +44,7 @@ export default function PricingPage() {
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
             Simple, transparent <span className="gradient-text">pricing</span>
           </h1>
-          <p className="text-lg text-white/50 max-w-lg mx-auto">Free for participants. Affordable plans for providers who want to grow.</p>
+          <p className="text-lg text-gray-500 max-w-lg mx-auto">Free for participants. Affordable plans for providers who want to grow.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -57,33 +57,33 @@ export default function PricingPage() {
               className={`relative rounded-2xl p-8 border transition-all ${
                 plan.highlight
                   ? "bg-blue-600/[0.08] border-blue-500/30 shadow-lg shadow-blue-600/10"
-                  : "bg-surface border-white/[0.06]"
+                  : "bg-surface border-gray-200"
               }`}
             >
               {plan.highlight && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-600 text-white">Most Popular</span>
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-600 text-gray-900">Most Popular</span>
                 </div>
               )}
               <h3 className="text-lg font-bold mb-2">{plan.name}</h3>
               <div className="flex items-baseline gap-1 mb-2">
                 <span className="text-4xl font-black">{plan.price}</span>
-                <span className="text-sm text-white/40">{plan.period}</span>
+                <span className="text-sm text-gray-500">{plan.period}</span>
               </div>
-              <p className="text-sm text-white/45 mb-8">{plan.desc}</p>
+              <p className="text-sm text-gray-500 mb-8">{plan.desc}</p>
               <Link
                 href={plan.href}
                 className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all mb-8 ${
                   plan.highlight
-                    ? "bg-blue-600 hover:bg-blue-500 text-white hover:shadow-lg hover:shadow-blue-600/25"
-                    : "bg-white/[0.06] hover:bg-white/[0.1] text-white border border-white/[0.08]"
+                    ? "bg-blue-600 hover:bg-blue-500 text-gray-900 hover:shadow-lg hover:shadow-blue-600/25"
+                    : "bg-gray-50 hover:bg-gray-50 text-gray-900 border border-gray-200"
                 }`}
               >
                 {plan.cta}
               </Link>
               <ul className="space-y-3">
                 {plan.features.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-white/60">
+                  <li key={f} className="flex items-center gap-3 text-sm text-gray-500">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={plan.highlight ? "#3B82F6" : "#4B5563"} strokeWidth="2"><path d="M5 13l4 4L19 7" /></svg>
                     {f}
                   </li>
@@ -93,10 +93,11 @@ export default function PricingPage() {
           ))}
         </div>
 
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center text-xs text-white/30 mt-12">
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center text-xs text-gray-500 mt-12">
           All plans include GST. Cancel anytime. Free for all NDIS participants.
         </motion.p>
       </div>
     </div>
   );
 }
+

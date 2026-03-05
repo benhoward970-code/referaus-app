@@ -96,7 +96,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-flex items-center gap-2 text-xs font-medium px-4 py-2 rounded-full glass text-blue-300 mb-8">
+            <span className="inline-flex items-center gap-2 text-xs font-medium px-4 py-2 rounded-full glass text-blue-600 mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
               Now live in Newcastle and Hunter Region
             </span>
@@ -119,7 +119,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-xl text-white/45 max-w-xl mx-auto mb-10 leading-relaxed"
+            className="text-lg sm:text-xl text-gray-500 max-w-xl mx-auto mb-10 leading-relaxed"
           >
             Browse trusted providers across Newcastle, Lake Macquarie and the Hunter.
             Read real reviews, compare services, and connect for free.
@@ -133,14 +133,14 @@ export default function Home() {
           >
             <Link
               href="/providers"
-              className="group relative px-8 py-4 rounded-2xl bg-blue-600 text-white font-semibold text-base transition-all hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] hover:bg-blue-500 overflow-hidden"
+              className="group relative px-8 py-4 rounded-2xl bg-blue-600 text-gray-900 font-semibold text-base transition-all hover:shadow-[0_0_40px_rgba(59,130,246,0.3)] hover:bg-blue-500 overflow-hidden"
             >
               <span className="relative z-10">Browse Providers</span>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" />
             </Link>
             <Link
               href="/register"
-              className="px-8 py-4 rounded-2xl glass hover:bg-white/[0.08] text-white font-medium text-base transition-all"
+              className="px-8 py-4 rounded-2xl glass hover:bg-gray-100 text-gray-900 font-medium text-base transition-all"
             >
               List Your Service
             </Link>
@@ -155,17 +155,17 @@ export default function Home() {
           >
             {stats.map((s) => (
               <div key={s.label} className="glass rounded-2xl p-5 text-center">
-                <div className="text-2xl sm:text-3xl font-black text-white mb-1">
+                <div className="text-2xl sm:text-3xl font-black text-gray-900 mb-1">
                   {s.display || <AnimatedCounter target={s.value} suffix={s.suffix} />}
                 </div>
-                <div className="text-xs text-white/35">{s.label}</div>
+                <div className="text-xs text-gray-400">{s.label}</div>
               </div>
             ))}
           </motion.div>
         </div>
 
         {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#060B14] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent" />
       </section>
 
       {/* Glow divider */}
@@ -202,13 +202,13 @@ export default function Home() {
               >
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-colors ${
                   f.color === "orange"
-                    ? "bg-orange-500/10 text-orange-400 group-hover:bg-orange-500/20"
-                    : "bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20"
+                    ? "bg-orange-50 text-orange-400 group-hover:bg-orange-100"
+                    : "bg-blue-50 text-blue-400 group-hover:bg-blue-100"
                 }`}>
                   {f.icon}
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                <p className="text-sm text-white/40 leading-relaxed">{f.desc}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -240,13 +240,13 @@ export default function Home() {
                 className="glass rounded-2xl p-8 relative overflow-hidden group"
               >
                 {/* Step number watermark */}
-                <div className="absolute top-4 right-4 text-5xl font-black text-white/[0.03]">{item.step}</div>
+                <div className="absolute top-4 right-4 text-5xl font-black text-gray-100">{item.step}</div>
 
-                <div className="w-14 h-14 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-5 mx-auto group-hover:bg-blue-500/20 transition-colors">
+                <div className="w-14 h-14 rounded-xl bg-blue-50 text-blue-400 flex items-center justify-center mb-5 mx-auto group-hover:bg-blue-100 transition-colors">
                   {item.icon}
                 </div>
                 <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-sm text-white/40 leading-relaxed">{item.desc}</p>
+                <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
 
                 {/* Shimmer */}
                 <div className="absolute inset-0 shimmer rounded-2xl" />
@@ -266,7 +266,7 @@ export default function Home() {
               <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Featured</span>
               <h2 className="text-4xl font-black tracking-tight">Top-rated providers</h2>
             </div>
-            <Link href="/providers" className="text-sm text-blue-400 hover:text-blue-300 transition-colors hidden sm:block">
+            <Link href="/providers" className="text-sm text-blue-400 hover:text-blue-600 transition-colors hidden sm:block">
               View all providers
             </Link>
           </div>
@@ -317,14 +317,14 @@ export default function Home() {
                     <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="#F97316"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                   ))}
                 </div>
-                <p className="text-sm text-white/55 leading-relaxed mb-6">{t.text}</p>
+                <p className="text-sm text-gray-600 leading-relaxed mb-6">{t.text}</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500/20 to-orange-500/20 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-orange-100 flex items-center justify-center">
                     <span className="text-sm font-bold text-blue-400">{t.name[0]}</span>
                   </div>
                   <div>
                     <p className="text-sm font-semibold">{t.name}</p>
-                    <p className="text-xs text-white/35">{t.role}</p>
+                    <p className="text-xs text-gray-400">{t.role}</p>
                   </div>
                 </div>
               </motion.div>
@@ -344,19 +344,19 @@ export default function Home() {
               <br />
               <span className="gradient-text">perfect provider?</span>
             </h2>
-            <p className="text-lg text-white/40 mb-10 max-w-lg mx-auto">
+            <p className="text-lg text-gray-500 mb-10 max-w-lg mx-auto">
               Join hundreds of NDIS participants in the Hunter Region who have found better support through Refer.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/providers"
-                className="px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:shadow-[0_0_40px_rgba(59,130,246,0.3)]"
+                className="px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-gray-900 font-semibold transition-all hover:shadow-[0_0_40px_rgba(59,130,246,0.3)]"
               >
                 Browse Providers
               </Link>
               <Link
                 href="/pricing"
-                className="px-8 py-4 rounded-2xl glass hover:bg-white/[0.08] text-orange-400 font-medium transition-all"
+                className="px-8 py-4 rounded-2xl glass hover:bg-gray-100 text-orange-400 font-medium transition-all"
               >
                 Provider Plans
               </Link>

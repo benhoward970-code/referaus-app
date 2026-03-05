@@ -72,21 +72,21 @@ export default function BlogPage() {
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
             Guides & <span className="gradient-text">Resources</span>
           </h1>
-          <p className="text-lg text-white/50 max-w-xl">Practical guides to help you navigate the NDIS with confidence.</p>
+          <p className="text-lg text-gray-500 max-w-xl">Practical guides to help you navigate the NDIS with confidence.</p>
         </motion.div>
 
         {/* Featured posts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {featured.map((post, i) => (
             <motion.div key={post.slug} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-              <div className="group rounded-2xl bg-surface border border-white/[0.06] p-8 h-full transition-all duration-300 hover:border-blue-500/20 card-glow cursor-pointer">
+              <div className="group rounded-2xl bg-surface border border-gray-200 p-8 h-full transition-all duration-300 hover:border-blue-500/20 card-glow cursor-pointer">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">{post.category}</span>
-                  <span className="text-xs text-white/30">{post.date}</span>
+                  <span className="text-xs text-gray-500">{post.date}</span>
                 </div>
                 <h2 className="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">{post.title}</h2>
-                <p className="text-sm text-white/45 leading-relaxed mb-4">{post.excerpt}</p>
-                <span className="text-xs text-white/30">{post.readTime}</span>
+                <p className="text-sm text-gray-500 leading-relaxed mb-4">{post.excerpt}</p>
+                <span className="text-xs text-gray-500">{post.readTime}</span>
               </div>
             </motion.div>
           ))}
@@ -96,16 +96,16 @@ export default function BlogPage() {
         <div className="space-y-4">
           {rest.map((post, i) => (
             <motion.div key={post.slug} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.05 }}>
-              <div className="group rounded-2xl bg-surface border border-white/[0.06] p-6 transition-all duration-300 hover:border-blue-500/20 card-glow cursor-pointer flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="group rounded-2xl bg-surface border border-gray-200 p-6 transition-all duration-300 hover:border-blue-500/20 card-glow cursor-pointer flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-white/[0.06] text-white/50">{post.category}</span>
-                    <span className="text-xs text-white/30">{post.date}</span>
+                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-50 text-gray-500">{post.category}</span>
+                    <span className="text-xs text-gray-500">{post.date}</span>
                   </div>
                   <h3 className="text-base font-bold group-hover:text-blue-400 transition-colors">{post.title}</h3>
-                  <p className="text-sm text-white/40 mt-1 hidden sm:block">{post.excerpt}</p>
+                  <p className="text-sm text-gray-500 mt-1 hidden sm:block">{post.excerpt}</p>
                 </div>
-                <span className="text-xs text-white/30 shrink-0">{post.readTime}</span>
+                <span className="text-xs text-gray-500 shrink-0">{post.readTime}</span>
               </div>
             </motion.div>
           ))}
@@ -115,10 +115,10 @@ export default function BlogPage() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-20">
           <div className="rounded-2xl bg-blue-600/[0.06] border border-blue-500/20 p-10 text-center">
             <h3 className="text-2xl font-bold mb-2">Stay in the loop</h3>
-            <p className="text-sm text-white/45 mb-6 max-w-md mx-auto">Get NDIS tips, provider updates, and platform news delivered to your inbox. No spam, unsubscribe anytime.</p>
+            <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">Get NDIS tips, provider updates, and platform news delivered to your inbox. No spam, unsubscribe anytime.</p>
             <form onSubmit={async (e) => { e.preventDefault(); const email = new FormData(e.currentTarget).get("email") as string; await subscribeNewsletter(email); (e.target as HTMLFormElement).reset(); alert("Subscribed!"); }} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input type="email" name="email" required placeholder="your@email.com" className="flex-1 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
-              <button type="submit" className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all shrink-0">Subscribe</button>
+              <input type="email" name="email" required placeholder="your@email.com" className="flex-1 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+              <button type="submit" className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-gray-900 font-semibold text-sm transition-all shrink-0">Subscribe</button>
             </form>
           </div>
         </motion.div>

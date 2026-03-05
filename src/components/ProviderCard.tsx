@@ -22,26 +22,26 @@ export function ProviderCard({ provider }: { provider: Provider }) {
 
         <div className="flex items-center gap-2 mb-3">
           <span className="text-xs text-orange-400 font-medium">{provider.category}</span>
-          <span className="text-white/15">|</span>
-          <span className="text-xs text-white/35">{provider.location}</span>
+          <span className="text-gray-900/15">|</span>
+          <span className="text-xs text-gray-400">{provider.location}</span>
         </div>
 
-        <p className="text-sm text-white/40 leading-relaxed mb-4 line-clamp-2">{provider.description}</p>
+        <p className="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-2">{provider.description}</p>
 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#F97316"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
             <span className="text-sm font-semibold text-orange-400">{provider.rating}</span>
           </div>
-          <span className="text-xs text-white/25">({provider.reviewCount} reviews)</span>
+          <span className="text-xs text-gray-900/25">({provider.reviewCount} reviews)</span>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-1.5">
           {provider.services.slice(0, 3).map((s) => (
-            <span key={s} className="text-[11px] px-2.5 py-1 rounded-lg bg-white/[0.03] text-white/35 border border-white/[0.05]">{s}</span>
+            <span key={s} className="text-[11px] px-2.5 py-1 rounded-lg bg-white/[0.03] text-gray-400 border border-white/[0.05]">{s}</span>
           ))}
           {provider.services.length > 3 && (
-            <span className="text-[11px] px-2 py-1 text-white/25">+{provider.services.length - 3}</span>
+            <span className="text-[11px] px-2 py-1 text-gray-900/25">+{provider.services.length - 3}</span>
           )}
         </div>
 
