@@ -30,7 +30,7 @@ export default function Contact() {
     <section className="min-h-screen pt-24 pb-16 px-6">
       <div className="max-w-[600px] mx-auto">
         <p className="section-label mb-3">Get in Touch</p>
-        <h1 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Contact us</h1>
+        <h1 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Contact us</h1>
         <p className="text-gray-500 mb-8 font-light">Have a question about Refer? Want to list your practice? We would love to hear from you.</p>
 
         {status === "sent" ? (

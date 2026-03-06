@@ -33,7 +33,7 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Sarah M.", role: "Participant, Merewether", text: "Refer made finding the right support worker so easy. I found Sunshine Support within minutes and they have been incredible with our son." },
+  { name: "Sarah M.", role: "Participant, Merewether", text: "ReferAus made finding the right support worker so easy. I found Sunshine Support within minutes and they have been incredible with our son." },
   { name: "Dr. James P.", role: "PhysioPlus Maitland", text: "Since listing on Refer, our enquiries from the Hunter Region have tripled. The direct messaging means we actually connect with participants." },
   { name: "Priya S.", role: "Parent, Charlestown", text: "I spent weeks calling around. A friend told me about Refer — I found Little Stars in ten minutes, messaged them, had an appointment within the week." },
 ];
@@ -53,7 +53,7 @@ export default function Home() {
         </motion.p>
 
         <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
-          className="serif-i text-[clamp(3rem,8vw,5.5rem)] leading-[1.05] mb-6 max-w-[800px]">
+          className="heading-bold text-[clamp(3rem,8vw,5.5rem)] leading-[1.05] mb-6 max-w-[800px]">
           Find the right{" "}
           <span className="text-orange-500">NDIS provider</span>{" "}
           for you
@@ -82,7 +82,7 @@ export default function Home() {
             { num: 15000, suffix: "+", label: "Successful Referrals" },
           ].map((s) => (
             <div key={s.label}>
-              <div className="serif-i text-[2.5rem] text-blue-600"><AnimatedCounter target={s.num} suffix={s.suffix} /></div>
+              <div className="heading-bold text-[2.5rem] text-blue-600"><AnimatedCounter target={s.num} suffix={s.suffix} /></div>
               <div className="text-[0.75rem] text-gray-400 uppercase tracking-[0.1em] mt-1">{s.label}</div>
             </div>
           ))}
@@ -94,7 +94,7 @@ export default function Home() {
       {/* How it works */}
       <section className="py-24 px-6 max-w-[1200px] mx-auto">
         <p className="section-label mb-3">How It Works</p>
-        <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Three steps. That&apos;s it.</h2>
+        <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Three steps. That&apos;s it.</h2>
         <p className="text-gray-500 max-w-[600px] mb-12 font-light">No sign-up required to browse. Find the support you need in minutes, not weeks.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -105,7 +105,7 @@ export default function Home() {
           ].map((step, i) => (
             <motion.div key={step.num} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }}
               className="text-center py-8">
-              <div className="serif-i text-[3.5rem] text-orange-500 leading-none">{step.num}</div>
+              <div className="heading-bold text-[3.5rem] text-orange-500 leading-none">{step.num}</div>
               <div className="font-bold text-lg mt-4 mb-2">{step.title}</div>
               <div className="text-gray-500 text-sm leading-relaxed">{step.desc}</div>
             </motion.div>
@@ -117,8 +117,8 @@ export default function Home() {
 
       {/* Features */}
       <section className="py-24 px-6 max-w-[1200px] mx-auto">
-        <p className="section-label mb-3">Why Refer</p>
-        <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Built for the NDIS community</h2>
+        <p className="section-label mb-3">Why ReferAus</p>
+        <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Built for the NDIS community</h2>
         <p className="text-gray-500 max-w-[600px] mb-12 font-light">Everything participants and providers need to find each other — nothing they don&apos;t.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -143,7 +143,7 @@ export default function Home() {
             { num: "< 2hrs", label: "Avg Response Time" },
           ].map((s) => (
             <div key={s.label}>
-              <div className="serif-i text-[3rem]">{s.num}</div>
+              <div className="heading-bold text-[3rem]">{s.num}</div>
               <div className="text-sm opacity-80 mt-1">{s.label}</div>
             </div>
           ))}
@@ -155,7 +155,7 @@ export default function Home() {
         <div className="flex items-end justify-between mb-12">
           <div>
             <p className="section-label mb-3">Browse Providers</p>
-            <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight">Top-rated in your area</h2>
+            <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight">Top-rated in your area</h2>
           </div>
           <Link href="/providers" className="text-sm text-blue-600 hover:text-blue-700 transition-colors hidden sm:block">
             View all providers →
@@ -196,13 +196,13 @@ export default function Home() {
       {/* Testimonials */}
       <section className="py-24 px-6 max-w-[1200px] mx-auto">
         <p className="section-label mb-3">What People Say</p>
-        <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-12">Real stories from real people</h2>
+        <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-12">Real stories from real people</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
             <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
               className="bg-gray-50 border border-gray-100 rounded-xl p-8 relative">
-              <div className="serif-i text-[4rem] text-orange-500 opacity-20 absolute top-2 left-5 leading-none">"</div>
+              <div className="heading-bold text-[4rem] text-orange-500 opacity-20 absolute top-2 left-5 leading-none">"</div>
               <div className="flex gap-0.5 mb-4">
                 {[...Array(5)].map((_, j) => <span key={j} className="text-orange-500 text-sm">★</span>)}
               </div>
@@ -219,19 +219,19 @@ export default function Home() {
       {/* Provider Pricing */}
       <section className="py-24 px-6 max-w-[1200px] mx-auto">
         <p className="section-label mb-3">For Providers</p>
-        <h2 className="serif-i text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Grow your practice</h2>
+        <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Grow your practice</h2>
         <p className="text-gray-500 max-w-[600px] mb-12 font-light">Get found by participants actively looking for your services. Free to list. Upgrade when you&apos;re ready.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             { tier: "Free", price: "$0", desc: "Get listed and start receiving enquiries.", features: ["Basic provider listing", "Show services and areas", "Enquiry notifications", "Up to 5 reviews"], cta: "Get Listed Free", style: "outline" },
-            { tier: "Pro", price: "$99", desc: "Stand out and connect directly with participants.", features: ["Priority in search results", "Direct messaging", "Profile analytics", "Unlimited reviews", "Highlighted badge", "Area alerts"], cta: "Start Free Trial", style: "orange", popular: true },
-            { tier: "Premium", price: "$249", desc: "Maximum visibility and dedicated support.", features: ["Everything in Pro", "Featured placement", "Multi-location support", "Custom branded profile", "Referral tracking", "Account manager"], cta: "Contact Sales", style: "outline" },
+            { tier: "Pro", price: "$49", desc: "Stand out and connect directly with participants.", features: ["Priority in search results", "Direct messaging", "Profile analytics", "Unlimited reviews", "Highlighted badge", "Area alerts"], cta: "Start Free Trial", style: "orange", popular: true },
+            { tier: "Premium", price: "$149", desc: "Maximum visibility and dedicated support.", features: ["Everything in Pro", "Featured placement", "Multi-location support", "Custom branded profile", "Referral tracking", "Account manager"], cta: "Contact Sales", style: "outline" },
           ].map((plan) => (
             <div key={plan.tier} className={`bg-white border rounded-xl p-8 relative ${plan.popular ? "border-orange-500 shadow-lg shadow-orange-500/10" : "border-gray-200"}`}>
               {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[0.6rem] font-bold px-3 py-0.5 rounded-full tracking-wider">MOST POPULAR</div>}
               <div className="text-sm text-gray-500 uppercase tracking-wider">{plan.tier}</div>
-              <div className="serif-i text-[3rem] my-2">{plan.price}<span className="text-base text-gray-400 font-sans not-italic">/mo</span></div>
+              <div className="heading-bold text-[3rem] my-2">{plan.price}<span className="text-base text-gray-400 font-sans not-italic">/mo</span></div>
               <p className="text-sm text-gray-500 mb-6">{plan.desc}</p>
               <ul className="space-y-2 mb-8">
                 {plan.features.map((f) => (
@@ -251,8 +251,8 @@ export default function Home() {
       {/* CTA Banner */}
       <section className="max-w-[1200px] mx-auto px-6 pb-24">
         <div className="bg-gradient-to-br from-orange-500 to-orange-400 text-white rounded-2xl p-12 text-center">
-          <h2 className="serif-i text-[clamp(1.8rem,4vw,2.8rem)] mb-4">Ready to find the right provider?</h2>
-          <p className="opacity-90 max-w-[500px] mx-auto mb-8">Join thousands of NDIS participants who found better support through Refer. Free, fast, and it works.</p>
+          <h2 className="heading-bold text-[clamp(1.8rem,4vw,2.8rem)] mb-4">Ready to find the right provider?</h2>
+          <p className="opacity-90 max-w-[500px] mx-auto mb-8">Join thousands of NDIS participants who found better support through ReferAus. Free, fast, and it works.</p>
           <Link href="/providers" className="inline-block px-8 py-3.5 bg-white text-orange-500 font-bold rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all">
             Search Providers Now
           </Link>

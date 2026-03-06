@@ -75,7 +75,7 @@ export default function PricingPage() {
                 href={plan.href}
                 className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all mb-8 ${
                   plan.highlight
-                    ? "bg-blue-600 hover:bg-blue-500 text-gray-900 hover:shadow-lg hover:shadow-blue-600/25"
+                    ? "bg-blue-600 hover:bg-blue-500 text-white hover:shadow-lg hover:shadow-blue-600/25"
                     : "bg-gray-50 hover:bg-gray-50 text-gray-900 border border-gray-200"
                 }`}
               >

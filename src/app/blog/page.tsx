@@ -118,7 +118,7 @@ export default function BlogPage() {
             <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">Get NDIS tips, provider updates, and platform news delivered to your inbox. No spam, unsubscribe anytime.</p>
             <form onSubmit={async (e) => { e.preventDefault(); const email = new FormData(e.currentTarget).get("email") as string; await subscribeNewsletter(email); (e.target as HTMLFormElement).reset(); alert("Subscribed!"); }} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input type="email" name="email" required placeholder="your@email.com" className="flex-1 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
-              <button type="submit" className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-gray-900 font-semibold text-sm transition-all shrink-0">Subscribe</button>
+              <button type="submit" className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all shrink-0">Subscribe</button>
             </form>
           </div>
         </motion.div>

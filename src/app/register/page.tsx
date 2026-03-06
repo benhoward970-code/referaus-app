@@ -1,4 +1,5 @@
 "use client";
+import { LogoMark } from "../../components/Logo";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -57,11 +58,9 @@ export default function RegisterPage() {
       <div className="absolute bottom-[-20%] right-[20%] w-[500px] h-[500px] rounded-full bg-orange-500/[0.04] blur-[120px]" />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/20">
-            <span className="text-gray-900 font-bold text-lg">N</span>
-          </div>
+          <div className="mx-auto mb-4"><LogoMark /></div>
           <h1 className="text-2xl font-black tracking-tight mb-2">Create your account</h1>
-          <p className="text-sm text-gray-500">Join Refer today</p>
+          <p className="text-sm text-gray-500">Join ReferAus today</p>
         </div>
         <div className="glass rounded-2xl p-8">
           <div className="flex rounded-xl bg-gray-50 p-1 mb-6">
@@ -98,3 +97,7 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+
+
+

@@ -48,3 +48,19 @@ body { background: #ffffff; color: #1a1d23; }
   height: 1px;
   background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
 }
+
+/* Bold display headings - Outfit Black */
+.heading-bold {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #1a1d23;
+}
+
+/* Accent word gradient (orange to purple/blue) */
+.accent-word {
+  background: linear-gradient(135deg, #f97316 0%, #7c3aed 50%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

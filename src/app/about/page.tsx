@@ -11,13 +11,13 @@ const values = [
 
 const timeline = [
   { year: "2025", title: "The Problem", desc: "We saw NDIS participants in Newcastle struggling to find quality providers. Google searches, outdated directories, word of mouth. There had to be a better way." },
-  { year: "2026", title: "Refer Launches", desc: "We built the platform we wished existed. Clean, simple, focused on the Hunter Region. Real reviews from real participants." },
+  { year: "2026", title: "ReferAus Launches", desc: "We built the platform we wished existed. Clean, simple, focused on the Hunter Region. Real reviews from real participants." },
   { year: "2026+", title: "Growing Together", desc: "Expanding across NSW while keeping the local focus that makes us different. Every provider vetted, every review verified." },
 ];
 
 const team = [
   { name: "Ben Deasey", role: "Founder & CEO", desc: "Passionate about using technology to improve disability services in Australia." },
-  { name: "Refer Team", role: "Engineering & Design", desc: "A small, dedicated team building the future of NDIS provider discovery." },
+  { name: "ReferAus Team", role: "Engineering & Design", desc: "A small, dedicated team building the future of NDIS provider discovery." },
 ];
 
 export default function AboutPage() {
@@ -34,7 +34,7 @@ export default function AboutPage() {
               discovery <span className="gradient-text">simple</span>
             </h1>
             <p className="text-lg text-gray-500 max-w-2xl leading-relaxed">
-              Refer was born from a simple frustration: finding the right NDIS provider in Newcastle should not be this hard. We are changing that.
+              ReferAus was born from a simple frustration: finding the right NDIS provider in Newcastle should not be this hard. We are changing that.
             </p>
           </motion.div>
         </div>
@@ -47,7 +47,7 @@ export default function AboutPage() {
             <div className="rounded-2xl bg-surface border border-gray-200 p-10 sm:p-14">
               <span className="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 block">Our Mission</span>
               <p className="text-2xl sm:text-3xl font-bold leading-snug text-gray-500">
-                To connect every NDIS participant in the Hunter Region with the right provider, based on real reviews, verified quality, and genuine compatibility — not who pays the most to advertise.
+                To connect every NDIS participant in the Hunter Region with the right provider, based on real reviews, verified quality, and genuine compatibility Ã¢â‚¬â€ not who pays the most to advertise.
               </p>
             </div>
           </motion.div>
@@ -102,7 +102,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12">
             <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Team</span>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">The people behind Refer</h2>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">The people behind ReferAus</h2>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {team.map((t, i) => (
@@ -126,9 +126,9 @@ export default function AboutPage() {
           <h2 className="text-3xl font-black tracking-tight mb-4">
             Ready to <span className="gradient-text">get started?</span>
           </h2>
-          <p className="text-gray-500 mb-8">Whether you are a participant looking for support or a provider wanting to grow, Refer is here for you.</p>
+          <p className="text-gray-500 mb-8">Whether you are a participant looking for support or a provider wanting to grow, ReferAus is here for you.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/providers" className="px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-gray-900 font-semibold transition-all hover:shadow-lg hover:shadow-blue-600/25">
+            <Link href="/providers" className="px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:shadow-lg hover:shadow-blue-600/25">
               Browse Providers
             </Link>
             <Link href="/register" className="px-8 py-3.5 rounded-xl bg-gray-50 hover:bg-gray-50 text-gray-900 font-medium border border-gray-200 transition-all">

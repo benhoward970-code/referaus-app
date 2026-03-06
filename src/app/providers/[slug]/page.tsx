@@ -101,7 +101,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           <div>
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass rounded-2xl p-6 sticky top-24">
               <h3 className="text-lg font-bold mb-4">Get in Touch</h3>
-              <button onClick={() => setEnquiryOpen(true)} className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-gray-900 font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25 mb-3">
+              <button onClick={() => setEnquiryOpen(true)} className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25 mb-3">
                 Send Enquiry
               </button>
               <button className="w-full py-3 rounded-xl glass hover:bg-white/[0.08] text-gray-900 font-medium text-sm transition-all mb-6">
