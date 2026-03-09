@@ -19,7 +19,7 @@ export default function ProvidersPage() {
         !search ||
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.description.toLowerCase().includes(search.toLowerCase()) ||
-        p.services.some((s) => s.toLowerCase().includes(search.toLowerCase()));
+        p.services.some((s) => s.toLowerCase().includes(search.toLowerCase())) || (p.postcode && p.postcode.includes(search)) || (p.suburb && p.suburb.toLowerCase().includes(search.toLowerCase()));
       const matchCat = category === "All" || p.category === category;
       const matchLoc = location === "All Locations" || p.location === location;
       const matchVerified = !verifiedOnly || p.verified;
