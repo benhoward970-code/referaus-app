@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { SearchAutocomplete } from '@/components/SearchAutocomplete';
 import { providers } from "@/lib/providers";
 
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -114,7 +115,7 @@ export default function Home() {
 
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
           className="mb-7">
-          <HeroSearch />
+          <SearchAutocomplete className="w-full max-w-[600px]" />
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}
