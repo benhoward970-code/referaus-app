@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase, isConfigured, signOut } from "@/lib/supabase";
+import type { User } from "@supabase/supabase-js";
 
 const NAV_LINKS = [
   { label: "Providers", href: "/providers" },
@@ -13,10 +15,74 @@ const NAV_LINKS = [
   { label: "Pricing", href: "/pricing" },
 ];
 
+function UserMenu({ user }: { user: User }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+    router.refresh();
+  };
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-sm text-gray-700 hover:text-gray-900 transition-all"
+      >
+        <span className="w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xs font-bold">
+          {user.email?.[0]?.toUpperCase() ?? "?"}
+        </span>
+        <span className="max-w-[120px] truncate">{user.email}</span>
+        <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50"
+          >
+            <Link
+              href="/dashboard"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+              onClick={() => setOpen(false)}
+            >
+              Dashboard
+            </Link>
+            <hr className="my-1 border-gray-100" />
+            <button
+              onClick={handleSignOut}
+              className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+            >
+              Sign Out
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -25,6 +91,23 @@ export function Navbar() {
   }, []);
 
   useEffect(() => { setOpen(false); }, [pathname]);
+
+  // Auth state
+  useEffect(() => {
+    if (!isConfigured() || !supabase) return;
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleMobileSignOut = async () => {
+    await signOut();
+    setOpen(false);
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <>
@@ -60,18 +143,24 @@ export function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="/login"
-              className="text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:border-gray-400 hover:text-gray-900 transition-all"
-            >
-              Login
-            </Link>
-            <Link
-              href="/register"
-              className="text-sm font-semibold px-5 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-sm"
-            >
-              List Your Business
-            </Link>
+            {user ? (
+              <UserMenu user={user} />
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:border-gray-400 hover:text-gray-900 transition-all"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className="text-sm font-semibold px-5 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-sm"
+                >
+                  List Your Business
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -143,21 +232,40 @@ export function Navbar() {
                     </Link>
                   );
                 })}
+                {user && (
+                  <Link href="/dashboard" className="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Dashboard
+                  </Link>
+                )}
               </nav>
 
               <div className="px-5 pb-8 pt-4 border-t border-gray-100 flex flex-col gap-3">
-                <Link
-                  href="/login"
-                  className="text-center text-sm font-medium px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:border-gray-400 transition-all"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/register"
-                  className="text-center text-sm font-semibold px-4 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-all"
-                >
-                  List Your Business
-                </Link>
+                {user ? (
+                  <>
+                    <p className="text-xs text-gray-500 truncate px-1">{user.email}</p>
+                    <button
+                      onClick={handleMobileSignOut}
+                      className="text-center text-sm font-medium px-4 py-2.5 rounded-lg border border-red-200 text-red-500 hover:bg-red-50 transition-all"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      className="text-center text-sm font-medium px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:border-gray-400 transition-all"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      href="/register"
+                      className="text-center text-sm font-semibold px-4 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-all"
+                    >
+                      List Your Business
+                    </Link>
+                  </>
+                )}
               </div>
             </motion.div>
           </>
