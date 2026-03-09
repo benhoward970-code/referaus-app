@@ -25,8 +25,8 @@ export const viewport = { width: "device-width", initialScale: 1, maximumScale: 
 export const metadata: Metadata = {
   metadataBase: new URL("https://referaus.com"),
   title: {
-    default: "ReferAus Ã¢â‚¬â€ NDIS Provider Directory",
-    template: "%s | ReferAus Ã¢â‚¬â€ NDIS Provider Directory",
+    default: "ReferAus ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NDIS Provider Directory",
+    template: "%s | ReferAus ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NDIS Provider Directory",
   },
   description:
     "Search, compare and connect with trusted NDIS providers in Newcastle and the Hunter Region. Free for participants. Real reviews, direct messaging, no middleman.",
@@ -38,13 +38,13 @@ export const metadata: Metadata = {
     locale: "en_AU",
     url: "https://referaus.com",
     siteName: "ReferAus",
-    title: "ReferAus Ã¢â‚¬â€ NDIS Provider Directory",
+    title: "ReferAus ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NDIS Provider Directory",
     description: "Find trusted NDIS providers in Newcastle and the Hunter Region. Real reviews, direct messaging, free for participants.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "ReferAus Ã¢â‚¬â€ NDIS Provider Directory" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "ReferAus ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NDIS Provider Directory" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ReferAus Ã¢â‚¬â€ NDIS Provider Directory",
+    title: "ReferAus ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NDIS Provider Directory",
     description: "Find trusted NDIS providers in Newcastle and the Hunter Region. Free for participants.",
     images: ["/og-image.png"],
     creator: "@referaus",
@@ -61,7 +61,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${outfit.variable} ${mono.variable}`}>
       <head>
+        <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
       </head>

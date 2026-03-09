@@ -1,0 +1,14 @@
+﻿{
+  "name": "ReferAus — NDIS Provider Directory",
+  "short_name": "ReferAus",
+  "description": "Find trusted NDIS providers in the Hunter Region",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563EB",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "categories": ["health", "business"],
+  "lang": "en-AU"
+}
