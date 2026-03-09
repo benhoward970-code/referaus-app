@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Logo } from "./Logo";
 
 const COLUMNS = [
@@ -77,7 +77,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <p className="text-xs text-gray-400">
-            © 2026 ReferAus. Built in the Hunter Region.
+            Â© 2026 ReferAus. Built in the Hunter Region.
           </p>
           <p className="text-xs text-gray-400">ABN pending</p>
         </div>
@@ -85,3 +85,4 @@ export function Footer() {
     </footer>
   );
 }
+

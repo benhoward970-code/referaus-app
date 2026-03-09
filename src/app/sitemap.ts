@@ -1,4 +1,4 @@
-import { MetadataRoute } from "next";
+﻿import { MetadataRoute } from "next";
 import { providers } from "@/lib/providers";
 import { blogPosts } from "@/data/blog-posts";
 
@@ -18,6 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/resources`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
+    { url: `${base}/for-participants`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/for-providers`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
   ];
 
   const providerRoutes: MetadataRoute.Sitemap = providers.map((p) => ({
@@ -36,3 +38,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...staticRoutes, ...providerRoutes, ...blogRoutes];
 }
+
