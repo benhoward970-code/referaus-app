@@ -1,11 +1,10 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import type { Provider } from "@/lib/providers";
 
 export function ProviderCard({ provider }: { provider: Provider }) {
   return (
     <Link href={`/providers/${provider.slug}`}>
       <div className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-500 hover:shadow-lg transition-all duration-300 cursor-pointer h-full flex flex-col">
-        {/* Blue header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5">
           <div className="flex items-start justify-between gap-2">
             <div>
@@ -23,9 +22,7 @@ export function ProviderCard({ provider }: { provider: Provider }) {
           </div>
         </div>
 
-        {/* Content */}
         <div className="px-6 py-5 flex-1 flex flex-col">
-          {/* Rating */}
           <div className="flex items-center gap-2 mb-3">
             <div className="flex items-center gap-0.5">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -38,7 +35,6 @@ export function ProviderCard({ provider }: { provider: Provider }) {
             <span className="text-xs text-gray-400">({provider.reviewCount} reviews)</span>
           </div>
 
-          {/* Services */}
           <div className="flex flex-wrap gap-1.5 mb-3">
             {provider.services.slice(0, 3).map((s) => (
               <span key={s} className="text-[11px] px-2.5 py-1 rounded-lg bg-gray-100 text-gray-600 border border-gray-200">{s}</span>
@@ -48,13 +44,11 @@ export function ProviderCard({ provider }: { provider: Provider }) {
             )}
           </div>
 
-          {/* Location */}
           <div className="flex items-center gap-1.5 mb-4">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             <span className="text-sm text-gray-500">{provider.location}</span>
           </div>
 
-          {/* CTA */}
           <div className="mt-auto">
             {provider.verified ? (
               <div className="text-center">

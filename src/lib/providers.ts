@@ -1,4 +1,4 @@
-export interface Provider {
+﻿export interface Provider {
   slug: string;
   name: string;
   category: string;
@@ -12,7 +12,7 @@ export interface Provider {
   phone: string;
   email: string;
   image: string;
-  planTier: "Core" | "Capacity Building" | "Capital" | "All Plans";
+  plan: "free" | "starter" | "pro" | "premium";
 }
 
 export const providers: Provider[] = [
@@ -30,7 +30,7 @@ export const providers: Provider[] = [
     phone: "02 4925 1100",
     email: "hello@sunshinesupport.com.au",
     image: "/providers/sunshine.jpg",
-    planTier: "Core",
+    plan: "premium",
   },
   {
     slug: "hunter-valley-therapy",
@@ -46,7 +46,7 @@ export const providers: Provider[] = [
     phone: "02 4933 2200",
     email: "info@huntervalleytherapy.com.au",
     image: "/providers/hunter-therapy.jpg",
-    planTier: "Capacity Building",
+    plan: "pro",
   },
   {
     slug: "physioplus-newcastle",
@@ -62,7 +62,7 @@ export const providers: Provider[] = [
     phone: "02 4952 3300",
     email: "book@physioplusnewcastle.com.au",
     image: "/providers/physioplus.jpg",
-    planTier: "Capacity Building",
+    plan: "pro",
   },
   {
     slug: "little-stars-early-intervention",
@@ -78,7 +78,7 @@ export const providers: Provider[] = [
     phone: "02 4943 4400",
     email: "enquiries@littlestars.com.au",
     image: "/providers/little-stars.jpg",
-    planTier: "Capacity Building",
+    plan: "premium",
   },
   {
     slug: "carefirst-community",
@@ -94,7 +94,7 @@ export const providers: Provider[] = [
     phone: "02 4990 5500",
     email: "connect@carefirst.com.au",
     image: "/providers/carefirst.jpg",
-    planTier: "All Plans",
+    plan: "starter",
   },
   {
     slug: "lakeside-allied-health",
@@ -110,7 +110,7 @@ export const providers: Provider[] = [
     phone: "02 4945 6600",
     email: "hello@lakesidehealth.com.au",
     image: "/providers/lakeside.jpg",
-    planTier: "Capacity Building",
+    plan: "pro",
   },
   {
     slug: "newcastle-disability-services",
@@ -126,7 +126,7 @@ export const providers: Provider[] = [
     phone: "02 4961 7700",
     email: "info@nds.org.au",
     image: "/providers/nds.jpg",
-    planTier: "Core",
+    plan: "pro",
   },
   {
     slug: "hunter-support-co",
@@ -142,7 +142,7 @@ export const providers: Provider[] = [
     phone: "02 4926 8800",
     email: "plans@huntersupport.co",
     image: "/providers/hunter-support.jpg",
-    planTier: "All Plans",
+    plan: "starter",
   },
   {
     slug: "valley-view-care",
@@ -158,7 +158,7 @@ export const providers: Provider[] = [
     phone: "02 4937 9900",
     email: "living@valleyviewcare.com.au",
     image: "/providers/valley-view.jpg",
-    planTier: "Capital",
+    plan: "free",
   },
   {
     slug: "coastal-wellness-group",
@@ -174,7 +174,39 @@ export const providers: Provider[] = [
     phone: "02 4963 1100",
     email: "support@coastalwellness.com.au",
     image: "/providers/coastal.jpg",
-    planTier: "Capacity Building",
+    plan: "starter",
+  },
+  {
+    slug: "hunter-transport-solutions",
+    name: "Hunter Transport Solutions",
+    category: "Transport",
+    description: "Reliable, accessible transport for NDIS participants across the Hunter Region. Wheelchair-accessible vehicles and trained drivers.",
+    location: "Wallsend",
+    suburb: "Wallsend",
+    rating: 4.5,
+    reviewCount: 38,
+    verified: false,
+    services: ["Transport Assistance", "Community Transport", "Airport Transfers", "Medical Appointments"],
+    phone: "02 4955 3344",
+    email: "bookings@huntertransport.com.au",
+    image: "/providers/hunter-transport.jpg",
+    plan: "free",
+  },
+  {
+    slug: "maitland-sil-homes",
+    name: "Maitland SIL Homes",
+    category: "Accommodation",
+    description: "Purpose-built SDA and SIL homes in Maitland and surrounding areas. Robust and fully accessible designs for high physical support needs.",
+    location: "Maitland",
+    suburb: "Maitland",
+    rating: 4.4,
+    reviewCount: 29,
+    verified: false,
+    services: ["SDA", "SIL", "24/7 Support", "Household Tasks"],
+    phone: "02 4933 7788",
+    email: "homes@maitlandsil.com.au",
+    image: "/providers/maitland-sil.jpg",
+    plan: "free",
   },
 ];
 
@@ -187,6 +219,7 @@ export const categories = [
   "Early Intervention",
   "Mental Health",
   "Accommodation",
+  "Transport",
 ];
 
 export const locations = [
@@ -201,5 +234,6 @@ export const locations = [
   "Kurri Kurri",
   "Merewether",
   "Adamstown",
+  "Wallsend",
   "Lake Macquarie",
 ];

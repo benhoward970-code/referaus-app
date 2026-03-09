@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { providers, categories, locations } from "@/lib/providers";
@@ -36,7 +36,6 @@ export default function ProvidersPage() {
   return (
     <div className="min-h-screen pt-24 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +49,6 @@ export default function ProvidersPage() {
           </p>
         </motion.div>
 
-        {/* Filters */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -58,16 +56,10 @@ export default function ProvidersPage() {
           className="space-y-3 mb-10"
         >
           <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search */}
             <div className="relative flex-1">
               <svg
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                viewBox="0 0 24 24"
+                width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"
               >
                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -79,8 +71,6 @@ export default function ProvidersPage() {
                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500/40 transition-colors"
               />
             </div>
-
-            {/* Category */}
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
@@ -90,8 +80,6 @@ export default function ProvidersPage() {
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
-
-            {/* Location */}
             <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
@@ -103,13 +91,12 @@ export default function ProvidersPage() {
             </select>
           </div>
 
-          {/* Second row: verified + sort */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <label className="flex items-center gap-2.5 cursor-pointer select-none">
-              <div
-                onClick={() => setVerifiedOnly(!verifiedOnly)}
-                className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${verifiedOnly ? "bg-blue-600 border-blue-600" : "border-gray-300 bg-white"}`}
-              >
+            <label
+              className="flex items-center gap-2.5 cursor-pointer select-none"
+              onClick={() => setVerifiedOnly(!verifiedOnly)}
+            >
+              <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${verifiedOnly ? "bg-blue-600 border-blue-600" : "border-gray-300 bg-white"}`}>
                 {verifiedOnly && (
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
@@ -126,9 +113,7 @@ export default function ProvidersPage() {
                   key={s}
                   onClick={() => setSort(s)}
                   className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${
-                    sort === s
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                    sort === s ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                   }`}
                 >
                   {s === "rating" ? "Top Rated" : s === "name" ? "Name A-Z" : "Most Reviews"}
@@ -138,12 +123,10 @@ export default function ProvidersPage() {
           </div>
         </motion.div>
 
-        {/* Results count */}
         <p className="text-sm text-gray-400 mb-6">
           Showing {filtered.length} of {providers.length} providers
         </p>
 
-        {/* Results */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-gray-500 text-lg mb-2">No providers found</p>

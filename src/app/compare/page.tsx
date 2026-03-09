@@ -82,11 +82,11 @@ function ProviderCard({ provider, onRemove, allServices }: { provider: Provider;
         <div className="flex justify-between items-center py-2 border-b border-gray-100">
           <span className="text-gray-500">Plan Tier</span>
           <span className={`text-xs font-semibold px-2 py-1 rounded-lg ${
-            provider.planTier === "All Plans" ? "bg-blue-50 text-blue-700 border border-blue-200" :
-            provider.planTier === "Core" ? "bg-green-50 text-green-700 border border-green-200" :
-            provider.planTier === "Capacity Building" ? "bg-purple-50 text-purple-700 border border-purple-200" :
+            provider.plan === "premium" ? "bg-blue-50 text-blue-700 border border-blue-200" :
+            provider.plan === "free" ? "bg-green-50 text-green-700 border border-green-200" :
+            provider.plan === "pro" ? "bg-purple-50 text-purple-700 border border-purple-200" :
             "bg-orange-50 text-orange-700 border border-orange-200"
-          }`}>{provider.planTier}</span>
+          }`}>{provider.plan}</span>
         </div>
         <div className="py-2">
           <p className="text-gray-500 mb-2">Services</p>
@@ -182,11 +182,11 @@ export default function ComparePage() {
       label: "Plan Tier",
       render: (p) => (
         <span className={`text-xs font-semibold px-2 py-1 rounded-lg ${
-          p.planTier === "All Plans" ? "bg-blue-50 text-blue-700 border border-blue-200" :
-          p.planTier === "Core" ? "bg-green-50 text-green-700 border border-green-200" :
-          p.planTier === "Capacity Building" ? "bg-purple-50 text-purple-700 border border-purple-200" :
+          p.plan === "premium" ? "bg-blue-50 text-blue-700 border border-blue-200" :
+          p.plan === "free" ? "bg-green-50 text-green-700 border border-green-200" :
+          p.plan === "pro" ? "bg-purple-50 text-purple-700 border border-purple-200" :
           "bg-orange-50 text-orange-700 border border-orange-200"
-        }`}>{p.planTier}</span>
+        }`}>{p.plan}</span>
       ),
       isDiff: (vals) => new Set(vals.map(String)).size > 1,
     },
