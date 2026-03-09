@@ -1,22 +1,10 @@
-import type { Metadata } from "next";
+﻿import { DashboardSidebar } from '@/components/DashboardSidebar';
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Your ReferAus provider dashboard — manage your profile, view enquiries, and track analytics.",
-  openGraph: {
-    title: "Dashboard | ReferAus — NDIS Provider Directory",
-    description: "Your ReferAus provider dashboard — manage your profile, view enquiries, and track analytics.",
-    url: "https://referaus.com/dashboard",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "ReferAus" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Dashboard | ReferAus — NDIS Provider Directory",
-    description: "Your ReferAus provider dashboard — manage your profile, view enquiries, and track analytics.",
-  },
-  alternates: { canonical: "https://referaus.com/dashboard" },
-};
-
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen flex flex-col md:flex-row gap-6 max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-20">
+      <DashboardSidebar />
+      <div className="flex-1 min-w-0">{children}</div>
+    </div>
+  );
 }

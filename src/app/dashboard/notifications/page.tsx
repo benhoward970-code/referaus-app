@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ export default function NotificationsPage() {
   const handleSave = () => { setSaved(true); setTimeout(() => setSaved(false), 3000); };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 max-w-3xl mx-auto">
+    <div className="">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center justify-between mb-8">
           <div><h1 className="text-3xl font-black tracking-tight">Notifications</h1><p className="text-gray-500 text-sm mt-1">Choose how you want to be notified</p></div>

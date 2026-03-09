@@ -7,7 +7,7 @@ import {
   Zap, User, Phone, Mail, Calendar, ArrowUpRight,
 } from "lucide-react";
 
-// ─── Mock Data (replace with Supabase queries later) ─────────────────────────
+// â”€â”€â”€ Mock Data (replace with Supabase queries later) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const providerName = "Sunshine Support Services";
 const providerSlug = "sunshine-support-services";
@@ -16,7 +16,7 @@ const stats = [
   { label: "Total Views", value: "1,284", change: "+18%", up: true, icon: Eye, color: "blue" },
   { label: "Enquiries This Month", value: "34", change: "+12", up: true, icon: MessageSquare, color: "orange" },
   { label: "Search Appearances", value: "892", change: "+24%", up: true, icon: Search, color: "purple" },
-  { label: "Average Rating", value: "4.8", change: "★", up: true, icon: Star, color: "yellow" },
+  { label: "Average Rating", value: "4.8", change: "â˜…", up: true, icon: Star, color: "yellow" },
 ];
 
 type EnquiryStatus = "new" | "contacted" | "closed";
@@ -60,13 +60,13 @@ const recentReviews: Review[] = [
 ];
 
 const tips = [
-  { icon: "📸", title: "Add more photos", desc: "Listings with 3+ photos get 2x more enquiries.", action: "Add photos", href: "/dashboard/profile" },
-  { icon: "💬", title: "Reply faster", desc: "Responding within 1 hour increases booking rate by 40%.", action: "View enquiries", href: "#enquiries" },
-  { icon: "⭐", title: "Ask for reviews", desc: "Send a review request to your recent clients to build trust.", action: "Get reviews", href: "/dashboard/reviews" },
-  { icon: "✅", title: "Complete your profile", desc: `You are at ${profileCompletion}%. Full profiles rank higher in search.`, action: "Edit profile", href: "/dashboard/profile" },
+  { icon: "ðŸ“¸", title: "Add more photos", desc: "Listings with 3+ photos get 2x more enquiries.", action: "Add photos", href: "/dashboard/profile" },
+  { icon: "ðŸ’¬", title: "Reply faster", desc: "Responding within 1 hour increases booking rate by 40%.", action: "View enquiries", href: "#enquiries" },
+  { icon: "â­", title: "Ask for reviews", desc: "Send a review request to your recent clients to build trust.", action: "Get reviews", href: "/dashboard/reviews" },
+  { icon: "âœ…", title: "Complete your profile", desc: `You are at ${profileCompletion}%. Full profiles rank higher in search.`, action: "Edit profile", href: "/dashboard/profile" },
 ];
 
-// ─── Status Badge ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Status Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const statusConfig: Record<EnquiryStatus, { label: string; className: string; dot: string }> = {
   new: { label: "New", className: "bg-orange-50 text-orange-600 border border-orange-200", dot: "bg-orange-500" },
