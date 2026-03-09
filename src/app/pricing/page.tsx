@@ -1,90 +1,229 @@
 "use client";
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 const plans = [
   {
     name: "Free Listing",
-    price: "$0",
-    period: "forever",
+    slug: "free",
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    yearlySaving: 0,
     desc: "Get discovered by NDIS participants in your area.",
-    features: ["Basic provider profile", "Appear in search results", "Receive enquiries via email", "Up to 5 service categories"],
+    features: [
+      "Basic provider profile",
+      "Appear in search results",
+      "Receive enquiries via email",
+      "Up to 5 service categories",
+    ],
     cta: "Create Free Listing",
-    href: "/register",
     highlight: false,
+    popular: false,
+  },
+  {
+    name: "Starter",
+    slug: "starter",
+    monthlyPrice: 29,
+    yearlyPrice: 290,
+    yearlySaving: 58,
+    desc: "Perfect for new providers building their presence.",
+    features: [
+      "Verified badge",
+      "Priority search ranking",
+      "Up to 10 service categories",
+      "Review management",
+      "Email support",
+    ],
+    cta: "Start Starter",
+    highlight: false,
+    popular: false,
   },
   {
     name: "Professional",
-    price: "$49",
-    period: "/month",
+    slug: "pro",
+    monthlyPrice: 79,
+    yearlyPrice: 790,
+    yearlySaving: 158,
     desc: "Everything you need to grow your provider business.",
-    features: ["Verified badge", "Priority search ranking", "Direct booking system", "Analytics dashboard", "Review management", "Unlimited service categories", "Phone & email support"],
+    features: [
+      "Everything in Starter",
+      "Direct booking system",
+      "Analytics dashboard",
+      "Unlimited service categories",
+      "Area alerts",
+      "Phone & email support",
+    ],
     cta: "Start Professional",
-    href: "/register?plan=pro",
     highlight: true,
+    popular: true,
   },
   {
     name: "Premium",
-    price: "$149",
-    period: "/month",
+    slug: "premium",
+    monthlyPrice: 149,
+    yearlyPrice: 1490,
+    yearlySaving: 298,
     desc: "For established providers who want maximum visibility.",
-    features: ["Everything in Professional", "Featured homepage placement", "Competitor insights", "Custom branded profile", "API access", "Dedicated account manager", "Multi-location support"],
+    features: [
+      "Everything in Professional",
+      "Featured homepage placement",
+      "Competitor insights",
+      "Custom branded profile",
+      "API access",
+      "Dedicated account manager",
+      "Multi-location support",
+    ],
     cta: "Start Premium",
-    href: "/register?plan=premium",
     highlight: false,
+    popular: false,
   },
 ];
 
 export default function PricingPage() {
+  const [yearly, setYearly] = useState(false);
+
   return (
     <div className="min-h-screen pt-24 pb-20 px-6">
-      <div className="max-w-6xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
-          <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Pricing</span>
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">
+            Pricing
+          </span>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
-            Simple, transparent <span className="gradient-text">pricing</span>
+            Simple, transparent{" "}
+            <span className="gradient-text">pricing</span>
           </h1>
-          <p className="text-lg text-gray-500 max-w-lg mx-auto">Free for participants. Affordable plans for providers who want to grow.</p>
+          <p className="text-lg text-gray-500 max-w-lg mx-auto">
+            Free for participants. Affordable plans for providers who want to grow.
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex items-center justify-center gap-4 mb-14"
+        >
+          <span className={`text-sm font-medium ${!yearly ? "text-gray-900" : "text-gray-400"}`}>
+            Monthly
+          </span>
+          <button
+            onClick={() => setYearly(!yearly)}
+            className={`relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none ${
+              yearly ? "bg-blue-600" : "bg-gray-200"
+            }`}
+            aria-label="Toggle yearly billing"
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${
+                yearly ? "translate-x-6" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <span className={`text-sm font-medium ${yearly ? "text-gray-900" : "text-gray-400"}`}>
+            Yearly
+          </span>
+          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-green-100 text-green-700 tracking-wide">
+            Save 17%
+          </span>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className={`relative rounded-2xl p-8 border transition-all ${
+              transition={{ delay: i * 0.08 }}
+              className={`relative rounded-2xl p-7 border flex flex-col transition-all ${
                 plan.highlight
-                  ? "bg-blue-600/[0.08] border-blue-500/30 shadow-lg shadow-blue-600/10"
+                  ? "bg-blue-600/[0.07] border-blue-500/40 shadow-xl shadow-blue-600/10"
                   : "bg-surface border-gray-200"
               }`}
             >
-              {plan.highlight && (
+              {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-600 text-gray-900">Most Popular</span>
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-600 text-white whitespace-nowrap">
+                    Most Popular
+                  </span>
                 </div>
               )}
-              <h3 className="text-lg font-bold mb-2">{plan.name}</h3>
-              <div className="flex items-baseline gap-1 mb-2">
-                <span className="text-4xl font-black">{plan.price}</span>
-                <span className="text-sm text-gray-500">{plan.period}</span>
+
+              <h3 className="text-base font-bold mb-1">{plan.name}</h3>
+
+              <div className="flex items-baseline gap-1 mb-1 min-h-[52px]">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={yearly ? "yearly" : "monthly"}
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.18 }}
+                    className="text-4xl font-black"
+                  >
+                    {plan.monthlyPrice === 0
+                      ? "$0"
+                      : yearly
+                      ? `$${Math.round(plan.yearlyPrice / 12)}`
+                      : `$${plan.monthlyPrice}`}
+                  </motion.span>
+                </AnimatePresence>
+                <span className="text-sm text-gray-400">
+                  {plan.monthlyPrice === 0 ? "forever" : "/month"}
+                </span>
               </div>
-              <p className="text-sm text-gray-500 mb-8">{plan.desc}</p>
+
+              {plan.yearlySaving > 0 ? (
+                <div className="h-5 mb-3">
+                  <AnimatePresence>
+                    {yearly && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="text-xs text-green-600 font-medium"
+                      >
+                        ${plan.yearlyPrice}/yr — save ${plan.yearlySaving}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <div className="h-5 mb-3" />
+              )}
+
+              <p className="text-sm text-gray-500 mb-6 flex-shrink-0">{plan.desc}</p>
+
               <Link
-                href={plan.href}
-                className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all mb-8 ${
+                href={`/register?plan=${plan.slug}${yearly && plan.monthlyPrice > 0 ? "&billing=yearly" : ""}`}
+                className={`block text-center py-3 rounded-xl font-semibold text-sm transition-all mb-7 ${
                   plan.highlight
                     ? "bg-blue-600 hover:bg-blue-500 text-white hover:shadow-lg hover:shadow-blue-600/25"
-                    : "bg-gray-50 hover:bg-gray-50 text-gray-900 border border-gray-200"
+                    : "bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200"
                 }`}
               >
                 {plan.cta}
               </Link>
-              <ul className="space-y-3">
+
+              <ul className="space-y-2.5 mt-auto">
                 {plan.features.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-gray-500">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={plan.highlight ? "#3B82F6" : "#4B5563"} strokeWidth="2"><path d="M5 13l4 4L19 7" /></svg>
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-gray-500">
+                    <svg
+                      className="flex-shrink-0 mt-0.5"
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke={plan.highlight ? "#3B82F6" : "#4B5563"}
+                      strokeWidth="2.5"
+                    >
+                      <path d="M5 13l4 4L19 7" />
+                    </svg>
                     {f}
                   </li>
                 ))}
@@ -93,11 +232,15 @@ export default function PricingPage() {
           ))}
         </div>
 
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center text-xs text-gray-500 mt-12">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-center text-xs text-gray-400 mt-12"
+        >
           All plans include GST. Cancel anytime. Free for all NDIS participants.
         </motion.p>
       </div>
     </div>
   );
 }
-
