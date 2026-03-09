@@ -54,7 +54,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6">
+    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {jsonLd && (
           <script
@@ -94,9 +94,9 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             </div>
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <span className="text-sm text-orange-500 font-medium">{provider.category}</span>
-              <span className="text-gray-300">|</span>
+              <span className="hidden sm:inline text-gray-300">|</span>
               <span className="text-sm text-gray-500">{provider.location}, NSW</span>
-              <span className="text-gray-300">|</span>
+              <span className="hidden sm:inline text-gray-300">|</span>
               <div className="flex items-center gap-1">
                 {[1,2,3,4,5].map((star) => (
                   <svg key={star} width="14" height="14" viewBox="0 0 24 24" fill={star <= Math.round(provider.rating) ? "#F97316" : "#e5e7eb"}>
@@ -249,7 +249,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               <div className="space-y-6">
                 {mockReviews.map((r, i) => (
                   <div key={i} className={i > 0 ? "pt-6 border-t border-gray-100" : ""}>
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex flex-wrap items-start justify-between gap-1 mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-600">
                           {r.author[0]}

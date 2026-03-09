@@ -53,7 +53,7 @@ function ProviderCard({ provider, onRemove, allServices }: { provider: Provider;
             <p className="text-xs text-gray-500 mt-0.5">{provider.suburb}</p>
           </div>
         </div>
-        <button onClick={onRemove} className="text-gray-300 hover:text-gray-500 transition-colors text-lg leading-none">✕</button>
+        <button onClick={onRemove} className="text-gray-300 hover:text-gray-500 transition-colors text-lg leading-none p-1 min-w-[32px] min-h-[32px] flex items-center justify-center">✕</button>
       </div>
 
       <div className="space-y-3 text-sm">
@@ -344,7 +344,7 @@ export default function ComparePage() {
                       </div>
                       <button
                         onClick={() => removeProvider(idx)}
-                        className="text-gray-300 hover:text-gray-500 transition-colors"
+                        className="text-gray-300 hover:text-gray-500 transition-colors p-1 min-w-[32px] min-h-[32px] flex items-center justify-center"
                       >✕</button>
                     </div>
                     <div className="mt-4 flex gap-2">

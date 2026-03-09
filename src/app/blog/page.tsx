@@ -20,7 +20,7 @@ export default function BlogPage() {
   const rest = filtered.slice(2);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6">
+    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
           <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Resources</span>
@@ -73,7 +73,7 @@ export default function BlogPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {featured.map((post, i) => (
               <motion.div key={post.slug} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                <Link href={`/blog/${post.slug}`} className="block group rounded-2xl bg-white border border-gray-200 p-8 h-full transition-all duration-300 hover:border-blue-500/40 hover:shadow-lg">
+                <Link href={`/blog/${post.slug}`} className="block group rounded-2xl bg-white border border-gray-200 p-5 sm:p-8 h-full transition-all duration-300 hover:border-blue-500/40 hover:shadow-lg">
                   <div className="flex items-center gap-3 mb-4">
                     <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-600 border border-blue-500/20">{post.category}</span>
                     <span className="text-xs text-gray-400">{post.date}</span>
@@ -116,7 +116,7 @@ export default function BlogPage() {
 
         {/* Newsletter CTA */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-20">
-          <div className="rounded-2xl bg-blue-600/[0.06] border border-blue-500/20 p-10 text-center">
+          <div className="rounded-2xl bg-blue-600/[0.06] border border-blue-500/20 p-5 sm:p-10 text-center">
             <h3 className="text-2xl font-bold mb-2">Stay in the loop</h3>
             <p className="text-sm text-gray-500 mb-6 max-w-md mx-auto">Get NDIS tips, provider updates, and platform news delivered to your inbox. No spam, unsubscribe anytime.</p>
             <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => { e.preventDefault(); (e.target as HTMLFormElement).reset(); alert("Subscribed!"); }}>

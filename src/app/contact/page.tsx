@@ -91,7 +91,7 @@ export default function ContactPage() {
     <div className="min-h-screen pt-24 pb-20">
 
       {/* Hero */}
-      <section className="px-6 pb-16">
+      <section className="px-4 sm:px-6 pb-16">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}>
             <span className="section-label mb-4 block">Contact Us</span>
@@ -106,7 +106,7 @@ export default function ContactPage() {
       </section>
 
       {/* Main content: form + office info */}
-      <section className="px-6 pb-20">
+      <section className="px-4 sm:px-6 pb-20">
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-10">
 
           {/* Contact Form */}
@@ -120,7 +120,7 @@ export default function ContactPage() {
                 <button onClick={() => setStatus("idle")} className="text-blue-600 text-sm font-semibold hover:text-blue-700">Send another message</button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="rounded-2xl bg-white border border-gray-200 p-8 sm:p-10 shadow-sm space-y-5">
+              <form onSubmit={handleSubmit} className="rounded-2xl bg-white border border-gray-200 p-5 sm:p-10 shadow-sm space-y-5">
                 <h2 className="text-xl font-bold mb-1">Send us a message</h2>
                 <p className="text-sm text-gray-400 mb-2">We typically respond within one business day.</p>
 
@@ -214,7 +214,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-6 py-16 bg-gray-50">
+      <section className="px-4 sm:px-6 py-16 bg-gray-50">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10">
             <span className="section-label mb-4 block">FAQ</span>
@@ -231,3 +231,4 @@ export default function ContactPage() {
     </div>
   );
 }
+

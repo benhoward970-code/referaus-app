@@ -14,7 +14,7 @@ export default function PricingPage() {
   const [yearly, setYearly] = useState(false);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6">
+    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Pricing</span>
@@ -35,7 +35,7 @@ export default function PricingPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
           {plans.map((plan, i) => (
-            <motion.div key={plan.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className={"relative rounded-2xl p-7 border flex flex-col transition-all " + (plan.highlight ? "border-blue-500/40" : "bg-surface border-gray-200")} style={plan.highlight ? { background: "rgba(37,99,235,0.07)", boxShadow: "0 20px 50px -15px rgba(37,99,235,0.1)" } : {}}>
+            <motion.div key={plan.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className={"relative rounded-2xl p-5 sm:p-7 border flex flex-col transition-all " + (plan.highlight ? "border-blue-500/40" : "bg-surface border-gray-200")} style={plan.highlight ? { background: "rgba(37,99,235,0.07)", boxShadow: "0 20px 50px -15px rgba(37,99,235,0.1)" } : {}}>
               {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2"><span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-600 text-white whitespace-nowrap">Most Popular</span></div>}
               <h3 className="text-base font-bold mb-1">{plan.name}</h3>
               <div className="flex items-baseline gap-1 mb-1" style={{ minHeight: "52px" }}>

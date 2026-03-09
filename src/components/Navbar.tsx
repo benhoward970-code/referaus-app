@@ -77,7 +77,7 @@ export function Navbar() {
           <button
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
-            className="md:hidden p-2 -mr-1 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 -mr-1 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               {open ? (

@@ -78,7 +78,7 @@ export default function ResourcesClient() {
   return (
     <div className="min-h-screen pt-24 pb-20">
       {/* Hero */}
-      <section className="px-6 pb-12">
+      <section className="px-4 sm:px-6 pb-12">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <span className="text-xs font-semibold tracking-widest uppercase text-blue-400 mb-4 block">
@@ -96,7 +96,7 @@ export default function ResourcesClient() {
       </section>
 
       {/* Search + Tabs */}
-      <section className="px-6 pb-10">
+      <section className="px-4 sm:px-6 pb-10">
         <div className="max-w-5xl mx-auto">
           {/* Search */}
           <div className="relative mb-6 max-w-lg">
@@ -247,7 +247,7 @@ export default function ResourcesClient() {
       </section>
 
       {/* Disclaimer */}
-      <section className="px-6 py-8">
+      <section className="px-4 sm:px-6 py-8">
         <div className="max-w-5xl mx-auto">
           <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6">
             <p className="text-xs text-gray-500 leading-relaxed">
@@ -261,7 +261,7 @@ export default function ResourcesClient() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 py-10 bg-surface/50">
+      <section className="px-4 sm:px-6 py-10 bg-surface/50">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl font-black tracking-tight mb-3">
             Need help finding an <span className="gradient-text">NDIS provider?</span>
