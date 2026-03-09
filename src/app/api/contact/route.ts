@@ -1,8 +1,12 @@
+import { checkRateLimit } from '@/lib/rate-limit';
 import { NextResponse } from "next/server";
 import { supabaseAdmin, supabaseServer } from "@/lib/supabase-server";
 
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    const { allowed } = checkRateLimit('contact:' + ip, 5, 300000);
+    if (!allowed) return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 });
     const body = await request.json();
     const { name, email, phone, message, type } = body;
 
@@ -26,6 +30,9 @@ export async function POST(request: Request) {
 
     // Also try Formspree as notification mechanism
     try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    const { allowed } = checkRateLimit('contact:' + ip, 5, 300000);
+    if (!allowed) return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 });
       await fetch("https://formspree.io/f/benhoward970@gmail.com", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
