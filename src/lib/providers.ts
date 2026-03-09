@@ -1,4 +1,4 @@
-﻿export interface Provider {
+export interface Provider {
   slug: string;
   name: string;
   category: string;

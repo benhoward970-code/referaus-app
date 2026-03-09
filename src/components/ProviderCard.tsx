@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import type { Provider } from "@/lib/providers";
 
 export function ProviderCard({ provider }: { provider: Provider }) {
