@@ -24,8 +24,8 @@ export const viewport = { width: "device-width", initialScale: 1, maximumScale: 
 export const metadata: Metadata = {
   metadataBase: new URL("https://referaus.com"),
   title: {
-    default: "ReferAus — NDIS Provider Directory",
-    template: "%s | ReferAus — NDIS Provider Directory",
+    default: "ReferAus â€” NDIS Provider Directory",
+    template: "%s | ReferAus â€” NDIS Provider Directory",
   },
   description:
     "Search, compare and connect with trusted NDIS providers in Newcastle and the Hunter Region. Free for participants. Real reviews, direct messaging, no middleman.",
@@ -37,13 +37,13 @@ export const metadata: Metadata = {
     locale: "en_AU",
     url: "https://referaus.com",
     siteName: "ReferAus",
-    title: "ReferAus — NDIS Provider Directory",
+    title: "ReferAus â€” NDIS Provider Directory",
     description: "Find trusted NDIS providers in Newcastle and the Hunter Region. Real reviews, direct messaging, free for participants.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "ReferAus — NDIS Provider Directory" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "ReferAus â€” NDIS Provider Directory" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ReferAus — NDIS Provider Directory",
+    title: "ReferAus â€” NDIS Provider Directory",
     description: "Find trusted NDIS providers in Newcastle and the Hunter Region. Free for participants.",
     images: ["/og-image.png"],
     creator: "@referaus",
@@ -64,10 +64,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-sans antialiased bg-white text-gray-900">
+      <body className="font-sans antialiased bg-white text-gray-900"><a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:outline-none">Skip to main content</a>
         <AuthProvider>
           <Navbar />
-          <main>{children}</main>
+          <main id="main-content" tabIndex={-1}>{children}</main>
           <Footer />
         </AuthProvider>
       </body>
