@@ -4,6 +4,7 @@ export interface Provider {
   category: string;
   description: string;
   location: string;
+  suburb: string;
   rating: number;
   reviewCount: number;
   verified: boolean;
@@ -11,6 +12,7 @@ export interface Provider {
   phone: string;
   email: string;
   image: string;
+  planTier: "Core" | "Capacity Building" | "Capital" | "All Plans";
 }
 
 export const providers: Provider[] = [
@@ -20,6 +22,7 @@ export const providers: Provider[] = [
     category: "Daily Living",
     description: "Person-centred daily living support across Newcastle. Specialising in community access, personal care, and independent living skills.",
     location: "Newcastle CBD",
+    suburb: "Newcastle CBD",
     rating: 4.9,
     reviewCount: 127,
     verified: true,
@@ -27,6 +30,7 @@ export const providers: Provider[] = [
     phone: "02 4925 1100",
     email: "hello@sunshinesupport.com.au",
     image: "/providers/sunshine.jpg",
+    planTier: "Core",
   },
   {
     slug: "hunter-valley-therapy",
@@ -34,6 +38,7 @@ export const providers: Provider[] = [
     category: "Allied Health",
     description: "Multidisciplinary therapy practice offering OT, speech, and psychology services throughout the Hunter Valley.",
     location: "Maitland",
+    suburb: "Maitland",
     rating: 4.8,
     reviewCount: 94,
     verified: true,
@@ -41,6 +46,7 @@ export const providers: Provider[] = [
     phone: "02 4933 2200",
     email: "info@huntervalleytherapy.com.au",
     image: "/providers/hunter-therapy.jpg",
+    planTier: "Capacity Building",
   },
   {
     slug: "physioplus-newcastle",
@@ -48,6 +54,7 @@ export const providers: Provider[] = [
     category: "Allied Health",
     description: "Expert physiotherapy and exercise physiology for NDIS participants. Hydrotherapy pool on-site.",
     location: "Adamstown",
+    suburb: "Adamstown",
     rating: 4.7,
     reviewCount: 83,
     verified: true,
@@ -55,13 +62,15 @@ export const providers: Provider[] = [
     phone: "02 4952 3300",
     email: "book@physioplusnewcastle.com.au",
     image: "/providers/physioplus.jpg",
+    planTier: "Capacity Building",
   },
   {
     slug: "little-stars-early-intervention",
     name: "Little Stars Early Intervention",
     category: "Early Intervention",
-    description: "Play-based early childhood intervention for children 0\u20136 years. NDIS early childhood partner.",
+    description: "Play-based early childhood intervention for children 0-6 years. NDIS early childhood partner.",
     location: "Charlestown",
+    suburb: "Charlestown",
     rating: 4.9,
     reviewCount: 156,
     verified: true,
@@ -69,6 +78,7 @@ export const providers: Provider[] = [
     phone: "02 4943 4400",
     email: "enquiries@littlestars.com.au",
     image: "/providers/little-stars.jpg",
+    planTier: "Capacity Building",
   },
   {
     slug: "carefirst-community",
@@ -76,6 +86,7 @@ export const providers: Provider[] = [
     category: "Support Coordination",
     description: "Specialist support coordination helping participants navigate their NDIS plans and connect with the right services.",
     location: "Cessnock",
+    suburb: "Cessnock",
     rating: 4.6,
     reviewCount: 61,
     verified: true,
@@ -83,6 +94,7 @@ export const providers: Provider[] = [
     phone: "02 4990 5500",
     email: "connect@carefirst.com.au",
     image: "/providers/carefirst.jpg",
+    planTier: "All Plans",
   },
   {
     slug: "lakeside-allied-health",
@@ -90,6 +102,7 @@ export const providers: Provider[] = [
     category: "Allied Health",
     description: "Comprehensive allied health services on the shores of Lake Macquarie. OT, speech, and dietetics.",
     location: "Belmont",
+    suburb: "Belmont",
     rating: 4.8,
     reviewCount: 72,
     verified: true,
@@ -97,6 +110,7 @@ export const providers: Provider[] = [
     phone: "02 4945 6600",
     email: "hello@lakesidehealth.com.au",
     image: "/providers/lakeside.jpg",
+    planTier: "Capacity Building",
   },
   {
     slug: "newcastle-disability-services",
@@ -104,6 +118,7 @@ export const providers: Provider[] = [
     category: "Daily Living",
     description: "Full-service disability support provider. SIL, respite, and community participation programs.",
     location: "Hamilton",
+    suburb: "Hamilton",
     rating: 4.5,
     reviewCount: 108,
     verified: true,
@@ -111,6 +126,7 @@ export const providers: Provider[] = [
     phone: "02 4961 7700",
     email: "info@nds.org.au",
     image: "/providers/nds.jpg",
+    planTier: "Core",
   },
   {
     slug: "hunter-support-co",
@@ -118,6 +134,7 @@ export const providers: Provider[] = [
     category: "Plan Management",
     description: "Transparent plan management with real-time budget tracking. No hidden fees, no lock-in contracts.",
     location: "Newcastle West",
+    suburb: "Newcastle West",
     rating: 4.7,
     reviewCount: 89,
     verified: true,
@@ -125,6 +142,7 @@ export const providers: Provider[] = [
     phone: "02 4926 8800",
     email: "plans@huntersupport.co",
     image: "/providers/hunter-support.jpg",
+    planTier: "All Plans",
   },
   {
     slug: "valley-view-care",
@@ -132,6 +150,7 @@ export const providers: Provider[] = [
     category: "Accommodation",
     description: "Modern supported independent living homes across the Hunter Valley. 24/7 on-site support available.",
     location: "Kurri Kurri",
+    suburb: "Kurri Kurri",
     rating: 4.6,
     reviewCount: 45,
     verified: false,
@@ -139,6 +158,7 @@ export const providers: Provider[] = [
     phone: "02 4937 9900",
     email: "living@valleyviewcare.com.au",
     image: "/providers/valley-view.jpg",
+    planTier: "Capital",
   },
   {
     slug: "coastal-wellness-group",
@@ -146,6 +166,7 @@ export const providers: Provider[] = [
     category: "Mental Health",
     description: "Recovery-focused mental health support. Psychosocial recovery coaching and peer support programs.",
     location: "Merewether",
+    suburb: "Merewether",
     rating: 4.8,
     reviewCount: 67,
     verified: true,
@@ -153,6 +174,7 @@ export const providers: Provider[] = [
     phone: "02 4963 1100",
     email: "support@coastalwellness.com.au",
     image: "/providers/coastal.jpg",
+    planTier: "Capacity Building",
   },
 ];
 

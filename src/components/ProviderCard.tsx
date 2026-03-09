@@ -4,15 +4,27 @@ import type { Provider } from "@/lib/providers";
 export function ProviderCard({ provider }: { provider: Provider }) {
   return (
     <Link href={`/providers/${provider.slug}`}>
-      <div className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-500 hover:shadow-lg transition-all duration-300 cursor-pointer">
+      <div className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-500 hover:shadow-lg transition-all duration-300 cursor-pointer h-full flex flex-col">
         {/* Blue header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5">
-          <h3 className="text-lg font-bold text-white">{provider.name}</h3>
-          <p className="text-blue-100 text-sm">{provider.category}</p>
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <h3 className="text-lg font-bold text-white leading-tight">{provider.name}</h3>
+              <p className="text-blue-100 text-sm">{provider.category}</p>
+            </div>
+            {provider.verified && (
+              <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30 mt-0.5">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+                Verified
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Content */}
-        <div className="px-6 py-5">
+        <div className="px-6 py-5 flex-1 flex flex-col">
           {/* Rating */}
           <div className="flex items-center gap-2 mb-3">
             <div className="flex items-center gap-0.5">
@@ -43,10 +55,29 @@ export function ProviderCard({ provider }: { provider: Provider }) {
           </div>
 
           {/* CTA */}
-          <div className="text-center">
-            <span className="text-sm font-semibold text-blue-600 group-hover:text-blue-700 transition-colors">
-              View Profile & Connect &rarr;
-            </span>
+          <div className="mt-auto">
+            {provider.verified ? (
+              <div className="text-center">
+                <span className="text-sm font-semibold text-blue-600 group-hover:text-blue-700 transition-colors">
+                  View Profile &amp; Connect &rarr;
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-blue-600 group-hover:text-blue-700 transition-colors">
+                  View Profile &rarr;
+                </span>
+                <span
+                  className="text-[11px] px-2.5 py-1 rounded-lg bg-orange-50 text-orange-600 border border-orange-200 font-medium hover:bg-orange-100 transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = "/register";
+                  }}
+                >
+                  Claim listing
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
