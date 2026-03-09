@@ -1,1 +1,114 @@
-﻿export const blogPosts = [];
+export interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  author: string;
+  category: string;
+  readTime: string;
+  coverImage: string;
+  tags: string[];
+}
+
+export const blogPosts: BlogPost[] = [
+  {
+    "slug": "what-is-the-ndis-complete-guide",
+    "title": "What Is the NDIS? A Complete Guide for Participants and Families",
+    "excerpt": "The National Disability Insurance Scheme (NDIS) is Australia's landmark disability support program. This guide explains how it works, who is eligible, and how to get the most from your plan.",
+    "date": "5 Mar 2026",
+    "author": "ReferAus Team",
+    "category": "Guides",
+    "readTime": "10 min read",
+    "coverImage": "/blog/ndis-guide-cover.jpg",
+    "tags": [
+      "NDIS",
+      "eligibility",
+      "participants",
+      "getting started"
+    ],
+    "content": "## What Is the NDIS?\n\nThe National Disability Insurance Scheme (NDIS) is a federal government program that provides funding and support to Australians under 65 who have a permanent and significant disability. Launched in 2013, the NDIS now supports over 650,000 Australians.\n\nUnlike older block-funded models, the NDIS is **person-centred**: each participant receives an individualised plan with funding tied to their goals.\n\n## Who Is Eligible?\n\n- **Age:** Under 65 when you first apply\n- **Residency:** Australian citizen, permanent resident, or Protected Special Category Visa holder\n- **Disability:** Permanent and significant disability that substantially reduces ability to participate in everyday activities\n\nThe NDIS Early Childhood approach covers children under 9 with developmental delay or disability.\n\n## How Does the NDIS Work?\n\n**Step 1: Access Request** - Submit evidence from treating professionals describing your disability and its functional impacts.\n\n**Step 2: Planning Meeting** - Meet with an NDIA planner or Local Area Coordinator (LAC) to discuss goals and support needs.\n\n**Step 3: Your NDIS Plan** - The NDIA develops your plan outlining goals, funded supports, and how funding is managed.\n\n**Step 4: Implementing Your Plan** - Use funding to engage providers. Your plan manager (if applicable) handles payments.\n\n**Step 5: Plan Review** - Annual reviews let you adjust funding, goals, and supports.\n\n## What Does the NDIS Fund?\n\n1. **Core Supports** - Personal care, domestic help, community participation, consumables\n2. **Capacity Building Supports** - Support coordination, employment, daily living skills\n3. **Capital Supports** - Assistive technology, home and vehicle modifications\n\nNDIS funding must be spent on reasonable and necessary disability-related supports.\n\n## What the NDIS Does NOT Fund\n\n- Medical treatments covered by Medicare\n- Education supports provided by schools\n- Day-to-day living costs unrelated to your disability\n- Supports that are not reasonable and necessary\n\n## Tips for Getting the Most From Your Plan\n\n1. Be specific about your goals - vague goals lead to vague funding\n2. Bring supporting evidence from your GP, OT, physio, or specialists\n3. Understand your funding categories - Core is most flexible\n4. Ask for a support coordinator if your situation is complex\n5. Keep records and track every dollar spent\n6. Request an unscheduled review if something is not working\n\n## Getting Help\n\n- NDIS website: ndis.gov.au\n- NDIS contact centre: 1800 800 110\n- Disability Advocacy NSW: free advocacy for people having difficulty with NDIS access\n- ReferAus: search local providers and read real reviews from other participants in the Hunter Region"
+  },
+  {
+    "slug": "how-to-choose-ndis-provider",
+    "title": "How to Choose the Right NDIS Provider in Your Area",
+    "excerpt": "Choosing an NDIS provider is one of the most important decisions you will make as a participant. Here is a practical framework to help you find the right fit.",
+    "date": "1 Mar 2026",
+    "author": "ReferAus Team",
+    "category": "Tips",
+    "readTime": "8 min read",
+    "coverImage": "/blog/choose-provider-cover.jpg",
+    "tags": [
+      "providers",
+      "tips",
+      "choosing",
+      "quality"
+    ],
+    "content": "## Why Choosing the Right Provider Matters\n\nYour NDIS provider directly shapes the quality of your daily life. A great provider helps you reach your goals and respects your autonomy. A poor one drains your funding and leaves you worse off.\n\n## Step 1: Get Clear on What You Need\n\nBefore researching providers, clarify what supports you need:\n\n- What support types? (personal care, occupational therapy, social support, plan management)\n- How often? (daily, weekly, as-needed)\n- Non-negotiables? (female worker, specific language, experience with your diagnosis)\n- What are your goals?\n\n## Step 2: Check NDIS Registration\n\nRegistered providers have been vetted by the NDIS Quality and Safeguards Commission. If your plan is NDIA-managed, you must use registered providers. Unregistered providers can be excellent - if plan-managed or self-managed, you can use them.\n\n## Step 3: Research and Shortlist\n\nBuild a shortlist of 3 to 5 providers by asking your LAC or support coordinator for recommendations, searching ReferAus for Hunter Region providers with real reviews, and checking provider websites and reviews.\n\n## Step 4: Ask the Right Questions\n\n1. Do you have experience with my specific disability?\n2. Who will be my regular worker and can I meet them before committing?\n3. How do you handle worker absences?\n4. What does your service agreement cover and what is the exit clause?\n5. What is your complaints process?\n6. How do you measure whether my goals are being achieved?\n7. What qualifications do your workers hold?\n\n## Step 5: Understand the Service Agreement\n\nBefore signing, check: scope of services and rates, cancellation policy, exit clauses and notice periods, and complaint resolution process.\n\n## Step 6: Start With a Trial\n\nStart with a short trial before committing long-term. Assess whether the worker is a good fit, whether the provider communicates well, and whether services are delivered as described.\n\n## Red Flags to Watch For\n\n- Pressure to sign quickly\n- Promises to maximise your plan (can mean over-servicing)\n- No clear complaint process\n- Reluctance to provide a written service agreement\n- No workers compensation or public liability insurance\n\n## Your Rights as an NDIS Participant\n\n- Be treated with dignity and respect\n- Make your own decisions about your supports\n- Access interpreters and culturally appropriate support\n- Raise complaints without fear of losing your service\n- Choose, change, or exit providers\n\nContact the NDIS Quality and Safeguards Commission on 1800 035 544 if you have concerns about a registered provider.\n\n## Finding Providers in the Hunter Region\n\nReferAus is built for participants in Newcastle, Maitland, Lake Macquarie, Cessnock, and the wider Hunter Region. Search by service type, read real reviews, and contact providers directly."
+  },
+  {
+    "slug": "ndis-plan-management-explained",
+    "title": "Understanding NDIS Plan Management: Self-Managed vs Plan-Managed vs NDIA-Managed",
+    "excerpt": "How your NDIS plan is managed affects your flexibility, paperwork, and choice of providers. Here is a plain-English breakdown of all three options.",
+    "date": "25 Feb 2026",
+    "author": "ReferAus Team",
+    "category": "Guides",
+    "readTime": "9 min read",
+    "coverImage": "/blog/plan-management-cover.jpg",
+    "tags": [
+      "plan management",
+      "self-managed",
+      "flexibility",
+      "funding"
+    ],
+    "content": "## What Is Plan Management?\n\nWhen you receive an NDIS plan, a key decision is how your funding is managed. There are three options: NDIA-Managed, Plan-Managed, and Self-Managed. You can mix and match across different support budgets.\n\n## Option 1: NDIA-Managed\n\nThe National Disability Insurance Agency handles all payments. Providers submit claims directly to the NDIS portal.\n\n**Pros:** No paperwork for you, built-in fraud protection, good for complex needs.\n\n**Cons:** Registered providers only, cannot negotiate rates, occasional portal delays.\n\n**Best for:** Participants who prefer a hands-off approach, or who are just starting out.\n\n## Option 2: Plan-Managed\n\nThe NDIA funds an extra line item in your plan to pay for a registered plan manager who handles financial administration. They pay invoices, track spending, provide monthly statements, and handle reporting.\n\n**Pros:** Access to unregistered providers (huge flexibility advantage), no bookkeeping for you, real-time budget tracking, can negotiate rates with unregistered providers.\n\n**Cons:** Reliant on your plan manager being responsive, adds an intermediary, quality varies significantly.\n\nThe NDIS funds plan management costs separately - it does not come out of your support budgets.\n\n**Best for:** Most participants. Best balance of flexibility and administrative simplicity.\n\n## Option 3: Self-Managed\n\nYou receive funding directly and are responsible for paying providers, keeping invoices, ensuring spending aligns with your plan, and reporting to the NDIA.\n\n**Pros:** Maximum flexibility (use any provider), full financial control, may stretch your budget further through rate negotiation, can hire your own workers directly.\n\n**Cons:** Significant administrative burden, compliance risk if misspending occurs, requires financial literacy and time, may create employer obligations.\n\n**Self-Management Tips:** Open a dedicated bank account for NDIS funds, track every payment, keep all invoices for at least 5 years, and understand NDIS rules about approved expenses.\n\n**Best for:** Participants with strong organisational skills who want maximum control.\n\n## Can I Change My Plan Management Type?\n\nYes. Request a change at your plan review or via an unscheduled review if circumstances have changed significantly.\n\n## Quick Comparison\n\n| Feature | NDIA-Managed | Plan-Managed | Self-Managed |\n| --- | --- | --- | --- |\n| Registered providers only | Yes | No | No |\n| Admin handled for you | Yes | Yes | No |\n| Extra funding for management | No | Yes | No |\n| Negotiate rates | No | Partially | Yes |\n| Flexibility | Low | High | Highest |\n\n## Making the Right Choice\n\n- New to the NDIS? Plan-managed is often the smart starting choice.\n- Want simplicity? NDIA-managed works well.\n- Want full control? Self-management can maximise your plan.\n\nTalk to your LAC, support coordinator, or a plan manager to explore which option suits your situation."
+  },
+  {
+    "slug": "10-questions-to-ask-ndis-provider",
+    "title": "Top 10 Questions to Ask Before Choosing an NDIS Provider",
+    "excerpt": "Do not commit to an NDIS provider before asking these 10 critical questions. They will help you separate the great from the good and spot the ones to avoid.",
+    "date": "20 Feb 2026",
+    "author": "ReferAus Team",
+    "category": "Tips",
+    "readTime": "6 min read",
+    "coverImage": "/blog/questions-cover.jpg",
+    "tags": [
+      "providers",
+      "questions",
+      "checklist",
+      "tips"
+    ],
+    "content": "## Why You Need to Ask Questions\n\nOnline reviews are a great starting point, but choosing an NDIS provider should not stop there. A direct conversation before signing anything is the most powerful tool you have.\n\n## Question 1: Do you have experience with my specific disability or condition?\n\nThis is foundational. Ask for specifics about how many participants they currently support with your condition, and what training their workers have completed. Vague answers like we support all disabilities are a warning sign.\n\n## Question 2: Who will be my regular support worker, and can I meet them first?\n\nConsistency matters enormously in disability support. Ask whether you will have dedicated workers or whether they rotate staff frequently. Look for an offer to arrange a meet-and-greet before signing.\n\n## Question 3: What happens if my regular worker is sick or unavailable?\n\nEven the best providers have unexpected absences. What matters is how they handle them - do they send an unfamiliar worker without notice, or do they respect your preferences to reschedule?\n\n## Question 4: What does your service agreement cover and what is the exit clause?\n\nA service agreement is a contract. Check scope of services, cancellation policies, rates, and how to exit. Ethical providers typically require 2 to 4 weeks notice to exit.\n\n## Question 5: Are you registered with the NDIS Quality and Safeguards Commission?\n\nRegistration indicates the provider has met baseline standards. If your plan is NDIA-managed, you must use registered providers. Ask for a registration number you can verify at ndis.gov.au.\n\n## Question 6: What is your complaints process?\n\nEvery provider must have a complaints process. Ask for a named person or process, a commitment to respond within a specific timeframe, and how complaints can be escalated to the NDIS Commission if needed.\n\n## Question 7: How do you measure whether my goals are being achieved?\n\nNDIS supports should help you reach your goals. Look for goal-based reporting, regular reviews of your support plan, and a genuinely person-centred approach rather than cookie-cutter service delivery.\n\n## Question 8: What qualifications and training do your workers hold?\n\nSupport workers may hold a Certificate III in Individual Support. Allied health staff must be degree-qualified and registered with AHPRA or their relevant professional body. Ask for specifics relevant to your needs.\n\n## Question 9: How do you handle billing and invoice disputes?\n\nBilling errors do happen. You need to know how invoices are raised, when you will see them, and what happens if something looks wrong. Look for clear invoicing timelines and a transparent dispute resolution process.\n\n## Question 10: Can you provide references from current or past participants?\n\nA confident, ethical provider will have no problem offering genuine references from someone with support needs similar to yours. References are more valuable than written testimonials on their own website.\n\n## Putting It Together\n\nBy the time you sign a service agreement, you should have satisfactory answers to every one of these questions. A great provider welcomes them. If a provider is evasive or pressures you to decide quickly, that tells you everything you need to know.\n\nUse ReferAus to search providers in the Hunter Region, read participant reviews, and contact providers directly before you commit."
+  },
+  {
+    "slug": "ndis-price-guide-2025-26",
+    "title": "NDIS Price Guide 2025-26: What You Need to Know",
+    "excerpt": "The NDIS Price Guide sets the maximum rates providers can charge for supports. Here is a plain-English breakdown of the 2025-26 guide.",
+    "date": "15 Feb 2026",
+    "author": "ReferAus Team",
+    "category": "News",
+    "readTime": "7 min read",
+    "coverImage": "/blog/price-guide-cover.jpg",
+    "tags": [
+      "price guide",
+      "funding",
+      "rates",
+      "2025-26"
+    ],
+    "content": "## What Is the NDIS Price Guide?\n\nThe NDIS Pricing Arrangements and Price Limits (commonly called the Price Guide) is published annually by the NDIA. It sets the maximum hourly rates that registered NDIS providers can charge for services. It protects participants from being overcharged and creates consistency and transparency in NDIS pricing.\n\n## Key Changes in the 2025-26 Price Guide\n\n**Support Worker Rate Increases:** Following indexation tied to the SCHADS Award, most direct support worker rates have increased approximately 3.5 to 4 percent. This reflects wage growth in the sector. If your plan was not updated to reflect new rates, your budget may not stretch as far as last year.\n\n**Temporary Transformation Payment Removal:** The NDIA removed Temporary Transformation Payments, a loading that allowed providers to charge above standard rates during the COVID transition period. This has been fully unwound in 2025-26.\n\n**New Support Items:** The 2025-26 guide introduced new line items including enhanced funding for home automation technology, digital literacy support, and updated codes for telehealth allied health services.\n\n**Cancellation Clarity:** The guide clarifies when providers can charge for short notice cancellations (generally within 7 days for most supports). This must be clearly stated in service agreements.\n\n## Key Rate Benchmarks for 2025-26\n\n**Core Supports - Daily Activities:**\n\n| Time | Rate (approx.) |\n| --- | --- |\n| Weekday daytime | $67.56/hr |\n| Weekday evening | $74.32/hr |\n| Saturday | $94.58/hr |\n| Sunday | $121.60/hr |\n| Public Holiday | $148.64/hr |\n\n**Allied Health (Capacity Building):**\n\n| Profession | Rate (approx.) |\n| --- | --- |\n| Occupational Therapy | $214.41/hr |\n| Physiotherapy | $214.41/hr |\n| Speech Pathology | $214.41/hr |\n| Psychology | $214.41/hr |\n\n**Support Coordination:**\n\n| Level | Rate (approx.) |\n| --- | --- |\n| Support Coordination | $100.14/hr |\n| Specialist Support Coordination | $190.54/hr |\n\n**Plan Management:**\n\n| Item | Rate |\n| --- | --- |\n| Monthly management fee | $104.45/month |\n| Statement of supports setup | $232.43 once |\n\n## How to Use the Price Guide\n\n**Verify Provider Invoices:** Cross-check that what your provider charges matches or is below the Price Guide rate for the support item and time of delivery. If a rate seems too high, query it.\n\n**Understand Your Budget:** With rate increases, your existing plan may provide fewer hours than last year. If your budget is insufficient, document this and raise it at your next plan review with evidence of the shortfall.\n\n**Negotiate With Unregistered Providers:** Unregistered providers are not bound by the Price Guide, but it is a useful benchmark. Always agree on rates in writing before services begin.\n\n**Plan for Higher-Cost Periods:** Weekend and public holiday rates are significantly higher than weekday daytime. Factor this into your annual budget planning.\n\n## What If Your Plan Does Not Reflect the New Rates?\n\nIf your plan was approved before the 2025-26 Price Guide and your budget is now insufficient:\n\n1. Raise it at your scheduled plan review with evidence of rate changes and the budget gap\n2. Request an unscheduled plan review if the shortfall significantly affects daily supports\n3. Talk to your LAC or support coordinator who can help document the impact\n\n## Where to Access the Full Price Guide\n\nThe full document is available at ndis.gov.au/providers/pricing-arrangements. It includes every support item code, rate, and conditions.\n\nAt ReferAus, we help participants in the Hunter Region find quality providers at fair rates. Browse our directory, compare reviews, and contact providers directly - all free for participants."
+  }
+];
+
+export function getBlogPost(slug: string): BlogPost | undefined {
+  return blogPosts.find(p => p.slug === slug);
+}
+
+export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
+  const post = getBlogPost(slug);
+  if (!post) return blogPosts.slice(0, limit);
+  return blogPosts
+    .filter(p => p.slug !== slug && (p.category === post.category || p.tags.some(t => post.tags.includes(t))))
+    .slice(0, limit);
+}
+
+export const categories = ['All', ...Array.from(new Set(blogPosts.map(p => p.category)))];
