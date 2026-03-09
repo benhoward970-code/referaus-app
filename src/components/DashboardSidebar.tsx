@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -7,6 +7,7 @@ const links = [
   { href: '/dashboard/analytics', label: 'Analytics', icon: '📈' },
   { href: '/dashboard/profile', label: 'Edit Profile', icon: '✏️' },
   { href: '/dashboard/notifications', label: 'Notifications', icon: '🔔' },
+  { href: '/dashboard/settings', label: 'Settings', icon: '⚙️' },
 ];
 
 export function DashboardSidebar() {
