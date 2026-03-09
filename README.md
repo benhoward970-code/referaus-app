@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# ReferAus
 
-## Getting Started
+**Australia's NDIS Provider Directory** — Search, compare, and connect with trusted NDIS providers in the Hunter Region.
 
-First, run the development server:
+## Live
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Production:** [nexaconnect-v2.vercel.app](https://nexaconnect-v2.vercel.app)
+- **Domain:** [referaus.com](https://referaus.com) (DNS pending)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework:** Next.js 16 (App Router, Turbopack)
+- **Styling:** Tailwind CSS v4
+- **Animations:** Framer Motion
+- **Database:** Supabase (Postgres + Auth + RLS)
+- **Payments:** Stripe (Checkout + Webhooks)
+- **Email:** Resend
+- **Hosting:** Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Pages
 
-## Learn More
+| Route | Description |
+|-------|-------------|
+| / | Homepage — hero search, how-it-works, featured providers, testimonials, pricing |
+| /providers | Provider directory — search, filter by service/area, sort by rating |
+| /providers/[slug] | Provider profile — reviews, contact form, breadcrumbs |
+| /compare | Side-by-side provider comparison (up to 3) |
+| /pricing | 4-tier pricing with monthly/yearly toggle |
+| /blog | Blog with NDIS articles |
+| /blog/[slug] | Individual blog posts with SEO |
+| /resources | NDIS resource hub + 25-term glossary |
+| /dashboard | Provider dashboard — stats, enquiries, reviews |
+| /admin | Admin panel — provider management, stats |
+| /onboarding | 4-step provider onboarding wizard |
+| /login | Login with Supabase Auth |
+| /register | Plan-aware registration |
+| /about | Mission, values, team |
+| /contact | Contact form + FAQ |
+| /privacy | Privacy policy |
+| /terms | Terms of service |
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Stripe
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PRICE_STARTER_MONTHLY=
+STRIPE_PRICE_STARTER_YEARLY=
+STRIPE_PRICE_PRO_MONTHLY=
+STRIPE_PRICE_PRO_YEARLY=
+STRIPE_PRICE_PREMIUM_MONTHLY=
+STRIPE_PRICE_PREMIUM_YEARLY=
 
-## Deploy on Vercel
+# Email
+RESEND_API_KEY=
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# App
+NEXT_PUBLIC_APP_URL=https://referaus.com
+`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development
+
+`ash
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+`
+
+## License
+
+Proprietary. (c) 2026 ReferAus.
