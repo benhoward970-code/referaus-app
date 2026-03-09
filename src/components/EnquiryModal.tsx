@@ -43,7 +43,7 @@ export function EnquiryModal({ providerName, providerSlug, open, onClose }: Prop
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-lg rounded-2xl bg-[#0F1729] border border-white/[0.08] p-8"
+          className="relative w-full max-w-lg rounded-2xl bg-[#0F1729] border border-white/[0.08] p-6 sm:p-8 max-h-[90vh] overflow-y-auto"
         >
           <button onClick={onClose} className="absolute top-4 right-4 text-white/30 hover:text-white/60">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" /></svg>
@@ -62,7 +62,7 @@ export function EnquiryModal({ providerName, providerSlug, open, onClose }: Prop
               <h2 className="text-xl font-bold mb-1">Send Enquiry</h2>
               <p className="text-sm text-white/45 mb-6">to {providerName}</p>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-medium text-white/50 mb-1.5 block">Your Name *</label>
                     <input type="text" required value={form.name} onChange={e => setForm({...form, name: e.target.value})}

@@ -74,7 +74,7 @@ export default function ProvidersPage() {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer min-w-[180px]"
+              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
             >
               {categories.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -83,7 +83,7 @@ export default function ProvidersPage() {
             <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer min-w-[180px]"
+              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
             >
               {locations.map((l) => (
                 <option key={l} value={l}>{l}</option>

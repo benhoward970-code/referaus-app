@@ -319,7 +319,7 @@ export default function ComparePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="hidden sm:block rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
+            className="hidden sm:block rounded-2xl border border-gray-200 overflow-x-auto shadow-sm"
           >
             {/* Provider header row */}
             <div

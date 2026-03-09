@@ -19,6 +19,8 @@ const mono = IBM_Plex_Mono({
   display: "swap",
 });
 
+export const viewport = { width: "device-width", initialScale: 1, maximumScale: 5 };
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://referaus.com"),
   title: {

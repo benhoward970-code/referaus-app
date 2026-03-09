@@ -75,14 +75,14 @@ export default function Home() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex gap-12 mt-16 pt-8 border-t border-gray-100">
+          className="flex flex-wrap gap-6 sm:gap-12 mt-16 pt-8 border-t border-gray-100">
           {[
             { num: 250, suffix: "+", label: "Providers Listed" },
             { num: 1200, suffix: "+", label: "Participants Connected" },
             { num: 15000, suffix: "+", label: "Successful Referrals" },
           ].map((s) => (
             <div key={s.label}>
-              <div className="heading-bold text-[2.5rem] text-blue-600"><AnimatedCounter target={s.num} suffix={s.suffix} /></div>
+              <div className="heading-bold text-[2rem] sm:text-[2.5rem] text-blue-600"><AnimatedCounter target={s.num} suffix={s.suffix} /></div>
               <div className="text-[0.75rem] text-gray-400 uppercase tracking-[0.1em] mt-1">{s.label}</div>
             </div>
           ))}
@@ -143,7 +143,7 @@ export default function Home() {
             { num: "< 2hrs", label: "Avg Response Time" },
           ].map((s) => (
             <div key={s.label}>
-              <div className="heading-bold text-[3rem]">{s.num}</div>
+              <div className="heading-bold text-[2rem] sm:text-[3rem]">{s.num}</div>
               <div className="text-sm opacity-80 mt-1">{s.label}</div>
             </div>
           ))}
@@ -152,7 +152,7 @@ export default function Home() {
 
       {/* Browse Providers */}
       <section className="py-24 px-6 max-w-[1200px] mx-auto">
-        <div className="flex items-end justify-between mb-12">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-12">
           <div>
             <p className="section-label mb-3">Browse Providers</p>
             <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight">Top-rated in your area</h2>
@@ -250,7 +250,7 @@ export default function Home() {
 
       {/* CTA Banner */}
       <section className="max-w-[1200px] mx-auto px-6 pb-24">
-        <div className="bg-gradient-to-br from-orange-500 to-orange-400 text-white rounded-2xl p-12 text-center">
+        <div className="bg-gradient-to-br from-orange-500 to-orange-400 text-white rounded-2xl p-8 sm:p-12 text-center">
           <h2 className="heading-bold text-[clamp(1.8rem,4vw,2.8rem)] mb-4">Ready to find the right provider?</h2>
           <p className="opacity-90 max-w-[500px] mx-auto mb-8">Join thousands of NDIS participants who found better support through ReferAus. Free, fast, and it works.</p>
           <Link href="/providers" className="inline-block px-8 py-3.5 bg-white text-orange-500 font-bold rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all">
