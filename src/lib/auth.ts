@@ -1,39 +1,29 @@
-﻿/**
- * Auth helpers -- thin wrappers around supabase.ts.
- * Gracefully handles Demo mode (env vars not configured).
- */
-import { supabase, isConfigured } from "./supabase";
+﻿import { supabase, isConfigured } from './supabase';
 
-export { isConfigured };
-
-export async function signUp(
-  email: string,
-  password: string,
-  metadata?: Record<string, unknown>
-) {
-  if (!supabase) return { data: null, error: { message: "Demo mode -- Supabase not configured" } };
-  return supabase.auth.signUp({ email, password, options: { data: metadata } });
+export async function signUp(email: string, password: string, metadata?: Record<string, unknown>) {
+  if (!isConfigured() || !supabase) return { error: { message: 'Supabase not configured - running in demo mode' }, data: null };
+  const { data, error } = await supabase.auth.signUp({ email, password, options: { data: metadata } });
+  return { data, error };
 }
 
 export async function signIn(email: string, password: string) {
-  if (!supabase) return { data: null, error: { message: "Demo mode -- Supabase not configured" } };
-  return supabase.auth.signInWithPassword({ email, password });
+  if (!isConfigured() || !supabase) return { error: { message: 'Supabase not configured - running in demo mode' }, data: null };
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  return { data, error };
 }
 
 export async function signOut() {
-  if (!supabase) return { error: null };
-  return supabase.auth.signOut();
+  if (!isConfigured() || !supabase) return;
+  await supabase.auth.signOut();
 }
 
 export async function getSession() {
-  if (!supabase) return null;
+  if (!isConfigured() || !supabase) return null;
   const { data } = await supabase.auth.getSession();
-  return data?.session ?? null;
+  return data.session;
 }
 
-export function onAuthStateChange(
-  callback: (event: string, session: unknown) => void
-) {
-  if (!supabase) return { data: { subscription: { unsubscribe: () => {} } } };
+export function onAuthStateChange(callback: (event: string, session: unknown) => void) {
+  if (!isConfigured() || !supabase) return { data: { subscription: { unsubscribe: () => {} } } };
   return supabase.auth.onAuthStateChange(callback);
 }

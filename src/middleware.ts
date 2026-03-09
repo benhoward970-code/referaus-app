@@ -1,49 +1,31 @@
-﻿import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+﻿import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const PROTECTED = ["/dashboard"];
+const protectedRoutes = ['/dashboard'];
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isProtected = PROTECTED.some((p) => pathname.startsWith(p));
+  const isProtected = protectedRoutes.some(route => pathname.startsWith(route));
+  
   if (!isProtected) return NextResponse.next();
-
+  
+  // Check for Supabase auth token in cookies
+  const token = request.cookies.get('sb-access-token')?.value 
+    || request.cookies.getAll().find(c => c.name.includes('auth-token'))?.value;
+  
+  // If no Supabase configured (no env vars), allow access (demo mode)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  // Not configured -- allow through (demo mode)
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return NextResponse.next();
-  }
-
-  const response = NextResponse.next();
-
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          response.cookies.set(name, value, options);
-        });
-      },
-    },
-  });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", pathname);
+  if (!supabaseUrl) return NextResponse.next();
+  
+  if (!token) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
-
-  return response;
+  
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ['/dashboard/:path*'],
 };
