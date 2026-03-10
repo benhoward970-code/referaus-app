@@ -8,6 +8,7 @@ export interface Provider {
   rating: number;
   reviewCount: number;
   verified: boolean;
+  registrationReady?: boolean;
   services: string[];
   phone: string;
   email: string;
@@ -90,6 +91,7 @@ export const providers: Provider[] = [
     rating: 4.6,
     reviewCount: 61,
     verified: true,
+    registrationReady: true,
     services: ["Support Coordination", "Plan Management", "Capacity Building", "Advocacy"],
     phone: "02 4990 5500",
     email: "connect@carefirst.com.au",
@@ -122,6 +124,7 @@ export const providers: Provider[] = [
     rating: 4.5,
     reviewCount: 108,
     verified: true,
+    registrationReady: true,
     services: ["SIL", "Respite", "Community Participation", "Skill Development"],
     phone: "02 4961 7700",
     email: "info@nds.org.au",
@@ -154,6 +157,7 @@ export const providers: Provider[] = [
     rating: 4.6,
     reviewCount: 45,
     verified: false,
+    registrationReady: true,
     services: ["SIL", "SDA", "Respite", "Short-Term Accommodation"],
     phone: "02 4937 9900",
     email: "living@valleyviewcare.com.au",
@@ -202,6 +206,7 @@ export const providers: Provider[] = [
     rating: 4.4,
     reviewCount: 29,
     verified: false,
+    registrationReady: true,
     services: ["SDA", "SIL", "24/7 Support", "Household Tasks"],
     phone: "02 4933 7788",
     email: "homes@maitlandsil.com.au",

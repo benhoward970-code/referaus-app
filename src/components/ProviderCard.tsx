@@ -19,6 +19,14 @@ export function ProviderCard({ provider }: { provider: Provider }) {
                 Verified
               </span>
             )}
+            {provider.registrationReady && (
+              <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-500/20 text-green-100 border border-green-400/30 mt-0.5">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+                </svg>
+                Reg Ready
+              </span>
+            )}
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
@@ -9,6 +9,7 @@ import type { User } from "@supabase/supabase-js";
 
 const NAV_LINKS = [
   { label: "Providers", href: "/providers" },
+  { label: "July 2026", href: "/registered-providers" },
   { label: "Compare", href: "/compare" },
   { label: "Resources", href: "/resources" },
   { label: "Blog", href: "/blog" },
