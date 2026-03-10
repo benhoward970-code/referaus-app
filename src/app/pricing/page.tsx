@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -10,11 +10,109 @@ const plans = [
   { name: "Premium", slug: "premium", monthlyPrice: 149, yearlyPrice: 1490, yearlySaving: 298, desc: "For established providers who want maximum visibility.", features: ["Everything in Professional", "Featured homepage placement", "Competitor insights", "Custom branded profile", "API access", "Dedicated account manager", "Multi-location support"], cta: "Start Premium", highlight: false, popular: false },
 ];
 
+type Plan = typeof plans[0];
+
+function CheckoutModal({ plan, billing, onClose }: { plan: Plan; billing: "monthly" | "yearly"; onClose: () => void }) {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const price = billing === "yearly" ? Math.round(plan.yearlyPrice / 12) : plan.monthlyPrice;
+
+  async function handleCheckout(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) { setError("Please enter your email."); return; }
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ planId: plan.slug, billing, email }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(data.error || "Something went wrong. Please try again.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Network error. Please try again.");
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md z-10">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+        </button>
+        <div className="mb-6">
+          <h2 className="text-2xl font-black mb-1">Start {plan.name}</h2>
+          <p className="text-gray-500 text-sm">
+            ${price}/mo{billing === "yearly" ? " · billed $" + plan.yearlyPrice + "/yr" : " · billed monthly"} · Cancel anytime
+          </p>
+        </div>
+        <form onSubmit={handleCheckout} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Business email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@yourbusiness.com.au"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
+              autoFocus
+              required
+            />
+          </div>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 rounded-xl font-bold text-sm bg-blue-600 hover:bg-blue-500 text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" /></svg>
+                Redirecting to payment...
+              </>
+            ) : (
+              <>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                Continue to secure checkout
+              </>
+            )}
+          </button>
+        </form>
+        <p className="text-xs text-gray-400 text-center mt-4">
+          Payments processed by Stripe · 256-bit SSL encryption · GST included
+        </p>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function PricingPage() {
   const [yearly, setYearly] = useState(false);
+  const [modal, setModal] = useState<{ plan: Plan; billing: "monthly" | "yearly" } | null>(null);
+
+  function handleCTA(plan: Plan) {
+    if (plan.slug === "free") return;
+    setModal({ plan, billing: yearly ? "yearly" : "monthly" });
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
+      <AnimatePresence>
+        {modal && (
+          <CheckoutModal plan={modal.plan} billing={modal.billing} onClose={() => setModal(null)} />
+        )}
+      </AnimatePresence>
+
       <div className="max-w-7xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Pricing</span>
@@ -52,7 +150,11 @@ export default function PricingPage() {
                 </AnimatePresence>
               </div>
               <p className="text-sm text-gray-500 mb-6 flex-shrink-0">{plan.desc}</p>
-              <Link href={"/register?plan=" + plan.slug + (yearly ? "&billing=yearly" : "")} className={"block text-center py-3 rounded-xl font-semibold text-sm transition-all mb-7 " + (plan.highlight ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200")}>{plan.cta}</Link>
+              {plan.slug === "free" ? (
+                <Link href="/register?plan=free" className="block text-center py-3 rounded-xl font-semibold text-sm transition-all mb-7 bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200">{plan.cta}</Link>
+              ) : (
+                <button onClick={() => handleCTA(plan)} className={"w-full py-3 rounded-xl font-semibold text-sm transition-all mb-7 " + (plan.highlight ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200")}>{plan.cta}</button>
+              )}
               <ul className="space-y-2.5 mt-auto">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-gray-500">
