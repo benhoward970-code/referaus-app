@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+
+function getClient() {
+  if (!supabaseUrl || !supabaseServiceKey) return null;
+  return createClient(supabaseUrl, supabaseServiceKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
 
 export interface Review {
   id?: string;
   provider_slug: string;
-  author_name: string;
+  reviewer_name: string;
   rating: number;
   text: string;
   service_type?: string;
@@ -17,11 +27,12 @@ export async function GET(request: NextRequest) {
   const slug = searchParams.get("slug");
   if (!slug) return NextResponse.json({ error: "Missing slug" }, { status: 400 });
 
-  if (!supabase) {
+  const client = getClient();
+  if (!client) {
     return NextResponse.json({ reviews: [] });
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await client
     .from("reviews")
     .select("*")
     .eq("provider_slug", slug)
@@ -41,10 +52,11 @@ export async function POST(request: NextRequest) {
   const { allowed } = checkRateLimit("reviews:" + ip, 5, 3600000);
   if (!allowed) return NextResponse.json({ error: "Too many reviews. Please try again later." }, { status: 429 });
 
-  const body: Review = await request.json();
-  const { provider_slug, author_name, rating, text, service_type } = body;
+  const body = await request.json();
+  const { provider_slug, author_name, reviewer_name, rating, text, service_type } = body;
+  const name = reviewer_name || author_name;
 
-  if (!provider_slug || !author_name || !rating || !text) {
+  if (!provider_slug || !name || !rating || !text) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
   if (rating < 1 || rating > 5) {
@@ -54,20 +66,21 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Review must be at least 10 characters" }, { status: 400 });
   }
 
-  const review: Review = {
+  const review = {
     provider_slug,
-    author_name: author_name.trim().substring(0, 80),
+    reviewer_name: name.trim().substring(0, 80),
     rating,
     text: text.trim().substring(0, 1000),
     service_type: service_type?.trim().substring(0, 80),
     created_at: new Date().toISOString(),
   };
 
-  if (!supabase) {
+  const client = getClient();
+  if (!client) {
     return NextResponse.json({ success: true, review: { ...review, id: "demo-" + Date.now() }, demo: true });
   }
 
-  const { data, error } = await supabase.from("reviews").insert(review).select().single();
+  const { data, error } = await client.from("reviews").insert(review).select().single();
   if (error) {
     console.error("Review insert error:", error);
     return NextResponse.json({ error: "Failed to save review" }, { status: 500 });

@@ -4,8 +4,18 @@ import ProviderDetailClient from "./ProviderDetailClient";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+
+  // Try hardcoded data first (available at build time, no async DB call needed)
   const provider = providers.find((p) => p.slug === slug);
-  if (!provider) return { title: "Provider Not Found" };
+
+  if (!provider) {
+    // Provider might exist only in DB - return generic metadata
+    return {
+      title: "Provider | ReferAus",
+      description: "View NDIS provider details on ReferAus - the Hunter Region NDIS marketplace.",
+    };
+  }
+
   return {
     title: provider.name,
     description: `${provider.name} — ${provider.category} provider in ${provider.location}. ${provider.description}`,

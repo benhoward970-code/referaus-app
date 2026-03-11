@@ -4,7 +4,8 @@ export interface Provider {
   category: string;
   description: string;
   location: string;
-  suburb: string; postcode: string;
+  suburb: string;
+  postcode: string;
   rating: number;
   reviewCount: number;
   verified: boolean;
@@ -14,6 +15,14 @@ export interface Provider {
   email: string;
   image: string;
   plan: "free" | "starter" | "pro" | "premium";
+  // New optional fields (DB-backed provider profiles)
+  bio?: string;
+  brand_color?: string;
+  logo_url?: string;
+  cover_image_url?: string;
+  gallery_urls?: string[];
+  website?: string;
+  state?: string;
 }
 
 export const providers: Provider[] = [
@@ -32,6 +41,7 @@ export const providers: Provider[] = [
     email: "hello@sunshinesupport.com.au",
     image: "/providers/sunshine.jpg",
     plan: "premium",
+    state: "NSW",
   },
   {
     slug: "hunter-valley-therapy",
@@ -48,6 +58,7 @@ export const providers: Provider[] = [
     email: "info@huntervalleytherapy.com.au",
     image: "/providers/hunter-therapy.jpg",
     plan: "pro",
+    state: "NSW",
   },
   {
     slug: "physioplus-newcastle",
@@ -64,6 +75,7 @@ export const providers: Provider[] = [
     email: "book@physioplusnewcastle.com.au",
     image: "/providers/physioplus.jpg",
     plan: "pro",
+    state: "NSW",
   },
   {
     slug: "little-stars-early-intervention",
@@ -80,6 +92,7 @@ export const providers: Provider[] = [
     email: "enquiries@littlestars.com.au",
     image: "/providers/little-stars.jpg",
     plan: "premium",
+    state: "NSW",
   },
   {
     slug: "carefirst-community",
@@ -97,6 +110,7 @@ export const providers: Provider[] = [
     email: "connect@carefirst.com.au",
     image: "/providers/carefirst.jpg",
     plan: "starter",
+    state: "NSW",
   },
   {
     slug: "lakeside-allied-health",
@@ -113,6 +127,7 @@ export const providers: Provider[] = [
     email: "hello@lakesidehealth.com.au",
     image: "/providers/lakeside.jpg",
     plan: "pro",
+    state: "NSW",
   },
   {
     slug: "newcastle-disability-services",
@@ -130,6 +145,7 @@ export const providers: Provider[] = [
     email: "info@nds.org.au",
     image: "/providers/nds.jpg",
     plan: "pro",
+    state: "NSW",
   },
   {
     slug: "hunter-support-co",
@@ -146,6 +162,7 @@ export const providers: Provider[] = [
     email: "plans@huntersupport.co",
     image: "/providers/hunter-support.jpg",
     plan: "starter",
+    state: "NSW",
   },
   {
     slug: "valley-view-care",
@@ -163,6 +180,7 @@ export const providers: Provider[] = [
     email: "living@valleyviewcare.com.au",
     image: "/providers/valley-view.jpg",
     plan: "free",
+    state: "NSW",
   },
   {
     slug: "coastal-wellness-group",
@@ -179,6 +197,7 @@ export const providers: Provider[] = [
     email: "support@coastalwellness.com.au",
     image: "/providers/coastal.jpg",
     plan: "starter",
+    state: "NSW",
   },
   {
     slug: "hunter-transport-solutions",
@@ -195,6 +214,7 @@ export const providers: Provider[] = [
     email: "bookings@huntertransport.com.au",
     image: "/providers/hunter-transport.jpg",
     plan: "free",
+    state: "NSW",
   },
   {
     slug: "maitland-sil-homes",
@@ -212,8 +232,12 @@ export const providers: Provider[] = [
     email: "homes@maitlandsil.com.au",
     image: "/providers/maitland-sil.jpg",
     plan: "free",
+    state: "NSW",
   },
 ];
+
+/** Alias – seed data for dev/demo use */
+export const seedProviders = providers;
 
 export const categories = [
   "All",

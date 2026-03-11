@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signUp, isConfigured, submitWaitlist } from "@/lib/supabase";
+import { signUp, isConfigured, submitWaitlist, supabase } from "@/lib/supabase";
 
 export default function RegisterPage() {
   const [role, setRole] = useState<"participant" | "provider">("participant");
@@ -28,14 +28,41 @@ export default function RegisterPage() {
       return;
     }
 
-    const { error: err } = await signUp(email, password, { name, role });
-    if (err) {
-      setError(err.message);
+    const result = await signUp(email, password, { name, role });
+    if (result.error) {
+      setError(result.error.message);
       setLoading(false);
-    } else {
-      setSuccess(true);
-      setLoading(false);
+      return;
     }
+
+    // For provider role, create a provider profile row
+    if (role === "provider" && supabase) {
+      const newUser = result.data?.user;
+      if (newUser) {
+        const slug = name
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
+
+        const { error: insertErr } = await supabase.from("providers").insert({
+          user_id: newUser.id,
+          name: name,
+          slug: slug,
+          email: email,
+          plan: "free",
+          category: "Daily Living",
+          services: [],
+        });
+
+        if (insertErr) {
+          console.error("[register] Provider profile insert error:", insertErr.message);
+          // Don't block registration if profile insert fails - they can set it up later
+        }
+      }
+    }
+
+    setSuccess(true);
+    setLoading(false);
   };
 
   if (success) {
@@ -46,8 +73,12 @@ export default function RegisterPage() {
             <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
           </div>
           <h2 className="text-2xl font-black mb-2">You are in!</h2>
-          <p className="text-gray-500 text-sm mb-6">{isConfigured() ? "Check your email to verify your account." : "We have added you to the waitlist. We will be in touch soon!"}</p>
-          <Link href="/" className="text-blue-400 text-sm hover:text-blue-300">Back to home</Link>
+          <p className="text-gray-500 text-sm mb-6">
+            {isConfigured()
+              ? "Check your email to verify your account. Once verified, you can sign in and start using ReferAus."
+              : "We have added you to the waitlist. We will be in touch soon!"}
+          </p>
+          <Link href="/login" className="text-blue-400 text-sm hover:text-blue-300">Go to sign in</Link>
         </motion.div>
       </div>
     );
@@ -64,8 +95,8 @@ export default function RegisterPage() {
         </div>
         <div className="glass rounded-2xl p-8">
           <div className="flex rounded-xl bg-gray-50 p-1 mb-6">
-            <button onClick={() => setRole("participant")} className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${role === "participant" ? "bg-blue-600 text-gray-900" : "text-gray-500"}`}>Participant</button>
-            <button onClick={() => setRole("provider")} className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${role === "provider" ? "bg-blue-600 text-gray-900" : "text-gray-500"}`}>Provider</button>
+            <button onClick={() => setRole("participant")} className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${role === "participant" ? "bg-blue-600 text-white" : "text-gray-500"}`}>Participant</button>
+            <button onClick={() => setRole("provider")} className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${role === "provider" ? "bg-blue-600 text-white" : "text-gray-500"}`}>Provider</button>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-400">{error}</div>}
@@ -85,7 +116,7 @@ export default function RegisterPage() {
                 className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
             </div>
             <button type="submit" disabled={loading}
-              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-gray-900 font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25">
+              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25">
               {loading ? "Creating account..." : role === "provider" ? "Create Provider Account" : "Sign Up Free"}
             </button>
           </form>
@@ -97,7 +128,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-
-
-

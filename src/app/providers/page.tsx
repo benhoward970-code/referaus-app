@@ -1,8 +1,11 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
-import { providers, categories, locations } from "@/lib/providers";
+import { providers as hardcodedProviders, categories, locations } from "@/lib/providers";
+import type { Provider } from "@/lib/providers";
 import { ProviderCard } from "@/components/ProviderCard";
+import { getAllProviders } from "@/lib/supabase";
+import { mapDbProvider } from "@/lib/map-provider";
 
 type SortOption = "rating" | "name" | "reviews";
 
@@ -12,6 +15,33 @@ export default function ProvidersPage() {
   const [location, setLocation] = useState("All Locations");
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [sort, setSort] = useState<SortOption>("rating");
+  const [providers, setProviders] = useState<Provider[]>(hardcodedProviders);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchProviders() {
+      try {
+        const dbRows = await getAllProviders();
+        if (!cancelled && dbRows.length > 0) {
+          const dbProviders = dbRows.map(mapDbProvider);
+          // Merge: DB providers take priority (by slug), then fill with hardcoded
+          const slugSet = new Set(dbProviders.map((p) => p.slug));
+          const merged = [
+            ...dbProviders,
+            ...hardcodedProviders.filter((p) => !slugSet.has(p.slug)),
+          ];
+          setProviders(merged);
+        }
+      } catch (err) {
+        console.error("[providers] Failed to fetch from DB, using hardcoded:", err);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+    fetchProviders();
+    return () => { cancelled = true; };
+  }, []);
 
   const filtered = useMemo(() => {
     let result = providers.filter((p) => {
@@ -31,7 +61,7 @@ export default function ProvidersPage() {
     else if (sort === "reviews") result = [...result].sort((a, b) => b.reviewCount - a.reviewCount);
 
     return result;
-  }, [search, category, location, verifiedOnly, sort]);
+  }, [search, category, location, verifiedOnly, sort, providers]);
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
@@ -127,7 +157,29 @@ export default function ProvidersPage() {
           Showing {filtered.length} of {providers.length} providers
         </p>
 
-        {filtered.length === 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-gray-200 p-6 animate-pulse">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-xl bg-gray-200" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-3/4" />
+                    <div className="h-3 bg-gray-100 rounded w-1/2" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="h-3 bg-gray-100 rounded w-full" />
+                  <div className="h-3 bg-gray-100 rounded w-5/6" />
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <div className="h-6 bg-gray-100 rounded-full w-20" />
+                  <div className="h-6 bg-gray-100 rounded-full w-16" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-gray-500 text-lg mb-2">No providers found</p>
             <p className="text-gray-500 text-sm">Try adjusting your search or filters</p>
