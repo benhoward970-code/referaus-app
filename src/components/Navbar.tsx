@@ -9,6 +9,7 @@ import type { User } from "@supabase/supabase-js";
 
 const NAV_LINKS = [
   { label: "Providers", href: "/providers" },
+  { label: "Services", href: "/services" },
   { label: "July 2026", href: "/registered-providers" },
   { label: "Compare", href: "/compare" },
   { label: "Resources", href: "/resources" },
@@ -277,5 +278,6 @@ export function Navbar() {
     </>
   );
 }
+
 
 
