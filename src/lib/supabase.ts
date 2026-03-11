@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+﻿import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -291,4 +291,56 @@ export async function submitWaitlist(email: string, role: string) {
   }
   const { error } = await supabase.from("waitlist").insert({ email, role });
   return { success: !error, error };
+}
+
+// ---------------------------------------------------------------------------
+// Plan / Stripe helpers (server-side, uses service role)
+// ---------------------------------------------------------------------------
+
+export async function updateProviderPlan(
+  customerEmail: string,
+  plan: string,
+  stripeCustomerId: string,
+  stripeSubscriptionId: string | null,
+) {
+  const admin = supabaseAdmin();
+  if (!admin) return { error: "Supabase admin not configured" };
+
+  const { error } = await admin
+    .from("providers")
+    .update({
+      plan,
+      stripe_customer_id: stripeCustomerId,
+      stripe_subscription_id: stripeSubscriptionId,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("email", customerEmail);
+
+  if (error) {
+    console.error("[supabase] updateProviderPlan error:", error.message);
+    return { error: error.message };
+  }
+  return { success: true };
+}
+
+export async function downgradeProviderByCustomerId(
+  stripeCustomerId: string,
+) {
+  const admin = supabaseAdmin();
+  if (!admin) return { error: "Supabase admin not configured" };
+
+  const { error } = await admin
+    .from("providers")
+    .update({
+      plan: "free",
+      stripe_subscription_id: null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("stripe_customer_id", stripeCustomerId);
+
+  if (error) {
+    console.error("[supabase] downgradeProvider error:", error.message);
+    return { error: error.message };
+  }
+  return { success: true };
 }

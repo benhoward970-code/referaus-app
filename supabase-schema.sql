@@ -1,4 +1,4 @@
--- ReferAus Provider Self-Service - Database Migration
+﻿-- ReferAus Provider Self-Service - Database Migration
 -- Run this in Supabase SQL Editor (Dashboard > SQL Editor)
 -- Safe to run multiple times (uses IF NOT EXISTS / IF EXISTS checks)
 
@@ -169,3 +169,12 @@ CREATE POLICY "Auth users can upload provider images" ON storage.objects FOR INS
 
 DROP POLICY IF EXISTS "Auth users can delete provider images" ON storage.objects;
 CREATE POLICY "Auth users can delete provider images" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'provider-images');
+
+-- ============================================================
+-- 8. Stripe billing columns (safe to run multiple times)
+-- ============================================================
+ALTER TABLE providers ADD COLUMN IF NOT EXISTS stripe_customer_id text;
+ALTER TABLE providers ADD COLUMN IF NOT EXISTS stripe_subscription_id text;
+
+CREATE INDEX IF NOT EXISTS idx_providers_stripe_customer ON providers(stripe_customer_id);
+CREATE INDEX IF NOT EXISTS idx_providers_email ON providers(email);
