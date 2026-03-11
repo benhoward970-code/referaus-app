@@ -65,6 +65,17 @@ export default function RegisterPage() {
     setLoading(false);
   };
 
+  const [resent, setResent] = useState(false);
+  const [resending, setResending] = useState(false);
+
+  const handleResendVerification = async () => {
+    if (!supabase || !email) return;
+    setResending(true);
+    await supabase.auth.resend({ type: "signup", email });
+    setResent(true);
+    setResending(false);
+  };
+
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center px-6 pt-16">
@@ -78,6 +89,21 @@ export default function RegisterPage() {
               ? "Check your email to verify your account. Once verified, you can sign in and start using ReferAus."
               : "We have added you to the waitlist. We will be in touch soon!"}
           </p>
+          {isConfigured() && (
+            <div className="mb-4">
+              {resent ? (
+                <p className="text-green-600 text-sm font-medium">Verification email resent! Check your inbox.</p>
+              ) : (
+                <button
+                  onClick={handleResendVerification}
+                  disabled={resending}
+                  className="text-blue-600 hover:text-blue-500 text-sm font-medium underline disabled:opacity-50"
+                >
+                  {resending ? "Sending..." : "Resend verification email"}
+                </button>
+              )}
+            </div>
+          )}
           <Link href="/login" className="text-blue-400 text-sm hover:text-blue-300">Go to sign in</Link>
         </motion.div>
       </div>
