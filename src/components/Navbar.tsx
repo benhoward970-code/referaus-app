@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { label: "Blog", href: "/blog" },
   { label: "Pricing", href: "/pricing" },
   { label: "For Providers", href: "/for-providers" },
+  { label: "For SCs", href: "/for-coordinators" },
 ];
 
 function UserMenu({ user }: { user: User }) {
@@ -276,4 +277,5 @@ export function Navbar() {
     </>
   );
 }
+
 
