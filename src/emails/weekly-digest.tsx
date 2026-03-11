@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 
 interface WeeklyDigestEmailProps {
   providerName: string;
@@ -50,7 +50,7 @@ function ChangeIndicator({ change }: { change: number }) {
   const up = change > 0;
   return (
     <span style={{ color: up ? '#16a34a' : '#dc2626', fontSize: '12px', fontWeight: '600' }}>
-      {up ? '▲' : '▼'} {Math.abs(change)}% vs last week
+      {up ? '?' : '?'} {Math.abs(change)}% vs last week
     </span>
   );
 }
@@ -63,7 +63,7 @@ export function WeeklyDigestEmail({
   profileViewsChange,
   newEnquiries,
   searchAppearances,
-  dashboardUrl = 'https://referaus.com.au/dashboard',
+  dashboardUrl = 'https://referaus.com/dashboard',
 }: WeeklyDigestEmailProps) {
   return (
     <html>
@@ -82,10 +82,10 @@ export function WeeklyDigestEmail({
             <tr>
               <td style={bodyStyle}>
                 <p style={{ color: '#1d4ed8', fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 8px' }}>
-                  Weekly Digest · Week ending {weekEnding}
+                  Weekly Digest � Week ending {weekEnding}
                 </p>
                 <h1 style={{ color: '#111827', fontSize: '26px', fontWeight: '700', margin: '0 0 8px' }}>
-                  Your Week in Review 📊
+                  Your Week in Review ??
                 </h1>
                 <p style={{ color: '#374151', fontSize: '16px', lineHeight: '1.6', margin: '0 0 28px' }}>
                   Hi <strong>{providerName}</strong>, here&apos;s how <strong>{businessName}</strong> performed this week on ReferAus.
@@ -122,13 +122,13 @@ export function WeeklyDigestEmail({
 
                 {/* Tips */}
                 <div style={{ backgroundColor: '#fffbeb', border: '1px solid #fde68a', borderRadius: '8px', padding: '20px', marginBottom: '28px' }}>
-                  <p style={{ color: '#92400e', fontSize: '14px', fontWeight: '600', margin: '0 0 10px' }}>💡 Tips to Improve Your Visibility</p>
+                  <p style={{ color: '#92400e', fontSize: '14px', fontWeight: '600', margin: '0 0 10px' }}>?? Tips to Improve Your Visibility</p>
                   <ul style={{ color: '#374151', fontSize: '14px', lineHeight: '1.8', margin: 0, paddingLeft: '20px' }}>
-                    <li>Keep your profile <strong>100% complete</strong> — complete profiles rank higher in search</li>
+                    <li>Keep your profile <strong>100% complete</strong> � complete profiles rank higher in search</li>
                     <li>Add a <strong>profile photo or logo</strong> to build participant trust</li>
-                    <li>List all <strong>NDIS support categories</strong> you deliver — this expands your reach</li>
+                    <li>List all <strong>NDIS support categories</strong> you deliver � this expands your reach</li>
                     <li>Add <strong>service areas</strong> so local participants can find you</li>
-                    <li>Respond to enquiries quickly — fast responders get featured</li>
+                    <li>Respond to enquiries quickly � fast responders get featured</li>
                   </ul>
                 </div>
 
@@ -155,9 +155,9 @@ export function WeeklyDigestEmail({
                   You&apos;re receiving this because you have a provider listing on ReferAus.
                 </p>
                 <p style={{ color: '#9ca3af', fontSize: '13px', margin: 0 }}>
-                  <a href="https://referaus.com.au/unsubscribe" style={{ color: '#6b7280' }}>Unsubscribe</a>
-                  {' · '}
-                  <a href="https://referaus.com.au/privacy" style={{ color: '#6b7280' }}>Privacy Policy</a>
+                  <a href="https://referaus.com/unsubscribe" style={{ color: '#6b7280' }}>Unsubscribe</a>
+                  {' � '}
+                  <a href="https://referaus.com/privacy" style={{ color: '#6b7280' }}>Privacy Policy</a>
                 </p>
               </td>
             </tr>

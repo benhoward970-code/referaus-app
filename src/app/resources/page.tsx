@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "NDIS Resources Hub | ReferAus",
     description:
       "Essential NDIS resources for participants and providers - guides, forms, glossary, and official links.",
-    url: "https://referaus.com.au/resources",
+    url: "https://referaus.com/resources",
     type: "website",
   },
 };
