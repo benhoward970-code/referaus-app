@@ -1,10 +1,10 @@
-ï»¿# ReferAus
+# ReferAus
 
-**Australia's NDIS Provider Directory** â€” Search, compare, and connect with trusted NDIS providers in the Hunter Region.
+**Australia's NDIS Provider Directory** — Search, compare, and connect with trusted NDIS providers in the Hunter Region.
 
 ## Live
 
-- **Production:** [nexaconnect-v2.vercel.app](https://nexaconnect-v2.vercel.app)
+- **Production:** [referaus.vercel.app](https://referaus.vercel.app)
 - **Domain:** [referaus.com](https://referaus.com) (DNS pending)
 
 ## Stack
@@ -21,16 +21,16 @@
 
 | Route | Description |
 |-------|-------------|
-| / | Homepage â€” hero search, how-it-works, featured providers, testimonials, pricing |
-| /providers | Provider directory â€” search, filter by service/area, sort by rating |
-| /providers/[slug] | Provider profile â€” reviews, contact form, breadcrumbs |
+| / | Homepage — hero search, how-it-works, featured providers, testimonials, pricing |
+| /providers | Provider directory — search, filter by service/area, sort by rating |
+| /providers/[slug] | Provider profile — reviews, contact form, breadcrumbs |
 | /compare | Side-by-side provider comparison (up to 3) |
 | /pricing | 4-tier pricing with monthly/yearly toggle |
 | /blog | Blog with NDIS articles |
 | /blog/[slug] | Individual blog posts with SEO |
 | /resources | NDIS resource hub + 25-term glossary |
-| /dashboard | Provider dashboard â€” stats, enquiries, reviews |
-| /admin | Admin panel â€” provider management, stats |
+| /dashboard | Provider dashboard — stats, enquiries, reviews |
+| /admin | Admin panel — provider management, stats |
 | /onboarding | 4-step provider onboarding wizard |
 | /login | Login with Supabase Auth |
 | /register | Plan-aware registration |
@@ -75,3 +75,4 @@ npm run build   # production build
 ## License
 
 Proprietary. (c) 2026 ReferAus.
+
