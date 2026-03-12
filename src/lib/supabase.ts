@@ -83,17 +83,21 @@ export async function getProviderBySlug(slug: string) {
   return data;
 }
 
+
 export async function getAllProviders() {
-  if (!supabase) return [];
-  const { data, error } = await supabase
-    .from("providers")
-    .select("*")
-    .order("name", { ascending: true });
-  if (error) {
-    console.error("[supabase] getAllProviders error:", error.message);
+  try {
+    // Use server-side API route (bypasses broken anon key)
+    const baseUrl = typeof window !== 'undefined' 
+      ? window.location.origin 
+      : (process.env.NEXT_PUBLIC_APP_URL || 'https://referaus.com');
+    const res = await fetch(`${baseUrl}/api/providers-public`, { 
+      next: { revalidate: 300 } 
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
     return [];
   }
-  return data ?? [];
 }
 
 export async function updateProvider(
