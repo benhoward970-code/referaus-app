@@ -24,9 +24,9 @@ export default function ProvidersPage() {
       try {
         const dbRows = await getAllProviders();
         if (!cancelled && dbRows.length > 0) {
-          const dbProviders = dbRows.map(mapDbProvider);
+          const dbProviders = dbRows.map((row: any) => mapDbProvider(row));
           // Merge: DB providers take priority (by slug), then fill with hardcoded
-          const slugSet = new Set(dbProviders.map((p) => p.slug));
+          const slugSet = new Set(dbProviders.map((p: any) => p.slug));
           const merged = [
             ...dbProviders,
             ...hardcodedProviders.filter((p) => !slugSet.has(p.slug)),

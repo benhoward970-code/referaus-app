@@ -1,4 +1,4 @@
-﻿import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -84,7 +84,7 @@ export async function getProviderBySlug(slug: string) {
 }
 
 
-export async function getAllProviders() {
+export async function getAllProviders(): Promise<any[]> {
   try {
     // Use server-side API route (bypasses broken anon key)
     const baseUrl = typeof window !== 'undefined' 
