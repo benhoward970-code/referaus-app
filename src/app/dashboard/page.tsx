@@ -316,13 +316,13 @@ export default function DashboardPage() {
                         )}
                       </td>
                       <td className="px-3 py-4">
-                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex gap-2">
                           {e.phone && (
-                            <a href={`tel:${e.phone}`} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                            <a href={`tel:${e.phone}`} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" aria-label={`Call ${e.name}`}>
                               <Phone className="w-3.5 h-3.5" />
                             </a>
                           )}
-                          <a href={`mailto:${e.email}`} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                          <a href={`mailto:${e.email}`} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" aria-label={`Email ${e.name}`}>
                             <Mail className="w-3.5 h-3.5" />
                           </a>
                         </div>

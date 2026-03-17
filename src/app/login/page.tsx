@@ -65,7 +65,7 @@ function MFAChallenge({ factorId, onSuccess }: { factorId: string; onSuccess: ()
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
             placeholder="000000"
             required
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-center text-2xl tracking-[0.5em] font-mono focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-center text-2xl tracking-[0.5em] font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500"
           />
         </div>
         <button
@@ -170,20 +170,23 @@ function LoginForm() {
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1.5 block">Email</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500" />
+            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500" />
         </div>
         <div>
           <label className="text-xs font-medium text-gray-500 mb-1.5 block">Password</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" required
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500" />
+            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500" />
         </div>
         <button type="submit" disabled={loading}
           className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25">
           {loading ? "Signing in..." : "Sign In"}
         </button>
       </form>
-      <div className="mt-6 text-center">
-        <p className="text-xs text-gray-500">No account? <Link href="/register" className="text-blue-400 hover:text-blue-300">Create one</Link></p>
+      <div className="mt-6 text-center space-y-2">
+        <p className="text-xs text-gray-500">
+          <Link href="/forgot-password" className="text-blue-600 hover:text-blue-700">Forgot your password?</Link>
+        </p>
+        <p className="text-xs text-gray-500">No account? <Link href="/register" className="text-blue-600 hover:text-blue-700">Create one</Link></p>
       </div>
     </div>
   );

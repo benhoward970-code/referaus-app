@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { CheckCircle, MapPin, Mail, Clock, ArrowRight } from "lucide-react";
 
 const subjects = [
   "General Enquiry",
@@ -14,7 +15,7 @@ const subjects = [
 const faqs = [
   {
     q: "Is ReferAus free for participants?",
-    a: "Yes � 100% free for NDIS participants. Always. You can search, compare, and contact providers without paying a cent. We are funded by providers who choose to list their services.",
+    a: "Yes — 100% free for NDIS participants. Always. You can search, compare, and contact providers without paying a cent. We are funded by providers who choose to list their services.",
   },
   {
     q: "How do I list my business on ReferAus?",
@@ -29,7 +30,7 @@ const faqs = [
     a: "You need a free participant account to leave reviews. Once logged in, search for the provider and click 'Leave a Review'. We verify reviews are from genuine NDIS participants to keep them trustworthy.",
   },
   {
-    q: "I found incorrect information � how do I report it?",
+    q: "I found incorrect information — how do I report it?",
     a: "Use the 'Report an issue' link on any provider profile, or contact us directly via this form with the subject 'Support'. We take accuracy seriously and will investigate within 48 hours.",
   },
 ];
@@ -114,7 +115,7 @@ export default function ContactPage() {
             className="lg:col-span-3">
             {status === "sent" ? (
               <div className="rounded-2xl bg-green-50 border border-green-200 p-10 text-center">
-                <div className="text-4xl mb-4">?</div>
+                <div className="flex justify-center mb-4"><CheckCircle className="w-12 h-12 text-green-500" /></div>
                 <h3 className="font-bold text-xl mb-2">Message sent!</h3>
                 <p className="text-gray-600 text-sm mb-6">We will get back to you within 24 hours.</p>
                 <button onClick={() => setStatus("idle")} className="text-blue-600 text-sm font-semibold hover:text-blue-700">Send another message</button>
@@ -156,7 +157,7 @@ export default function ContactPage() {
 
                 <button type="submit" disabled={status === "sending"}
                   className="w-full py-3.5 rounded-xl bg-orange-500 text-white font-semibold hover:bg-orange-600 transition-all disabled:opacity-50 hover:shadow-lg hover:shadow-orange-500/25">
-                  {status === "sending" ? "Sending�" : "Send Message ?"}
+                  {status === "sending" ? "Sending..." : "Send Message"}
                 </button>
 
                 {status === "error" && (
@@ -176,21 +177,21 @@ export default function ContactPage() {
               <h3 className="font-bold text-lg mb-5">Office</h3>
               <div className="space-y-4 text-sm text-gray-600">
                 <div className="flex gap-3">
-                  <span className="text-orange-500 mt-0.5">??</span>
+                  <MapPin className="text-orange-500 mt-0.5 shrink-0 w-4 h-4" />
                   <div>
                     <p className="font-medium text-gray-800">Hunter Region, NSW</p>
                     <p className="text-gray-400">Australia</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="text-orange-500 mt-0.5">??</span>
+                  <Mail className="text-orange-500 mt-0.5 shrink-0 w-4 h-4" />
                   <div>
                     <p className="font-medium text-gray-800">Email</p>
                     <a href="mailto:hello@referaus.com" className="text-blue-600 hover:text-blue-700 transition-colors">hello@referaus.com</a>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="text-orange-500 mt-0.5">??</span>
+                  <Clock className="text-orange-500 mt-0.5 shrink-0 w-4 h-4" />
                   <div>
                     <p className="font-medium text-gray-800">Response time</p>
                     <p className="text-gray-400">Within 1 business day</p>
@@ -206,8 +207,7 @@ export default function ContactPage() {
               </p>
               <Link href="/register"
                 className="inline-block px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-500 transition-all">
-                List Your Business ?
-              </Link>
+                List Your Business</Link>
             </div>
           </motion.div>
         </div>

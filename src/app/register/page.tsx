@@ -104,7 +104,7 @@ export default function RegisterPage() {
               )}
             </div>
           )}
-          <Link href="/login" className="text-blue-400 text-sm hover:text-blue-300">Go to sign in</Link>
+          <Link href="/login" className="text-blue-600 text-sm hover:text-blue-700">Go to sign in</Link>
         </motion.div>
       </div>
     );
@@ -120,26 +120,32 @@ export default function RegisterPage() {
           <p className="text-sm text-gray-500">Join ReferAus today</p>
         </div>
         <div className="glass rounded-2xl p-8">
-          <div className="flex rounded-xl bg-gray-50 p-1 mb-6">
-            <button onClick={() => setRole("participant")} className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${role === "participant" ? "bg-blue-600 text-white" : "text-gray-500"}`}>Participant</button>
-            <button onClick={() => setRole("provider")} className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${role === "provider" ? "bg-blue-600 text-white" : "text-gray-500"}`}>Provider</button>
+          <div className="flex rounded-xl bg-gray-50 p-1 mb-6" role="radiogroup" aria-label="Account type">
+            <button onClick={() => setRole("participant")} role="radio" aria-checked={role === "participant"} className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${role === "participant" ? "bg-blue-600 text-white" : "text-gray-500"}`}>Participant</button>
+            <button onClick={() => setRole("provider")} role="radio" aria-checked={role === "provider"} className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${role === "provider" ? "bg-blue-600 text-white" : "text-gray-500"}`}>Provider</button>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-400">{error}</div>}
             <div>
               <label className="text-xs font-medium text-gray-500 mb-1.5 block">{role === "provider" ? "Business Name" : "Full Name"}</label>
               <input type="text" required value={name} onChange={e => setName(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40" />
             </div>
             <div>
               <label className="text-xs font-medium text-gray-500 mb-1.5 block">Email</label>
               <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com"
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40" />
             </div>
             <div>
               <label className="text-xs font-medium text-gray-500 mb-1.5 block">Password</label>
               <input type="password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="Min 6 characters"
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/40" />
+                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40" />
+              {password.length > 0 && password.length < 6 && (
+                <p className="text-xs text-red-500 mt-1">Password must be at least 6 characters</p>
+              )}
+              {password.length >= 6 && (
+                <p className="text-xs text-green-600 mt-1">&#10003; Password looks good</p>
+              )}
             </div>
             <button type="submit" disabled={loading}
               className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25">
@@ -147,7 +153,7 @@ export default function RegisterPage() {
             </button>
           </form>
           <div className="mt-6 text-center">
-            <p className="text-xs text-gray-500">Already have an account? <Link href="/login" className="text-blue-400 hover:text-blue-300">Sign in</Link></p>
+            <p className="text-xs text-gray-500">Already have an account? <Link href="/login" className="text-blue-600 hover:text-blue-700">Sign in</Link></p>
           </div>
         </div>
       </motion.div>

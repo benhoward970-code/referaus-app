@@ -1,8 +1,7 @@
 "use client";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { SearchAutocomplete } from '@/components/SearchAutocomplete';
 import { providers } from "@/lib/providers";
 
@@ -10,8 +9,10 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
+  const prefersReduced = useReducedMotion();
   useEffect(() => {
     if (!inView) return;
+    if (prefersReduced) { setCount(target); return; }
     let start = 0;
     const duration = 2000;
     const step = (timestamp: number) => {
@@ -21,35 +22,10 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
       if (progress < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
-  }, [inView, target]);
+  }, [inView, target, prefersReduced]);
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
-function HeroSearch() {
-  const [query, setQuery] = useState("");
-  const router = useRouter();
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push(`/providers${query.trim() ? `?q=${encodeURIComponent(query.trim())}` : ""}`);
-  };
-  return (
-    <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3 w-full max-w-[600px]">
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search by service, location or provider name..."
-        className="flex-1 px-5 py-3.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white shadow-sm"
-      />
-      <button
-        type="submit"
-        className="px-7 py-3.5 rounded-lg bg-orange-500 text-white font-semibold text-sm hover:bg-orange-600 transition-all hover:-translate-y-0.5 shadow-sm whitespace-nowrap"
-      >
-        Find Providers
-      </button>
-    </form>
-  );
-}
 
 const features = [
   { icon: "🔍", title: "Smart Search", desc: "Search by location, NDIS support category, availability, and ratings. Find providers who offer what you need, near where you are." },
@@ -88,6 +64,9 @@ const gradients = [
 ];
 
 export default function Home() {
+  const prefersReduced = useReducedMotion();
+  const d = (n: number) => prefersReduced ? 0 : n;
+
   return (
     <>
       {/* Hero */}
@@ -95,30 +74,30 @@ export default function Home() {
         <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(249,115,22,0.06)_0%,transparent_70%)] pointer-events-none" />
         <div className="absolute top-[40%] left-[-15%] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(37,99,235,0.04)_0%,transparent_70%)] pointer-events-none" />
 
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5) }}
           className="font-mono text-[0.7rem] text-blue-600 tracking-[0.2em] uppercase mb-6 flex items-center gap-3">
           <span className="w-8 h-px bg-orange-500" />
           referaus.com — Australia&apos;s NDIS Marketplace
         </motion.p>
 
-        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
+        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.7), delay: d(0.1) }}
           className="heading-bold text-[clamp(2.8rem,7vw,5rem)] leading-[1.05] mb-6 max-w-[820px]">
           Find Trusted{" "}
           <span className="text-orange-500">NDIS Providers</span>{" "}
           Near You
         </motion.h1>
 
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.6), delay: d(0.2) }}
           className="text-gray-500 text-lg max-w-[550px] mb-8 font-light leading-relaxed">
           Search, compare, and connect with NDIS providers in your area. Real reviews from real participants. Direct messaging. No middleman.
         </motion.p>
 
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.3) }}
           className="mb-7">
           <SearchAutocomplete className="w-full max-w-[600px]" />
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.4) }}
           className="flex flex-wrap gap-3 mb-4">
           {[
             { icon: "🏢", label: "500+ Providers" },
@@ -133,12 +112,12 @@ export default function Home() {
           ))}
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55 }}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.6), delay: d(0.55) }}
           className="flex flex-wrap gap-6 sm:gap-12 mt-12 pt-8 border-t border-gray-100">
           {[
-            { num: 500, suffix: "+", label: "Providers Listed" },
-            { num: 1200, suffix: "+", label: "Participants Connected" },
-            { num: 15000, suffix: "+", label: "Successful Referrals" },
+            { num: 50, suffix: "+", label: "Providers Listed" },
+            { num: 50, suffix: "+", label: "Hunter Region Providers" },
+            { num: 100, suffix: "%", label: "Free for Participants" },
           ].map((s) => (
             <div key={s.label}>
               <div className="heading-bold text-[2rem] sm:text-[2.5rem] text-blue-600">
@@ -164,7 +143,7 @@ export default function Home() {
             { icon: "⚖️", num: "02", title: "Compare", desc: "Browse provider profiles with real reviews from other participants. See services, specialties, and ratings side by side." },
             { icon: "🤝", num: "03", title: "Connect", desc: "Send an enquiry or message the provider directly. No phone tag, no waiting on hold. Get a response and start." },
           ].map((step, i) => (
-            <motion.div key={step.num} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }}
+            <motion.div key={step.num} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.15), duration: d(0.5) }}
               className="card p-8 relative overflow-hidden group">
               <div className="absolute top-4 right-5 heading-bold text-[4rem] text-gray-100 leading-none select-none group-hover:text-orange-50 transition-colors">
                 {step.num}
@@ -189,7 +168,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((f, i) => (
-            <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+            <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.08), duration: d(0.4) }}
               className="card relative overflow-hidden p-8">
               <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-lg">{f.icon}</div>
               <h3 className="font-semibold text-[1.05rem] mb-2">{f.title}</h3>
@@ -203,10 +182,10 @@ export default function Home() {
       <section className="bg-blue-600 text-white py-12 px-6">
         <div className="max-w-[1200px] mx-auto flex justify-around text-center flex-wrap gap-8">
           {[
-            { num: "15,000+", label: "Referrals Made" },
-            { num: "500+", label: "Verified Providers" },
-            { num: "98%", label: "Connection Rate" },
-            { num: "< 2hrs", label: "Avg Response Time" },
+            { num: "50+", label: "Local Providers" },
+            { num: "Free", label: "For Participants" },
+            { num: "24/7", label: "Always Available" },
+            { num: "Hunter", label: "Region Focus" },
           ].map((s) => (
             <div key={s.label}>
               <div className="heading-bold text-[2rem] sm:text-[3rem]">{s.num}</div>
@@ -230,7 +209,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {featuredProviders.map((p, i) => (
-            <motion.div key={p.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
+            <motion.div key={p.slug} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.08), duration: d(0.4) }}>
               <Link href={`/providers/${p.slug}`}
                 className="flex flex-col h-full border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all">
                 <div className={`p-5 text-white bg-gradient-to-r ${gradients[i % gradients.length]}`}>
@@ -272,7 +251,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
-            <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+            <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.1), duration: d(0.4) }}
               className="bg-gray-50 border border-gray-100 rounded-xl p-8 relative">
               <div className="heading-bold text-[4rem] text-orange-500 opacity-20 absolute top-2 left-5 leading-none">&ldquo;</div>
               <div className="flex gap-0.5 mb-4">
@@ -290,7 +269,7 @@ export default function Home() {
 
       {/* Provider CTA */}
       <section className="py-24 px-6 max-w-[1200px] mx-auto">
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: d(0.5) }}
           className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-2xl p-8 sm:p-14 flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <p className="font-mono text-[0.7rem] tracking-[0.2em] uppercase text-blue-200 mb-3">For Providers</p>

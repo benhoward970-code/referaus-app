@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { Eye, Heart, Shield, Users, X, Check, MapPin } from "lucide-react";
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -11,22 +12,22 @@ const fadeUp = (delay = 0) => ({
 
 const values = [
   {
-    icon: "??",
+    Icon: Eye,
     title: "Transparency",
-    desc: "No sponsored rankings, no pay-to-win listings. Every result is based on real reviews and verified quality � not who pays the most.",
+    desc: "No sponsored rankings, no pay-to-win listings. Every result is based on real reviews and verified quality — not who pays the most.",
   },
   {
-    icon: "?",
+    Icon: Heart,
     title: "Accessibility",
     desc: "Built from the ground up to be usable by everyone, regardless of ability. WCAG-compliant design, plain language, no jargon.",
   },
   {
-    icon: "?",
+    Icon: Shield,
     title: "Quality",
     desc: "We verify every provider before they appear in our directory. Participants deserve to know they're choosing from vetted, reputable services.",
   },
   {
-    icon: "??",
+    Icon: Users,
     title: "Community",
     desc: "We're local. We know the Hunter. We believe the best NDIS platform is one built in partnership with the community it serves.",
   },
@@ -53,7 +54,7 @@ export default function AboutPage() {
               <span className="gradient-text">NDIS Community</span>
             </h1>
             <p className="text-lg text-gray-500 max-w-2xl leading-relaxed">
-              ReferAus is a modern, searchable directory that makes it easy to find, compare, and connect with quality NDIS providers � starting in the Hunter Region, NSW.
+              ReferAus is a modern, searchable directory that makes it easy to find, compare, and connect with quality NDIS providers — starting in the Hunter Region, NSW.
             </p>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.55 }}
@@ -76,7 +77,7 @@ export default function AboutPage() {
             <div className="rounded-2xl bg-white border border-gray-200 p-6 sm:p-14 shadow-sm">
               <p className="text-2xl sm:text-3xl font-bold leading-snug text-gray-700">
                 To connect every NDIS participant with the{" "}
-                <span className="gradient-text">right provider</span> � based on real reviews, verified quality, and genuine compatibility.{" "}
+                <span className="gradient-text">right provider</span> — based on real reviews, verified quality, and genuine compatibility.{" "}
                 <span className="text-gray-400">Not who pays the most to advertise.</span>
               </p>
             </div>
@@ -92,11 +93,11 @@ export default function AboutPage() {
             <span className="inline-block text-xs font-bold tracking-widest uppercase text-red-400 mb-4">The Problem</span>
             <h2 className="text-2xl font-black mb-4 text-gray-800">Finding NDIS providers is broken</h2>
             <ul className="space-y-3 text-gray-600 text-sm leading-relaxed">
-              <li className="flex gap-2"><span className="text-red-400 mt-0.5">?</span> Outdated government directories with missing or stale information</li>
-              <li className="flex gap-2"><span className="text-red-400 mt-0.5">?</span> No way to compare providers side-by-side</li>
-              <li className="flex gap-2"><span className="text-red-400 mt-0.5">?</span> Participants rely on word-of-mouth and hope for the best</li>
-              <li className="flex gap-2"><span className="text-red-400 mt-0.5">?</span> Paid rankings bury quality providers under big advertisers</li>
-              <li className="flex gap-2"><span className="text-red-400 mt-0.5">?</span> No real reviews from real participants</li>
+              <li className="flex gap-2"><X className="text-red-400 mt-0.5 shrink-0 w-4 h-4" /> Outdated government directories with missing or stale information</li>
+              <li className="flex gap-2"><X className="text-red-400 mt-0.5 shrink-0 w-4 h-4" /> No way to compare providers side-by-side</li>
+              <li className="flex gap-2"><X className="text-red-400 mt-0.5 shrink-0 w-4 h-4" /> Participants rely on word-of-mouth and hope for the best</li>
+              <li className="flex gap-2"><X className="text-red-400 mt-0.5 shrink-0 w-4 h-4" /> Paid rankings bury quality providers under big advertisers</li>
+              <li className="flex gap-2"><X className="text-red-400 mt-0.5 shrink-0 w-4 h-4" /> No real reviews from real participants</li>
             </ul>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55, delay: 0.1 }}
@@ -104,11 +105,11 @@ export default function AboutPage() {
             <span className="inline-block text-xs font-bold tracking-widest uppercase text-green-500 mb-4">Our Solution</span>
             <h2 className="text-2xl font-black mb-4 text-gray-800">ReferAus: the directory you deserve</h2>
             <ul className="space-y-3 text-gray-600 text-sm leading-relaxed">
-              <li className="flex gap-2"><span className="text-green-500 mt-0.5">?</span> Modern, searchable directory � fast and always up to date</li>
-              <li className="flex gap-2"><span className="text-green-500 mt-0.5">?</span> Real reviews from verified NDIS participants</li>
-              <li className="flex gap-2"><span className="text-green-500 mt-0.5">?</span> Side-by-side provider comparison built in</li>
-              <li className="flex gap-2"><span className="text-green-500 mt-0.5">?</span> Every provider vetted � no pay-to-rank system</li>
-              <li className="flex gap-2"><span className="text-green-500 mt-0.5">?</span> Completely free for NDIS participants</li>
+              <li className="flex gap-2"><Check className="text-green-500 mt-0.5 shrink-0 w-4 h-4" /> Modern, searchable directory — fast and always up to date</li>
+              <li className="flex gap-2"><Check className="text-green-500 mt-0.5 shrink-0 w-4 h-4" /> Real reviews from verified NDIS participants</li>
+              <li className="flex gap-2"><Check className="text-green-500 mt-0.5 shrink-0 w-4 h-4" /> Side-by-side provider comparison built in</li>
+              <li className="flex gap-2"><Check className="text-green-500 mt-0.5 shrink-0 w-4 h-4" /> Every provider vetted — no pay-to-rank system</li>
+              <li className="flex gap-2"><Check className="text-green-500 mt-0.5 shrink-0 w-4 h-4" /> Completely free for NDIS participants</li>
             </ul>
           </motion.div>
         </div>
@@ -125,7 +126,9 @@ export default function AboutPage() {
             {values.map((v, i) => (
               <motion.div key={v.title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}
                 className="rounded-2xl bg-white border border-gray-200 p-8 hover:border-orange-300 hover:shadow-md transition-all">
-                <div className="text-3xl mb-4">{v.icon}</div>
+                <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center mb-4">
+                  <v.Icon className="w-5 h-5 text-orange-500" />
+                </div>
                 <h3 className="text-lg font-bold mb-2">{v.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{v.desc}</p>
               </motion.div>
@@ -150,18 +153,18 @@ export default function AboutPage() {
               <h3 className="text-lg font-bold mb-1">Ben Deasey</h3>
               <p className="text-sm font-medium text-orange-500 mb-3">Founder &amp; CEO</p>
               <p className="text-sm text-gray-500 leading-relaxed">
-                Passionate about using technology to improve disability services in Australia. Based in the Hunter Region, NSW � building the platform he wished existed.
+                Passionate about using technology to improve disability services in Australia. Based in the Hunter Region, NSW — building the platform he wished existed.
               </p>
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
               className="rounded-2xl bg-white border border-gray-200 p-8">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500/20 to-blue-600/20 border border-gray-200 flex items-center justify-center mb-4">
-                <span className="text-2xl">??</span>
+                <MapPin className="w-7 h-7 text-orange-500" />
               </div>
               <h3 className="text-lg font-bold mb-1">Hunter Region, NSW</h3>
               <p className="text-sm font-medium text-blue-500 mb-3">Home Base</p>
               <p className="text-sm text-gray-500 leading-relaxed">
-                We are proudly local. ReferAus was founded and operates out of the Hunter Region � built for this community, by this community. Expanding across NSW while keeping the local focus that makes us different.
+                We are proudly local. ReferAus was founded and operates out of the Hunter Region — built for this community, by this community. Expanding across NSW while keeping the local focus that makes us different.
               </p>
             </motion.div>
           </div>
@@ -176,7 +179,7 @@ export default function AboutPage() {
               Ready to <span className="gradient-text">get started?</span>
             </h2>
             <p className="text-gray-500 mb-8 text-lg">
-              Whether you are a participant looking for support or a provider wanting to reach more people � ReferAus is here for you.
+              Whether you are a participant looking for support or a provider wanting to reach more people — ReferAus is here for you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/providers"

@@ -11,7 +11,11 @@ export function CookieConsent() {
     if (!consent) setTimeout(() => setShow(true), 2000);
   }, []);
 
-  const accept = () => { localStorage.setItem('referaus-cookie-consent', 'accepted'); setShow(false); };
+  const accept = () => {
+    localStorage.setItem('referaus-cookie-consent', 'accepted');
+    window.dispatchEvent(new Event('storage'));
+    setShow(false);
+  };
   const decline = () => { localStorage.setItem('referaus-cookie-consent', 'declined'); setShow(false); };
 
   return (

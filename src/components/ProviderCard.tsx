@@ -1,11 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Provider } from "@/lib/providers";
 
 export function ProviderCard({ provider }: { provider: Provider }) {
   return (
     <Link href={`/providers/${provider.slug}`}>
       <div className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-500 hover:shadow-lg transition-all duration-300 cursor-pointer h-full flex flex-col">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 pt-5 pb-8">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="text-lg font-bold text-white leading-tight">{provider.name}</h3>
@@ -30,7 +31,26 @@ export function ProviderCard({ provider }: { provider: Provider }) {
           </div>
         </div>
 
-        <div className="px-6 py-5 flex-1 flex flex-col">
+        {/* Logo avatar overlapping header/body boundary */}
+        <div className="px-5 -mt-5 mb-1">
+          <div className="w-10 h-10 rounded-full border-2 border-white shadow-md overflow-hidden bg-white">
+            {provider.logo_url ? (
+              <Image
+                src={provider.logo_url}
+                alt={provider.name}
+                width={40}
+                height={40}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center text-white text-sm font-bold">
+                {provider.name[0]}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="px-6 pt-1 pb-5 flex-1 flex flex-col">
           <div className="flex items-center gap-2 mb-3">
             <div className="flex items-center gap-0.5">
               {[1, 2, 3, 4, 5].map((star) => (

@@ -1,6 +1,7 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import { providers as hardcodedProviders, categories, locations } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
 import { ProviderCard } from "@/components/ProviderCard";
@@ -9,14 +10,42 @@ import { mapDbProvider } from "@/lib/map-provider";
 
 type SortOption = "rating" | "name" | "reviews";
 
-export default function ProvidersPage() {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [location, setLocation] = useState("All Locations");
-  const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [sort, setSort] = useState<SortOption>("rating");
+function CloseIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+function ProvidersContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const prefersReduced = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+
+  const [search, setSearch] = useState(searchParams.get("q") || "");
+  const [category, setCategory] = useState(searchParams.get("category") || "All");
+  const [location, setLocation] = useState(searchParams.get("location") || "All Locations");
+  const [verifiedOnly, setVerifiedOnly] = useState(searchParams.get("verified") === "true");
+  const [sort, setSort] = useState<SortOption>((searchParams.get("sort") as SortOption) || "rating");
   const [providers, setProviders] = useState<Provider[]>(hardcodedProviders);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => { setMounted(true); }, []);
+
+  // Sync filter state to URL
+  useEffect(() => {
+    if (!mounted) return;
+    const params = new URLSearchParams();
+    if (search) params.set("q", search);
+    if (category !== "All") params.set("category", category);
+    if (location !== "All Locations") params.set("location", location);
+    if (verifiedOnly) params.set("verified", "true");
+    if (sort !== "rating") params.set("sort", sort);
+    const query = params.toString();
+    router.replace(query ? `/providers?${query}` : "/providers", { scroll: false });
+  }, [search, category, location, verifiedOnly, sort, mounted, router]);
 
   useEffect(() => {
     let cancelled = false;
@@ -25,7 +54,6 @@ export default function ProvidersPage() {
         const dbRows = await getAllProviders();
         if (!cancelled && dbRows.length > 0) {
           const dbProviders = dbRows.map((row: any) => mapDbProvider(row));
-          // Merge: DB providers take priority (by slug), then fill with hardcoded
           const slugSet = new Set(dbProviders.map((p: any) => p.slug));
           const merged = [
             ...dbProviders,
@@ -63,12 +91,15 @@ export default function ProvidersPage() {
     return result;
   }, [search, category, location, verifiedOnly, sort, providers]);
 
+  const hasActiveFilters = category !== "All" || location !== "All Locations" || verifiedOnly || !!search;
+
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: prefersReduced ? 0 : 0.5 }}
           className="mb-12"
         >
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
@@ -82,8 +113,8 @@ export default function ProvidersPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="space-y-3 mb-10"
+          transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }}
+          className="space-y-3 mb-4"
         >
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
@@ -98,13 +129,13 @@ export default function ProvidersPage() {
                 placeholder="Search providers, services..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus:border-blue-500/40 transition-colors"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 transition-colors"
               />
             </div>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
+              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
             >
               {categories.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -113,7 +144,7 @@ export default function ProvidersPage() {
             <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
+              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
             >
               {locations.map((l) => (
                 <option key={l} value={l}>{l}</option>
@@ -122,11 +153,15 @@ export default function ProvidersPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <label
-              className="flex items-center gap-2.5 cursor-pointer select-none"
-              onClick={() => setVerifiedOnly(!verifiedOnly)}
-            >
-              <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${verifiedOnly ? "bg-blue-600 border-blue-600" : "border-gray-300 bg-white"}`}>
+            <label className="flex items-center gap-2.5 cursor-pointer select-none">
+              <div
+                role="checkbox"
+                aria-checked={verifiedOnly}
+                tabIndex={0}
+                onClick={() => setVerifiedOnly(!verifiedOnly)}
+                onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); setVerifiedOnly(!verifiedOnly); } }}
+                className={`w-5 h-5 rounded flex items-center justify-center border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${verifiedOnly ? "bg-blue-600 border-blue-600" : "border-gray-300 bg-white"}`}
+              >
                 {verifiedOnly && (
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
@@ -142,7 +177,7 @@ export default function ProvidersPage() {
                 <button
                   key={s}
                   onClick={() => setSort(s)}
-                  className={`text-xs px-3 py-2 min-h-[40px] rounded-lg font-medium transition-colors ${
+                  className={`text-xs px-3 py-2 min-h-[40px] rounded-lg font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                     sort === s ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                   }`}
                 >
@@ -152,6 +187,54 @@ export default function ProvidersPage() {
             </div>
           </div>
         </motion.div>
+
+        {/* Active filter pills */}
+        {hasActiveFilters && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-50 text-orange-700 text-xs font-medium border border-orange-200 hover:bg-orange-100 transition-colors"
+              >
+                &ldquo;{search}&rdquo;
+                <CloseIcon />
+              </button>
+            )}
+            {category !== "All" && (
+              <button
+                onClick={() => setCategory("All")}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors"
+              >
+                {category}
+                <CloseIcon />
+              </button>
+            )}
+            {location !== "All Locations" && (
+              <button
+                onClick={() => setLocation("All Locations")}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors"
+              >
+                {location}
+                <CloseIcon />
+              </button>
+            )}
+            {verifiedOnly && (
+              <button
+                onClick={() => setVerifiedOnly(false)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-medium border border-green-200 hover:bg-green-100 transition-colors"
+              >
+                Verified Only
+                <CloseIcon />
+              </button>
+            )}
+            <button
+              onClick={() => { setSearch(""); setCategory("All"); setLocation("All Locations"); setVerifiedOnly(false); setSort("rating"); }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-medium border border-gray-200 hover:bg-gray-200 transition-colors"
+            >
+              Clear all
+            </button>
+          </div>
+        )}
 
         <p className="text-sm text-gray-400 mb-6">
           Showing {filtered.length} of {providers.length} providers
@@ -191,7 +274,7 @@ export default function ProvidersPage() {
                 key={p.slug}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
+                transition={{ delay: prefersReduced ? 0 : Math.min(i * 0.05, 0.3), duration: prefersReduced ? 0 : 0.4 }}
               >
                 <ProviderCard provider={p} />
               </motion.div>
@@ -200,5 +283,20 @@ export default function ProvidersPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ProvidersPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto animate-pulse">
+          <div className="h-12 bg-gray-200 rounded w-64 mb-4" />
+          <div className="h-5 bg-gray-100 rounded w-80 mb-12" />
+        </div>
+      </div>
+    }>
+      <ProvidersContent />
+    </Suspense>
   );
 }

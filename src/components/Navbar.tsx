@@ -9,14 +9,10 @@ import type { User } from "@supabase/supabase-js";
 
 const NAV_LINKS = [
   { label: "Providers", href: "/providers" },
-  { label: "Services", href: "/services" },
-  { label: "July 2026", href: "/registered-providers" },
-  { label: "Compare", href: "/compare" },
-  { label: "Resources", href: "/resources" },
-  { label: "Blog", href: "/blog" },
   { label: "Pricing", href: "/pricing" },
-  { label: "For Providers", href: "/for-providers" },
-  { label: "For SCs", href: "/for-coordinators" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Blog", href: "/blog" },
 ];
 
 function UserMenu({ user }: { user: User }) {
@@ -127,7 +123,7 @@ export function Navbar() {
             <Logo />
           </Link>
 
-          <div className="hidden md:flex items-center gap-7">
+          <div className="hidden md:flex items-center md:gap-4 lg:gap-7">
             {NAV_LINKS.map(({ label, href }) => {
               const active = pathname === href || pathname.startsWith(href + "/");
               return (

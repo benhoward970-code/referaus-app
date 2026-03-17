@@ -1,18 +1,15 @@
 "use client";
-import { use, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { use, useState, useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { providers } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
 import { EnquiryModal } from "@/components/EnquiryModal";
-import { getProviderBySlug, getProviderReviews } from "@/lib/supabase";
+import { getProviderBySlug, getProviderReviews, submitEnquiry } from "@/lib/supabase";
 import { mapDbProvider } from "@/lib/map-provider";
 
-const mockReviews = [
-  { author: "Emily T.", date: "2 weeks ago", rating: 5, text: "Absolutely wonderful service. The team went above and beyond to understand my needs and match me with the right support worker." },
-  { author: "Mark L.", date: "1 month ago", rating: 5, text: "Professional, reliable, and genuinely caring. I have been with them for 6 months and could not be happier." },
-  { author: "Jessica W.", date: "2 months ago", rating: 4, text: "Great service overall. Communication could be slightly better but the quality of care is excellent." },
-];
+const mockReviews: ReviewData[] = [];
 
 interface ReviewData {
   author?: string;
@@ -47,6 +44,11 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
     let cancelled = false;
@@ -80,6 +82,16 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
     return () => { cancelled = true; };
   }, [slug]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        setShowStickyBar(heroRef.current.getBoundingClientRect().bottom < 0);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const jsonLd = provider ? {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -105,7 +117,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-bold mb-2">Provider not found</h1>
-        <Link href="/providers" className="text-blue-400">Back to directory</Link>
+        <Link href="/providers" className="text-blue-600 hover:text-blue-700">Back to directory</Link>
       </div>
     </div>
   );
@@ -130,13 +142,29 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
   const accent = provider.brand_color || "#2563eb";
   const accentLight = provider.brand_color ? `${provider.brand_color}20` : "rgba(37,99,235,0.12)";
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
+    setFormError("");
+    setFormLoading(true);
+    const result = await submitEnquiry({
+      provider_slug: provider!.slug,
+      provider_name: provider!.name,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone || undefined,
+      service: "General Enquiry",
+      message: formData.message,
+    });
+    setFormLoading(false);
+    if (result.success) {
+      setFormSubmitted(true);
+    } else {
+      setFormError("Something went wrong. Please try again or use the enquiry form.");
+    }
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
+    <div className="min-h-screen pt-24 pb-28 md:pb-20 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {jsonLd && (
           <script
@@ -159,21 +187,23 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="w-full h-48 sm:h-64 rounded-2xl overflow-hidden mb-8"
+            transition={{ duration: prefersReduced ? 0 : 0.5 }}
+            className="relative w-full h-48 sm:h-64 rounded-2xl overflow-hidden mb-8"
           >
-            <img
-              src={provider.cover_image_url}
+            <Image
+              src={provider.cover_image_url!}
               alt={`${provider.name} cover`}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </motion.div>
         )}
 
         {/* Hero */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row gap-8 mb-12">
+        <motion.div ref={heroRef} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: prefersReduced ? 0 : 0.5 }} className="flex flex-col md:flex-row gap-8 mb-12">
           {provider.logo_url ? (
-            <div className="w-24 h-24 rounded-2xl border border-gray-200 overflow-hidden shrink-0">
-              <img src={provider.logo_url} alt={`${provider.name} logo`} className="w-full h-full object-cover" />
+            <div className="relative w-24 h-24 rounded-2xl border border-gray-200 overflow-hidden shrink-0">
+              <Image src={provider.logo_url} alt={`${provider.name} logo`} fill className="object-cover" />
             </div>
           ) : (
             <div
@@ -228,7 +258,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             {/* Services */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-2xl border border-gray-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
               <h2 className="text-xl font-bold mb-6 text-gray-900">Services Offered</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {provider.services.map((s) => (
@@ -242,20 +272,20 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
 
             {/* Gallery */}
             {provider.gallery_urls && provider.gallery_urls.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }} className="bg-white rounded-2xl border border-gray-200 p-8">
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.12, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
                 <h2 className="text-xl font-bold mb-6 text-gray-900">Gallery</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {provider.gallery_urls.map((url, i) => (
-                    <div key={i} className="aspect-square rounded-xl overflow-hidden bg-gray-100">
-                      <img src={url} alt={`${provider.name} gallery ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
+                      <Image src={url} alt={`${provider.name} gallery ${i + 1}`} fill className="object-cover hover:scale-105 transition-transform duration-300" />
                     </div>
                   ))}
                 </div>
               </motion.div>
             )}
 
-            {/* Map placeholder */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            {/* Map */}
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.15, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
               <div className="px-8 pt-8 pb-4">
                 <h2 className="text-xl font-bold text-gray-900">Location</h2>
                 <p className="text-sm text-gray-500 mt-1">{provider.location}, {provider.state || "NSW"}, Australia</p>
@@ -282,7 +312,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             </motion.div>
 
             {/* Contact Form */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white rounded-2xl border border-gray-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.2, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
               <h2 className="text-xl font-bold mb-2 text-gray-900">Send a Message</h2>
               <p className="text-sm text-gray-500 mb-6">Get in touch with {provider.name} directly.</p>
               {formSubmitted ? (
@@ -303,7 +333,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
                         placeholder="Jane Smith"
                       />
                     </div>
@@ -314,7 +344,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
                         placeholder="jane@example.com"
                       />
                     </div>
@@ -325,7 +355,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
                       placeholder="04xx xxx xxx"
                     />
                   </div>
@@ -340,19 +370,23 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                       placeholder="Hi, I am interested in learning more about your services..."
                     />
                   </div>
+                  {formError && (
+                    <p className="text-sm text-red-500">{formError}</p>
+                  )}
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-all hover:shadow-lg"
+                    disabled={formLoading}
+                    className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-all hover:shadow-lg disabled:opacity-60"
                     style={{ backgroundColor: accent, boxShadow: `0 10px 25px -5px ${accent}40` }}
                   >
-                    Send Message
+                    {formLoading ? "Sending..." : "Send Message"}
                   </button>
                 </form>
               )}
             </motion.div>
 
             {/* Reviews */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="bg-white rounded-2xl border border-gray-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.25, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-900">Reviews</h2>
                 <div className="flex items-center gap-2">
@@ -395,20 +429,14 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
 
           {/* Sidebar */}
           <div>
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-2xl border border-gray-200 p-6 sticky top-24">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-6 sticky top-24">
               <h3 className="text-lg font-bold mb-4 text-gray-900">Get in Touch</h3>
               <button
                 onClick={() => setEnquiryOpen(true)}
-                className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-all hover:shadow-lg mb-3"
+                className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-all hover:shadow-lg mb-6"
                 style={{ backgroundColor: accent, boxShadow: `0 10px 25px -5px ${accent}40` }}
               >
                 Send Enquiry
-              </button>
-              <button
-                onClick={() => setEnquiryOpen(true)}
-                className="w-full py-3 rounded-xl border border-orange-300 bg-orange-50 hover:bg-orange-100 text-orange-600 font-semibold text-sm transition-all mb-6"
-              >
-                Request a Quote
               </button>
               <div className="space-y-3 text-sm">
                 <a href={`tel:${provider.phone}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors">
@@ -456,6 +484,22 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
         open={enquiryOpen}
         onClose={() => setEnquiryOpen(false)}
       />
+
+      {/* Sticky mobile CTA bar */}
+      {showStickyBar && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 shadow-lg">
+          <div className="flex-1 min-w-0">
+            <p className="text-[11px] text-gray-400 truncate">{provider.category}</p>
+            <p className="text-sm font-semibold text-gray-900 truncate">{provider.name}</p>
+          </div>
+          <button
+            onClick={() => setEnquiryOpen(true)}
+            className="shrink-0 px-5 py-2.5 rounded-xl text-white font-semibold text-sm bg-orange-500 hover:bg-orange-600 active:bg-orange-700 transition-colors"
+          >
+            Send Enquiry
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -29,7 +29,6 @@ const COLUMNS = [
   {
     heading: "More",
     links: [
-      { label: "Contact Us", href: "/contact" },
       { label: "For Providers", href: "/for-providers" },
       { label: "For Participants", href: "/for-participants" },
       { label: "FAQ", href: "/faq" },
@@ -77,9 +76,8 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <p className="text-xs text-gray-400">
-            © 2026 ReferAus. Built in the Hunter Region.
+            &copy; {new Date().getFullYear()} ReferAus. Built in the Hunter Region.
           </p>
-          <p className="text-xs text-gray-400"></p>
         </div>
       </div>
     </footer>

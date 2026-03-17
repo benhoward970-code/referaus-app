@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
-export const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2026-02-25.clover' }) : null;
+export const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY.trim()) : null;
 
 export function isStripeConfigured() {
   return !!STRIPE_SECRET_KEY;
@@ -27,8 +27,8 @@ export async function createCheckoutSession(planId: PlanId, billing: 'monthly' |
     mode: 'subscription',
     customer_email: customerEmail,
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: process.env.NEXT_PUBLIC_APP_URL + '/dashboard?upgraded=true',
-    cancel_url: process.env.NEXT_PUBLIC_APP_URL + '/pricing',
+    success_url: (process.env.NEXT_PUBLIC_APP_URL || 'https://referaus.com') + '/dashboard?upgraded=true',
+    cancel_url: (process.env.NEXT_PUBLIC_APP_URL || 'https://referaus.com') + '/pricing',
     metadata: { planId, billing },
   });
   return session;
@@ -38,7 +38,7 @@ export async function createPortalSession(customerId: string) {
   if (!stripe) throw new Error('Stripe not configured');
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: process.env.NEXT_PUBLIC_APP_URL + '/dashboard',
+    return_url: (process.env.NEXT_PUBLIC_APP_URL || 'https://referaus.com') + '/dashboard',
   });
   return session;
 }
