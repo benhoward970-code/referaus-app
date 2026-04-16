@@ -21,11 +21,12 @@ const nextConfig: NextConfig = {
     const csp = [
       `default-src 'self'`,
       // Scripts: Next.js requires 'unsafe-inline' and 'unsafe-eval' for dev; in prod 'unsafe-inline' is still needed for inline event handlers
-      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://*.vercel-analytics.com https://*.vercel-insights.com`,
+      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://*.vercel-analytics.com https://*.vercel-insights.com https://js.stripe.com https://maps.googleapis.com`,
       `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
-      `font-src 'self' https://fonts.gstatic.com`,
-      `img-src 'self' data: blob: https://*.supabase.co https://${supabaseHost} https://api.qrserver.com https://referaus.com https://vercel.com`,
-      `connect-src 'self' https://*.supabase.co https://${supabaseHost} https://vercel.live https://*.vercel-analytics.com https://*.vercel-insights.com wss://*.supabase.co`,
+      `font-src 'self' data: https://fonts.gstatic.com`,
+      `img-src 'self' data: blob: https://*.supabase.co https://${supabaseHost} https://api.qrserver.com https://referaus.com https://vercel.com https://*.stripe.com`,
+      `connect-src 'self' https://*.supabase.co https://${supabaseHost} https://vercel.live https://*.vercel-analytics.com https://*.vercel-insights.com wss://*.supabase.co https://api.stripe.com`,
+      `frame-src https://js.stripe.com https://hooks.stripe.com`,
       `frame-ancestors 'none'`,
       `object-src 'none'`,
       `base-uri 'self'`,
