@@ -1,9 +1,9 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "For Support Coordinators | ReferAus",
-  description: "ReferAus helps NDIS Support Coordinators find registered providers for their clients. Free tools, referral links, and trusted provider directory.",
+  description: "ReferAus is the free tool NDIS Support Coordinators use to find registered providers for their clients. Search by registration status, share referral links, and connect clients with trusted providers in the Hunter Region.",
   openGraph: {
     title: "For Support Coordinators | ReferAus",
     description: "The free tool Support Coordinators trust to find registered NDIS providers for their clients.",
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
     siteName: "ReferAus",
     type: "website",
   },
+  alternates: { canonical: "https://referaus.com/for-coordinators" },
 };
 
 export default function ForCoordinatorsPage() {
@@ -146,7 +147,7 @@ export default function ForCoordinatorsPage() {
               </div>
               <div className="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-4 border border-gray-100">
                 <span className="text-sm text-gray-500">Providers who need to be found after July 2026</span>
-                <span className="text-lg font-black text-blue-600">1,000s</span>
+                <span className="text-lg font-black text-blue-600">Growing</span>
               </div>
               <div className="flex items-center justify-between bg-gray-50 rounded-xl px-5 py-4 border border-gray-100">
                 <span className="text-sm text-gray-500">Days until mandatory registration deadline</span>
@@ -177,7 +178,7 @@ export default function ForCoordinatorsPage() {
       <section className="px-4 sm:px-6 py-16">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-black text-gray-900 mb-3">Ready to get started?</h2>
-          <p className="text-gray-500 mb-6">Join Support Coordinators in the Hunter Region already using ReferAus to connect clients with the right registered providers.</p>
+          <p className="text-gray-500 mb-6">Connect your clients with registered NDIS providers in the Hunter Region. Free for Support Coordinators, always.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/contact?role=coordinator" className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-7 py-3.5 rounded-xl transition-colors">
               Get Your Free SC Account

@@ -1,7 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { verifyAdmin } from "@/app/api/admin/verify-admin";
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  const result = await verifyAdmin(request.headers.get("authorization"));
+  if (!result.ok) return result.response;
   const admin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,

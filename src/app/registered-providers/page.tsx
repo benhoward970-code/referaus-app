@@ -37,7 +37,7 @@ export default function RegisteredProvidersPage() {
               href="/register"
               className="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl hover:border-blue-400 hover:text-blue-600 transition-colors"
             >
-              List Your Practice Free
+              List your organisation Free
             </Link>
           </div>
         </div>

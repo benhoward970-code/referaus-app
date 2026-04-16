@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
-  MessageSquare, Phone, Mail, Calendar, Check, Loader2, AlertCircle, Eye,
+  MessageSquare, Phone, Mail, Calendar, Check, Loader2, AlertCircle, Eye, Download, Clipboard,
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import {
@@ -11,6 +11,79 @@ import {
   getProviderEnquiries,
   markEnquiryRead,
 } from '@/lib/supabase';
+
+const REPLY_TEMPLATES = [
+  "Thanks for reaching out! I'll get back to you within 24 hours.",
+  "I'd love to help. What times work for a phone call?",
+  "Thanks for your enquiry. Unfortunately we're fully booked at the moment.",
+];
+
+function ReplyTemplates() {
+  const [toast, setToast] = useState<string | null>(null);
+
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setToast('Copied to clipboard!');
+      setTimeout(() => setToast(null), 2500);
+    } catch {
+      setToast('Copy failed — please copy manually.');
+      setTimeout(() => setToast(null), 2500);
+    }
+  };
+
+  return (
+    <div className="relative">
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Quick Reply Templates</p>
+      <div className="flex flex-wrap gap-2">
+        {REPLY_TEMPLATES.map((template) => (
+          <button
+            key={template}
+            onClick={() => handleCopy(template)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100 hover:bg-blue-100 transition-colors max-w-[280px] text-left"
+          >
+            <Clipboard className="w-3 h-3 shrink-0" />
+            <span className="truncate">{template}</span>
+          </button>
+        ))}
+      </div>
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="absolute left-0 bottom-full mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg shadow-lg whitespace-nowrap"
+          >
+            {toast}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function exportEnquiriesToCSV(enquiries: EnquiryRecord[]) {
+  const headers = ['Name', 'Email', 'Phone', 'Service', 'Message', 'Date'];
+  const rows = enquiries.map((e) => [
+    e.name || '',
+    e.email || '',
+    e.phone || '',
+    e.service || 'General',
+    (e.message || '').replace(/"/g, '""'),
+    e.created_at ? new Date(e.created_at).toLocaleDateString() : '',
+  ]);
+  const csv = [headers, ...rows]
+    .map((row) => row.map((cell) => `"${cell}"`).join(','))
+    .join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `enquiries-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type EnquiryRecord = Record<string, any>;
@@ -104,10 +177,28 @@ export default function EnquiriesPage() {
             )}
           </p>
         </div>
-        <Link href="/dashboard" className="text-sm text-blue-600 hover:underline">
-          Back to Dashboard
-        </Link>
+        <div className="flex items-center gap-3">
+          {enquiries.length > 0 && (
+            <button
+              onClick={() => exportEnquiriesToCSV(enquiries)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              Export CSV
+            </button>
+          )}
+          <Link href="/dashboard" className="text-sm text-blue-600 hover:underline">
+            Back to Dashboard
+          </Link>
+        </div>
       </motion.div>
+
+      {/* Reply Templates */}
+      {enquiries.length > 0 && (
+        <motion.div {...fadeUp(0.05)} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <ReplyTemplates />
+        </motion.div>
+      )}
 
       {/* Empty state */}
       {enquiries.length === 0 ? (

@@ -4,7 +4,7 @@ export const metadata: Metadata = { title: "Privacy Policy | ReferAus" };
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6">
+    <div className="min-h-screen pt-28 pb-14 px-6">
       <div className="max-w-3xl mx-auto">
         <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Legal</span>
         <h1 className="text-4xl font-black tracking-tight mb-2">Privacy Policy</h1>
@@ -70,6 +70,7 @@ export default function PrivacyPage() {
             <p className="mt-4">ReferAus (ABN 83 588 359 423)<br/>Newcastle, NSW, Australia</p>
           </section>
         </div>
+        <p className="text-xs text-gray-400 mt-10 pb-4">Last updated: March 2026</p>
       </div>
     </div>
   );

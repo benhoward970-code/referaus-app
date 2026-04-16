@@ -17,7 +17,7 @@ export default function OGImage() {
       <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: 28, fontWeight: 500, marginBottom: 8 }}>Find Trusted NDIS Providers Near You</div>
       <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 20 }}>Search, Compare and Connect — Free for Participants</div>
       <div style={{ display: 'flex', gap: 32, marginTop: 40 }}>
-        <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '12px 24px', color: 'white', fontSize: 16 }}>500+ Providers</div>
+        <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '12px 24px', color: 'white', fontSize: 16 }}>NDIS Providers</div>
         <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '12px 24px', color: 'white', fontSize: 16 }}>Verified Reviews</div>
         <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '12px 24px', color: 'white', fontSize: 16 }}>Hunter Region</div>
       </div>

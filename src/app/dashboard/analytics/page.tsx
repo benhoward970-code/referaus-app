@@ -67,18 +67,73 @@ export default function AnalyticsPage() {
           ))}
         </div>
 
-        {/* Chart */}
+        {/* Enquiries Bar Chart — Last 7 Days */}
+        <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+          <h2 className="font-bold mb-1">Enquiries — Last 7 Days</h2>
+          <p className="text-xs text-gray-400 mb-6">Number of enquiries received per day</p>
+          {totalEnquiries === 0 ? (
+            <div className="flex flex-col items-center justify-center h-40 text-gray-400">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-3 opacity-40">
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+              <p className="text-sm font-medium">No data yet</p>
+              <p className="text-xs mt-1">Analytics will appear once you receive enquiries</p>
+            </div>
+          ) : (
+            <div className="flex items-end gap-3 h-40">
+              {weeklyData.map((d, i) => {
+                const maxEnq = Math.max(...weeklyData.map(x => x.enquiries), 1);
+                return (
+                  <div key={d.day} className="flex-1 flex flex-col items-center gap-2">
+                    <span className="text-xs text-gray-500 font-medium">{d.enquiries > 0 ? d.enquiries : ""}</span>
+                    <div className="w-full flex-1 flex items-end">
+                      <motion.div
+                        initial={{ height: 0 }}
+                        animate={{ height: d.enquiries === 0 ? "4px" : `${(d.enquiries / maxEnq) * 100}%` }}
+                        transition={{ delay: i * 0.05, duration: 0.4 }}
+                        className={`w-full rounded-t-md ${d.enquiries === 0 ? "bg-gray-100 min-h-[4px]" : "bg-orange-400"}`}
+                        style={{ minHeight: "4px" }}
+                      />
+                    </div>
+                    <span className="text-xs text-gray-400">{d.day}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Profile Views Bar Chart */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 mb-8">
-          <h2 className="font-bold mb-6">Profile Views — This Week</h2>
-          <div className="flex items-end gap-3 h-48">
-            {weeklyData.map((d, i) => (
-              <div key={d.day} className="flex-1 flex flex-col items-center gap-2">
-                <span className="text-xs text-gray-500 font-medium">{d.views}</span>
-                <motion.div initial={{ height: 0 }} animate={{ height: (d.views / maxViews) * 100 + '%' }} transition={{ delay: i * 0.05, duration: 0.4 }} className="w-full bg-blue-500 rounded-t-md min-h-[4px]" />
-                <span className="text-xs text-gray-400">{d.day}</span>
-              </div>
-            ))}
-          </div>
+          <h2 className="font-bold mb-1">Profile Views — This Week</h2>
+          <p className="text-xs text-gray-400 mb-6">Number of times your profile was viewed</p>
+          {totalViews === 0 ? (
+            <div className="flex flex-col items-center justify-center h-40 text-gray-400">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-3 opacity-40">
+                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              <p className="text-sm font-medium">No data yet</p>
+              <p className="text-xs mt-1">Analytics will appear once you receive enquiries</p>
+            </div>
+          ) : (
+            <div className="flex items-end gap-3 h-40">
+              {weeklyData.map((d, i) => (
+                <div key={d.day} className="flex-1 flex flex-col items-center gap-2">
+                  <span className="text-xs text-gray-500 font-medium">{d.views}</span>
+                  <div className="w-full flex-1 flex items-end">
+                    <motion.div
+                      initial={{ height: 0 }}
+                      animate={{ height: `${(d.views / maxViews) * 100}%` }}
+                      transition={{ delay: i * 0.05, duration: 0.4 }}
+                      className="w-full bg-blue-500 rounded-t-md"
+                      style={{ minHeight: "4px" }}
+                    />
+                  </div>
+                  <span className="text-xs text-gray-400">{d.day}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">

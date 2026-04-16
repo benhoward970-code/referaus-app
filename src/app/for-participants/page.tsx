@@ -3,7 +3,7 @@ import ForParticipantsClient from "./ForParticipantsClient";
 
 export const metadata: Metadata = {
   title: "For NDIS Participants | Find Trusted Providers Near You | ReferAus",
-  description: "ReferAus is 100% free for NDIS participants. Search hundreds of verified providers, read real reviews, message directly, and find the right support for your plan.",
+  description: "ReferAus is 100% free for NDIS participants. Search verified providers in the Hunter Region, read real reviews, message directly, and find the right support for your plan.",
   openGraph: {
     title: "For NDIS Participants | ReferAus",
     description: "Find trusted NDIS providers near you. Real reviews, direct messaging, 100% free.",

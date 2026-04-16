@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Eye, Heart, Shield, Users, X, Check, MapPin } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -34,19 +35,20 @@ const values = [
 ];
 
 const stats = [
-  { value: "500+", label: "Providers listed" },
-  { value: "2,000+", label: "Participants helped" },
+  { value: "Free", label: "To list & search" },
+  { value: "24/7", label: "Always available" },
   { value: "Hunter Region", label: "Home base, NSW" },
   { value: "100%", label: "Free for participants" },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen pt-24 pb-20">
+    <div className="min-h-screen pt-28 pb-14">
 
       {/* Hero */}
-      <section className="px-4 sm:px-6 pb-16 sm:pb-24">
+      <section className="px-4 sm:px-6 pb-12 sm:pb-12">
         <div className="max-w-4xl mx-auto">
+          <Breadcrumbs />
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}>
             <span className="section-label mb-4 block">About ReferAus</span>
             <h1 className="heading-bold text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.05] mb-6">
@@ -70,7 +72,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission */}
-      <section className="px-4 sm:px-6 py-14 sm:py-20 bg-gray-50">
+      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}>
             <span className="section-label mb-4 block">Our Mission</span>
@@ -86,7 +88,7 @@ export default function AboutPage() {
       </section>
 
       {/* Problem / Solution */}
-      <section className="px-4 sm:px-6 py-14 sm:py-20">
+      <section className="px-4 sm:px-6 py-10 sm:py-10">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}
             className="rounded-2xl border border-red-100 bg-red-50/50 p-8 sm:p-10">
@@ -116,7 +118,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="px-4 sm:px-6 py-14 sm:py-20 bg-gray-50">
+      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12">
             <span className="section-label mb-4 block">Our Values</span>
@@ -138,7 +140,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section className="px-4 sm:px-6 py-14 sm:py-20">
+      <section className="px-4 sm:px-6 py-10 sm:py-10">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12">
             <span className="section-label mb-4 block">Our Team</span>
@@ -150,7 +152,7 @@ export default function AboutPage() {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-600/20 to-orange-500/20 border border-gray-200 flex items-center justify-center mb-4">
                 <span className="text-2xl font-black text-blue-600">B</span>
               </div>
-              <h3 className="text-lg font-bold mb-1">Ben Deasey</h3>
+              <h3 className="text-lg font-bold mb-1">Ben Howard</h3>
               <p className="text-sm font-medium text-orange-500 mb-3">Founder &amp; CEO</p>
               <p className="text-sm text-gray-500 leading-relaxed">
                 Passionate about using technology to improve disability services in Australia. Based in the Hunter Region, NSW — building the platform he wished existed.
@@ -172,7 +174,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="px-4 sm:px-6 py-14 sm:py-20 bg-gray-50">
+      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-gray-50">
         <div className="max-w-2xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="heading-bold text-3xl sm:text-4xl mb-4">
@@ -194,6 +196,9 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </section>
+      <div className="text-center pb-8">
+        <p className="text-xs text-gray-400">Last updated: March 2026</p>
+      </div>
     </div>
   );
 }

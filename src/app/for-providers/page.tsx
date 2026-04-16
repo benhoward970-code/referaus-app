@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import ForProvidersClient from "./ForProvidersClient";
 
 export const metadata: Metadata = {

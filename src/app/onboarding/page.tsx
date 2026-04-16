@@ -23,15 +23,49 @@ export default function OnboardingPage() {
         <h1 className="text-3xl font-black tracking-tight mb-2">Set up your listing</h1>
         <p className="text-gray-500 text-sm mb-8">Complete these steps to go live on ReferAus</p>
 
-        {/* Progress bar */}
-        <div className="flex gap-2 mb-10">
-          {STEPS.map((s, i) => (
-            <div key={s} className="flex-1">
-              <div className={'h-1.5 rounded-full transition-all ' + (i <= step ? 'bg-blue-600' : 'bg-gray-200')} />
-              <div className={'text-xs mt-2 ' + (i <= step ? 'text-gray-900 font-medium' : 'text-gray-400')}>{s}</div>
-            </div>
-          ))}
+        {/* Progress Indicator */}
+        <div className="mb-10">
+          <div className="flex items-center">
+            {STEPS.map((s, i) => (
+              <div key={s} className="flex items-center flex-1 last:flex-none">
+                {/* Circle */}
+                <div className="relative flex flex-col items-center">
+                  <motion.div
+                    animate={{
+                      backgroundColor: i < step ? '#16a34a' : i === step ? '#2563eb' : '#ffffff',
+                      borderColor: i < step ? '#16a34a' : i === step ? '#2563eb' : '#d1d5db',
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold"
+                    style={{ color: i <= step ? '#ffffff' : '#9ca3af' }}
+                  >
+                    {i < step ? (
+                      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      i + 1
+                    )}
+                  </motion.div>
+                  <span className={`absolute top-10 text-[10px] whitespace-nowrap font-medium ${i === step ? 'text-blue-600' : i < step ? 'text-green-600' : 'text-gray-400'}`}>
+                    {s}
+                  </span>
+                </div>
+                {/* Connector line */}
+                {i < STEPS.length - 1 && (
+                  <div className="flex-1 h-0.5 mx-1 relative overflow-hidden bg-gray-200">
+                    <motion.div
+                      className="absolute inset-y-0 left-0 bg-blue-600"
+                      animate={{ width: i < step ? '100%' : '0%' }}
+                      transition={{ duration: 0.4, ease: 'easeInOut' }}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
+        <div className="mb-6" />
 
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>

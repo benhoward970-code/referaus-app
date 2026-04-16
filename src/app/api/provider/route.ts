@@ -9,11 +9,31 @@ function getAdmin() {
   );
 }
 
-// GET /api/provider?userId=xxx - get provider by user ID (server-side)
+async function getAuthUser(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) return null;
+  const token = authHeader.replace("Bearer ", "");
+  const admin = getAdmin();
+  const { data: { user }, error } = await admin.auth.getUser(token);
+  if (error || !user) return null;
+  return user;
+}
+
+// GET /api/provider?userId=xxx - get provider by user ID (authenticated)
 export async function GET(request: NextRequest) {
+  const user = await getAuthUser(request);
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const userId = request.nextUrl.searchParams.get("userId");
   if (!userId) {
     return NextResponse.json({ error: "Missing userId" }, { status: 400 });
+  }
+
+  // Only allow fetching your own provider record
+  if (userId !== user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const admin = getAdmin();
@@ -30,8 +50,13 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ provider: data });
 }
 
-// PATCH /api/provider - update provider profile
+// PATCH /api/provider - update provider profile (authenticated, owner only)
 export async function PATCH(request: NextRequest) {
+  const user = await getAuthUser(request);
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await request.json();
   const { id, ...updates } = body;
 
@@ -40,6 +65,22 @@ export async function PATCH(request: NextRequest) {
   }
 
   const admin = getAdmin();
+
+  // Verify the authenticated user owns this provider
+  const { data: existing, error: lookupError } = await admin
+    .from("providers")
+    .select("user_id")
+    .eq("id", id)
+    .single();
+
+  if (lookupError || !existing) {
+    return NextResponse.json({ error: "Provider not found" }, { status: 404 });
+  }
+
+  if (existing.user_id !== user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const { data, error } = await admin
     .from("providers")
     .update(updates)

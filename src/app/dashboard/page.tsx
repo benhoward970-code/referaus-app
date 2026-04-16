@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -14,7 +14,9 @@ import {
   getProviderByUserId,
   getProviderEnquiries,
   getProviderReviews,
+  supabase,
 } from "@/lib/supabase";
+import { Globe } from "lucide-react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ProviderRecord = Record<string, any>;
@@ -22,6 +24,237 @@ type ProviderRecord = Record<string, any>;
 type EnquiryRecord = Record<string, any>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ReviewRecord = Record<string, any>;
+
+// Item 68: Provider Ranking Indicator
+function RankingIndicator({ providerId, avgRating, hasReviews }: { providerId?: string; avgRating: number; hasReviews: boolean }) {
+  const [rank, setRank] = useState<{ rank: number; total: number } | null>(null);
+
+  useEffect(() => {
+    if (!hasReviews) return;
+    fetch("/api/providers-public")
+      .then((r) => r.json())
+      .then((data: any[]) => {
+        if (!Array.isArray(data)) return;
+        const sorted = [...data].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        const idx = sorted.findIndex((p) => p.id === providerId);
+        if (idx !== -1) setRank({ rank: idx + 1, total: sorted.length });
+        else setRank({ rank: -1, total: sorted.length });
+      })
+      .catch(() => {});
+  }, [providerId, hasReviews]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.15 }}
+      className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex items-center gap-4"
+    >
+      <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0">
+        <TrendingUp className="w-5 h-5 text-orange-500" />
+      </div>
+      <div>
+        <p className="text-xs text-gray-400 font-medium mb-0.5">Your ranking</p>
+        {!hasReviews ? (
+          <p className="text-sm font-semibold text-gray-700">Get reviews to improve your ranking</p>
+        ) : rank ? (
+          rank.rank > 0 ? (
+            <p className="text-sm font-semibold text-gray-900">
+              You rank{" "}
+              <span className="text-orange-500 font-black">#{rank.rank}</span>
+              {" "}out of{" "}
+              <span className="font-bold">{rank.total}</span> providers
+            </p>
+          ) : (
+            <p className="text-sm font-semibold text-gray-700">Keep collecting reviews to build your ranking</p>
+          )
+        ) : (
+          <p className="text-sm text-gray-400">Calculating...</p>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+// Item 58: Quick-Edit Profile from Dashboard
+function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (updated: any) => void }) {
+  const [editField, setEditField] = useState<"phone" | "bio" | "website" | null>(null);
+  const [value, setValue] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [savedField, setSavedField] = useState<string | null>(null);
+
+  const startEdit = (field: "phone" | "bio" | "website") => {
+    setEditField(field);
+    if (field === "phone") setValue(provider?.phone || "");
+    if (field === "bio") setValue((provider?.bio || provider?.description || "").slice(0, 100));
+    if (field === "website") setValue(provider?.website || "");
+  };
+
+  const handleSave = async () => {
+    if (!provider?.id || editField === null) return;
+    setSaving(true);
+    try {
+      const fieldKey = editField === "bio" ? "bio" : editField;
+      const { data: { session } } = await supabase!.auth.getSession();
+      const res = await fetch("/api/provider", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify({ id: provider.id, [fieldKey]: value }),
+      });
+      if (res.ok) {
+        onSaved({ [fieldKey]: value });
+        setSavedField(editField);
+        setTimeout(() => setSavedField(null), 2500);
+      }
+    } catch {}
+    setSaving(false);
+    setEditField(null);
+  };
+
+  const fields: Array<{ key: "phone" | "bio" | "website"; label: string; icon: React.ReactNode; value: string; placeholder: string }> = [
+    {
+      key: "phone",
+      label: "Phone",
+      icon: <Phone className="w-4 h-4 text-blue-500" />,
+      value: provider?.phone || "Not set",
+      placeholder: "04xx xxx xxx",
+    },
+    {
+      key: "bio",
+      label: "Bio",
+      icon: <User className="w-4 h-4 text-blue-500" />,
+      value: (provider?.bio || provider?.description || "").slice(0, 100) || "Not set",
+      placeholder: "Brief description of your organisation...",
+    },
+    {
+      key: "website",
+      label: "Website",
+      icon: <Globe className="w-4 h-4 text-blue-500" />,
+      value: provider?.website || "Not set",
+      placeholder: "https://yourwebsite.com",
+    },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.18 }}
+      className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-base font-bold text-gray-900">Quick Edit Profile</h2>
+          <p className="text-xs text-gray-400 mt-0.5">Update key fields without leaving the dashboard</p>
+        </div>
+        <Link href="/dashboard/profile" className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
+          Full edit <ArrowUpRight className="w-3 h-3" />
+        </Link>
+      </div>
+      <div className="space-y-3">
+        {fields.map((f) => (
+          <div key={f.key} className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-gray-50 border border-gray-200">
+            <span className="shrink-0">{f.icon}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-gray-400 font-medium">{f.label}</p>
+              {editField === f.key ? (
+                <div className="flex items-center gap-2 mt-1">
+                  <input
+                    type="text"
+                    value={value}
+                    onChange={(e) => setValue(f.key === "bio" ? e.target.value.slice(0, 100) : e.target.value)}
+                    placeholder={f.placeholder}
+                    autoFocus
+                    className="flex-1 text-sm px-2.5 py-1.5 rounded-lg border border-gray-200 focus:outline-none focus:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 text-gray-900 min-w-0"
+                    onKeyDown={(e) => { if (e.key === "Enter") handleSave(); if (e.key === "Escape") setEditField(null); }}
+                  />
+                  <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="px-2.5 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 disabled:opacity-60 transition-colors shrink-0"
+                  >
+                    {saving ? "…" : "Save"}
+                  </button>
+                  <button
+                    onClick={() => setEditField(null)}
+                    className="px-2 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs hover:bg-gray-200 transition-colors shrink-0"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <p className={`text-sm truncate ${f.value === "Not set" ? "text-gray-400 italic" : "text-gray-800"}`}>
+                  {f.value}
+                  {savedField === f.key && <span className="ml-2 text-green-600 text-xs font-semibold">✓ Saved</span>}
+                </p>
+              )}
+            </div>
+            {editField !== f.key && (
+              <button
+                onClick={() => startEdit(f.key)}
+                className="shrink-0 p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                aria-label={`Edit ${f.label}`}
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Confetti Component ─── */
+const CONFETTI_COLORS = ["#f97316", "#2563eb", "#7c3aed", "#10b981", "#f59e0b", "#ef4444"];
+function ConfettiCelebration({ onDone }: { onDone: () => void }) {
+  const particles = Array.from({ length: 60 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+    duration: 2 + Math.random() * 2,
+    delay: Math.random() * 1.5,
+    size: 6 + Math.random() * 8,
+  }));
+
+  useEffect(() => {
+    const t = setTimeout(onDone, 5000);
+    return () => clearTimeout(t);
+  }, [onDone]);
+
+  return (
+    <div className="fixed inset-0 z-[9999] pointer-events-none" aria-hidden="true">
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="confetti-particle"
+          style={{
+            left: `${p.left}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            backgroundColor: p.color,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+            borderRadius: Math.random() > 0.5 ? "50%" : "2px",
+          }}
+        />
+      ))}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-2xl px-8 py-6 text-center pointer-events-auto"
+      >
+        <div className="text-4xl mb-2">🎉</div>
+        <h3 className="text-xl font-black text-gray-900 mb-1">Your profile is complete!</h3>
+        <p className="text-sm text-gray-500">You&apos;re ready to attract more NDIS participants.</p>
+      </motion.div>
+    </div>
+  );
+}
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 18 },
@@ -76,6 +309,8 @@ export default function DashboardPage() {
   const [reviews, setReviews] = useState<ReviewRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const confettiShownRef = useRef(false);
 
   const fetchData = useCallback(async () => {
     if (!user) { setLoading(false); return; }
@@ -115,6 +350,7 @@ export default function DashboardPage() {
     { label: "Unread Enquiries", value: String(unreadCount), icon: Eye, color: "blue" },
     { label: "Total Reviews", value: String(reviews.length), icon: Star, color: "yellow" },
     { label: "Average Rating", value: avgRating, icon: TrendingUp, color: "purple" },
+    { label: "Profile Views", value: null, icon: Eye, color: "blue", comingSoon: true },
   ];
 
   const profileChecks = provider
@@ -133,6 +369,18 @@ export default function DashboardPage() {
   const profileCompletion = profileChecks.length
     ? Math.round((profileChecks.filter((c) => c.done).length / profileChecks.length) * 100)
     : 0;
+
+  // Show confetti once when profile reaches 100%
+  useEffect(() => {
+    if (profileCompletion === 100 && !loading && !confettiShownRef.current) {
+      const key = "referaus_confetti_shown";
+      if (typeof window !== "undefined" && !localStorage.getItem(key)) {
+        confettiShownRef.current = true;
+        localStorage.setItem(key, "1");
+        setShowConfetti(true);
+      }
+    }
+  }, [profileCompletion, loading]);
 
   const recentEnquiries = enquiries.slice(0, 5);
   const recentReviews = reviews.slice(0, 3);
@@ -187,6 +435,27 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {/* Confetti Celebration */}
+      <AnimatePresence>
+        {showConfetti && <ConfettiCelebration onDone={() => setShowConfetti(false)} />}
+      </AnimatePresence>
+
+      {/* Pending Approval Banner */}
+      {provider && !provider.verified && (
+        <motion.div {...fadeUp(0)} className="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+            <Shield className="w-5 h-5 text-amber-600" />
+          </div>
+          <div>
+            <p className="font-bold text-amber-800">Profile pending approval</p>
+            <p className="text-amber-700 text-sm mt-0.5">
+              Your listing is being reviewed by our team. This usually takes less than 24 hours.
+              In the meantime, you can complete your profile so it&apos;s ready to go live.
+            </p>
+          </div>
+        </motion.div>
+      )}
+
       <AnimatePresence>
         {showUpgradeBanner && (
           <motion.div
@@ -228,16 +497,29 @@ export default function DashboardPage() {
           <Link href={`/providers/${provider.slug}`} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-semibold text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all shadow-sm">
             <ExternalLink className="w-4 h-4" /> View Listing
           </Link>
+          {/* Item 63: Preview Profile button */}
+          <a
+            href={`/providers/${provider.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Preview your public profile"
+            className="group relative inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-semibold text-gray-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm"
+            aria-label="Preview your public profile"
+          >
+            <Eye className="w-4 h-4" />
+            <span>Preview Profile</span>
+          </a>
           <Link href="/dashboard/profile" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 text-sm font-semibold text-white hover:bg-blue-700 transition-all shadow-sm">
             <Pencil className="w-4 h-4" /> Edit Profile
           </Link>
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {stats.map((s, i) => {
           const colors = statColors[s.color];
           const Icon = s.icon;
+          const isComingSoon = (s as any).comingSoon;
           return (
             <motion.div key={s.label} {...fadeUp(0.05 + i * 0.06)} className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
               <div className="flex items-start justify-between mb-3">
@@ -246,11 +528,72 @@ export default function DashboardPage() {
                   <Icon className={`w-3.5 h-3.5 ${colors.icon}`} />
                 </span>
               </div>
-              <span className="text-3xl font-black text-gray-900">{s.value}</span>
+              {isComingSoon ? (
+                <div>
+                  <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-1 rounded-lg">Coming soon</span>
+                  <p className="text-[10px] text-gray-400 mt-1.5">Tracking being set up</p>
+                </div>
+              ) : (
+                <span className="text-3xl font-black text-gray-900">{s.value}</span>
+              )}
             </motion.div>
           );
         })}
       </div>
+
+      {/* Item 68: Provider Ranking Indicator */}
+      <RankingIndicator providerId={provider.id} avgRating={Number(avgRating)} hasReviews={reviews.length > 0} />
+
+      {/* Item 58: Quick-Edit Profile */}
+      <QuickEditProfile provider={provider} onSaved={(updated) => setProvider((p) => ({ ...p, ...updated }))} />
+
+      {/* Onboarding Checklist (Item 61) */}
+      {(() => {
+        const onboardingItems = [
+          { label: "Create account", done: true, alwaysDone: true },
+          { label: "Verify email", done: !!(user && ((user as any).email_confirmed_at || (user as any).confirmed_at)) },
+          { label: "Complete profile", done: !!(provider?.description && provider?.phone) },
+          { label: "Add services", done: !!(Array.isArray(provider?.services) && provider?.services.length > 0) },
+          { label: "Add contact details", done: !!(provider?.phone || provider?.email) },
+          { label: "Get first enquiry", done: enquiries.length > 0 },
+        ];
+        const doneCount = onboardingItems.filter((i) => i.done).length;
+        const total = onboardingItems.length;
+        const allDone = doneCount === total;
+        return (
+          <motion.div {...fadeUp(0.17)} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-base font-bold text-gray-900">Getting Started</h2>
+                <p className="text-xs text-gray-400 mt-0.5">{doneCount}/{total} complete</p>
+              </div>
+              <div className="text-right">
+                <span className={`text-sm font-black ${allDone ? "text-green-600" : "text-blue-600"}`}>{Math.round((doneCount / total) * 100)}%</span>
+              </div>
+            </div>
+            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden mb-4">
+              <motion.div
+                className="h-full rounded-full bg-gradient-to-r from-blue-500 to-green-500"
+                initial={{ width: 0 }}
+                animate={{ width: `${(doneCount / total) * 100}%` }}
+                transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+              />
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {onboardingItems.map((item) => (
+                <div key={item.label} className="flex items-center gap-2">
+                  {item.done ? (
+                    <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  ) : (
+                    <Circle className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                  )}
+                  <span className={`text-xs ${item.done ? "text-gray-700 font-medium" : "text-gray-400"}`}>{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        );
+      })()}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <motion.section {...fadeUp(0.2)} className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
@@ -466,6 +809,69 @@ export default function DashboardPage() {
         )}
       </motion.section>
 
+      {/* Item 67: Activity Feed */}
+      <motion.section {...fadeUp(0.38)} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-100">
+          <h2 className="text-base font-bold text-gray-900">Recent Activity</h2>
+          <p className="text-xs text-gray-400 mt-0.5">Your last 5 activities</p>
+        </div>
+        {enquiries.length === 0 && reviews.length === 0 ? (
+          <div className="p-8 text-center">
+            <TrendingUp className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+            <p className="text-sm text-gray-500 font-medium">No activity yet</p>
+            <p className="text-xs text-gray-400 mt-1">Activity will appear as enquiries and reviews come in.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-50">
+            {[
+              ...enquiries.map((e) => ({
+                type: "enquiry" as const,
+                title: `New enquiry from ${e.name || "Someone"}`,
+                desc: e.service ? `Service: ${e.service}` : "General enquiry",
+                date: e.created_at,
+                icon: "enquiry",
+              })),
+              ...reviews.map((r) => ({
+                type: "review" as const,
+                title: `New review from ${r.author || r.reviewer_name || "Anonymous"}`,
+                desc: `Rating: ${r.rating}/5 — "${(r.text || r.comment || "").slice(0, 60)}${(r.text || r.comment || "").length > 60 ? "…" : ""}"`,
+                date: r.created_at,
+                icon: "review",
+              })),
+            ]
+              .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime())
+              .slice(0, 5)
+              .map((activity, i) => {
+                const now = Date.now();
+                const then = activity.date ? new Date(activity.date).getTime() : 0;
+                const diff = now - then;
+                const mins = Math.floor(diff / 60000);
+                const hours = Math.floor(diff / 3600000);
+                const days = Math.floor(diff / 86400000);
+                const relTime = days > 0 ? `${days}d ago` : hours > 0 ? `${hours}h ago` : mins > 0 ? `${mins}m ago` : "Just now";
+                return (
+                  <div key={i} className="flex items-start gap-4 px-6 py-4 hover:bg-gray-50/50 transition-colors">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      activity.type === "enquiry" ? "bg-orange-50" : "bg-yellow-50"
+                    }`}>
+                      {activity.type === "enquiry" ? (
+                        <MessageSquare className="w-4 h-4 text-orange-500" />
+                      ) : (
+                        <Star className="w-4 h-4 text-yellow-500" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 truncate">{activity.title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 truncate">{activity.desc}</p>
+                    </div>
+                    <span className="text-xs text-gray-400 shrink-0">{relTime}</span>
+                  </div>
+                );
+              })}
+          </div>
+        )}
+      </motion.section>
+
       <motion.section {...fadeUp(0.4)}>
         <div className="flex items-center gap-2 mb-4">
           <Lightbulb className="w-4 h-4 text-orange-500" />
@@ -496,7 +902,7 @@ export default function DashboardPage() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Zap className="w-4 h-4 text-blue-200" />
-                <span className="text-xs font-semibold text-blue-200 uppercase tracking-wide">Grow your practice</span>
+                <span className="text-xs font-semibold text-blue-200 uppercase tracking-wide">Grow your organisation</span>
               </div>
               <h3 className="text-xl font-black" style={{ fontFamily: "'Oswald'" }}>Unlock Professional Features</h3>
               <p className="text-blue-200 text-sm mt-1">Get verified badge, priority ranking, direct booking, and analytics.</p>

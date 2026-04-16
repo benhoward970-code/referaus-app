@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { providers } from "@/lib/providers";
+// providers loaded from DB only
 import { blogPosts } from "@/data/blog-posts";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://zfhapnnlxfhxsqpqcuje.supabase.co";
@@ -8,24 +8,31 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_P
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://referaus.com";
 
+  const now = new Date();
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: base, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
-    { url: `${base}/providers`, lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
-    { url: `${base}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
-    { url: `${base}/compare`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
-    { url: `${base}/pricing`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/register`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/resources`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${base}/for-participants`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/for-providers`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${base}/faq`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
-    { url: `${base}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
+    { url: base, lastModified: now, changeFrequency: "daily", priority: 1 },
+    { url: `${base}/providers`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: `${base}/services`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/for-participants`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/for-providers`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/for-coordinators`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${base}/resources`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/registered-providers`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${base}/compare`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${base}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/register`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/login`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${base}/testimonial`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${base}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${base}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${base}/cookie-preferences`, lastModified: now, changeFrequency: "yearly", priority: 0.1 },
   ];
 
-  const allSlugs = new Set(providers.map(p => p.slug));
+  const allSlugs = new Set<string>();
 
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/providers?select=slug`, {
@@ -37,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       dbProviders.forEach((p: { slug: string }) => allSlugs.add(p.slug));
     }
   } catch {
-    // Fall back to hardcoded only
+    // No providers yet
   }
 
   const providerRoutes: MetadataRoute.Sitemap = Array.from(allSlugs).map((slug) => ({

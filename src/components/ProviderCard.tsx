@@ -1,16 +1,45 @@
-import Link from "next/link";
 import Image from "next/image";
 import type { Provider } from "@/lib/providers";
+import { PrefetchLink } from "@/components/PrefetchOnHover";
+
+function isNewProvider(provider: Provider): boolean {
+  // Check created_at if available (DB providers may have it)
+  const createdAt = (provider as any).created_at;
+  if (!createdAt) return false;
+  const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  return new Date(createdAt).getTime() > thirtyDaysAgo;
+}
 
 export function ProviderCard({ provider }: { provider: Provider }) {
+  const isNew = isNewProvider(provider);
+  const isTopRated = provider.reviewCount >= 5;
+
   return (
-    <Link href={`/providers/${provider.slug}`}>
-      <div className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-500 hover:shadow-lg transition-all duration-300 cursor-pointer h-full flex flex-col">
+    <PrefetchLink href={`/providers/${provider.slug}`}>
+      <div className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 pt-5 pb-8">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="text-lg font-bold text-white leading-tight">{provider.name}</h3>
               <p className="text-blue-100 text-sm">{provider.category}</p>
+              {/* Provider Badges */}
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {provider.verified && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-500 text-white">
+                    ✓ Verified
+                  </span>
+                )}
+                {isTopRated && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-orange-500 text-white">
+                    ★ Top Rated
+                  </span>
+                )}
+                {isNew && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-400 text-white">
+                    ✦ New
+                  </span>
+                )}
+              </div>
             </div>
             {provider.verified && (
               <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/20 text-white border border-white/30 mt-0.5">
@@ -41,6 +70,8 @@ export function ProviderCard({ provider }: { provider: Provider }) {
                 width={40}
                 height={40}
                 className="object-cover w-full h-full"
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAF0lEQVR4nGNkYGD4z8BQDwAAAf8A/ob0qgAAAABJRU5ErkJggg=="
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center text-white text-sm font-bold">
@@ -72,9 +103,12 @@ export function ProviderCard({ provider }: { provider: Provider }) {
             )}
           </div>
 
-          <div className="flex items-center gap-1.5 mb-4">
+          <div className="flex items-center gap-1.5 mb-1">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             <span className="text-sm text-gray-500">{provider.location}</span>
+          </div>
+          <div className="flex items-center gap-1 mb-3">
+            <span className="text-xs text-gray-400">🌐 {((provider as any).languages as string[] | undefined)?.join(", ") || "English"}</span>
           </div>
 
           <div className="mt-auto">
@@ -103,6 +137,6 @@ export function ProviderCard({ provider }: { provider: Provider }) {
           </div>
         </div>
       </div>
-    </Link>
+    </PrefetchLink>
   );
 }

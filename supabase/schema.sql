@@ -80,5 +80,30 @@ create policy "Public read approved reviews" on reviews
 -- Indexes
 create index if not exists providers_slug_idx on providers(slug);
 create index if not exists providers_state_idx on providers(state);
+create index if not exists providers_email_idx on providers(email);
+create index if not exists providers_user_id_idx on providers(user_id);
 create index if not exists enquiries_provider_id_idx on enquiries(provider_id);
+create index if not exists enquiries_provider_slug_idx on enquiries(provider_slug);
 create index if not exists reviews_provider_id_idx on reviews(provider_id);
+create index if not exists reviews_provider_slug_idx on reviews(provider_slug);
+
+-- RLS: authenticated users can update/delete their own provider record
+create policy "Users can update own provider" on providers
+  for update using (auth.uid() = user_id);
+
+create policy "Users can delete own provider" on providers
+  for delete using (auth.uid() = user_id);
+
+-- RLS: authenticated users can read all their own provider records (including unverified)
+create policy "Users can read own provider" on providers
+  for select using (auth.uid() = user_id);
+
+-- RLS: authenticated users can update enquiries for their own providers
+create policy "Providers can update own enquiries" on enquiries
+  for update using (
+    exists (
+      select 1 from providers
+      where providers.slug = enquiries.provider_slug
+      and providers.user_id = auth.uid()
+    )
+  );

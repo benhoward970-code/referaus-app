@@ -1,14 +1,19 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").trim();
+const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "").trim();
 const supabaseServiceRoleKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
 
 export const isConfigured = () => !!supabaseUrl && !!supabaseAnonKey;
 
-export const supabase: SupabaseClient | null = isConfigured()
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+let _supabase: SupabaseClient | null = null;
+try {
+  _supabase = isConfigured() ? createClient(supabaseUrl, supabaseAnonKey) : null;
+} catch (e) {
+  console.error("[supabase] Failed to create client:", e);
+  _supabase = null;
+}
+export const supabase = _supabase;
 
 // Server-side admin client (uses service role key - never expose to browser)
 let _supabaseAdmin: SupabaseClient | null = null;

@@ -142,7 +142,7 @@ export function EnquiryNotificationEmail({
                   &copy; {new Date().getFullYear()} ReferAus. All rights reserved.
                 </p>
                 <p style={{ color: '#9ca3af', fontSize: '13px', margin: 0 }}>
-                  <a href="https://referaus.com/unsubscribe" style={{ color: '#6b7280' }}>Unsubscribe</a>
+                  <a href="https://referaus.com/contact" style={{ color: '#6b7280' }}>Unsubscribe</a>
                   {' · '}
                   <a href="https://referaus.com/privacy" style={{ color: '#6b7280' }}>Privacy Policy</a>
                 </p>

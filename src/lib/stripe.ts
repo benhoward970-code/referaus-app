@@ -9,10 +9,10 @@ export function isStripeConfigured() {
 }
 
 export const PLANS = {
-  free: { name: 'Free Listing', priceMonthly: 0, priceYearly: 0, stripePriceMonthly: null, stripePriceYearly: null },
-  starter: { name: 'Starter', priceMonthly: 2900, priceYearly: 29000, stripePriceMonthly: process.env.STRIPE_PRICE_STARTER_MONTHLY || null, stripePriceYearly: process.env.STRIPE_PRICE_STARTER_YEARLY || null },
-  pro: { name: 'Professional', priceMonthly: 7900, priceYearly: 79000, stripePriceMonthly: process.env.STRIPE_PRICE_PRO_MONTHLY || null, stripePriceYearly: process.env.STRIPE_PRICE_PRO_YEARLY || null },
-  premium: { name: 'Premium', priceMonthly: 14900, priceYearly: 149000, stripePriceMonthly: process.env.STRIPE_PRICE_PREMIUM_MONTHLY || null, stripePriceYearly: process.env.STRIPE_PRICE_PREMIUM_YEARLY || null },
+  free: { name: 'Free', priceMonthly: 0, priceYearly: 0, stripePriceMonthly: null, stripePriceYearly: null },
+  starter: { name: 'Starter', priceMonthly: 2900, priceYearly: 19900, stripePriceMonthly: process.env.STRIPE_PRICE_STARTER_MONTHLY?.trim() || null, stripePriceYearly: process.env.STRIPE_PRICE_STARTER_YEARLY?.trim() || null },
+  pro: { name: 'Pro', priceMonthly: 7900, priceYearly: 54900, stripePriceMonthly: process.env.STRIPE_PRICE_PRO_MONTHLY?.trim() || null, stripePriceYearly: process.env.STRIPE_PRICE_PRO_YEARLY?.trim() || null },
+  premium: { name: 'Premium', priceMonthly: 14900, priceYearly: 99900, stripePriceMonthly: process.env.STRIPE_PRICE_PREMIUM_MONTHLY?.trim() || null, stripePriceYearly: process.env.STRIPE_PRICE_PREMIUM_YEARLY?.trim() || null },
 } as const;
 
 export type PlanId = keyof typeof PLANS;

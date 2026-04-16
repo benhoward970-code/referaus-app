@@ -225,6 +225,7 @@ function TwoFactorSection() {
             <p className="text-xs text-gray-400">(Google Authenticator, Authy, 1Password, etc.)</p>
           </div>
           <div className="bg-white border border-gray-200 rounded-xl p-4 inline-block">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qrCode} alt="2FA QR Code" width={200} height={200} />
           </div>
           <form onSubmit={handleVerifyEnrollment} className="space-y-3">
@@ -258,6 +259,69 @@ function TwoFactorSection() {
           </form>
         </motion.div>
       )}
+    </section>
+  );
+}
+
+function NotificationPreferences() {
+  const [prefs, setPrefs] = useState({ newEnquiries: true, newReviews: true, marketingUpdates: true });
+  const [savedPrefs, setSavedPrefs] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('referaus_notification_prefs');
+      if (stored) setPrefs(JSON.parse(stored));
+    } catch {}
+  }, []);
+
+  const toggle = (key: keyof typeof prefs) => {
+    setPrefs(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleSave = () => {
+    try {
+      localStorage.setItem('referaus_notification_prefs', JSON.stringify(prefs));
+      setSavedPrefs(true);
+      setTimeout(() => setSavedPrefs(false), 2500);
+    } catch {}
+  };
+
+  return (
+    <section className="bg-white border border-gray-200 rounded-xl p-6">
+      <h2 className="font-bold mb-2">Notification Preferences</h2>
+      <p className="text-sm text-gray-500 mb-5">Choose what you want to be notified about.</p>
+      <div className="space-y-4 max-w-md">
+        {[
+          { key: 'newEnquiries' as const, label: 'New Enquiries', desc: 'When a participant sends you an enquiry' },
+          { key: 'newReviews' as const, label: 'New Reviews', desc: 'When a participant leaves a review on your profile' },
+          { key: 'marketingUpdates' as const, label: 'Marketing Updates', desc: 'Platform news, tips, and feature announcements' },
+        ].map(({ key, label, desc }) => (
+          <div key={key} className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-gray-900">{label}</p>
+              <p className="text-xs text-gray-400">{desc}</p>
+            </div>
+            <button
+              role="switch"
+              aria-checked={prefs[key]}
+              onClick={() => toggle(key)}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${prefs[key] ? 'bg-blue-600' : 'bg-gray-200'}`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${prefs[key] ? 'translate-x-5' : 'translate-x-0'}`}
+              />
+            </button>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center gap-3 mt-6">
+        <button onClick={handleSave} className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-all">
+          Save Preferences
+        </button>
+        {savedPrefs && (
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-green-600 font-medium">Saved!</motion.span>
+        )}
+      </div>
     </section>
   );
 }
@@ -299,6 +363,8 @@ export default function SettingsPage() {
           </section>
 
           <TwoFactorSection />
+
+          <NotificationPreferences />
 
           <section className="bg-white border border-gray-200 rounded-xl p-6">
             <h2 className="font-bold mb-4">Preferences</h2>

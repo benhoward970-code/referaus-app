@@ -4,7 +4,7 @@ export const metadata: Metadata = { title: "Terms of Service | ReferAus" };
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen pt-24 pb-20 px-6">
+    <div className="min-h-screen pt-28 pb-14 px-6">
       <div className="max-w-3xl mx-auto">
         <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Legal</span>
         <h1 className="text-4xl font-black tracking-tight mb-2">Terms of Service</h1>
@@ -51,7 +51,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold text-gray-900 mb-3">5. Payments and Refunds</h2>
             <ul className="space-y-2 list-disc pl-6">
-              <li>All prices are in AUD and include GST.</li>
+              <li>All prices are in AUD.</li>
               <li>Payments are processed securely through Stripe.</li>
               <li>You may cancel your subscription at any time. Access continues until the end of the billing period.</li>
               <li>Refunds are considered on a case-by-case basis for the current billing period.</li>
@@ -78,6 +78,7 @@ export default function TermsPage() {
             <p>Questions about these terms? Contact us at <a href="mailto:hello@referaus.com" className="text-blue-600 hover:underline">hello@referaus.com</a>.</p>
           </section>
         </div>
+        <p className="text-xs text-gray-400 mt-10 pb-4">Last updated: March 2026</p>
       </div>
     </div>
   );

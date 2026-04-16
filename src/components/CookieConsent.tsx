@@ -25,7 +25,7 @@ export function CookieConsent() {
           <div className="max-w-4xl mx-auto bg-gray-900 text-white rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-2xl">
             <div className="flex-1">
               <p className="text-sm font-medium mb-1">We use cookies</p>
-              <p className="text-xs text-gray-400">We use cookies to improve your experience and analyse site traffic. See our <Link href="/privacy" className="text-blue-400 hover:underline">Privacy Policy</Link> for details.</p>
+              <p className="text-xs text-gray-400">We use cookies to improve your experience and analyse site traffic. See our <Link href="/privacy" className="text-blue-400 hover:underline">Privacy Policy</Link> for details. <Link href="/cookie-preferences" className="text-blue-400 hover:underline">Manage preferences</Link>.</p>
             </div>
             <div className="flex gap-2 shrink-0">
               <button onClick={decline} className="px-4 py-2 text-xs font-medium text-gray-400 hover:text-white transition-colors">Decline</button>

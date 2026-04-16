@@ -1,7 +1,8 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 const faqs = [
   { q: 'Is ReferAus free for NDIS participants?', a: 'Yes, completely free. Searching, comparing, and contacting providers costs nothing for participants. We are funded by provider subscriptions.' },
@@ -18,6 +19,19 @@ const faqs = [
   { q: 'How do I report a problem with a provider?', a: 'If you have a concern about a provider listed on ReferAus, contact us through our Contact page. For serious concerns about provider conduct, you can also report directly to the NDIS Quality and Safeguards Commission.' },
 ];
 
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.a,
+    },
+  })),
+};
+
 const categories = ['All', 'Participants', 'Providers', 'Platform'];
 const catMap: Record<string, number[]> = { 'All': [], 'Participants': [0, 4, 5, 8, 9, 10, 11], 'Providers': [1, 2, 3, 6], 'Platform': [7, 9] };
 
@@ -27,7 +41,12 @@ export default function FAQPage() {
   const filtered = cat === 'All' ? faqs : faqs.filter((_, i) => catMap[cat]?.includes(i));
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 max-w-3xl mx-auto">
+    <div className="min-h-screen pt-28 pb-14 px-4 sm:px-6 max-w-3xl mx-auto">
+      <Breadcrumbs />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <p className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4">Support</p>
         <h1 className="text-4xl font-black tracking-tight mb-3">Frequently Asked Questions</h1>
@@ -35,14 +54,24 @@ export default function FAQPage() {
 
         <div className="flex gap-2 mb-8 flex-wrap">
           {categories.map(c => (
-            <button key={c} onClick={() => { setCat(c); setOpen(null); }} className={'px-4 py-2 rounded-lg text-sm font-medium transition-all ' + (cat === c ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')}>{c}</button>
+            <button
+              key={c}
+              onClick={() => { setCat(c); setOpen(null); }}
+              className={'min-h-[44px] px-4 py-2 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ' + (cat === c ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')}
+            >
+              {c}
+            </button>
           ))}
         </div>
 
         <div className="space-y-3">
           {filtered.map((faq, i) => (
             <div key={faq.q} className="border border-gray-200 rounded-xl overflow-hidden">
-              <button onClick={() => setOpen(open === i ? null : i)} className="w-full px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors" aria-expanded={open === i}>
+              <button
+                onClick={() => setOpen(open === i ? null : i)}
+                className="w-full min-h-[44px] px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+                aria-expanded={open === i}
+              >
                 <span className="text-sm font-medium text-gray-900">{faq.q}</span>
                 <span className={'text-gray-400 transition-transform duration-200 ' + (open === i ? 'rotate-180' : '')} aria-hidden="true">&#9662;</span>
               </button>
@@ -60,9 +89,15 @@ export default function FAQPage() {
         <div className="mt-12 text-center bg-gray-50 rounded-xl p-8">
           <h3 className="font-bold mb-2">Still have questions?</h3>
           <p className="text-sm text-gray-500 mb-4">Our team is here to help</p>
-          <Link href="/contact" className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-500 transition-all">Contact Us</Link>
+          <Link
+            href="/contact"
+            className="inline-block min-h-[44px] px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          >
+            Contact Us
+          </Link>
         </div>
       </motion.div>
+      <p className="text-xs text-gray-400 text-center mt-8 pb-4">Last updated: March 2026</p>
     </div>
   );
 }

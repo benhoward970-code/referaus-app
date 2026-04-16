@@ -18,30 +18,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://referaus.com" },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "ReferAus",
-  url: "https://referaus.com",
-  logo: "https://referaus.com/logo.png",
-  description: "Australia's NDIS provider directory for Newcastle and the Hunter Region.",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Newcastle",
-    addressRegion: "NSW",
-    addressCountry: "AU",
-  },
-  sameAs: [],
-};
-
 export default function HomePage() {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <HomeClient />
-    </>
-  );
+  return <HomeClient />;
 }

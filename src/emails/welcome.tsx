@@ -96,7 +96,7 @@ export function WelcomeEmail({
 
                 <p style={{ color: '#6b7280', fontSize: '14px', margin: 0 }}>
                   Questions? Reply to this email or visit our{' '}
-                  <a href="https://referaus.com/help" style={{ color: '#1d4ed8' }}>Help Centre</a>.
+                  <a href="https://referaus.com/faq" style={{ color: '#1d4ed8' }}>Help Centre</a>.
                 </p>
               </td>
             </tr>
@@ -108,7 +108,7 @@ export function WelcomeEmail({
                   &copy; {new Date().getFullYear()} ReferAus. All rights reserved.
                 </p>
                 <p style={{ color: '#9ca3af', fontSize: '13px', margin: 0 }}>
-                  <a href="https://referaus.com/unsubscribe" style={{ color: '#6b7280' }}>Unsubscribe</a>
+                  <a href="https://referaus.com/contact" style={{ color: '#6b7280' }}>Unsubscribe</a>
                   {' · '}
                   <a href="https://referaus.com/privacy" style={{ color: '#6b7280' }}>Privacy Policy</a>
                 </p>

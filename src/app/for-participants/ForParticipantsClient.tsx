@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const steps = [
-  { icon: "🔍", num: "01", title: "Search for what you need", desc: "Enter your suburb and the type of support you're after — whether it is a support worker, OT, physio, speech therapist, or anything else in your NDIS plan." },
+  { icon: "🔍", num: "01", title: "Search for what you need", desc: "Enter your suburb and the type of support you're after - whether it is a support worker, OT, physio, speech therapist, or anything else in your NDIS plan." },
   { icon: "📋", num: "02", title: "Read real reviews", desc: "Every provider profile shows reviews from verified NDIS participants. No paid placements. No fake ratings. Just honest experiences from people like you." },
-  { icon: "💬", num: "03", title: "Message directly", desc: "Send an enquiry straight to the provider. Ask about availability, costs, and whether they're a good fit — before committing to anything." },
+  { icon: "💬", num: "03", title: "Message directly", desc: "Send an enquiry straight to the provider. Ask about availability, costs, and whether they're a good fit - before committing to anything." },
   { icon: "🤝", num: "04", title: "Connect and get started", desc: "Once you've found the right match, connect and start your support journey. You stay in control every step of the way." },
 ];
 
@@ -15,7 +15,7 @@ const benefits = [
   { icon: "⭐", title: "Honest reviews", desc: "Real feedback from real participants. We never hide negative reviews or let providers pay to boost their ratings." },
   { icon: "📍", title: "Find local support", desc: "Search by your suburb, region, or postcode. See which providers service your area, how far they travel, and what they charge." },
   { icon: "🔒", title: "Your privacy protected", desc: "Your details are only shared with providers you choose to contact. We never sell your data or share it without your permission." },
-  { icon: "📞", title: "No phone tag", desc: "Message providers directly through the platform. Get answers on your schedule — not during business hours when you might be in a session." },
+  { icon: "📞", title: "No phone tag", desc: "Message providers directly through the platform. Get answers on your schedule - not during business hours when you might be in a session." },
 ];
 
 const supportCategories = [
@@ -34,11 +34,11 @@ const supportCategories = [
 ];
 
 const faqs = [
-  { q: "Is ReferAus really free for participants?", a: "Yes, completely. You can search, browse profiles, read reviews, and message providers — all without paying a cent. We charge providers a small subscription to list on the platform, not participants." },
+  { q: "Is ReferAus really free for participants?", a: "Yes, completely. You can search, browse profiles, read reviews, and message providers - all without paying a cent. We charge providers a small subscription to list on the platform, not participants." },
   { q: "Do I need an NDIS plan to use ReferAus?", a: "No. You can browse and research providers at any time. Whether you're waiting for your plan to be approved or already have funding, ReferAus is here to help." },
   { q: "Are the reviews genuine?", a: "We verify that reviewers are real NDIS participants before publishing their reviews. We never hide negative reviews, and providers cannot pay to improve their ratings." },
-  { q: "What if I can't find a provider in my area?", a: "We're growing our network every week. If you can't find what you need, use the contact form to let us know your location and support type — we'll try to help or point you in the right direction." },
-  { q: "Can I use ReferAus if I'm plan-managed or self-managed?", a: "Yes. ReferAus works for participants across all plan management types — NDIA-managed, plan-managed, or self-managed." },
+  { q: "What if I can't find a provider in my area?", a: "We're growing our network every week. If you can't find what you need, use the contact form to let us know your location and support type - we'll try to help or point you in the right direction." },
+  { q: "Can I use ReferAus if I'm plan-managed or self-managed?", a: "Yes. ReferAus works for participants across all plan management types - NDIA-managed, plan-managed, or self-managed." },
 ];
 
 export default function ForParticipantsClient() {
@@ -74,7 +74,7 @@ export default function ForParticipantsClient() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-gray-500 text-lg leading-relaxed mb-10 font-light"
           >
-            Searching for NDIS providers is stressful and time-consuming. ReferAus makes it simple — search hundreds of verified providers, read real reviews from other participants, and message directly. 100% free, always.
+            Searching for NDIS providers is stressful and time-consuming. ReferAus makes it simple — search verified providers in the Hunter Region, read real reviews from other participants, and message directly. 100% free, always.
           </motion.p>
 
           <motion.div
@@ -154,7 +154,7 @@ export default function ForParticipantsClient() {
       <section className="py-24 px-6 max-w-[1200px] mx-auto">
         <p className="section-label mb-3">Why Participants Choose ReferAus</p>
         <h2 className="heading-bold text-[clamp(2rem,5vw,3rem)] leading-tight mb-3">Everything you need. Nothing you don't.</h2>
-        <p className="text-gray-500 max-w-[560px] mb-12 font-light">Designed with NDIS participants in mind — simple, honest, and always on your side.</p>
+        <p className="text-gray-500 max-w-[560px] mb-12 font-light">Designed with NDIS participants in mind - simple, honest, and always on your side.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {benefits.map((b, i) => (
@@ -232,10 +232,10 @@ export default function ForParticipantsClient() {
         >
           <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl mx-auto mb-6">🔍</div>
           <h2 className="heading-bold text-[clamp(2rem,5vw,3rem)] leading-tight mb-4">
-            Start searching — it&apos;s free
+            Start searching - it&apos;s free
           </h2>
           <p className="text-gray-500 mb-8 max-w-[480px] mx-auto font-light">
-            Hundreds of verified NDIS providers in Newcastle and the Hunter Region, waiting to help. No account needed to get started.
+            Verified NDIS providers in Newcastle and the Hunter Region, ready to help. No account needed to get started.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link

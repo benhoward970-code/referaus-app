@@ -13,12 +13,24 @@
 
 export const blogPosts: BlogPost[] = [
   {
+    "slug": "referaus-platform-update-march-2026",
+    "title": "ReferAus Platform Update — March 2026",
+    "excerpt": "We have been busy building. Here is what changed on ReferAus this month — real provider data, Stripe payments, cleaner design, and more honest copy.",
+    "date": "23 Mar 2026",
+    "author": "ReferAus Team",
+    "category": "Platform Updates",
+    "readTime": "3 min read",
+    "coverImage": "/blog/platform-update.jpg",
+    "tags": ["ReferAus", "update", "platform", "2026"],
+    "content": "## What We Have Been Working On\n\nReferAus is a new platform, and we are building in public. Here is a rundown of the changes we shipped this month.\n\n## Real Provider Data\n\nWe removed all placeholder and demo content from the site. Every provider you see on ReferAus is a real, verified NDIS provider. No fake listings, no made-up reviews. If it is on the platform, it is real.\n\n## Subscription Payments\n\nProviders can now sign up for a paid plan directly on the site. We have three tiers — Starter ($29/mo), Pro ($79/mo), and Premium ($149/mo) — with Stripe handling payments securely. Free listings are still available for providers who want basic visibility.\n\n## Cleaner, Honest Copy\n\nWe cleaned up marketing language across the site. No more inflated numbers or vague claims. The mailing list section now says what it does without pretending we have thousands of subscribers. We would rather be honest and small than impressive and fake.\n\n## Design Polish\n\nSmall but meaningful design improvements across the homepage, provider profiles, and blog. Faster load times, better mobile layout, and consistent branding throughout.\n\n## What Is Next\n\n- **Provider onboarding flow** — making it easier for providers to create and manage their profiles\n- **Participant reviews** — real reviews from real NDIS participants\n- **Search improvements** — better filtering by service type, location, and availability\n- **Registration status badges** — showing which providers are registered ahead of the July 2026 deadline\n\n## Built for the NDIS Community\n\nReferAus exists to make finding NDIS providers easier and more transparent. We are a small team building something we believe matters. If you are a provider, [list your services for free](https://referaus.com/register). If you are a participant, [search providers in your area](https://referaus.com/providers).\n\nWe will keep shipping and keep you posted."
+  },
+  {
     "slug": "ndis-july-2026-mandatory-registration-checklist",
     "title": "NDIS July 2026 Mandatory Registration: What Every Provider Needs to Know",
     "excerpt": "From 1 July 2026, all NDIS providers must be registered with the NDIS Quality and Safeguards Commission. Here is your complete compliance checklist to get ready before the deadline.",
     "date": "11 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Compliance",
+    "category": "Industry News",
     "readTime": "11 min read",
     "coverImage": "/blog/compliance-checklist.jpg",
     "tags": ["NDIS", "compliance", "registration", "July 2026", "providers", "SIL"],
@@ -30,7 +42,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "The National Disability Insurance Scheme (NDIS) is Australia's landmark disability support program. This guide explains how it works, who is eligible, and how to get the most from your plan.",
     "date": "5 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Guides",
+    "category": "NDIS Guide",
     "readTime": "10 min read",
     "coverImage": "/blog/ndis-guide-cover.jpg",
     "tags": [
@@ -47,7 +59,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "Choosing an NDIS provider is one of the most important decisions you will make as a participant. Here is a practical framework to help you find the right fit.",
     "date": "1 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Tips",
+    "category": "Participant Resources",
     "readTime": "8 min read",
     "coverImage": "/blog/choose-provider-cover.jpg",
     "tags": [
@@ -64,7 +76,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "How your NDIS plan is managed affects your flexibility, paperwork, and choice of providers. Here is a plain-English breakdown of all three options.",
     "date": "25 Feb 2026",
     "author": "ReferAus Team",
-    "category": "Guides",
+    "category": "NDIS Guide",
     "readTime": "9 min read",
     "coverImage": "/blog/plan-management-cover.jpg",
     "tags": [
@@ -81,7 +93,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "Do not commit to an NDIS provider before asking these 10 critical questions. They will help you separate the great from the good and spot the ones to avoid.",
     "date": "20 Feb 2026",
     "author": "ReferAus Team",
-    "category": "Tips",
+    "category": "Participant Resources",
     "readTime": "6 min read",
     "coverImage": "/blog/questions-cover.jpg",
     "tags": [
@@ -98,7 +110,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "The NDIS Price Guide sets the maximum rates providers can charge for supports. Here is a plain-English breakdown of the 2025-26 guide.",
     "date": "15 Feb 2026",
     "author": "ReferAus Team",
-    "category": "News",
+    "category": "Industry News",
     "readTime": "7 min read",
     "coverImage": "/blog/price-guide-cover.jpg",
     "tags": [
@@ -115,7 +127,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "Support coordination helps NDIS participants navigate the system, connect with providers, and get the most from their plan. Here is everything you need to know.",
     "date": "7 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Guides",
+    "category": "NDIS Guide",
     "readTime": "8 min read",
     "coverImage": "/blog/support-coordination.jpg",
     "tags": ["NDIS", "Support Coordination", "Plan Management"],
@@ -127,7 +139,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "Supported Independent Living and Specialist Disability Accommodation are two different NDIS housing supports. Learn the difference and which one is right for you.",
     "date": "6 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Guides",
+    "category": "NDIS Guide",
     "readTime": "9 min read",
     "coverImage": "/blog/sil-sda.jpg",
     "tags": ["NDIS", "SIL", "SDA", "Housing"],
@@ -139,7 +151,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "Your NDIS plan review is your chance to adjust your supports. These 7 tips will help you prepare and get the best outcome.",
     "date": "4 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Tips",
+    "category": "Participant Resources",
     "readTime": "6 min read",
     "coverImage": "/blog/plan-review.jpg",
     "tags": ["NDIS", "Plan Review", "Tips"],
@@ -151,7 +163,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "A step-by-step guide to NDIS provider registration, including requirements, costs, and the difference between registered and unregistered providers.",
     "date": "3 Mar 2026",
     "author": "ReferAus Team",
-    "category": "News",
+    "category": "Provider Tips",
     "readTime": "11 min read",
     "coverImage": "/blog/provider-registration.jpg",
     "tags": ["NDIS", "Provider", "Registration"],
@@ -163,7 +175,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "A comprehensive overview of NDIS services available in Newcastle, Lake Macquarie, Maitland, Cessnock, and the broader Hunter Region.",
     "date": "2 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Guides",
+    "category": "NDIS Guide",
     "readTime": "12 min read",
     "coverImage": "/blog/hunter-region.jpg",
     "tags": ["NDIS", "Hunter Region", "Newcastle", "Local"],
@@ -175,7 +187,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "The ACCC and NDIS Commission are cracking down on misleading conduct and fraud. Here is how legitimate providers can stand out.",
     "date": "12 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Compliance",
+    "category": "Industry News",
     "readTime": "9 min read",
     "coverImage": "/blog/fraud-crackdown.jpg",
     "tags": ["NDIS", "compliance", "fraud", "ACCC", "providers", "trust", "2026"],
@@ -187,7 +199,7 @@ export const blogPosts: BlogPost[] = [
     "excerpt": "With mandatory registration and rising fraud concerns, finding a trustworthy NDIS provider matters more than ever.",
     "date": "12 Mar 2026",
     "author": "ReferAus Team",
-    "category": "Guides",
+    "category": "Participant Resources",
     "readTime": "8 min read",
     "coverImage": "/blog/find-providers.jpg",
     "tags": ["NDIS", "providers", "search", "verified", "participants", "2026"],
@@ -208,4 +220,12 @@ export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
     .slice(0, limit);
 }
 
-export const categories = ['All', ...Array.from(new Set(blogPosts.map(p => p.category)))];
+// Canonical category list (used for filter chips on the blog listing page)
+export const categories = [
+  'All',
+  'Platform Updates',
+  'NDIS Guide',
+  'Provider Tips',
+  'Participant Resources',
+  'Industry News',
+];

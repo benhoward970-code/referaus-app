@@ -10,21 +10,13 @@ export async function POST(req: NextRequest) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
 
   if (!signature || !webhookSecret) {
-    // In development without webhook secret, skip verification
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('[Stripe] Skipping webhook signature check in development');
-    } else {
-      return NextResponse.json({ error: 'Missing signature or webhook secret' }, { status: 400 });
-    }
+    console.error('[Stripe] Missing signature or webhook secret');
+    return NextResponse.json({ error: 'Missing signature or webhook secret' }, { status: 400 });
   }
 
   let event;
   try {
-    if (signature && webhookSecret) {
-      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    } else {
-      event = JSON.parse(body);
-    }
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     console.error('[Stripe] Webhook signature error:', message);

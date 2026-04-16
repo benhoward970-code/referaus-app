@@ -1,13 +1,14 @@
 ﻿"use client";
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 const plans = [
-  { name: "Free Listing", slug: "free", monthlyPrice: 0, yearlyPrice: 0, yearlySaving: 0, desc: "Get discovered by NDIS participants in your area.", features: ["Basic provider profile", "Appear in search results", "Receive enquiries via email", "Up to 5 service categories"], cta: "Create Free Listing", highlight: false, popular: false },
-  { name: "Starter", slug: "starter", monthlyPrice: 29, yearlyPrice: 290, yearlySaving: 58, desc: "Perfect for new providers building their presence.", features: ["Verified badge", "Priority search ranking", "Up to 10 service categories", "Review management", "Email support"], cta: "Start Starter", highlight: false, popular: false },
-  { name: "Professional", slug: "pro", monthlyPrice: 79, yearlyPrice: 790, yearlySaving: 158, desc: "Everything you need to grow your provider business.", features: ["Everything in Starter", "Direct booking system", "Analytics dashboard", "Unlimited service categories", "Area alerts", "Phone and email support"], cta: "Start Professional", highlight: true, popular: true },
-  { name: "Premium", slug: "premium", monthlyPrice: 149, yearlyPrice: 1490, yearlySaving: 298, desc: "For established providers who want maximum visibility.", features: ["Everything in Professional", "Featured homepage placement", "Competitor insights", "Custom branded profile", "API access", "Dedicated account manager", "Multi-location support"], cta: "Start Premium", highlight: false, popular: false },
+  { name: "Free", slug: "free", monthlyPrice: 0, yearlyPrice: 0, yearlySaving: 0, desc: "Get discovered by NDIS participants in your area.", features: ["Basic provider profile", "Appear in search results", "Receive enquiries via email", "Up to 5 service categories"], cta: "Get Started Free", highlight: false, popular: false },
+  { name: "Starter", slug: "starter", monthlyPrice: 29, yearlyPrice: 199, yearlySaving: 149, desc: "Perfect for new providers building their presence.", features: ["Verified badge", "Priority search ranking", "Up to 10 service categories", "Review management", "Email support"], cta: "Get Starter", highlight: false, popular: false },
+  { name: "Pro", slug: "pro", monthlyPrice: 79, yearlyPrice: 549, yearlySaving: 399, desc: "Everything you need to grow your provider business.", features: ["Everything in Starter", "Direct booking system", "Analytics dashboard", "Unlimited service categories", "Area alerts", "Phone and email support"], cta: "Get Pro", highlight: true, popular: true },
+  { name: "Premium", slug: "premium", monthlyPrice: 149, yearlyPrice: 999, yearlySaving: 789, desc: "For established providers who want maximum visibility.", features: ["Everything in Pro", "Featured homepage placement", "Competitor insights", "Custom branded profile", "API access", "Dedicated account manager", "Multi-location support"], cta: "Get Premium", highlight: false, popular: false },
 ];
 
 type Plan = typeof plans[0];
@@ -53,7 +54,7 @@ function CheckoutModal({ plan, billing, onClose }: { plan: Plan; billing: "month
         <div className="mb-6">
           <h2 className="text-2xl font-black mb-1">Start {plan.name}</h2>
           <p className="text-gray-500 text-sm">
-            ${price}/mo{billing === "yearly" ? " · billed $" + plan.yearlyPrice + "/yr" : " · billed monthly"} · Cancel anytime
+            ${price}/mo{billing === "yearly" ? " � billed $" + plan.yearlyPrice + "/yr" : " � billed monthly"} � Cancel anytime
           </p>
         </div>
         <form onSubmit={handleCheckout} className="space-y-4">
@@ -89,7 +90,7 @@ function CheckoutModal({ plan, billing, onClose }: { plan: Plan; billing: "month
           </button>
         </form>
         <p className="text-xs text-gray-400 text-center mt-4">
-          Payments processed by Stripe · 256-bit SSL encryption · GST included
+          Payments processed by Stripe · 256-bit SSL encryption · All prices in AUD
         </p>
       </motion.div>
     </div>
@@ -99,6 +100,20 @@ function CheckoutModal({ plan, billing, onClose }: { plan: Plan; billing: "month
 export default function PricingPage() {
   const [yearly, setYearly] = useState(false);
   const [modal, setModal] = useState<{ plan: Plan; billing: "monthly" | "yearly" } | null>(null);
+  const [showStickyCTA, setShowStickyCTA] = useState(false);
+  const pricingCardsRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = useCallback(() => {
+    if (!pricingCardsRef.current) return;
+    const rect = pricingCardsRef.current.getBoundingClientRect();
+    // Show sticky bar once pricing cards are scrolled past the viewport
+    setShowStickyCTA(rect.bottom < 0);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   function handleCTA(plan: Plan) {
     if (plan.slug === "free") return;
@@ -106,7 +121,33 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
+    <div className="min-h-screen pt-28 pb-14 px-4 sm:px-6">
+      {/* Sticky CTA Bar */}
+      <AnimatePresence>
+        {showStickyCTA && (
+          <motion.div
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] px-6 py-4"
+          >
+            <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+              <div>
+                <p className="font-bold text-gray-900 text-sm sm:text-base">Ready to list your business?</p>
+                <p className="text-xs text-gray-500 hidden sm:block">Join NDIS providers already on ReferAus. Free to start.</p>
+              </div>
+              <Link
+                href="/register"
+                className="flex-shrink-0 px-6 py-3 bg-orange-500 hover:bg-orange-400 text-white font-bold text-sm rounded-xl transition-all shadow-sm whitespace-nowrap"
+              >
+                Get Started Free
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {modal && (
           <CheckoutModal plan={modal.plan} billing={modal.billing} onClose={() => setModal(null)} />
@@ -114,6 +155,7 @@ export default function PricingPage() {
       </AnimatePresence>
 
       <div className="max-w-7xl mx-auto">
+        <Breadcrumbs />
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Pricing</span>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
@@ -131,7 +173,7 @@ export default function PricingPage() {
           <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-green-100 text-green-700 tracking-wide">Save 17%</span>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div ref={pricingCardsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan, i) => (
             <motion.div key={plan.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className={"relative rounded-2xl p-5 sm:p-7 border flex flex-col transition-all " + (plan.highlight ? "border-blue-500/40" : "bg-surface border-gray-200")} style={plan.highlight ? { background: "rgba(37,99,235,0.07)", boxShadow: "0 20px 50px -15px rgba(37,99,235,0.1)" } : {}}>
               {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2"><span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-600 text-white whitespace-nowrap">Most Popular</span></div>}
@@ -168,7 +210,7 @@ export default function PricingPage() {
         </div>
 
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center text-xs text-gray-400 mt-12">
-          All plans include GST. Cancel anytime. Free for all NDIS participants.
+          All prices in AUD. Cancel anytime. Free for all NDIS participants.
         </motion.p>
       </div>
     </div>

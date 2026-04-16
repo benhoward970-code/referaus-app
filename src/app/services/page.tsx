@@ -1,12 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { providers } from "@/lib/providers";
+import { ServiceCategoryGrid } from "@/components/ServiceCategoryGrid";
 
 export const metadata: Metadata = {
-  title: "NDIS Support Categories | ReferAus - Find Providers by Service",
+  title: "NDIS Services Directory | ReferAus",
   description: "Browse all NDIS support categories and find providers near you in Newcastle and the Hunter Region. From daily living to therapy, find the support you need.",
   openGraph: {
-    title: "NDIS Support Categories | ReferAus",
+    title: "NDIS Services Directory | ReferAus",
     description: "Find NDIS providers by support category in Newcastle and the Hunter Region.",
     url: "https://referaus.com/services",
     siteName: "ReferAus",
@@ -162,11 +163,14 @@ export default function ServicesPage() {
               <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </Link>
             <Link href="/register" className="inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-orange-300 text-gray-700 hover:text-orange-600 font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
-              List Your Practice
+              List your organisation
             </Link>
           </div>
         </div>
       </section>
+
+      {/* Category Grid Cards */}
+      <ServiceCategoryGrid />
 
       {/* Quick jump */}
       <section className="sticky top-[72px] z-10 bg-white border-b border-gray-100 px-4 sm:px-6 py-3">
@@ -260,7 +264,7 @@ export default function ServicesPage() {
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5">
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h3 className="font-bold text-base mb-2 text-gray-900">Are you a provider?</h3>
-              <p className="text-sm text-gray-500 mb-4">List your practice on ReferAus and get found by participants searching for your services.</p>
+              <p className="text-sm text-gray-500 mb-4">List your organisation on ReferAus and get found by participants searching for your services.</p>
               <Link href="/register" className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
                 Create free listing &rarr;
               </Link>

@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const plans = [
-  { name: "Free Listing", price: "$0", period: "forever", highlight: false, features: ["Basic profile", "Appear in search", "Receive enquiries", "Up to 5 categories"] },
+  { name: "Free", price: "$0", period: "forever", highlight: false, features: ["Basic profile", "Appear in search", "Receive enquiries", "Up to 5 categories"] },
   { name: "Starter", price: "$29", period: "/month", highlight: false, features: ["Verified badge", "Priority ranking", "10 categories", "Review management"] },
-  { name: "Professional", price: "$79", period: "/month", highlight: true, features: ["Direct booking", "Analytics dashboard", "Unlimited categories", "Area alerts", "Priority support"] },
+  { name: "Pro", price: "$79", period: "/month", highlight: true, features: ["Direct booking", "Analytics dashboard", "Unlimited categories", "Area alerts", "Priority support"] },
   { name: "Premium", price: "$149", period: "/month", highlight: false, features: ["Homepage featured", "Competitor insights", "Custom profile", "Dedicated manager", "Multi-location"] },
 ];
 

@@ -1,6 +1,13 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for') || 'unknown';
+  const { allowed } = checkRateLimit('newsletter:' + ip, 10, 60000);
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+  }
+
   try {
     const { email, name } = await req.json();
     if (!email || !email.includes('@')) {
