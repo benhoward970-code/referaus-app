@@ -14,7 +14,7 @@ import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { CommandPalette } from "@/components/CommandPalette";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
-import { WebVitals } from "@/components/WebVitals";
+// WebVitals removed — used internal Next.js path that caused runtime errors
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -130,7 +130,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AnnouncementBar />
             <ScrollProgressBar />
             <GoogleAnalytics />
-            <WebVitals />
             <Navbar />
             <main id="main-content" role="main" tabIndex={-1}>
               <ErrorBoundary>

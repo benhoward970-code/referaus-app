@@ -1,12 +1,28 @@
 "use client";
 import { LogoMark } from "../../components/Logo";
-import { useState } from "react";
+import { useState, Component, ReactNode } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signUp, isConfigured, submitWaitlist, supabase } from "@/lib/supabase";
 
-export default function RegisterPage() {
+class RegisterErrorBoundary extends Component<{children: ReactNode}, {error: string | null}> {
+  constructor(props: {children: ReactNode}) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(e: Error) { return { error: e.message }; }
+  render() {
+    if (this.state.error) return (
+      <div className="min-h-screen flex items-center justify-center p-8">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-lg w-full">
+          <h2 className="font-bold text-red-700 mb-2">Register page error:</h2>
+          <pre className="text-xs text-red-600 whitespace-pre-wrap">{this.state.error}</pre>
+        </div>
+      </div>
+    );
+    return this.props.children;
+  }
+}
+
+function RegisterInner() {
   const [role, setRole] = useState<"participant" | "provider">("participant");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -158,5 +174,13 @@ export default function RegisterPage() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <RegisterErrorBoundary>
+      <RegisterInner />
+    </RegisterErrorBoundary>
   );
 }
