@@ -39,15 +39,14 @@ function RegisterInner() {
 
     try {
       if (!isConfigured()) {
-        await submitWaitlist(email, role);
-        setSuccess(true);
+        setError("DEBUG: Supabase not configured — check env vars");
         setLoading(false);
         return;
       }
 
       const result = await signUp(email, password, { name, role });
       if (result.error) {
-        setError(result.error.message);
+        setError("Signup error: " + result.error.message + " (code: " + (result.error as any).status + ")");
         setLoading(false);
         return;
       }
