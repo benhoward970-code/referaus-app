@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -301,7 +301,7 @@ const PLAN_CONFIG: Record<string, { label: string; icon: any; color: string; bg:
   premium: { label: "Premium", icon: Crown, color: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200" },
 };
 
-export default function DashboardPage() {
+function DashboardContent() {
   const { user, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
   const [provider, setProvider] = useState<ProviderRecord | null>(null);
@@ -916,5 +916,13 @@ export default function DashboardPage() {
         </motion.div>
       )}
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" /></div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
