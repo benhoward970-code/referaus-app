@@ -37,44 +37,49 @@ function RegisterInner() {
     setError("");
     setLoading(true);
 
-    if (!isConfigured()) {
-      await submitWaitlist(email, role);
-      setSuccess(true);
-      setLoading(false);
-      return;
-    }
+    try {
+      if (!isConfigured()) {
+        await submitWaitlist(email, role);
+        setSuccess(true);
+        setLoading(false);
+        return;
+      }
 
-    const result = await signUp(email, password, { name, role });
-    if (result.error) {
-      setError(result.error.message);
-      setLoading(false);
-      return;
-    }
+      const result = await signUp(email, password, { name, role });
+      if (result.error) {
+        setError(result.error.message);
+        setLoading(false);
+        return;
+      }
 
-    // For provider role, create a provider profile row
-    if (role === "provider" && supabase) {
-      const newUser = result.data?.user;
-      if (newUser) {
-        const slug = name
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "");
+      // For provider role, create provider profile via API (respects auth + RLS)
+      if (role === "provider") {
+        const newUser = result.data?.user;
+        if (newUser) {
+          const slug = name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "");
 
-        const { error: insertErr } = await supabase.from("providers").insert({
-          user_id: newUser.id,
-          name: name,
-          slug: slug,
-          email: email,
-          plan: "free",
-          category: "Daily Living",
-          services: [],
-        });
-
-        if (insertErr) {
-          console.error("[register] Provider profile insert error:", insertErr.message);
-          // Don't block registration if profile insert fails - they can set it up later
+          await fetch("/api/register-provider", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: newUser.id,
+              name,
+              slug,
+              email,
+            }),
+          }).catch(() => {
+            // Non-blocking — user can complete profile in dashboard
+          });
         }
       }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(msg);
+      setLoading(false);
+      return;
     }
 
     setSuccess(true);
