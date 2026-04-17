@@ -175,7 +175,7 @@ export default function PricingPage() {
 
         <div ref={pricingCardsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan, i) => (
-            <motion.div key={plan.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className={"relative rounded-2xl p-5 sm:p-7 border flex flex-col transition-all " + (plan.highlight ? "border-blue-500/40" : "bg-surface border-gray-200")} style={plan.highlight ? { background: "rgba(37,99,235,0.07)", boxShadow: "0 20px 50px -15px rgba(37,99,235,0.1)" } : {}}>
+            <motion.div key={plan.name} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} className={"relative rounded-2xl p-5 sm:p-7 flex flex-col transition-all hover:shadow-2xl hover:-translate-y-2"} style={plan.highlight ? { background: "#ffffff", border: "3px solid #2563eb", boxShadow: "0 20px 80px -20px rgba(37,99,235,0.5), 0 0 0 1px rgba(255,255,255,0.8) inset" } : { background: "#ffffff", border: "2px solid #d1d5db", boxShadow: "0 20px 60px -15px rgba(0,0,0,0.25)" }}>
               {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2"><span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-600 text-white whitespace-nowrap">Most Popular</span></div>}
               <h3 className="text-base font-bold mb-1">{plan.name}</h3>
               <div className="flex items-baseline gap-1 mb-1" style={{ minHeight: "52px" }}>
@@ -193,9 +193,9 @@ export default function PricingPage() {
               </div>
               <p className="text-sm text-gray-500 mb-6 flex-shrink-0">{plan.desc}</p>
               {plan.slug === "free" ? (
-                <Link href="/register?plan=free" className="block text-center py-3 rounded-xl font-semibold text-sm transition-all mb-7 bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200">{plan.cta}</Link>
+                <Link href="/register?plan=free" className="block text-center py-3 rounded-xl font-semibold text-sm transition-all mb-7 bg-purple-50 hover:bg-gray-100 text-gray-900 border border-gray-200">{plan.cta}</Link>
               ) : (
-                <button onClick={() => handleCTA(plan)} className={"w-full py-3 rounded-xl font-semibold text-sm transition-all mb-7 " + (plan.highlight ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-gray-50 hover:bg-gray-100 text-gray-900 border border-gray-200")}>{plan.cta}</button>
+                <button onClick={() => handleCTA(plan)} className={"w-full py-3 rounded-xl font-semibold text-sm transition-all mb-7 " + (plan.highlight ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-purple-50 hover:bg-gray-100 text-gray-900 border border-gray-200")}>{plan.cta}</button>
               )}
               <ul className="space-y-2.5 mt-auto">
                 {plan.features.map((f) => (
