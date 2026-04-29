@@ -165,19 +165,29 @@ function ProvidersContent() {
   return (
     <div className="min-h-screen pt-28 pb-14 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: prefersReduced ? 0 : 0.5 }}
-          className="mb-12"
-        >
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
-            Browse <span className="text-orange-500">Providers</span>
-          </h1>
-          <p className="text-gray-500 text-lg max-w-xl">
-            {providers.length > 0 ? `${providers.length} NDIS providers across Newcastle & the Hunter Region` : "Find NDIS providers in Newcastle & the Hunter Region"}
-          </p>
-        </motion.div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: prefersReduced ? 0 : 0.5 }}
+          >
+            <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
+              Browse <span className="text-orange-500">Providers</span>
+            </h1>
+            <p className="text-gray-500 text-lg max-w-xl">
+              {providers.length > 0 ? `${providers.length} NDIS providers across Newcastle & the Hunter Region` : "Find NDIS providers in Newcastle & the Hunter Region"}
+            </p>
+          </motion.div>
+          <motion.a
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: prefersReduced ? 0 : 0.5 }}
+            href="/register"
+            className="flex-shrink-0 inline-block px-6 py-3.5 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-400 transition-all text-sm sm:text-base whitespace-nowrap shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          >
+            List Your Organisation
+          </motion.a>
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
