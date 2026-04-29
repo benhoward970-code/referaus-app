@@ -1,5 +1,6 @@
 const https = require('https');
-const svc = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmaGFwbm5seGZoeHNxcHFjdWplIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjA0NDYyOCwiZXhwIjoyMDg3NjIwNjI4fQ.iBMN0RjFjP_woNhZPtgwsaHyAWscGF2Jc3BVOkG78cE";
+const svc = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_API_KEY;
+if (!svc) throw new Error('SUPABASE_SERVICE_KEY or SUPABASE_API_KEY env var required');
 const defaults = {tier:"professional",verified:true,suburb:"Newcastle",state:"NSW",postcode:"2300",location:"Newcastle",plan:"free",registration_ready:true,availability:{mon:"8am-5pm",tue:"8am-5pm",wed:"8am-5pm",thu:"8am-5pm",fri:"8am-5pm",sat:"Closed",sun:"Closed"},photos:[],gallery_urls:[],user_id:"4f5229df-48af-4af5-9b39-85319a6531d5"};
 
 const providers = [

@@ -1,5 +1,6 @@
 const https = require('https');
-const svc = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmaGFwbm5seGZoeHNxcHFjdWplIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjA0NDYyOCwiZXhwIjoyMDg3NjIwNjI4fQ.iBMN0RjFjP_woNhZPtgwsaHyAWscGF2Jc3BVOkG78cE";
+const svc = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_API_KEY;
+if (!svc) throw new Error('SUPABASE_SERVICE_KEY or SUPABASE_API_KEY env var required');
 
 // Get all providers that don't have reviews yet
 const get = (path) => new Promise((resolve) => {

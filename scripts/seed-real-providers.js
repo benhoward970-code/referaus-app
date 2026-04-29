@@ -1,7 +1,8 @@
 const https = require('https');
 const crypto = require('crypto');
 
-const svc = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpmaGFwbm5seGZoeHNxcHFjdWplIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjA0NDYyOCwiZXhwIjoyMDg3NjIwNjI4fQ.iBMN0RjFjP_woNhZPtgwsaHyAWscGF2Jc3BVOkG78cE";
+const svc = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_API_KEY;
+if (!svc) throw new Error('SUPABASE_SERVICE_KEY or SUPABASE_API_KEY env var required');
 
 const providers = [
   {name:"Samaritans",email:"info@samaritans.org.au",phone:"02 4960 7100",website:"https://www.samaritans.org.au",description:"One of the Hunter regions largest NDIS providers offering flexible disability support across Newcastle, Lake Macquarie, Maitland, Upper Hunter, Central Coast and Mid North Coast. Services include daily living support, community access, supported independent living and social programs.",short_description:"Trusted Hunter Region provider — daily living, community access & supported living.",slug:"samaritans",categories:["daily-living","community-access","supported-living"],services:["daily-living","community-access","supported-living"],category:"Daily Living",rating:4.5,review_count:12,response_rate:92,response_time:"Within 24 hours",wait_time:"1-2 weeks",plan_types:["NDIA Managed","Plan Managed","Self Managed"],service_areas:["Newcastle","Lake Macquarie","Maitland","Upper Hunter"],founded:"1984",team_size:"200+",languages:["English","Arabic"],features:["NDIS Registered","24/7 Support Available"],brand_color:"#1e40af"},
