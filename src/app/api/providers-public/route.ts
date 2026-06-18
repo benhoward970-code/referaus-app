@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 300; // cache for 5 min
+// ISR: cache for 5 minutes, revalidate in background
+export const revalidate = 300;
 
 export async function GET() {
   try {
+    // Fetch all providers ordered by verified first, then by rating
+    // Unverified providers are shown with a flag so new signups appear immediately
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=*&verified=eq.true&order=rating.desc&limit=200`,
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=*&order=verified.desc,rating.desc&limit=200`,
       {
         headers: {
           apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -17,7 +19,7 @@ export async function GET() {
     );
 
     if (!res.ok) {
-      // Fallback: return empty so client uses hardcoded
+      // Fallback: return empty so client uses hardcoded demo data
       return NextResponse.json([]);
     }
 

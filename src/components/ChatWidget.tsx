@@ -41,16 +41,7 @@ export function ChatWidget() {
   const [enquiry, setEnquiry] = useState({ name: "", email: "", message: "" });
   const [input, setInput] = useState("");
   const [unread, setUnread] = useState(false);
-  const [onAuthPage, setOnAuthPage] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const path = window.location.pathname;
-    const authPaths = ["/login", "/register", "/forgot-password", "/reset-password", "/admin"];
-    setOnAuthPage(authPaths.some((p) => path.startsWith(p)));
-  }, []);
-
-  if (onAuthPage) return null;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });

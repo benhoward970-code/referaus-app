@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 function HexIcon({ size = 32 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +16,7 @@ export function Logo({ size = "default" }: { size?: "small" | "default" | "large
   const s = sizes[size];
 
   return (
-    <Link href="/" className="flex items-center gap-2.5 group">
+    <div className="flex items-center gap-2.5 group">
       <HexIcon size={s.icon} />
       <div className="flex flex-col">
         <div className={`${s.text} leading-none tracking-wider`} style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, textTransform: "uppercase" as const }}>
@@ -26,7 +24,7 @@ export function Logo({ size = "default" }: { size?: "small" | "default" | "large
           <span className="text-orange-500">AUS</span>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
