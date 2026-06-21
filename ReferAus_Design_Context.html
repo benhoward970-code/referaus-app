@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ReferAus — Design Context for Claude Design / Figma</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+  .page { max-width: 960px; margin: 0 auto; padding: 48px 32px; }
+  h1 { font-size: 32px; font-weight: 900; color: #0f172a; margin-bottom: 6px; }
+  h2 { font-size: 20px; font-weight: 800; color: #0f172a; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+  h3 { font-size: 14px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px; }
+  p { font-size: 14px; color: #475569; margin-bottom: 12px; }
+  code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 6px; font-family: 'SF Mono', monospace; font-size: 12px; color: #1e293b; }
+  .subtitle { font-size: 15px; color: #64748b; margin-bottom: 32px; }
+  .badge { display: inline-block; background: rgba(249,115,22,0.12); color: #ea580c; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(249,115,22,0.25); margin-bottom: 24px; }
+
+  /* Colour Swatches */
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .swatch { border-radius: 10px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); }
+  .swatch-color { height: 64px; }
+  .swatch-info { background: #fff; padding: 8px 10px; }
+  .swatch-name { font-size: 12px; font-weight: 700; color: #1e293b; }
+  .swatch-hex { font-size: 11px; color: #94a3b8; font-family: monospace; }
+
+  /* Typography */
+  .type-sample { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px 24px; margin-bottom: 10px; }
+  .type-meta { font-size: 11px; color: #94a3b8; margin-top: 4px; font-family: monospace; }
+
+  /* Components */
+  .component-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .component-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px 24px; }
+  .component-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+  /* Buttons */
+  .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #f97316; color: #fff; font-size: 14px; font-weight: 700; padding: 11px 20px; border-radius: 10px; border: none; cursor: pointer; text-decoration: none; }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; color: #2563eb; font-size: 14px; font-weight: 600; padding: 11px 20px; border-radius: 10px; border: 1px solid #bfdbfe; cursor: pointer; text-decoration: none; }
+  .btn-outline { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: #1e293b; font-size: 14px; font-weight: 600; padding: 10px 20px; border-radius: 10px; border: 1.5px solid #e2e8f0; cursor: pointer; text-decoration: none; }
+  .btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: #f97316; font-size: 14px; font-weight: 600; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; text-decoration: none; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+  /* Input */
+  .input-demo { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; color: #1e293b; background: #fff; outline: none; }
+  .input-focused { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+  .input-label { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block; }
+
+  /* Cards */
+  .provider-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; transition: box-shadow 0.2s; }
+  .provider-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .card-avatar { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #2563eb, #7c3aed); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 18px; margin-bottom: 12px; }
+  .card-name { font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+  .card-category { font-size: 12px; color: #f97316; font-weight: 600; margin-bottom: 8px; }
+  .card-desc { font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 12px; }
+  .tag { display: inline-block; background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 6px; margin: 2px; }
+  .verified-badge { display: inline-flex; align-items: center; gap: 4px; background: #dcfce7; color: #16a34a; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+  .stars { color: #f59e0b; font-size: 13px; }
+  .star-count { font-size: 12px; color: #94a3b8; margin-left: 4px; }
+
+  /* Nav */
+  .navbar-demo { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; border-radius: 10px; }
+  .logo-mark { display: flex; align-items: center; gap: 10px; }
+  .logo-icon { width: 34px; height: 34px; background: #2563eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 16px; }
+  .logo-text { font-size: 18px; font-weight: 900; color: #1e293b; letter-spacing: -0.5px; }
+  .logo-text span { color: #f97316; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-link { font-size: 14px; font-weight: 500; color: #475569; text-decoration: none; }
+
+  /* Plan cards */
+  .plan-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .plan-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 16px; text-align: center; }
+  .plan-card.popular { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
+  .plan-name { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+  .plan-price { font-size: 28px; font-weight: 900; color: #0f172a; margin-bottom: 2px; }
+  .plan-per { font-size: 12px; color: #94a3b8; margin-bottom: 14px; }
+  .plan-feature { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+
+  /* Layout wireframes */
+  .wireframe { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .wireframe-title { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 12px; }
+  .wf-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .wf-block { background: #f1f5f9; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #94a3b8; font-weight: 600; }
+
+  /* Spacing scale */
+  .space-grid { display: flex; gap: 0; align-items: flex-end; }
+  .space-item { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-right: 16px; }
+  .space-bar { background: #2563eb; border-radius: 4px; width: 32px; }
+  .space-label { font-size: 11px; color: #94a3b8; font-family: monospace; }
+
+  /* Shadows */
+  .shadow-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .shadow-demo { background: #fff; border-radius: 10px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #94a3b8; font-weight: 600; }
+
+  /* Stack table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; background: #f8fafc; border-bottom: 2px solid #e2e8f0; font-weight: 700; color: #374151; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #475569; }
+  tr:last-child td { border-bottom: none; }
+
+  .note { background: #fff7ed; border-left: 3px solid #f97316; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: #92400e; margin: 16px 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="badge">Claude Design Context · June 2026</div>
+  <h1>ReferAus Design System</h1>
+  <p class="subtitle">Drop this file into Claude Design to give it full context of the ReferAus brand, components, layouts and tech stack.</p>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Brand Overview</h2>
+  <p><strong>ReferAus</strong> is an Australian marketplace for professional referrals, starting with NDIS (National Disability Insurance Scheme) providers in the Hunter Region / Newcastle, NSW. It connects participants with trusted, verified service providers.</p>
+  <p><strong>Personality:</strong> Trustworthy, approachable, modern, Australian. Not corporate or cold. Warm but professional.</p>
+  <p><strong>Live URL:</strong> <code>https://referaus.com</code> — Next.js 16 app on Vercel.</p>
+
+  <div class="note">💡 When designing for ReferAus: use orange as the primary action colour, blue as secondary/trust colour, and keep white-space generous. The audience includes people with disabilities — accessibility (contrast, focus states, large touch targets) is non-negotiable.</div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Colour Tokens</h2>
+
+  <h3>Primary Palette</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#f97316;"></div><div class="swatch-info"><div class="swatch-name">Orange 500</div><div class="swatch-hex">#f97316 · Primary CTA</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#ea580c;"></div><div class="swatch-info"><div class="swatch-name">Orange 600</div><div class="swatch-hex">#ea580c · Hover state</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#fff7ed;"></div><div class="swatch-info"><div class="swatch-name">Orange 50</div><div class="swatch-hex">#fff7ed · Tint / callout bg</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#fed7aa;"></div><div class="swatch-info"><div class="swatch-name">Orange 200</div><div class="swatch-hex">#fed7aa · Icon border</div></div></div>
+  </div>
+
+  <h3>Blue Palette (Trust / Secondary)</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#2563eb;"></div><div class="swatch-info"><div class="swatch-name">Blue 600</div><div class="swatch-hex">#2563eb · Secondary action</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#1d4ed8;"></div><div class="swatch-info"><div class="swatch-name">Blue 700</div><div class="swatch-hex">#1d4ed8 · Hover</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#eff6ff;"></div><div class="swatch-info"><div class="swatch-name">Blue 50</div><div class="swatch-hex">#eff6ff · Tint</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#bfdbfe;"></div><div class="swatch-info"><div class="swatch-name">Blue 200</div><div class="swatch-hex">#bfdbfe · Border</div></div></div>
+  </div>
+
+  <h3>Neutral Palette</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#0f172a;"></div><div class="swatch-info"><div class="swatch-name">Slate 900</div><div class="swatch-hex">#0f172a · Headings</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#1e293b;"></div><div class="swatch-info"><div class="swatch-name">Slate 800</div><div class="swatch-hex">#1e293b · Body text</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#475569;"></div><div class="swatch-info"><div class="swatch-name">Slate 600</div><div class="swatch-hex">#475569 · Secondary text</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#94a3b8;"></div><div class="swatch-info"><div class="swatch-name">Slate 400</div><div class="swatch-hex">#94a3b8 · Muted / placeholder</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#e2e8f0;"></div><div class="swatch-info"><div class="swatch-name">Slate 200</div><div class="swatch-hex">#e2e8f0 · Border</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#f1f5f9;"></div><div class="swatch-info"><div class="swatch-name">Slate 100</div><div class="swatch-hex">#f1f5f9 · Surface / bg</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#f8fafc;"></div><div class="swatch-info"><div class="swatch-name">Slate 50</div><div class="swatch-hex">#f8fafc · Page bg</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#ffffff; border:1px solid #e2e8f0;"></div><div class="swatch-info"><div class="swatch-name">White</div><div class="swatch-hex">#ffffff · Card bg</div></div></div>
+  </div>
+
+  <h3>Semantic Colours</h3>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="swatch-color" style="background:#16a34a;"></div><div class="swatch-info"><div class="swatch-name">Green 600</div><div class="swatch-hex">#16a34a · Verified / success</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#dcfce7;"></div><div class="swatch-info"><div class="swatch-name">Green 100</div><div class="swatch-hex">#dcfce7 · Success bg</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#f59e0b;"></div><div class="swatch-info"><div class="swatch-name">Amber 500</div><div class="swatch-hex">#f59e0b · Stars / rating</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#dc2626;"></div><div class="swatch-info"><div class="swatch-name">Red 600</div><div class="swatch-hex">#dc2626 · Error / danger</div></div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Typography</h2>
+  <p>Primary font: <code>Outfit</code> (Google Fonts, weights 300–900). Mono: <code>IBM Plex Mono</code>.</p>
+
+  <div class="type-sample">
+    <div style="font-size:40px;font-weight:900;color:#0f172a;letter-spacing:-1.5px;line-height:1.1;">Display / Hero</div>
+    <div class="type-meta">Outfit 900 · 40–56px · letter-spacing: -1.5px · color: #0f172a</div>
+  </div>
+  <div class="type-sample">
+    <div style="font-size:28px;font-weight:800;color:#0f172a;letter-spacing:-0.5px;">Heading 1</div>
+    <div class="type-meta">Outfit 800 · 28–32px · letter-spacing: -0.5px</div>
+  </div>
+  <div class="type-sample">
+    <div style="font-size:20px;font-weight:700;color:#1e293b;">Heading 2</div>
+    <div class="type-meta">Outfit 700 · 20–24px</div>
+  </div>
+  <div class="type-sample">
+    <div style="font-size:16px;font-weight:600;color:#1e293b;">Heading 3 / Card Title</div>
+    <div class="type-meta">Outfit 600 · 16–18px</div>
+  </div>
+  <div class="type-sample">
+    <div style="font-size:15px;font-weight:400;color:#475569;line-height:1.7;">Body text. ReferAus connects Australians with trusted, verified NDIS providers in their area. Search, compare reviews, and contact directly — no middlemen.</div>
+    <div class="type-meta">Outfit 400 · 14–15px · line-height: 1.7 · color: #475569</div>
+  </div>
+  <div class="type-sample">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#f97316;">Section Label</div>
+    <div class="type-meta">Outfit 700 · 11–12px · UPPERCASE · letter-spacing: 2px · color: #f97316</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Spacing Scale</h2>
+  <p>Base unit: <code>4px</code>. Tailwind CSS v4 spacing scale used throughout.</p>
+  <div class="space-grid">
+    <div class="space-item"><div class="space-bar" style="height:4px;"></div><div class="space-label">4px</div></div>
+    <div class="space-item"><div class="space-bar" style="height:8px;"></div><div class="space-label">8px</div></div>
+    <div class="space-item"><div class="space-bar" style="height:12px;"></div><div class="space-label">12px</div></div>
+    <div class="space-item"><div class="space-bar" style="height:16px;"></div><div class="space-label">16px</div></div>
+    <div class="space-item"><div class="space-bar" style="height:24px;"></div><div class="space-label">24px</div></div>
+    <div class="space-item"><div class="space-bar" style="height:32px;"></div><div class="space-label">32px</div></div>
+    <div class="space-item"><div class="space-bar" style="height:48px;"></div><div class="space-label">48px</div></div>
+    <div class="space-item"><div class="space-bar" style="height:64px;"></div><div class="space-label">64px</div></div>
+    <div class="space-item"><div class="space-bar" style="height:96px;"></div><div class="space-label">96px</div></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Border Radius</h2>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+    <div style="background:#fff;border:1px solid #e2e8f0;padding:20px 24px;border-radius:6px;font-size:12px;color:#94a3b8;font-weight:600;">6px · Tags/badges</div>
+    <div style="background:#fff;border:1px solid #e2e8f0;padding:20px 24px;border-radius:8px;font-size:12px;color:#94a3b8;font-weight:600;">8px · Logo icon</div>
+    <div style="background:#fff;border:1px solid #e2e8f0;padding:20px 24px;border-radius:10px;font-size:12px;color:#94a3b8;font-weight:600;">10px · Buttons/inputs</div>
+    <div style="background:#fff;border:1px solid #e2e8f0;padding:20px 24px;border-radius:12px;font-size:12px;color:#94a3b8;font-weight:600;">12px · Cards</div>
+    <div style="background:#fff;border:1px solid #e2e8f0;padding:20px 24px;border-radius:16px;font-size:12px;color:#94a3b8;font-weight:600;">16px · Modals</div>
+    <div style="background:#fff;border:1px solid #e2e8f0;padding:20px 24px;border-radius:9999px;font-size:12px;color:#94a3b8;font-weight:600;">Full · Pills</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Elevation / Shadows</h2>
+  <div class="shadow-grid">
+    <div class="shadow-demo" style="box-shadow:none;border:1px solid #e2e8f0;">None · Flat card</div>
+    <div class="shadow-demo" style="box-shadow:0 1px 3px rgba(0,0,0,0.08);">Shadow SM</div>
+    <div class="shadow-demo" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">Shadow MD · Hover</div>
+    <div class="shadow-demo" style="box-shadow:0 8px 32px rgba(0,0,0,0.12);">Shadow LG · Modal</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Components</h2>
+
+  <h3>Buttons</h3>
+  <div class="component-box" style="margin-bottom:16px;">
+    <div class="component-label">Button Variants</div>
+    <div class="btn-row">
+      <a class="btn-primary">Find Providers</a>
+      <a class="btn-secondary">View Plans</a>
+      <a class="btn-outline">Learn More</a>
+      <a class="btn-ghost">See all →</a>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:#94a3b8;">
+      Primary: bg #f97316, hover #ea580c · Secondary: bg #eff6ff, text #2563eb · Outline: border #e2e8f0 · Ghost: text #f97316<br/>
+      Height: 42px · Padding: 11px 20px · Border-radius: 10px · Font-weight: 700 (primary) / 600 (others)
+    </div>
+  </div>
+
+  <h3>Form Inputs</h3>
+  <div class="component-grid">
+    <div class="component-box">
+      <div class="component-label">Default</div>
+      <label class="input-label">Your name</label>
+      <input class="input-demo" placeholder="e.g. Sarah Johnson" style="display:block;"/>
+    </div>
+    <div class="component-box">
+      <div class="component-label">Focused</div>
+      <label class="input-label">Email address</label>
+      <input class="input-demo input-focused" value="sarah@example.com" style="display:block;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.12);"/>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:12px;color:#94a3b8;">Default border: #e2e8f0 · Focus: border #2563eb + ring rgba(37,99,235,0.12) · Height: 42px · Padding: 10px 14px · Border-radius: 10px</p>
+
+  <h3>Navigation Bar</h3>
+  <div class="navbar-demo">
+    <div class="logo-mark">
+      <div class="logo-icon">R</div>
+      <div class="logo-text">Refer<span>Aus</span></div>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link">Find Providers</a>
+      <a class="nav-link">How it Works</a>
+      <a class="nav-link">Pricing</a>
+      <a class="nav-link">Blog</a>
+    </div>
+    <div class="btn-row">
+      <a class="btn-outline" style="padding:8px 16px;font-size:13px;">Log In</a>
+      <a class="btn-primary" style="padding:8px 16px;font-size:13px;">Get Started</a>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:12px;color:#94a3b8;">Background: rgba(255,255,255,0.95) with backdrop-blur(12px) · border-bottom: 1px solid #e2e8f0 · Height: ~64px · Sticky on scroll</p>
+
+  <h3>Provider Card</h3>
+  <div style="max-width:320px;margin-bottom:16px;">
+    <div class="provider-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div class="card-avatar">S</div>
+        <div class="verified-badge">✓ Verified</div>
+      </div>
+      <div class="card-name">Sunrise Support Services</div>
+      <div class="card-category">Daily Living · Therapy Support</div>
+      <div class="card-desc">Expert NDIS support coordination and therapy services across Newcastle and the Hunter Region.</div>
+      <div style="margin-bottom:12px;">
+        <span class="tag">Newcastle</span>
+        <span class="tag">Plan Managed</span>
+        <span class="tag">NDIS Registered</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div><span class="stars">★★★★★</span><span class="star-count">4.9 (24 reviews)</span></div>
+        <a class="btn-primary" style="font-size:12px;padding:7px 14px;">Enquire</a>
+      </div>
+    </div>
+  </div>
+
+  <h3>Pricing Plans</h3>
+  <div class="plan-grid">
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-per">forever</div>
+      <div class="plan-feature">Basic listing</div>
+      <div class="plan-feature">Appear in search</div>
+      <div class="plan-feature">Standard position</div>
+      <a class="btn-outline" style="display:block;text-align:center;font-size:12px;padding:8px;">Get Started</a>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">$29</div>
+      <div class="plan-per">per month</div>
+      <div class="plan-feature">Enhanced profile</div>
+      <div class="plan-feature">Priority listing</div>
+      <div class="plan-feature">Enquiry inbox</div>
+      <a class="btn-outline" style="display:block;text-align:center;font-size:12px;padding:8px;">Choose Plan</a>
+    </div>
+    <div class="plan-card popular">
+      <div style="font-size:10px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Most Popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$79</div>
+      <div class="plan-per">per month</div>
+      <div class="plan-feature">Analytics dashboard</div>
+      <div class="plan-feature">Featured placement</div>
+      <div class="plan-feature">Review management</div>
+      <a class="btn-primary" style="display:block;text-align:center;font-size:12px;padding:8px;">Choose Pro</a>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Premium</div>
+      <div class="plan-price">$149</div>
+      <div class="plan-per">per month</div>
+      <div class="plan-feature">Top placement</div>
+      <div class="plan-feature">Verified badge</div>
+      <div class="plan-feature">Advanced analytics</div>
+      <a class="btn-outline" style="display:block;text-align:center;font-size:12px;padding:8px;">Choose Plan</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Page Layouts</h2>
+
+  <div class="wireframe">
+    <div class="wireframe-title">Homepage</div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:56px;">Navbar (sticky)</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:320px;">Hero: Big headline + search bar + "Find providers near you" + 3 social proof stats</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:100px;">Service category grid (Daily Living, Therapy, Transport, Accommodation…)</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:200px;">Featured providers (3-col card grid)</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:140px;">How it works (3 steps: Search → Compare → Connect)</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:120px;">Testimonials</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:100px;">CTA strip: "Are you a provider? List your service free"</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:180px;">Footer</div></div>
+  </div>
+
+  <div class="wireframe">
+    <div class="wireframe-title">Provider Directory (/providers)</div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:56px;">Navbar</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:80px;">Search + filters bar (category, suburb, plan type, rating)</div></div>
+    <div class="wf-row">
+      <div class="wf-block" style="width:240px;min-width:240px;height:500px;">Sidebar: Advanced filters</div>
+      <div class="wf-block" style="flex:1;height:500px;">Provider card grid (2–3 col) + pagination</div>
+    </div>
+  </div>
+
+  <div class="wireframe">
+    <div class="wireframe-title">Provider Profile (/providers/[slug])</div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:56px;">Navbar</div></div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:200px;">Hero: Provider logo, name, category, verified badge, location, rating, breadcrumbs</div></div>
+    <div class="wf-row">
+      <div class="wf-block" style="flex:1;height:600px;">About · Services · Reviews · Photo gallery</div>
+      <div class="wf-block" style="width:320px;min-width:320px;height:600px;">Sticky enquiry card: name, email, phone, message + Send button</div>
+    </div>
+  </div>
+
+  <div class="wireframe">
+    <div class="wireframe-title">Provider Dashboard (/dashboard)</div>
+    <div class="wf-row"><div class="wf-block" style="width:100%;height:56px;">Dashboard Navbar (no public nav)</div></div>
+    <div class="wf-row">
+      <div class="wf-block" style="width:220px;min-width:220px;height:640px;">Sidebar: Profile · Enquiries · Reviews · Analytics · Billing · Settings</div>
+      <div class="wf-block" style="flex:1;height:640px;">Main content area (changes per section)</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Tech Stack Reference</h2>
+  <table>
+    <tr><th>Layer</th><th>Technology</th><th>Notes</th></tr>
+    <tr><td>Framework</td><td>Next.js 16.1.6 (App Router)</td><td>React 19 · TypeScript · deployed on Vercel</td></tr>
+    <tr><td>Styling</td><td>Tailwind CSS v4</td><td>JIT · custom @theme tokens · no CSS Modules</td></tr>
+    <tr><td>Animation</td><td>Framer Motion 12</td><td>Page transitions, hover animations, scroll effects</td></tr>
+    <tr><td>Icons</td><td>Lucide React</td><td>Consistent icon set throughout</td></tr>
+    <tr><td>Database</td><td>Supabase (PostgreSQL)</td><td>RLS enabled · auth via Supabase Auth</td></tr>
+    <tr><td>Payments</td><td>Stripe</td><td>4 subscription tiers · webhook-driven</td></tr>
+    <tr><td>Email</td><td>Resend</td><td>Transactional emails · React Email templates</td></tr>
+    <tr><td>Fonts</td><td>Outfit + IBM Plex Mono</td><td>Google Fonts · next/font optimized</td></tr>
+    <tr><td>OG Image</td><td>next/og (edge runtime)</td><td>Auto-generated · 1200×630</td></tr>
+  </table>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Key Pages Inventory</h2>
+  <table>
+    <tr><th>Route</th><th>Description</th><th>Auth</th></tr>
+    <tr><td><code>/</code></td><td>Homepage — hero, search, featured providers, how it works</td><td>Public</td></tr>
+    <tr><td><code>/providers</code></td><td>Provider directory — search, filter, paginate</td><td>Public</td></tr>
+    <tr><td><code>/providers/[slug]</code></td><td>Provider profile — about, services, reviews, enquiry form</td><td>Public</td></tr>
+    <tr><td><code>/login</code></td><td>Auth page — participant + provider login/signup</td><td>Public</td></tr>
+    <tr><td><code>/pricing</code></td><td>Subscription plans for providers</td><td>Public</td></tr>
+    <tr><td><code>/for-participants</code></td><td>Landing page for NDIS participants</td><td>Public</td></tr>
+    <tr><td><code>/for-providers</code></td><td>Landing page for NDIS providers</td><td>Public</td></tr>
+    <tr><td><code>/dashboard</code></td><td>Provider dashboard — enquiries, profile, analytics, billing</td><td>Auth required</td></tr>
+    <tr><td><code>/dashboard/profile</code></td><td>Edit provider profile</td><td>Auth required</td></tr>
+    <tr><td><code>/dashboard/reviews</code></td><td>Manage reviews</td><td>Auth required</td></tr>
+    <tr><td><code>/dashboard/analytics</code></td><td>View profile views, enquiry stats</td><td>Auth required</td></tr>
+    <tr><td><code>/admin</code></td><td>Admin panel — verify providers, manage users</td><td>Admin only</td></tr>
+    <tr><td><code>/blog</code></td><td>NDIS news and guides</td><td>Public</td></tr>
+    <tr><td><code>/compare</code></td><td>Side-by-side provider comparison</td><td>Public</td></tr>
+  </table>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Logo Specification</h2>
+  <div class="component-grid">
+    <div class="component-box">
+      <div class="component-label">Primary Logo</div>
+      <div class="logo-mark" style="gap:12px;">
+        <div style="width:44px;height:44px;background:#2563eb;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px;font-family:-apple-system,sans-serif;">R</div>
+        <div style="font-size:22px;font-weight:900;color:#1e293b;letter-spacing:-0.5px;">Refer<span style="color:#f97316;">Aus</span></div>
+      </div>
+    </div>
+    <div class="component-box">
+      <div class="component-label">Dark Background Logo</div>
+      <div style="background:#0f172a;border-radius:8px;padding:16px 20px;display:inline-flex;align-items:center;gap:12px;">
+        <div style="width:44px;height:44px;background:#f97316;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px;font-family:-apple-system,sans-serif;">R</div>
+        <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">REFER<span style="color:#f97316;">AUS</span></div>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:8px;font-size:12px;color:#94a3b8;">Logo icon: Square with rounded corners (radius ~20% of size) · "R" in Outfit Black · Blue (#2563eb) on light bg · Orange (#f97316) on dark bg<br/>
+  Wordmark: "Refer" in #1e293b (or white on dark) · "Aus" always in #f97316</p>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Background Treatment</h2>
+  <p>The site uses an animated gradient mesh background (global, fixed position, z-index -1):</p>
+  <div style="background:#f0f9ff;border-radius:12px;padding:32px;position:relative;overflow:hidden;margin-bottom:16px;min-height:100px;">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(37,99,235,0.15) 0%,rgba(139,92,246,0.08) 50%,transparent 100%);border-radius:50%;filter:blur(60px);width:120%;height:100%;top:-20%;left:-20%;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(225deg,rgba(249,115,22,0.12) 0%,rgba(37,99,235,0.06) 50%,transparent 100%);border-radius:50%;filter:blur(60px);width:100%;height:80%;top:30%;right:-20%;"></div>
+    <div style="position:relative;font-size:13px;color:#64748b;">Mesh bg preview: soft blue + purple (top-left) and orange + blue (bottom-right) · Page base: #f0f9ff · Animated in prod</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <h2>Design Priorities for Claude Design</h2>
+  <p>When iterating on ReferAus designs, keep these in mind:</p>
+  <ol style="padding-left:20px;font-size:14px;color:#475569;line-height:2;">
+    <li><strong style="color:#1e293b;">Accessibility first</strong> — WCAG AA minimum contrast ratios. Large touch targets (44px+). Clear focus indicators.</li>
+    <li><strong style="color:#1e293b;">Mobile-first</strong> — Most NDIS participants browse on phones. Cards stack to single column below 640px.</li>
+    <li><strong style="color:#1e293b;">Trust signals</strong> — Verified badges, star ratings, review counts, and ABN verification are all critical for the NDIS audience.</li>
+    <li><strong style="color:#1e293b;">Clear CTAs</strong> — Every page needs one clear primary action in orange. Never compete with multiple CTAs of the same weight.</li>
+    <li><strong style="color:#1e293b;">Speed perception</strong> — Use skeleton loaders (not spinners) for async content. Cards should fill in progressively.</li>
+    <li><strong style="color:#1e293b;">Expansion mindset</strong> — Design components to work beyond NDIS (for aged care, mental health, etc.). Avoid hardcoding "NDIS" into UI chrome.</li>
+  </ol>
+
+  <!-- FOOTER -->
+  <div style="margin-top:48px;padding-top:24px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+    <div style="font-size:13px;color:#94a3b8;">ReferAus Design Context · Confidential · June 2026</div>
+    <div style="font-size:13px;"><a href="https://referaus.com" style="color:#f97316;text-decoration:none;">referaus.com</a></div>
+  </div>
+
+</div>
+</body>
+</html>

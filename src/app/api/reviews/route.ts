@@ -12,6 +12,17 @@ function getClient() {
   });
 }
 
+async function getAuthUser(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) return null;
+  const token = authHeader.replace("Bearer ", "");
+  const client = getClient();
+  if (!client) return null;
+  const { data: { user }, error } = await client.auth.getUser(token);
+  if (error || !user) return null;
+  return user;
+}
+
 export interface Review {
   id?: string;
   provider_slug: string;
@@ -48,8 +59,14 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // Require authentication to prevent fake/spam reviews
+  const user = await getAuthUser(request);
+  if (!user) {
+    return NextResponse.json({ error: "You must be logged in to leave a review." }, { status: 401 });
+  }
+
   const ip = request.headers.get("x-forwarded-for") || "unknown";
-  const { allowed } = checkRateLimit("reviews:" + ip, 5, 3600000);
+  const { allowed } = await checkRateLimit("reviews:" + ip, 5, 3600000);
   if (!allowed) return NextResponse.json({ error: "Too many reviews. Please try again later." }, { status: 429 });
 
   const body = await request.json();
@@ -69,6 +86,7 @@ export async function POST(request: NextRequest) {
   const review = {
     provider_slug,
     reviewer_name: name.trim().substring(0, 80),
+    user_id: user.id,
     rating,
     text: text.trim().substring(0, 1000),
     service_type: service_type?.trim().substring(0, 80),

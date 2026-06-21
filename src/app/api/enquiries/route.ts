@@ -23,7 +23,7 @@ async function getAuthUser(request: NextRequest) {
 // GET /api/enquiries?slug=xxx - get enquiries for a provider (authenticated, owner only)
 export async function GET(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
-  const { allowed } = checkRateLimit("enquiries-get:" + ip, 10, 60000);
+  const { allowed } = await checkRateLimit("enquiries-get:" + ip, 10, 60000);
   if (!allowed) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
 // POST /api/enquiries - submit an enquiry (public)
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
-  const { allowed } = checkRateLimit("enquiries-post:" + ip, 10, 60000);
+  const { allowed } = await checkRateLimit("enquiries-post:" + ip, 10, 60000);
   if (!allowed) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }

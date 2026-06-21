@@ -1,0 +1,115 @@
+Subject: ReferAus — Australia's Referral Marketplace | Dev Partnership Opportunity
+
+Hi [Name],
+
+I wanted to share an opportunity I'm working on and get your thoughts on it.
+
+I'm the founder of ReferAus (referaus.com) — a platform I've been building that connects Australians who need services with trusted, verified providers. Think of it like a cross between HiPages and a referral network, but built for industries where trust and credentials actually matter.
+
+─────────────────────────────────────────
+WHAT IS IT?
+─────────────────────────────────────────
+
+ReferAus is a marketplace for professional referrals. It lets people search for, compare, read reviews on, and directly contact service providers in their area — no middlemen, no cold calls, no guesswork.
+
+The platform launched in the NDIS (National Disability Insurance Scheme) space, which is the perfect proving ground:
+
+  • 600,000+ Australians rely on NDIS funding
+  • $42 billion annual market
+  • Participants genuinely struggle to find and compare providers
+  • No dominant marketplace exists in this space
+
+The web app is already live and production-ready at referaus.com.
+
+─────────────────────────────────────────
+WHAT'S ALREADY BUILT
+─────────────────────────────────────────
+
+  ✓ Provider directory with search and filters
+  ✓ Reviews and ratings system
+  ✓ Direct enquiry messaging
+  ✓ Participant and provider account types
+  ✓ Live Stripe billing (4 subscription tiers)
+  ✓ Admin panel for verifying providers
+  ✓ Blog / SEO content
+  ✓ PWA (installable on mobile)
+
+Tech stack: Next.js 16, TypeScript, Supabase (PostgreSQL), Stripe,
+Tailwind CSS, Framer Motion, deployed on Vercel.
+
+─────────────────────────────────────────
+HOW IT MAKES MONEY
+─────────────────────────────────────────
+
+Free for participants. Providers pay a monthly subscription:
+
+  Free      — $0/mo      Basic listing, appear in search
+  Starter   — ~$29/mo    Enhanced profile, priority listing
+  Pro       — ~$79/mo    Analytics, featured placement
+  Premium   — ~$149/mo   Top placement, verified badge, API access
+
+Recurring monthly revenue that scales with the provider base.
+
+─────────────────────────────────────────
+THE BIG PICTURE — BEYOND NDIS
+─────────────────────────────────────────
+
+NDIS is the beachhead. The same problem exists across every service
+industry in Australia — "how do I find a trusted professional in my area,
+read real reviews, and contact them directly?"
+
+The roadmap:
+
+  Phase 1 (Now)       NDIS — Newcastle & Hunter Region
+                      Build brand, prove model, onboard first 100 providers
+
+  Phase 2 (6–12mo)    National NDIS expansion
+                      All states & territories, 600k+ participants
+
+  Phase 3 (12–24mo)   Adjacent health & care sectors
+                      Aged care, mental health, allied health, GP clinics
+
+  Phase 4 (2yr+)      Every service sector in Australia
+                      Legal, financial, education, trades, professional services
+
+The name "ReferAus" wasn't chosen by accident — it's not "ReferNDIS".
+It's built to be Australia's referral platform, full stop.
+
+The closest international comparisons are Zocdoc and Care.com. There is
+no dominant player in this space in Australia. The window is open now.
+
+─────────────────────────────────────────
+WHAT I'M LOOKING FOR
+─────────────────────────────────────────
+
+The web platform is live. The next stage is native mobile apps and
+scaling for national growth. Specifically:
+
+  • iOS and Android apps (participant + provider versions)
+  • Real-time in-app messaging and push notifications
+  • Map-based provider search and location filtering
+  • Provider dashboard (analytics, enquiry management)
+  • Enhanced auth (biometric, Google/Apple sign-in, ABN verification)
+  • API optimisation for national-scale load
+
+I'm looking for a development partner who wants to build something that
+genuinely helps people — not just another SaaS tool.
+
+─────────────────────────────────────────
+NEXT STEPS
+─────────────────────────────────────────
+
+Happy to jump on a call and walk you through the live platform, the
+codebase, and where I see this going. Let me know if you're interested.
+
+  Website:  https://referaus.com
+  Email:    hello@referaus.com
+
+Cheers,
+Ben Howard
+Founder, ReferAus
+
+
+─────────────────────────────────────────
+Confidential — June 2026
+─────────────────────────────────────────
