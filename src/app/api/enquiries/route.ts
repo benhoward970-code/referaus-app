@@ -91,9 +91,18 @@ export async function POST(request: NextRequest) {
   }
 
   const admin = getAdmin();
+
+  // Look up provider_id from slug so RLS policies work correctly
+  const { data: providerRow } = await admin
+    .from("providers")
+    .select("id")
+    .eq("slug", provider_slug)
+    .single();
+
   const { data, error } = await admin.from("enquiries").insert({
     provider_slug,
     provider_name,
+    provider_id: providerRow?.id ?? null,
     name: name.trim().substring(0, 80),
     email: email.trim().substring(0, 120),
     phone: phone?.trim().substring(0, 20),
