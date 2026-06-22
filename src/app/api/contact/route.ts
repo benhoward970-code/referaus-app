@@ -33,6 +33,9 @@ export async function POST(request: Request) {
     if (message && String(message).trim().length > 2000) {
       return NextResponse.json({ error: "Message must be under 2000 characters" }, { status: 400 });
     }
+    if (phone && !/^[\d\s\+\-\(\)]{6,20}$/.test(String(phone).trim())) {
+      return NextResponse.json({ error: "Invalid phone number" }, { status: 400 });
+    }
 
     // Save to contacts table
     const db = supabaseAdmin || supabaseServer;
