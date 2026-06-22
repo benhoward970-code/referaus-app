@@ -1,21 +1,128 @@
-﻿'use client';
-import { useState } from 'react';
+'use client';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 const STEPS = ['Business Details', 'Services', 'Location', 'Review'];
-const SERVICE_OPTIONS = ['Support Coordination', 'Daily Living', 'Community Access', 'Therapy', 'Allied Health', 'SIL', 'SDA', 'Transport', 'Plan Management', 'Respite', 'Employment Support', 'Early Childhood'];
+const SERVICE_OPTIONS = [
+  'Support Coordination', 'Daily Living', 'Community Access', 'Therapy',
+  'Allied Health', 'SIL', 'SDA', 'Transport', 'Plan Management',
+  'Respite', 'Employment Support', 'Early Childhood',
+];
 
 export default function OnboardingPage() {
+  const router = useRouter();
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState({ businessName: '', contactName: '', email: '', phone: '', abn: '', description: '', services: [] as string[], suburb: '', state: 'NSW', postcode: '' });
+  const [providerId, setProviderId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [form, setForm] = useState({
+    businessName: '',
+    contactName: '',
+    email: '',
+    phone: '',
+    abn: '',
+    description: '',
+    services: [] as string[],
+    suburb: '',
+    state: 'NSW',
+    postcode: '',
+  });
 
-  const update = (field: string, value: string | string[]) => setForm(prev => ({ ...prev, [field]: value }));
-  const toggleService = (s: string) => {
-    setForm(prev => ({ ...prev, services: prev.services.includes(s) ? prev.services.filter(x => x !== s) : [...prev.services, s] }));
-  };
+  // Load the authenticated provider's ID on mount
+  useEffect(() => {
+    async function load() {
+      if (!supabase) return;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { router.push('/login'); return; }
 
-  const canNext = step === 0 ? form.businessName && form.email : step === 1 ? form.services.length > 0 : step === 2 ? form.suburb && form.postcode : true;
+      const res = await fetch(`/api/provider?userId=${session.user.id}`, {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      const json = await res.json();
+      if (json.provider) {
+        setProviderId(json.provider.id);
+        // Pre-fill form with existing data
+        setForm(f => ({
+          ...f,
+          businessName: json.provider.name || '',
+          email: json.provider.email || session.user.email || '',
+          phone: json.provider.phone || '',
+          abn: json.provider.abn || '',
+          description: json.provider.description || '',
+          services: json.provider.services || [],
+          suburb: json.provider.suburb || '',
+          state: json.provider.state || 'NSW',
+          postcode: json.provider.postcode || '',
+        }));
+      }
+    }
+    load();
+  }, [router]);
+
+  const update = (field: string, value: string | string[]) =>
+    setForm(prev => ({ ...prev, [field]: value }));
+
+  const toggleService = (s: string) =>
+    setForm(prev => ({
+      ...prev,
+      services: prev.services.includes(s)
+        ? prev.services.filter(x => x !== s)
+        : [...prev.services, s],
+    }));
+
+  const canNext =
+    step === 0 ? !!(form.businessName && form.email) :
+    step === 1 ? form.services.length > 0 :
+    step === 2 ? !!(form.suburb && form.postcode) :
+    true;
+
+  async function handleLaunch() {
+    if (!supabase || !providerId) return;
+    setLoading(true);
+    setError('');
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { router.push('/login'); return; }
+
+      const res = await fetch('/api/provider', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          id: providerId,
+          name: form.businessName,
+          email: form.email,
+          phone: form.phone || null,
+          abn: form.abn || null,
+          description: form.description,
+          short_description: form.description ? form.description.slice(0, 160) : 'NDIS provider in ' + form.suburb,
+          services: form.services,
+          suburb: form.suburb,
+          state: form.state,
+          postcode: form.postcode,
+          location: `${form.suburb}, ${form.state}`,
+          registration_ready: true,
+          updated_at: new Date().toISOString(),
+        }),
+      });
+
+      if (!res.ok) {
+        const json = await res.json();
+        setError(json.error || 'Failed to save. Please try again.');
+        return;
+      }
+
+      router.push('/dashboard');
+    } catch {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 max-w-2xl mx-auto">
@@ -28,7 +135,6 @@ export default function OnboardingPage() {
           <div className="flex items-center">
             {STEPS.map((s, i) => (
               <div key={s} className="flex items-center flex-1 last:flex-none">
-                {/* Circle */}
                 <div className="relative flex flex-col items-center">
                   <motion.div
                     animate={{
@@ -43,15 +149,12 @@ export default function OnboardingPage() {
                       <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
-                    ) : (
-                      i + 1
-                    )}
+                    ) : i + 1}
                   </motion.div>
                   <span className={`absolute top-10 text-[10px] whitespace-nowrap font-medium ${i === step ? 'text-blue-600' : i < step ? 'text-green-600' : 'text-gray-400'}`}>
                     {s}
                   </span>
                 </div>
-                {/* Connector line */}
                 {i < STEPS.length - 1 && (
                   <div className="flex-1 h-0.5 mx-1 relative overflow-hidden bg-gray-200">
                     <motion.div
@@ -71,14 +174,42 @@ export default function OnboardingPage() {
           <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>
             {step === 0 && (
               <div className="space-y-5">
-                <div><label className="block text-sm font-medium mb-1.5">Business Name *</label><input value={form.businessName} onChange={e => update('businessName', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Hunter Disability Services" /></div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div><label className="block text-sm font-medium mb-1.5">Contact Name</label><input value={form.contactName} onChange={e => update('contactName', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                  <div><label className="block text-sm font-medium mb-1.5">Phone</label><input value={form.phone} onChange={e => update('phone', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Business Name *</label>
+                  <input value={form.businessName} onChange={e => update('businessName', e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g. Hunter Disability Services" />
                 </div>
-                <div><label className="block text-sm font-medium mb-1.5">Email *</label><input type="email" value={form.email} onChange={e => update('email', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-                <div><label className="block text-sm font-medium mb-1.5">ABN (optional)</label><input value={form.abn} onChange={e => update('abn', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="XX XXX XXX XXX" /></div>
-                <div><label className="block text-sm font-medium mb-1.5">About your business</label><textarea value={form.description} onChange={e => update('description', e.target.value)} rows={4} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Tell participants what makes your services special..." /></div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Contact Name</label>
+                    <input value={form.contactName} onChange={e => update('contactName', e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Phone</label>
+                    <input value={form.phone} onChange={e => update('phone', e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Email *</label>
+                  <input type="email" value={form.email} onChange={e => update('email', e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">ABN (optional)</label>
+                  <input value={form.abn} onChange={e => update('abn', e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="XX XXX XXX XXX" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">About your business</label>
+                  <textarea value={form.description} onChange={e => update('description', e.target.value)}
+                    rows={4}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    placeholder="Tell participants what makes your services special..." />
+                </div>
               </div>
             )}
 
@@ -87,7 +218,9 @@ export default function OnboardingPage() {
                 <p className="text-sm text-gray-500 mb-4">Select the NDIS services you provide (at least one):</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {SERVICE_OPTIONS.map(s => (
-                    <button key={s} onClick={() => toggleService(s)} className={'px-4 py-3 rounded-lg text-sm font-medium border transition-all ' + (form.services.includes(s) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-300')}>
+                    <button key={s} onClick={() => toggleService(s)}
+                      className={'px-4 py-3 rounded-lg text-sm font-medium border transition-all ' +
+                        (form.services.includes(s) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-200 hover:border-blue-300')}>
                       {s}
                     </button>
                   ))}
@@ -98,36 +231,81 @@ export default function OnboardingPage() {
 
             {step === 2 && (
               <div className="space-y-5">
-                <div><label className="block text-sm font-medium mb-1.5">Suburb *</label><input value={form.suburb} onChange={e => update('suburb', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Newcastle" /></div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Suburb *</label>
+                  <input value={form.suburb} onChange={e => update('suburb', e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g. Newcastle" />
+                </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div><label className="block text-sm font-medium mb-1.5">State</label><select value={form.state} onChange={e => update('state', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"><option>NSW</option><option>VIC</option><option>QLD</option><option>WA</option><option>SA</option><option>TAS</option><option>ACT</option><option>NT</option></select></div>
-                  <div><label className="block text-sm font-medium mb-1.5">Postcode *</label><input value={form.postcode} onChange={e => update('postcode', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="2300" /></div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">State</label>
+                    <select value={form.state} onChange={e => update('state', e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                      {['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'].map(st => <option key={st}>{st}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Postcode *</label>
+                    <input value={form.postcode} onChange={e => update('postcode', e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="2300" />
+                  </div>
                 </div>
               </div>
             )}
 
             {step === 3 && (
-              <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-                <h3 className="font-bold text-lg">Review your listing</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div><span className="text-gray-500">Business:</span> <span className="font-medium">{form.businessName}</span></div>
-                  <div><span className="text-gray-500">Email:</span> <span className="font-medium">{form.email}</span></div>
-                  <div><span className="text-gray-500">Location:</span> <span className="font-medium">{form.suburb}, {form.state} {form.postcode}</span></div>
-                  <div><span className="text-gray-500">Services:</span> <span className="font-medium">{form.services.length} selected</span></div>
+              <div className="space-y-4">
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="font-bold text-lg mb-4">Review your listing</h3>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div><span className="text-gray-500">Business:</span> <span className="font-medium">{form.businessName}</span></div>
+                    <div><span className="text-gray-500">Email:</span> <span className="font-medium">{form.email}</span></div>
+                    <div><span className="text-gray-500">Location:</span> <span className="font-medium">{form.suburb}, {form.state} {form.postcode}</span></div>
+                    <div><span className="text-gray-500">Services:</span> <span className="font-medium">{form.services.length} selected</span></div>
+                    {form.phone && <div><span className="text-gray-500">Phone:</span> <span className="font-medium">{form.phone}</span></div>}
+                    {form.abn && <div><span className="text-gray-500">ABN:</span> <span className="font-medium">{form.abn}</span></div>}
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {form.services.map(s => (
+                      <span key={s} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">{s}</span>
+                    ))}
+                  </div>
+                  {form.description && <p className="text-sm text-gray-600 mt-4">{form.description}</p>}
                 </div>
-                <div className="flex flex-wrap gap-2 mt-2">{form.services.map(s => <span key={s} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">{s}</span>)}</div>
-                {form.description && <p className="text-sm text-gray-600 mt-2">{form.description}</p>}
+                {error && (
+                  <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">{error}</div>
+                )}
               </div>
             )}
           </motion.div>
         </AnimatePresence>
 
         <div className="flex justify-between mt-10">
-          <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} className="px-6 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all">Back</button>
+          <button
+            onClick={() => setStep(Math.max(0, step - 1))}
+            disabled={step === 0}
+            className="px-6 py-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            Back
+          </button>
           {step < 3 ? (
-            <button onClick={() => setStep(step + 1)} disabled={!canNext} className="px-8 py-3 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all">Continue</button>
+            <button
+              onClick={() => setStep(step + 1)}
+              disabled={!canNext}
+              className="px-8 py-3 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            >
+              Continue
+            </button>
           ) : (
-            <Link href="/dashboard" className="px-8 py-3 rounded-lg text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-all">Launch My Listing</Link>
+            <button
+              onClick={handleLaunch}
+              disabled={loading}
+              className="px-8 py-3 rounded-lg text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 transition-all"
+            >
+              {loading ? 'Saving…' : 'Launch My Listing'}
+            </button>
           )}
         </div>
       </motion.div>

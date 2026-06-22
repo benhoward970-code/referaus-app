@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { sendEmail } from "@/lib/email";
 
 function getAdmin() {
   return createClient(
@@ -69,7 +70,7 @@ export async function PATCH(request: NextRequest) {
   // Verify the authenticated user owns this provider
   const { data: existing, error: lookupError } = await admin
     .from("providers")
-    .select("user_id")
+    .select("user_id, registration_ready")
     .eq("id", id)
     .single();
 
@@ -90,6 +91,61 @@ export async function PATCH(request: NextRequest) {
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  // Send welcome email when provider goes live for the first time
+  const justWentLive = updates.registration_ready === true && !existing.registration_ready;
+  if (justWentLive && data?.email && data?.name) {
+    // Notify admin
+    try {
+      await sendEmail({
+        to: "hello@referaus.com",
+        subject: `New provider live: ${data.name}`,
+        html: `
+          <p><strong>${data.name}</strong> just completed onboarding and went live on ReferAus.</p>
+          <ul>
+            <li>Email: ${data.email}</li>
+            <li>Location: ${data.suburb || "—"}, ${data.state || ""}</li>
+            <li>Services: ${(data.services || []).join(", ") || "—"}</li>
+            <li>Plan: ${data.plan || "free"}</li>
+          </ul>
+          <p><a href="https://referaus.com/admin">View in admin →</a></p>
+        `,
+      });
+    } catch (e) { console.error("[provider] Admin notification failed:", e); }
+
+    try {
+      await sendEmail({
+        to: data.email,
+        subject: "Your ReferAus listing is live! 🎉",
+        html: `
+          <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
+            <div style="background:#1d4ed8;padding:24px 32px;">
+              <span style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">REFER<span style="color:#f97316;">AUS</span></span>
+            </div>
+            <div style="padding:32px;">
+              <h2 style="margin:0 0 8px;color:#111827;">You're live on ReferAus!</h2>
+              <p style="color:#374151;margin:0 0 24px;">Hi ${data.name}, your listing is now visible to participants and support coordinators across Newcastle and the Hunter Region.</p>
+              <div style="background:#f0fdf4;border-left:4px solid #16a34a;border-radius:4px;padding:16px 20px;margin-bottom:24px;">
+                <p style="margin:0;color:#15803d;font-weight:600;">What happens next?</p>
+                <ul style="margin:8px 0 0;padding-left:20px;color:#166534;font-size:14px;line-height:1.8;">
+                  <li>Participants searching for your services will find your profile</li>
+                  <li>You'll get an email the moment someone sends you an enquiry</li>
+                  <li>Log in any time to update your profile, photos, or services</li>
+                </ul>
+              </div>
+              <a href="https://referaus.com/dashboard" style="display:inline-block;background:#f97316;color:#fff;font-weight:700;padding:14px 28px;border-radius:8px;text-decoration:none;font-size:15px;margin-bottom:24px;">View Your Dashboard →</a>
+              <p style="color:#6b7280;font-size:13px;margin:0;">Questions? Reply to this email or visit <a href="https://referaus.com/contact" style="color:#2563eb;">referaus.com/contact</a></p>
+            </div>
+            <div style="padding:16px 32px;background:#f9fafb;border-top:1px solid #f3f4f6;text-align:center;">
+              <p style="margin:0;color:#9ca3af;font-size:12px;">ReferAus · Newcastle, NSW · <a href="https://referaus.com" style="color:#9ca3af;">referaus.com</a></p>
+            </div>
+          </div>
+        `,
+      });
+    } catch (emailErr) {
+      console.error("[provider] Welcome email failed:", emailErr);
+    }
   }
 
   return NextResponse.json({ provider: data });

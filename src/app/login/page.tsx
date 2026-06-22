@@ -103,7 +103,12 @@ function LoginForm() {
     const user = data?.user;
     if (user) {
       const provider = await getProviderByUserId(user.id);
-      router.push(provider ? "/dashboard" : "/");
+      if (provider) {
+        // Redirect to onboarding if profile not yet completed (no suburb = fresh signup)
+        router.push(provider.suburb ? "/dashboard" : "/onboarding");
+      } else {
+        router.push("/");
+      }
     } else {
       router.push("/");
     }

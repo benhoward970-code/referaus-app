@@ -34,9 +34,15 @@ interface ProviderRow {
   plan: string;
   category: string;
   location: string | null;
+  suburb: string | null;
+  state: string | null;
   created_at: string;
   phone: string | null;
   abn: string | null;
+  verified: boolean;
+  registration_ready: boolean;
+  services: string[] | null;
+  slug: string | null;
 }
 
 interface EnquiryRow {
@@ -331,8 +337,18 @@ function ProvidersSection({ data, loading }: { data: ProviderRow[]; loading: boo
           >
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <div>
-                <h3 className="font-bold text-gray-900">{p.name}</h3>
-                <p className="text-sm text-gray-500">{p.email}</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="font-bold text-gray-900">{p.name}</h3>
+                  {p.registration_ready ? (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-600">Live</span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-50 text-yellow-600">Pending setup</span>
+                  )}
+                  {p.verified && (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600">✓ Verified</span>
+                  )}
+                </div>
+                <p className="text-sm text-gray-500 mt-0.5">{p.email}</p>
               </div>
               <span
                 className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
@@ -349,10 +365,11 @@ function ProvidersSection({ data, loading }: { data: ProviderRow[]; loading: boo
               </span>
             </div>
             <div className="mt-3 flex flex-wrap gap-4 text-xs text-gray-400">
-              {p.category && <span>📂 {p.category}</span>}
-              {p.location && <span>📍 {p.location}</span>}
+              {p.suburb && <span>📍 {p.suburb}{p.state ? `, ${p.state}` : ""}</span>}
               {p.phone && <span>📞 {p.phone}</span>}
               {p.abn && <span>ABN: {p.abn}</span>}
+              {p.services && p.services.length > 0 && <span>🏷 {p.services.slice(0, 3).join(", ")}{p.services.length > 3 ? ` +${p.services.length - 3}` : ""}</span>}
+              {p.slug && <a href={`https://referaus.com/providers/${p.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">View listing ↗</a>}
               <span>Joined: {formatDate(p.created_at)}</span>
             </div>
           </div>

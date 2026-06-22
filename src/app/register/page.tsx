@@ -32,17 +32,7 @@ export default function RegisterPage() {
         return;
       }
 
-      // Create provider profile via API (service role, bypasses RLS)
-      const userId = (result as any).data?.user?.id;
-      if (role === "provider" && userId) {
-        const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-        fetch("/api/register-provider", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId, name, slug, email }),
-        }).catch(() => {});
-      }
-
+      // Provider profile is created automatically via database trigger (handle_new_user)
       setDone(true);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -63,7 +53,7 @@ export default function RegisterPage() {
           <h2 className="text-2xl font-black mb-2">You&apos;re in!</h2>
           <p className="text-gray-500 text-sm mb-6">
             {isConfigured()
-              ? "Check your email to verify your account, then sign in."
+              ? `Check your email to verify your account${role === "provider" ? ", then we'll walk you through setting up your listing." : "."}`
               : "Added to the waitlist — we will be in touch soon!"}
           </p>
           <Link href="/login" className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl text-sm hover:bg-blue-500 transition-all">
