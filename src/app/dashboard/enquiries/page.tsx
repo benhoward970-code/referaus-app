@@ -4,12 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   MessageSquare, Phone, Mail, Calendar, Check, Loader2, AlertCircle, Eye, Download, Clipboard,
+  Archive, Inbox,
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import {
   getProviderByUserId,
   getProviderEnquiries,
   markEnquiryRead,
+  supabase,
 } from '@/lib/supabase';
 
 const REPLY_TEMPLATES = [
@@ -105,6 +107,8 @@ export default function EnquiriesPage() {
   const [enquiries, setEnquiries] = useState<EnquiryRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [markingRead, setMarkingRead] = useState<string | null>(null);
+  const [archiving, setArchiving] = useState<string | null>(null);
+  const [tab, setTab] = useState<'open' | 'archived'>('open');
 
   const fetchData = useCallback(async () => {
     if (!user) { setLoading(false); return; }
@@ -133,7 +137,29 @@ export default function EnquiriesPage() {
     setMarkingRead(null);
   };
 
-  const unreadCount = enquiries.filter((e) => !e.read).length;
+  const handleArchive = async (id: string, archive: boolean) => {
+    setArchiving(id);
+    try {
+      const { data: { session } } = await supabase!.auth.getSession();
+      await fetch('/api/enquiries', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify({ id, archived: archive }),
+      });
+      setEnquiries((prev) =>
+        prev.map((e) => (e.id === id ? { ...e, archived: archive, read: archive ? true : e.read } : e)),
+      );
+    } catch {}
+    setArchiving(null);
+  };
+
+  const openEnquiries = enquiries.filter((e) => !e.archived);
+  const archivedEnquiries = enquiries.filter((e) => e.archived);
+  const visibleEnquiries = tab === 'open' ? openEnquiries : archivedEnquiries;
+  const unreadCount = openEnquiries.filter((e) => !e.read).length;
 
   if (authLoading || loading) {
     return (
@@ -169,7 +195,7 @@ export default function EnquiriesPage() {
             Enquiries
           </h1>
           <p className="text-gray-500 text-sm mt-1">
-            {enquiries.length} total enquirie{enquiries.length !== 1 ? 's' : ''}
+            {openEnquiries.length} open · {archivedEnquiries.length} archived
             {unreadCount > 0 && (
               <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-orange-600 text-xs font-semibold border border-orange-200">
                 {unreadCount} unread
@@ -180,7 +206,7 @@ export default function EnquiriesPage() {
         <div className="flex items-center gap-3">
           {enquiries.length > 0 && (
             <button
-              onClick={() => exportEnquiriesToCSV(enquiries)}
+              onClick={() => exportEnquiriesToCSV(visibleEnquiries)}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors"
             >
               <Download className="w-4 h-4" />
@@ -193,20 +219,56 @@ export default function EnquiriesPage() {
         </div>
       </motion.div>
 
+      {/* Tabs */}
+      <motion.div {...fadeUp(0.02)} className="flex gap-1 p-1 bg-gray-100 rounded-xl w-fit">
+        <button
+          onClick={() => setTab('open')}
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+            tab === 'open' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <Inbox className="w-3.5 h-3.5" />
+          Open
+          {openEnquiries.length > 0 && (
+            <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${tab === 'open' ? 'bg-orange-100 text-orange-600' : 'bg-gray-200 text-gray-500'}`}>
+              {openEnquiries.length}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={() => setTab('archived')}
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+            tab === 'archived' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <Archive className="w-3.5 h-3.5" />
+          Archived
+          {archivedEnquiries.length > 0 && (
+            <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${tab === 'archived' ? 'bg-gray-200 text-gray-600' : 'bg-gray-200 text-gray-500'}`}>
+              {archivedEnquiries.length}
+            </span>
+          )}
+        </button>
+      </motion.div>
+
       {/* Reply Templates */}
-      {enquiries.length > 0 && (
+      {tab === 'open' && openEnquiries.length > 0 && (
         <motion.div {...fadeUp(0.05)} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
           <ReplyTemplates />
         </motion.div>
       )}
 
       {/* Empty state */}
-      {enquiries.length === 0 ? (
+      {visibleEnquiries.length === 0 ? (
         <motion.div {...fadeUp(0.1)} className="bg-white rounded-2xl border border-gray-200 p-12 text-center shadow-sm">
           <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-lg font-bold text-gray-900 mb-2">No Enquiries Yet</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-2">
+            {tab === 'archived' ? 'No Archived Enquiries' : 'No Enquiries Yet'}
+          </h2>
           <p className="text-sm text-gray-500 max-w-sm mx-auto">
-            When participants send you enquiries through your listing, they will appear here.
+            {tab === 'archived'
+              ? 'Enquiries you archive will appear here.'
+              : 'When participants send you enquiries through your listing, they will appear here.'}
           </p>
         </motion.div>
       ) : (
@@ -227,7 +289,7 @@ export default function EnquiriesPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {enquiries.map((e, i) => (
+                  {visibleEnquiries.map((e, i) => (
                     <motion.tr
                       key={e.id}
                       initial={{ opacity: 0 }}
@@ -285,7 +347,7 @@ export default function EnquiriesPage() {
                         )}
                       </td>
                       <td className="px-3 py-4">
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                           {!e.read && (
                             <button
                               onClick={() => handleMarkRead(e.id)}
@@ -300,9 +362,28 @@ export default function EnquiriesPage() {
                               Mark read
                             </button>
                           )}
-                          <a href={`mailto:${e.email}`} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                          <a href={`mailto:${e.email}`} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" aria-label="Email">
                             <Mail className="w-3.5 h-3.5" />
                           </a>
+                          <button
+                            onClick={() => handleArchive(e.id, !e.archived)}
+                            disabled={archiving === e.id}
+                            className={`p-1.5 rounded-lg text-xs transition-colors disabled:opacity-60 ${
+                              e.archived
+                                ? 'bg-green-50 text-green-600 hover:bg-green-100'
+                                : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
+                            }`}
+                            aria-label={e.archived ? 'Unarchive' : 'Archive'}
+                            title={e.archived ? 'Unarchive' : 'Archive'}
+                          >
+                            {archiving === e.id ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : e.archived ? (
+                              <Inbox className="w-3.5 h-3.5" />
+                            ) : (
+                              <Archive className="w-3.5 h-3.5" />
+                            )}
+                          </button>
                         </div>
                       </td>
                     </motion.tr>
@@ -314,7 +395,7 @@ export default function EnquiriesPage() {
 
           {/* Mobile cards */}
           <div className="sm:hidden space-y-3">
-            {enquiries.map((e, i) => (
+            {visibleEnquiries.map((e, i) => (
               <motion.div
                 key={e.id}
                 initial={{ opacity: 0, y: 12 }}
@@ -361,7 +442,7 @@ export default function EnquiriesPage() {
 
                 <p className="text-sm text-gray-600 leading-relaxed">{e.message}</p>
 
-                <div className="flex items-center justify-between pt-1">
+                <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
                   <div className="flex gap-2">
                     {e.phone && (
                       <a href={`tel:${e.phone}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100 transition-colors">
@@ -371,6 +452,21 @@ export default function EnquiriesPage() {
                     <a href={`mailto:${e.email}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100 transition-colors">
                       <Mail className="w-3 h-3" /> Email
                     </a>
+                    <button
+                      onClick={() => handleArchive(e.id, !e.archived)}
+                      disabled={archiving === e.id}
+                      className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-60 ${
+                        e.archived ? 'bg-green-50 text-green-600 hover:bg-green-100' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                      }`}
+                    >
+                      {archiving === e.id ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : e.archived ? (
+                        <><Inbox className="w-3 h-3" /> Unarchive</>
+                      ) : (
+                        <><Archive className="w-3 h-3" /> Archive</>
+                      )}
+                    </button>
                   </div>
                   {!e.read && (
                     <button

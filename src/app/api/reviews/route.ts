@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { createClient } from "@supabase/supabase-js";
+import { sendEmail } from "@/lib/email";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
@@ -162,6 +163,42 @@ export async function POST(request: NextRequest) {
   if (allReviews && allReviews.length > 0) {
     const avg = allReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / allReviews.length;
     await client.from("providers").update({ rating: Math.round(avg * 10) / 10 }).eq("id", provider.id);
+  }
+
+  // Email provider to notify them of the new review
+  try {
+    const { data: providerRecord } = await client
+      .from("providers")
+      .select("name, email")
+      .eq("id", provider.id)
+      .maybeSingle();
+
+    if (providerRecord?.email) {
+      const stars = "★".repeat(Math.round(rating)) + "☆".repeat(5 - Math.round(rating));
+      await sendEmail({
+        to: providerRecord.email,
+        subject: `New ${rating}-star review on your ReferAus listing`,
+        html: `
+          <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#111;">
+            <h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">You have a new review!</h2>
+            <p style="color:#666;margin-top:0;">Someone left a review on your <strong>${providerRecord.name || "ReferAus"}</strong> listing.</p>
+            <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:20px;margin:20px 0;">
+              <p style="font-size:22px;margin:0 0 4px;">${stars}</p>
+              <p style="font-weight:700;margin:0 0 4px;">${reviewer_name.trim()}</p>
+              ${service_type ? `<p style="font-size:12px;color:#888;margin:0 0 12px;">Service: ${service_type}</p>` : ""}
+              <p style="font-style:italic;color:#333;margin:0;">&ldquo;${text.trim()}&rdquo;</p>
+            </div>
+            <p style="color:#666;font-size:14px;">You can reply to this review from your dashboard.</p>
+            <a href="https://referaus.com/dashboard/reviews" style="display:inline-block;margin-top:8px;padding:12px 24px;background:#f97316;color:#fff;font-weight:700;border-radius:8px;text-decoration:none;">Reply to Review →</a>
+            <hr style="border:none;border-top:1px solid #eee;margin:24px 0;" />
+            <p style="color:#aaa;font-size:12px;">ReferAus — Hunter Region NDIS Marketplace</p>
+          </div>
+        `,
+      });
+    }
+  } catch (emailErr) {
+    console.error("[reviews] Provider notification email failed:", emailErr);
+    // Non-blocking
   }
 
   return NextResponse.json({ success: true, review: data });

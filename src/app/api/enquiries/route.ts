@@ -200,14 +200,16 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ success: true, enquiry: data });
 }
 
-// PATCH /api/enquiries - mark enquiry as read (authenticated, owner only)
+// PATCH /api/enquiries - mark enquiry as read or archived (authenticated, owner only)
+// Body: { id, read?: true } or { id, archived?: boolean }
 export async function PATCH(request: NextRequest) {
   const user = await getAuthUser(request);
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id } = await request.json();
+  const body = await request.json();
+  const { id, archived } = body;
   if (!id) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
@@ -235,9 +237,18 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  // Support both read-marking and archiving
+  const updatePayload: Record<string, unknown> = {};
+  if (typeof archived === "boolean") {
+    updatePayload.archived = archived;
+    if (archived) updatePayload.read = true; // archiving also marks as read
+  } else {
+    updatePayload.read = true;
+  }
+
   const { error } = await admin
     .from("enquiries")
-    .update({ read: true })
+    .update(updatePayload)
     .eq("id", id);
 
   if (error) {

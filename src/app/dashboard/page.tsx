@@ -301,6 +301,71 @@ const PLAN_CONFIG: Record<string, { label: string; icon: any; color: string; bg:
   premium: { label: "Premium", icon: Crown, color: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200" },
 };
 
+function TrendChart({ enquiries, reviews }: { enquiries: EnquiryRecord[]; reviews: ReviewRecord[] }) {
+  // Build last-4-weeks data from enquiry and review timestamps
+  const weeks = Array.from({ length: 4 }, (_, i) => {
+    const now = new Date();
+    const end = new Date(now);
+    end.setDate(now.getDate() - i * 7);
+    const start = new Date(end);
+    start.setDate(end.getDate() - 7);
+    const label = i === 0 ? "This week" : i === 1 ? "Last week" : `${i + 1}w ago`;
+    const enqCount = enquiries.filter((e) => {
+      const d = e.created_at ? new Date(e.created_at) : null;
+      return d && d >= start && d < end;
+    }).length;
+    const revCount = reviews.filter((r) => {
+      const d = r.created_at ? new Date(r.created_at) : null;
+      return d && d >= start && d < end;
+    }).length;
+    return { label, enqCount, revCount };
+  }).reverse();
+
+  const maxVal = Math.max(...weeks.map((w) => Math.max(w.enqCount, w.revCount)), 1);
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, delay: 0.37, ease: [0.22, 1, 0.36, 1] }}
+      className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-base font-bold text-gray-900">Activity Trend</h2>
+          <p className="text-xs text-gray-400 mt-0.5">Enquiries &amp; reviews over the last 4 weeks</p>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-gray-500">
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-orange-400 inline-block" />Enquiries</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-blue-400 inline-block" />Reviews</span>
+        </div>
+      </div>
+      <div className="flex items-end gap-3 h-32">
+        {weeks.map((w) => (
+          <div key={w.label} className="flex-1 flex flex-col items-center gap-1.5">
+            <div className="w-full flex items-end gap-1 h-24">
+              <div
+                className="flex-1 bg-orange-400 rounded-t-md transition-all duration-700 min-h-[2px]"
+                style={{ height: `${(w.enqCount / maxVal) * 100}%` }}
+                title={`${w.enqCount} enquiries`}
+              />
+              <div
+                className="flex-1 bg-blue-400 rounded-t-md transition-all duration-700 min-h-[2px]"
+                style={{ height: `${(w.revCount / maxVal) * 100}%` }}
+                title={`${w.revCount} reviews`}
+              />
+            </div>
+            <div className="text-center">
+              <p className="text-[10px] text-gray-400 leading-tight">{w.label}</p>
+              <p className="text-xs font-bold text-gray-700">{w.enqCount + w.revCount}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </motion.section>
+  );
+}
+
 function DashboardContent() {
   const { user, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
@@ -887,6 +952,9 @@ function DashboardContent() {
           })}
         </div>
       </motion.section>
+
+      {/* Trend Chart: Enquiries over last 4 weeks */}
+      <TrendChart enquiries={enquiries} reviews={reviews} />
 
       {!isPaid && (
         <motion.div {...fadeUp(0.5)} className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-blue-700 p-6 sm:p-8 text-white shadow-lg">

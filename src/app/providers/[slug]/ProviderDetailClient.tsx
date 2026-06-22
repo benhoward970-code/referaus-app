@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ShareButtons } from "@/components/ShareButtons";
 import { RecentlyViewed, saveRecentlyViewed } from "@/components/RecentlyViewed";
 import { showToast } from "@/components/Toast";
-import { getProviderBySlug, getProviderReviews, submitEnquiry } from "@/lib/supabase";
+import { getProviderBySlug, getProviderReviews, submitEnquiry, supabase } from "@/lib/supabase";
 import { fetchWithSWR } from "@/lib/swr-cache";
 import { mapDbProvider } from "@/lib/map-provider";
 import { useAuth } from "@/components/AuthProvider";
@@ -1044,43 +1044,47 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Your name</label>
+                        <label htmlFor="review-name" className="block text-sm font-medium text-gray-700 mb-1">Your name</label>
                         <input
+                          id="review-name"
                           type="text"
                           value={reviewForm.reviewer_name}
                           onChange={(e) => setReviewForm((f) => ({ ...f, reviewer_name: e.target.value }))}
                           placeholder="First name or initials"
                           maxLength={60}
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          autoComplete="name"
+                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Service received <span className="text-gray-400 font-normal">(optional)</span></label>
+                        <label htmlFor="review-service" className="block text-sm font-medium text-gray-700 mb-1">Service received <span className="text-gray-400 font-normal">(optional)</span></label>
                         <input
+                          id="review-service"
                           type="text"
                           value={reviewForm.service_type}
                           onChange={(e) => setReviewForm((f) => ({ ...f, service_type: e.target.value }))}
                           placeholder="e.g. Support Coordination"
                           maxLength={80}
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Your review</label>
+                        <label htmlFor="review-text" className="block text-sm font-medium text-gray-700 mb-1">Your review</label>
                         <textarea
+                          id="review-text"
                           value={reviewForm.text}
                           onChange={(e) => setReviewForm((f) => ({ ...f, text: e.target.value }))}
                           placeholder="Share your experience with this provider..."
                           rows={4}
                           maxLength={1000}
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 resize-none"
                         />
-                        <p className="text-xs text-gray-400 mt-1 text-right">{reviewForm.text.length}/1000</p>
+                        <p className="text-xs text-gray-400 mt-1 text-right" aria-live="polite">{reviewForm.text.length}/1000</p>
                       </div>
                       <button
                         type="submit"
                         disabled={reviewSubmitting}
-                        className="px-6 py-2.5 rounded-xl bg-orange-500 text-white text-sm font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50"
+                        className="px-6 py-2.5 rounded-xl bg-orange-500 text-white text-sm font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus:outline-none"
                       >
                         {reviewSubmitting ? "Submitting..." : "Submit Review"}
                       </button>
