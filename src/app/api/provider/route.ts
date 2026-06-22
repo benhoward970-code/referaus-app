@@ -70,7 +70,7 @@ export async function PATCH(request: NextRequest) {
   // Verify the authenticated user owns this provider
   const { data: existing, error: lookupError } = await admin
     .from("providers")
-    .select("user_id, registration_ready")
+    .select("user_id, registration_ready, slug")
     .eq("id", id)
     .single();
 
@@ -80,6 +80,30 @@ export async function PATCH(request: NextRequest) {
 
   if (existing.user_id !== user.id) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  // When going live for the first time and a business name is provided,
+  // regenerate the slug from the business name (not the personal name used at signup)
+  const justWentLive = updates.registration_ready === true && !existing.registration_ready;
+  if (justWentLive && updates.name) {
+    const base = updates.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 54);
+    const candidate = base.length >= 3 ? base : 'provider';
+    // Check for collision (exclude current provider)
+    const { data: collision } = await admin
+      .from("providers")
+      .select("id")
+      .eq("slug", candidate)
+      .neq("id", id)
+      .maybeSingle();
+    if (!collision) {
+      updates.slug = candidate;
+    } else {
+      updates.slug = candidate + '-' + id.replace(/-/g, '').slice(0, 6);
+    }
   }
 
   const { data, error } = await admin
