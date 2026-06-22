@@ -506,6 +506,64 @@ function PasswordSection() {
   );
 }
 
+function DangerZone() {
+  const [confirm, setConfirm] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleDelete = async () => {
+    if (!supabase) return;
+    setDeleting(true);
+    setError('');
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { setError('Not logged in.'); setDeleting(false); return; }
+    const res = await fetch('/api/account/delete', {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    });
+    if (res.ok) {
+      await supabase.auth.signOut();
+      window.location.href = '/?deleted=1';
+    } else {
+      const json = await res.json().catch(() => ({}));
+      setError(json.error || 'Deletion failed. Please contact support@referaus.com.');
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <section className="bg-red-50 border border-red-200 rounded-xl p-6">
+      <h2 className="font-bold text-red-700 mb-2">Danger Zone</h2>
+      <p className="text-sm text-red-600 mb-4">
+        Permanently delete your account and all personal data. This cannot be undone.
+        Note: Billing records are retained for 7 years as required by Australian tax law.
+      </p>
+      <p className="text-sm text-red-700 font-medium mb-2">
+        Type <strong>DELETE</strong> to confirm:
+      </p>
+      <div className="flex gap-3 items-center flex-wrap">
+        <input
+          type="text"
+          value={confirm}
+          onChange={e => setConfirm(e.target.value)}
+          placeholder="DELETE"
+          className="px-4 py-2.5 rounded-lg border border-red-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-red-400 w-40"
+        />
+        <button
+          onClick={handleDelete}
+          disabled={confirm !== 'DELETE' || deleting}
+          className="px-6 py-2.5 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition-all disabled:opacity-40"
+        >
+          {deleting ? 'Deleting…' : 'Delete My Account'}
+        </button>
+      </div>
+      {error && (
+        <p className="mt-3 text-sm text-red-700 bg-red-100 border border-red-200 rounded-lg px-4 py-2">{error}</p>
+      )}
+    </section>
+  );
+}
+
 export default function SettingsPage() {
   return (
     <div className="">
@@ -520,14 +578,7 @@ export default function SettingsPage() {
           <TwoFactorSection />
           <NotificationPreferences />
 
-          <section className="bg-red-50 border border-red-200 rounded-xl p-6">
-            <h2 className="font-bold text-red-700 mb-2">Danger Zone</h2>
-            <p className="text-sm text-red-600 mb-4">
-              To permanently delete your account and all associated data, please email{' '}
-              <a href="mailto:support@referaus.com" className="underline font-medium">support@referaus.com</a>{' '}
-              from your registered address. This action cannot be undone.
-            </p>
-          </section>
+          <DangerZone />
         </div>
       </motion.div>
     </div>

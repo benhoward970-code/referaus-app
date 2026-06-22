@@ -262,10 +262,22 @@ function useProviderCount() {
   return count;
 }
 
+function useSiteStats() {
+  const [stats, setStats] = useState<{ providers: number; enquiries: number; reviews: number } | null>(null);
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(r => r.json())
+      .then(data => { if (data.providers !== undefined) setStats(data); })
+      .catch(() => {});
+  }, []);
+  return stats;
+}
+
 export default function Home() {
   const prefersReduced = useReducedMotion();
   const d = (n: number) => prefersReduced ? 0 : n;
   const providerCount = useProviderCount();
+  const siteStats = useSiteStats();
 
   // Parallax for hero background blobs
   const heroRef = useRef<HTMLElement>(null);
@@ -352,11 +364,15 @@ export default function Home() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.6), delay: d(0.55) }}
           className="flex flex-wrap gap-6 sm:gap-12 mt-12 pt-8 border-t border-gray-100">
-          {[
+          {(siteStats && siteStats.providers > 0 ? [
+            { num: siteStats.providers, suffix: "+", label: "Providers Listed" },
+            { num: siteStats.enquiries, suffix: "+", label: "Enquiries Sent" },
+            { num: siteStats.reviews, suffix: "+", label: "Reviews Published" },
+          ] : [
             { num: 100, suffix: "%", label: "Free for Participants" },
             { num: 24, suffix: "/7", label: "Always Available" },
             { num: 5, suffix: "min", label: "To Get Listed" },
-          ].map((s) => (
+          ]).map((s) => (
             <div key={s.label}>
               <div className="heading-bold text-[2rem] sm:text-[2.5rem] text-blue-600">
                 <AnimatedCounter target={s.num} suffix={s.suffix} />

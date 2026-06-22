@@ -179,6 +179,82 @@ function ReviewCard({ review: r, index: i }: { review: ReviewRecord; index: numb
   );
 }
 
+function GetReviewsCard({ slug }: { slug: string }) {
+  const [copied, setCopied] = useState(false);
+  const [showEmail, setShowEmail] = useState(false);
+  const reviewLink = `https://referaus.com/providers/${slug}#reviews`;
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(reviewLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // fallback
+    }
+  };
+
+  const emailTemplate = `Hi [Name],
+
+I hope you've been happy with the support I've provided through [Business Name].
+
+If you have a moment, I'd really appreciate it if you could share your experience by leaving a review on my ReferAus profile. It only takes a minute and helps other NDIS participants find the right support.
+
+Leave a review here: ${reviewLink}
+
+Thank you so much,
+[Your Name]`;
+
+  return (
+    <motion.div {...fadeUp(0.05)} className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-2xl p-6 shadow-sm">
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-9 h-9 rounded-xl bg-orange-500 flex items-center justify-center shrink-0">
+          <Star className="w-5 h-5 fill-white text-white" />
+        </div>
+        <div>
+          <h2 className="font-bold text-gray-900">Get More Reviews</h2>
+          <p className="text-sm text-gray-500">Share your review link with clients to build trust on your listing.</p>
+        </div>
+      </div>
+      <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex-1 flex items-center gap-2 bg-white border border-orange-200 rounded-xl px-3 py-2 text-sm text-gray-600 font-mono overflow-hidden">
+          <span className="truncate">{reviewLink}</span>
+        </div>
+        <button
+          onClick={copyLink}
+          className="shrink-0 px-5 py-2 bg-orange-500 text-white text-sm font-semibold rounded-xl hover:bg-orange-600 transition-colors flex items-center gap-2"
+        >
+          {copied ? <><Check className="w-4 h-4" /> Copied!</> : "Copy Link"}
+        </button>
+        <button
+          onClick={() => setShowEmail(v => !v)}
+          className="shrink-0 px-5 py-2 bg-white border border-orange-300 text-orange-700 text-sm font-semibold rounded-xl hover:bg-orange-50 transition-colors"
+        >
+          Email Template
+        </button>
+      </div>
+      {showEmail && (
+        <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="mt-4">
+          <p className="text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wide">Copy &amp; paste this email to send to clients:</p>
+          <pre className="bg-white border border-orange-200 rounded-xl p-4 text-xs text-gray-700 whitespace-pre-wrap leading-relaxed font-sans select-all">
+            {emailTemplate}
+          </pre>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(emailTemplate).catch(() => {});
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2500);
+            }}
+            className="mt-2 text-xs text-orange-600 hover:underline"
+          >
+            {copied ? "Copied!" : "Copy email text"}
+          </button>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
+
 export default function ReviewsPage() {
   const { user, loading: authLoading } = useAuth();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -257,6 +333,9 @@ export default function ReviewsPage() {
           Back to Dashboard
         </Link>
       </motion.div>
+
+      {/* Get Reviews section */}
+      <GetReviewsCard slug={provider.slug} />
 
       {/* Empty state */}
       {reviews.length === 0 ? (

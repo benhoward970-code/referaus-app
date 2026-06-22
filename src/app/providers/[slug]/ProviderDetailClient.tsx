@@ -108,7 +108,8 @@ interface ReviewData {
   rating: number;
   text?: string;
   content?: string;
-  providerReply?: string;
+  service?: string;
+  providerReply?: string | null;
   // Item 85: verified review flag (true when reviewer sent an enquiry to this provider)
   isVerifiedReview?: boolean;
 }
@@ -327,7 +328,85 @@ function ReviewItem({
         {helpfulCount > 0 && (
           <span className="text-xs text-gray-400">{helpfulCount} {helpfulCount === 1 ? "person" : "people"} found this helpful</span>
         )}
+        <FlagButton reviewId={reviewId} />
       </div>
+    </div>
+  );
+}
+
+const FLAG_REASONS = ["Fake review", "Conflict of interest", "Inappropriate content", "Spam", "Other"] as const;
+
+function FlagButton({ reviewId }: { reviewId: string }) {
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState<string>("");
+  const [details, setDetails] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!reason) return;
+    setSubmitting(true);
+    try {
+      await fetch("/api/reviews/flag", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ review_id: reviewId, reason, details: details.trim() || undefined }),
+      });
+      setDone(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (done) {
+    return <span className="text-xs text-gray-400 ml-auto">Report submitted</span>;
+  }
+
+  return (
+    <div className="ml-auto relative">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="text-xs text-gray-300 hover:text-gray-500 transition-colors"
+        aria-label="Report this review"
+        title="Report this review"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute right-0 bottom-6 z-20 bg-white rounded-xl border border-gray-200 shadow-lg p-4 w-56">
+          <p className="text-xs font-semibold text-gray-700 mb-2">Report this review</p>
+          <div className="space-y-1 mb-3">
+            {FLAG_REASONS.map(r => (
+              <label key={r} className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+                <input type="radio" name={`flag-${reviewId}`} value={r} checked={reason === r} onChange={() => setReason(r)} className="accent-orange-500" />
+                {r}
+              </label>
+            ))}
+          </div>
+          {reason === "Other" && (
+            <textarea
+              rows={2}
+              value={details}
+              onChange={e => setDetails(e.target.value)}
+              placeholder="Tell us more…"
+              className="w-full text-xs px-2 py-1.5 border border-gray-200 rounded-lg resize-none mb-2 focus:outline-none focus:border-orange-300"
+              maxLength={500}
+            />
+          )}
+          <div className="flex gap-2">
+            <button
+              onClick={handleSubmit}
+              disabled={!reason || submitting}
+              className="flex-1 text-xs bg-orange-500 text-white rounded-lg py-1.5 font-semibold disabled:opacity-50"
+            >
+              {submitting ? "…" : "Submit"}
+            </button>
+            <button onClick={() => setOpen(false)} className="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -390,10 +469,12 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           reviews: dbReviews.length > 0
             ? dbReviews.map((r: Record<string, unknown>) => ({
                 id: r.id as string | undefined,
-                author: (r.author as string) || (r.name as string) || "Anonymous",
+                author: (r.reviewer_name as string) || (r.author as string) || (r.name as string) || "Anonymous",
                 date: formatReviewDate(r.created_at as string),
                 rating: (r.rating as number) ?? 5,
                 text: (r.text as string) || (r.content as string) || "",
+                providerReply: (r.response as string) || null,
+                service: (r.service_type as string) || undefined,
               }))
             : [],
         };
@@ -626,7 +707,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             text: reviewForm.text,
             service: reviewForm.service_type || undefined,
             date: new Date().toISOString(),
-            providerReply: null,
+            providerReply: undefined,
           }, ...prev]);
         }
       }
@@ -693,6 +774,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               src={provider.cover_image_url}
               alt={`${provider.name} cover`}
               fill
+              priority
               className="object-cover"
               placeholder="blur"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAF0lEQVR4nGNkYGD4z8BQDwAAAf8A/ob0qgAAAABJRU5ErkJggg=="
@@ -1136,6 +1218,23 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                   {provider.location}, {provider.state || "NSW"}
                 </div>
+                {(provider as any).ndis_registration_number && (
+                  <div className="flex items-start gap-3 text-gray-600">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="mt-0.5 shrink-0"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+                    <div>
+                      <p className="text-xs text-gray-400">NDIS Reg. No.</p>
+                      <a
+                        href="https://www.ndiscommission.gov.au/participants/working-providers/find-registered-provider"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-green-700 font-medium hover:underline"
+                        title="Verify on NDIS Commission website"
+                      >
+                        {(provider as any).ndis_registration_number} ↗
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
               {provider.verified && (
                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -1154,6 +1253,26 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               )}
             </motion.div>
           </div>
+        </div>
+      </div>
+
+      {/* NDIS Disclaimer — required for legal compliance */}
+      <div className="max-w-5xl mx-auto mt-10 px-1">
+        <div className="flex gap-3 items-start bg-blue-50 border border-blue-100 rounded-xl px-5 py-4">
+          <svg className="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <p className="text-xs text-blue-700 leading-relaxed">
+            <strong>Important:</strong> ReferAus is a directory service only. We do not verify, endorse, recommend, or refer any provider listed on this site. Always verify a provider&apos;s NDIS registration before engaging their services.{" "}
+            <a
+              href="https://www.ndiscommission.gov.au/participants/working-providers/find-registered-provider"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-blue-900 font-medium"
+            >
+              Verify registration on the NDIS Commission website →
+            </a>
+          </p>
         </div>
       </div>
 
@@ -1297,6 +1416,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   alt="QR code"
                   width={200}
                   height={200}
+                  loading="lazy"
                   className="rounded-xl border border-gray-100"
                 />
               </div>

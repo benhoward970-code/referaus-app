@@ -130,6 +130,7 @@ export async function POST(request: NextRequest) {
       await sendEmail({
         to: provider.email,
         subject: `New enquiry from ${name.trim()} — ReferAus`,
+        transactional: true,
         html: `
           <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
             <div style="background:#1d4ed8;padding:24px 32px;">
@@ -170,6 +171,7 @@ export async function POST(request: NextRequest) {
       await sendEmail({
         to: email.trim(),
         subject: `Your enquiry to ${provider_name || "the provider"} was received — ReferAus`,
+        transactional: true,
         html: `
           <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
             <div style="background:#1d4ed8;padding:24px 32px;">

@@ -178,6 +178,7 @@ export async function POST(request: NextRequest) {
       await sendEmail({
         to: providerRecord.email,
         subject: `New ${rating}-star review on your ReferAus listing`,
+        transactional: true,
         html: `
           <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#111;">
             <h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">You have a new review!</h2>

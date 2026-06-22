@@ -42,6 +42,7 @@ export default function EditProfilePage() {
     name: '', bio: '', description: '', category: '',
     services: [] as string[],
     phone: '', email: '', website: '', abn: '',
+    ndis_registration_number: '',
     suburb: '', state: '', postcode: '',
     brand_color: '#3b82f6',
   });
@@ -62,6 +63,7 @@ export default function EditProfilePage() {
         email: p.email || '',
         website: p.website || '',
         abn: p.abn || '',
+        ndis_registration_number: p.ndis_registration_number || '',
         suburb: p.suburb || p.location || '',
         state: p.state || '',
         postcode: p.postcode || '',
@@ -101,6 +103,7 @@ export default function EditProfilePage() {
       email: form.email,
       website: form.website,
       abn: form.abn,
+      ndis_registration_number: form.ndis_registration_number || null,
       suburb: form.suburb,
       location: form.suburb,
       state: form.state,
@@ -247,6 +250,23 @@ export default function EditProfilePage() {
                   className={inputClass}
                   placeholder="XX XXX XXX XXX"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  NDIS Registration Number
+                  <span className="ml-1.5 text-xs text-gray-400 font-normal">(optional but recommended)</span>
+                </label>
+                <input
+                  value={form.ndis_registration_number}
+                  onChange={(e) => update('ndis_registration_number', e.target.value)}
+                  className={inputClass}
+                  placeholder="4-XXXXXXXX"
+                  maxLength={20}
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Your NDIS provider registration number. Participants can{' '}
+                  <a href="https://www.ndiscommission.gov.au/participants/working-providers/find-registered-provider" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">verify it on the NDIS Commission website</a>.
+                </p>
               </div>
             </div>
           </motion.section>

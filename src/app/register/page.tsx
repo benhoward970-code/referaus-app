@@ -11,10 +11,15 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (loading) return;
+    if (!termsAccepted) {
+      setError("You must accept the Terms of Service and Privacy Policy to continue.");
+      return;
+    }
     setError("");
     setLoading(true);
 
@@ -137,9 +142,26 @@ export default function RegisterPage() {
               />
             </div>
 
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={e => setTermsAccepted(e.target.checked)}
+                className="mt-0.5 accent-blue-600 shrink-0"
+                required
+              />
+              <span className="text-xs text-gray-500 leading-relaxed">
+                I agree to the ReferAus{" "}
+                <Link href="/terms" className="text-blue-600 hover:underline font-medium">Terms of Service</Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="text-blue-600 hover:underline font-medium">Privacy Policy</Link>.
+                I understand that my personal information will be handled in accordance with the Australian Privacy Act 1988.
+              </span>
+            </label>
+
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !termsAccepted}
               className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-bold text-sm transition-all"
             >
               {loading ? "Creating account…" : role === "provider" ? "Create Provider Account" : "Sign Up Free"}
