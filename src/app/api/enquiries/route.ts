@@ -161,6 +161,42 @@ export async function POST(request: NextRequest) {
     // Non-blocking — enquiry is still saved
   }
 
+  // Confirmation email to the person who submitted the enquiry
+  if (email && email.trim()) {
+    try {
+      const esc = (s: string) => s
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+      await sendEmail({
+        to: email.trim(),
+        subject: `Your enquiry to ${provider_name || "the provider"} was received — ReferAus`,
+        html: `
+          <div style="font-family:sans-serif;max-width:600px;margin:0 auto;">
+            <div style="background:#1d4ed8;padding:24px 32px;">
+              <span style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px;">REFER<span style="color:#f97316;">AUS</span></span>
+            </div>
+            <div style="padding:32px;">
+              <h2 style="margin:0 0 8px;color:#111827;">Enquiry received</h2>
+              <p style="color:#374151;margin:0 0 24px;">Hi ${esc(name.trim())}, your enquiry to <strong>${esc(provider_name || "the provider")}</strong> has been sent. They'll be in touch with you shortly.</p>
+              <div style="background:#f9fafb;border-radius:8px;padding:16px 20px;margin-bottom:28px;">
+                <p style="margin:0 0 8px;font-size:13px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Your message</p>
+                <p style="margin:0;color:#374151;font-size:15px;line-height:1.6;">${esc(message.trim()).replace(/\n/g, "<br/>")}</p>
+              </div>
+              <p style="color:#6b7280;font-size:14px;">In the meantime, you can browse more providers on ReferAus.</p>
+              <a href="https://referaus.com/providers" style="display:inline-block;margin-top:16px;background:#f97316;color:#fff;font-weight:700;padding:14px 28px;border-radius:8px;text-decoration:none;font-size:15px;">Browse Providers →</a>
+            </div>
+            <div style="padding:16px 32px;background:#f9fafb;border-top:1px solid #f3f4f6;text-align:center;">
+              <p style="margin:0;color:#9ca3af;font-size:12px;">ReferAus · Newcastle, NSW · <a href="https://referaus.com" style="color:#9ca3af;">referaus.com</a></p>
+            </div>
+          </div>
+        `,
+      });
+    } catch (confirmErr) {
+      console.error("[enquiries] Confirmation email to sender failed:", confirmErr);
+      // Non-blocking — enquiry is still saved
+    }
+  }
+
   return NextResponse.json({ success: true, enquiry: data });
 }
 

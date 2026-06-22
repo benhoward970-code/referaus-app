@@ -262,6 +262,49 @@ function TwoFactorSection() {
   );
 }
 
+function BillingSection() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const openPortal = async () => {
+    if (!supabase) return;
+    setLoading(true);
+    setError('');
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { setError('Not logged in.'); setLoading(false); return; }
+    const res = await fetch('/api/billing-portal', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    });
+    const json = await res.json();
+    if (!res.ok) {
+      setError(json.error || 'Failed to open billing portal.');
+      setLoading(false);
+      return;
+    }
+    window.location.href = json.url;
+  };
+
+  return (
+    <section className="bg-white border border-gray-200 rounded-xl p-6">
+      <h2 className="font-bold mb-1">Billing & Subscription</h2>
+      <p className="text-sm text-gray-500 mb-4">
+        Manage your subscription, update your payment method, or view past invoices via the Stripe billing portal.
+      </p>
+      {error && (
+        <div className="p-3 rounded-lg text-sm bg-red-50 border border-red-200 text-red-600 mb-4">{error}</div>
+      )}
+      <button
+        onClick={openPortal}
+        disabled={loading}
+        className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-all disabled:opacity-50"
+      >
+        {loading ? 'Opening...' : 'Manage Billing →'}
+      </button>
+    </section>
+  );
+}
+
 function NotificationPreferences() {
   const [prefs, setPrefs] = useState({ newEnquiries: true, newReviews: true, marketingUpdates: true });
   const [savedPrefs, setSavedPrefs] = useState(false);
@@ -473,6 +516,7 @@ export default function SettingsPage() {
         <div className="space-y-8">
           <EmailSection />
           <PasswordSection />
+          <BillingSection />
           <TwoFactorSection />
           <NotificationPreferences />
 

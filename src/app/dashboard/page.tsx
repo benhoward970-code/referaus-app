@@ -350,7 +350,7 @@ function DashboardContent() {
     { label: "Unread Enquiries", value: String(unreadCount), icon: Eye, color: "blue" },
     { label: "Total Reviews", value: String(reviews.length), icon: Star, color: "yellow" },
     { label: "Average Rating", value: avgRating, icon: TrendingUp, color: "purple" },
-    { label: "Profile Views", value: null, icon: Eye, color: "blue", comingSoon: true },
+    { label: "Profile Views", value: String(provider?.view_count ?? 0), icon: Eye, color: "blue" },
   ];
 
   const profileChecks = provider
@@ -519,7 +519,6 @@ function DashboardContent() {
         {stats.map((s, i) => {
           const colors = statColors[s.color];
           const Icon = s.icon;
-          const isComingSoon = (s as any).comingSoon;
           return (
             <motion.div key={s.label} {...fadeUp(0.05 + i * 0.06)} className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
               <div className="flex items-start justify-between mb-3">
@@ -528,14 +527,7 @@ function DashboardContent() {
                   <Icon className={`w-3.5 h-3.5 ${colors.icon}`} />
                 </span>
               </div>
-              {isComingSoon ? (
-                <div>
-                  <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-1 rounded-lg">Coming soon</span>
-                  <p className="text-[10px] text-gray-400 mt-1.5">Tracking being set up</p>
-                </div>
-              ) : (
-                <span className="text-3xl font-black text-gray-900">{s.value}</span>
-              )}
+              <span className="text-3xl font-black text-gray-900">{s.value}</span>
             </motion.div>
           );
         })}

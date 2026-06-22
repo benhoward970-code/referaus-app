@@ -353,6 +353,11 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
   const [provider, setProvider] = useState<Provider | null>(hardcodedProvider || null);
   const [reviews, setReviews] = useState<ReviewData[]>(mockReviews);
   const [isLoading, setIsLoading] = useState(true);
+  const [reviewForm, setReviewForm] = useState({ rating: 0, text: "", reviewer_name: "", service_type: "" });
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
@@ -446,10 +451,34 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
     return () => { cancelled = true; };
   }, [provider]);
 
+  // Check if user already reviewed this provider
+  useEffect(() => {
+    if (!user || !slug) return;
+    supabase?.auth.getSession().then(({ data: { session } }) => {
+      if (!session) return;
+      fetch(`/api/reviews?slug=${encodeURIComponent(slug)}`, {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.reviews?.some((r: { user_id?: string }) => r.user_id === user.id)) {
+            setAlreadyReviewed(true);
+          }
+        })
+        .catch(() => {});
+    });
+  }, [user, slug]);
+
   // Save to recently viewed when provider loads
   useEffect(() => {
     if (provider) {
       saveRecentlyViewed({ slug: provider.slug, name: provider.name, category: provider.category });
+      // Track profile view (rate limited server-side to 1 per IP per 30 min)
+      fetch('/api/provider-view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: provider.slug }),
+      }).catch(() => {});
     }
   }, [provider]);
 
@@ -559,6 +588,52 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
       setFormError("Something went wrong. Please try again or use the enquiry form.");
       showToast("Failed to send message. Please try again.", "error");
     }
+  };
+
+  const handleReviewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    if (reviewForm.rating === 0) { setReviewError("Please select a star rating."); return; }
+    if (reviewForm.text.trim().length < 10) { setReviewError("Review must be at least 10 characters."); return; }
+    if (!reviewForm.reviewer_name.trim()) { setReviewError("Please enter your name."); return; }
+    setReviewSubmitting(true);
+    setReviewError("");
+    try {
+      const { data: { session } } = await supabase!.auth.getSession();
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token}` },
+        body: JSON.stringify({
+          provider_slug: slug,
+          rating: reviewForm.rating,
+          text: reviewForm.text.trim(),
+          reviewer_name: reviewForm.reviewer_name.trim(),
+          service_type: reviewForm.service_type.trim() || undefined,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setReviewError(json.error || "Failed to submit review.");
+      } else {
+        setReviewSubmitted(true);
+        setAlreadyReviewed(true);
+        // Append new review to local state
+        if (json.review) {
+          setReviews((prev) => [{
+            id: json.review.id,
+            author: reviewForm.reviewer_name,
+            rating: reviewForm.rating,
+            text: reviewForm.text,
+            service: reviewForm.service_type || undefined,
+            date: new Date().toISOString(),
+            providerReply: null,
+          }, ...prev]);
+        }
+      }
+    } catch {
+      setReviewError("Network error. Please try again.");
+    }
+    setReviewSubmitting(false);
   };
 
   const handleReportSubmit = async (e: React.FormEvent) => {
@@ -916,7 +991,6 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               <div className="space-y-6">
                 {reviews.map((r, i) => {
                   const reviewId = r.id || `${slug}-review-${i}`;
-                  // isOwner: user is logged in and provider email matches or user_id matches
                   const isOwner = !!(user && provider && (
                     user.email === provider.email ||
                     (provider as any).user_id === user.id
@@ -927,6 +1001,92 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                     </div>
                   );
                 })}
+                {reviews.length === 0 && (
+                  <p className="text-sm text-gray-400 text-center py-4">No reviews yet. Be the first!</p>
+                )}
+              </div>
+
+              {/* Write a review */}
+              <div className="mt-8 pt-6 border-t border-gray-100">
+                {!user ? (
+                  <div className="bg-gray-50 rounded-xl p-5 text-center">
+                    <p className="text-sm text-gray-600 mb-3">Sign in to leave a review</p>
+                    <a href="/login" className="inline-block px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors">Sign in</a>
+                  </div>
+                ) : alreadyReviewed || reviewSubmitted ? (
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-center">
+                    <p className="text-sm font-semibold text-green-700">✓ {reviewSubmitted ? "Review submitted — thank you!" : "You've already reviewed this provider."}</p>
+                  </div>
+                ) : (provider as any)?.user_id === user.id ? null : (
+                  <div>
+                    <h3 className="text-base font-bold text-gray-900 mb-4">Write a review</h3>
+                    {reviewError && (
+                      <div className="mb-3 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">{reviewError}</div>
+                    )}
+                    <form onSubmit={handleReviewSubmit} className="space-y-4">
+                      {/* Star picker */}
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 mb-2">Rating</p>
+                        <div className="flex gap-1">
+                          {[1,2,3,4,5].map((star) => (
+                            <button
+                              key={star}
+                              type="button"
+                              onClick={() => setReviewForm((f) => ({ ...f, rating: star }))}
+                              className="p-1 focus:outline-none"
+                              aria-label={`${star} star`}
+                            >
+                              <svg width="28" height="28" viewBox="0 0 24 24" fill={star <= reviewForm.rating ? "#F97316" : "#e5e7eb"} className="transition-colors">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                              </svg>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Your name</label>
+                        <input
+                          type="text"
+                          value={reviewForm.reviewer_name}
+                          onChange={(e) => setReviewForm((f) => ({ ...f, reviewer_name: e.target.value }))}
+                          placeholder="First name or initials"
+                          maxLength={60}
+                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Service received <span className="text-gray-400 font-normal">(optional)</span></label>
+                        <input
+                          type="text"
+                          value={reviewForm.service_type}
+                          onChange={(e) => setReviewForm((f) => ({ ...f, service_type: e.target.value }))}
+                          placeholder="e.g. Support Coordination"
+                          maxLength={80}
+                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Your review</label>
+                        <textarea
+                          value={reviewForm.text}
+                          onChange={(e) => setReviewForm((f) => ({ ...f, text: e.target.value }))}
+                          placeholder="Share your experience with this provider..."
+                          rows={4}
+                          maxLength={1000}
+                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                        />
+                        <p className="text-xs text-gray-400 mt-1 text-right">{reviewForm.text.length}/1000</p>
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={reviewSubmitting}
+                        className="px-6 py-2.5 rounded-xl bg-orange-500 text-white text-sm font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50"
+                      >
+                        {reviewSubmitting ? "Submitting..." : "Submit Review"}
+                      </button>
+                    </form>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>
