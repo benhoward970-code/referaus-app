@@ -91,8 +91,10 @@ function LoginForm() {
   const redirect = searchParams.get("redirect");
 
   const navigateAfterLogin = async () => {
-    if (redirect) {
-      router.push(redirect);
+    // Restrict redirect to same-origin paths only (block open-redirect attacks)
+    const safeRedirect = redirect && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : null;
+    if (safeRedirect) {
+      router.push(safeRedirect);
       return;
     }
     if (!supabase) {
@@ -106,6 +108,9 @@ function LoginForm() {
       if (provider) {
         // Redirect to onboarding if profile not yet completed (no suburb = fresh signup)
         router.push(provider.suburb ? "/dashboard" : "/onboarding");
+      } else if (user.user_metadata?.role === "provider") {
+        // Provider registered but trigger may have failed — send to onboarding which will recover
+        router.push("/onboarding");
       } else {
         router.push("/");
       }

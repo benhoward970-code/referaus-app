@@ -109,8 +109,15 @@ export default function AdminPage() {
       return;
     }
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session || !ADMIN_EMAILS.includes(session.user.email?.toLowerCase() ?? "")) {
+      if (!session) {
+        // Not logged in — send to login
         router.push("/login?redirect=/admin");
+        return;
+      }
+      if (!ADMIN_EMAILS.includes(session.user.email?.toLowerCase() ?? "")) {
+        // Logged in but not an admin — show 403 inline (don't redirect to login)
+        setError("Access denied. This area is restricted to ReferAus administrators.");
+        setLoading(false);
         return;
       }
       setToken(session.access_token);
@@ -152,7 +159,15 @@ export default function AdminPage() {
   if (!authed) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-20">
-        <div className="text-gray-400 text-sm">Checking access...</div>
+        {error ? (
+          <div className="text-center">
+            <div className="text-5xl mb-4">🔒</div>
+            <h1 className="text-xl font-bold text-gray-900 mb-2">Access Denied</h1>
+            <p className="text-sm text-gray-500 max-w-xs">{error}</p>
+          </div>
+        ) : (
+          <div className="text-gray-400 text-sm">Checking access...</div>
+        )}
       </div>
     );
   }

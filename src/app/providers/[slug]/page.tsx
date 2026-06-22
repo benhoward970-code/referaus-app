@@ -1,6 +1,24 @@
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { providers } from "@/lib/providers";
 import ProviderDetailClient from "./ProviderDetailClient";
+
+async function resolveSlug(slug: string): Promise<string | null> {
+  // Check if this slug was a previous_slug (i.e. provider renamed their business)
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/providers?select=slug&previous_slug=eq.${encodeURIComponent(slug)}&limit=1`,
+    {
+      headers: {
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+      },
+      next: { revalidate: 3600 },
+    }
+  );
+  if (!res.ok) return null;
+  const rows = await res.json();
+  return rows[0]?.slug ?? null;
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -34,6 +52,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default function ProviderPage({ params }: { params: Promise<{ slug: string }> }) {
-  return <ProviderDetailClient params={params} />;
+export default async function ProviderPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  // If this slug was renamed, redirect permanently to the new URL
+  const newSlug = await resolveSlug(slug);
+  if (newSlug) {
+    redirect(`/providers/${newSlug}`);
+  }
+
+  return <ProviderDetailClient params={Promise.resolve({ slug })} />;
 }

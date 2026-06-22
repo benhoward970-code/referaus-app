@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     .from("providers")
     .select("user_id")
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
   if (!provider || provider.user_id !== user.id) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -76,12 +76,12 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const { provider_slug, provider_name, name, email, phone, service, message } = body;
 
-  if (!provider_slug || !name || !email || !message) {
+  if (!provider_slug || !name || !message) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
-  // Server-side email validation
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+  // Email is optional (callback requests provide phone only) but validate format if supplied
+  if (email && email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
     return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
   }
 
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     .from("providers")
     .select("id")
     .eq("slug", provider_slug)
-    .single();
+    .maybeSingle();
 
   const { data, error } = await admin.from("enquiries").insert({
     provider_slug,
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
       .from("providers")
       .select("email, name")
       .eq("slug", provider_slug)
-      .single();
+      .maybeSingle();
 
     if (provider?.email) {
       const esc = (s: string) => s
@@ -183,7 +183,7 @@ export async function PATCH(request: NextRequest) {
     .from("enquiries")
     .select("provider_slug")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (!enquiry) {
     return NextResponse.json({ error: "Enquiry not found" }, { status: 404 });
@@ -193,7 +193,7 @@ export async function PATCH(request: NextRequest) {
     .from("providers")
     .select("user_id")
     .eq("slug", enquiry.provider_slug)
-    .single();
+    .maybeSingle();
 
   if (!provider || provider.user_id !== user.id) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });

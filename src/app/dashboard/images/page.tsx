@@ -156,11 +156,24 @@ export default function ImagesPage() {
   ) => {
     if (!provider?.id) return;
 
+    // Validate file type and size before uploading
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      showToast('error', 'Only JPG, PNG, GIF, and WebP images are allowed.');
+      return;
+    }
+    if (file.size > MAX_SIZE_BYTES) {
+      showToast('error', 'Image must be under 5 MB.');
+      return;
+    }
+
     const setUploading = type === 'logo' ? setUploadingLogo : type === 'cover' ? setUploadingCover : setUploadingGallery;
     setUploading(true);
 
     const timestamp = Date.now();
-    const path = `${provider.id}/${type}-${timestamp}-${file.name}`;
+    const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+    const path = `${provider.id}/${type}-${timestamp}-${sanitizedName}`;
     const { url, error } = await uploadProviderImage(file, path);
 
     if (error || !url) {

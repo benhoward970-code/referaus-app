@@ -17,16 +17,21 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     // Supabase handles the token exchange automatically via the URL hash
+    let sub: { unsubscribe: () => void } | null = null;
     if (supabase) {
-      supabase.auth.onAuthStateChange((event) => {
+      const { data } = supabase.auth.onAuthStateChange((event) => {
         if (event === "PASSWORD_RECOVERY") {
           setReady(true);
         }
       });
+      sub = data.subscription;
     }
     // Give it a moment to process the URL
     const timer = setTimeout(() => setReady(true), 2000);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      sub?.unsubscribe();
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

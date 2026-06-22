@@ -30,6 +30,11 @@ export default function OnboardingPage() {
     postcode: '',
   });
 
+  // Ensure page starts at top (Framer Motion can leave y-offset on initial render)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Load the authenticated provider's ID on mount
   useEffect(() => {
     async function load() {
@@ -37,10 +42,26 @@ export default function OnboardingPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { router.push('/login'); return; }
 
-      const res = await fetch(`/api/provider?userId=${session.user.id}`, {
+      let res = await fetch(`/api/provider?userId=${session.user.id}`, {
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
-      const json = await res.json();
+      let json = await res.json();
+
+      // If no provider row exists (trigger may have failed), create one now as recovery
+      if (!json.provider) {
+        const fallbackName = session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'Provider';
+        const fallbackSlug = fallbackName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 54) || 'provider';
+        await fetch('/api/register-provider', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+          body: JSON.stringify({ userId: session.user.id, name: fallbackName, slug: fallbackSlug, email: session.user.email }),
+        });
+        res = await fetch(`/api/provider?userId=${session.user.id}`, {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        });
+        json = await res.json();
+      }
+
       if (json.provider) {
         setProviderId(json.provider.id);
         // Pre-fill form with existing data
@@ -125,7 +146,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 max-w-2xl mx-auto">
+    <div className="min-h-screen pt-8 pb-20 px-4 sm:px-6 max-w-2xl mx-auto">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-black tracking-tight mb-2">Set up your listing</h1>
         <p className="text-gray-500 text-sm mb-8">Complete these steps to go live on ReferAus</p>

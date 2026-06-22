@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     .from("providers")
     .select("*")
     .eq("user_id", userId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     return NextResponse.json({ provider: null });
@@ -99,10 +99,11 @@ export async function PATCH(request: NextRequest) {
       .eq("slug", candidate)
       .neq("id", id)
       .maybeSingle();
-    if (!collision) {
-      updates.slug = candidate;
-    } else {
-      updates.slug = candidate + '-' + id.replace(/-/g, '').slice(0, 6);
+    const newSlug = !collision ? candidate : candidate + '-' + id.replace(/-/g, '').slice(0, 6);
+    // Preserve old slug so /providers/<old-slug> can redirect to the new URL
+    if (newSlug !== existing.slug) {
+      updates.slug = newSlug;
+      updates.previous_slug = existing.slug;
     }
   }
 
@@ -118,7 +119,6 @@ export async function PATCH(request: NextRequest) {
   }
 
   // Send welcome email when provider goes live for the first time
-  const justWentLive = updates.registration_ready === true && !existing.registration_ready;
   if (justWentLive && data?.email && data?.name) {
     // Notify admin
     try {

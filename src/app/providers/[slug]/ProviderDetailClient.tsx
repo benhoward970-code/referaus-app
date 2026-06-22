@@ -565,7 +565,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
     e.preventDefault();
     setReportLoading(true);
     try {
-      await fetch("/api/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -573,9 +573,10 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           provider_slug: provider!.slug,
           provider_name: provider!.name,
           reason: reportReason,
-          message: reportText,
+          message: `Provider: ${provider!.name} (${provider!.slug})\nReason: ${reportReason}\n\n${reportText}`,
         }),
       });
+      if (!res.ok) throw new Error("Report failed");
       setReportSubmitted(true);
       showToast("Report submitted. Thank you.", "success");
       setTimeout(() => { setReportOpen(false); setReportSubmitted(false); setReportText(""); setReportReason("Incorrect info"); }, 2000);
