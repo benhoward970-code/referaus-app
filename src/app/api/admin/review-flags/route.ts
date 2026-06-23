@@ -1,21 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import { verifyAdmin } from "@/app/api/admin/verify-admin";
-
-function getAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  );
-}
 
 // GET /api/admin/review-flags — list pending flags
 export async function GET(request: NextRequest) {
-  const adminCheck = await verifyAdmin(request);
-  if (!adminCheck.ok) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const adminCheck = await verifyAdmin(request.headers.get("authorization"));
+  if (!adminCheck.ok) return adminCheck.response;
 
-  const admin = getAdmin();
+  const admin = adminCheck.admin;
   const { data, error } = await admin
     .from("review_flags")
     .select("*, review:review_id(id, reviewer_name, text, rating, provider_slug)")
@@ -28,14 +19,14 @@ export async function GET(request: NextRequest) {
 
 // PATCH /api/admin/review-flags — update flag status or delete the review
 export async function PATCH(request: NextRequest) {
-  const adminCheck = await verifyAdmin(request);
-  if (!adminCheck.ok) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const adminCheck = await verifyAdmin(request.headers.get("authorization"));
+  if (!adminCheck.ok) return adminCheck.response;
 
   const { flag_id, status, delete_review, review_id } = await request.json();
 
   if (!flag_id) return NextResponse.json({ error: "flag_id required" }, { status: 400 });
 
-  const admin = getAdmin();
+  const admin = adminCheck.admin;
 
   if (delete_review && review_id) {
     // Delete the review (admin actioned)
