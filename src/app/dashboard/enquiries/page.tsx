@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   MessageSquare, Phone, Mail, Calendar, Check, Loader2, AlertCircle, Eye, Download, Clipboard,
-  Archive, Inbox,
+  Archive, Inbox, Send, X, Reply,
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import {
@@ -100,6 +100,69 @@ function Skeleton({ className = '' }: { className?: string }) {
   return <div className={`animate-pulse bg-gray-200 rounded-lg ${className}`} />;
 }
 
+function InlineReply({ enquiryId, enquiryEmail, token, onSent }: {
+  enquiryId: string;
+  enquiryEmail: string;
+  token: string;
+  onSent: (id: string) => void;
+}) {
+  const [message, setMessage] = useState('');
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSend = async () => {
+    if (!message.trim()) return;
+    setSending(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/enquiries/reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ enquiry_id: enquiryId, message: message.trim() }),
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        setError(d.error || 'Failed to send reply');
+      } else {
+        onSent(enquiryId);
+      }
+    } catch {
+      setError('Network error — please try again');
+    }
+    setSending(false);
+  };
+
+  return (
+    <div className="mt-3 border-t border-blue-100 pt-3">
+      <p className="text-xs font-semibold text-blue-600 mb-2 flex items-center gap-1.5">
+        <Reply className="w-3 h-3" /> Replying to {enquiryEmail}
+      </p>
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type your reply..."
+        rows={3}
+        maxLength={2000}
+        className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+      />
+      <div className="flex items-center justify-between mt-2">
+        <span className="text-xs text-gray-400">{message.length}/2000</span>
+        <div className="flex gap-2">
+          {error && <span className="text-xs text-red-500">{error}</span>}
+          <button
+            onClick={handleSend}
+            disabled={sending || !message.trim()}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition-colors disabled:opacity-50"
+          >
+            {sending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
+            {sending ? 'Sending...' : 'Send Reply'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function EnquiriesPage() {
   const { user, loading: authLoading } = useAuth();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,6 +172,8 @@ export default function EnquiriesPage() {
   const [markingRead, setMarkingRead] = useState<string | null>(null);
   const [archiving, setArchiving] = useState<string | null>(null);
   const [tab, setTab] = useState<'open' | 'archived'>('open');
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     if (!user) { setLoading(false); return; }
@@ -119,8 +184,18 @@ export default function EnquiriesPage() {
       const enq = await getProviderEnquiries(p.slug);
       setEnquiries(enq);
     }
+    // Cache auth token for reply API calls
+    const { data: { session } } = await supabase!.auth.getSession();
+    if (session?.access_token) setAuthToken(session.access_token);
     setLoading(false);
   }, [user]);
+
+  const handleReplySent = (enquiryId: string) => {
+    setEnquiries((prev) =>
+      prev.map((e) => e.id === enquiryId ? { ...e, replied_at: new Date().toISOString(), read: true } : e)
+    );
+    setReplyingTo(null);
+  };
 
   useEffect(() => {
     if (!authLoading) fetchData();
@@ -290,13 +365,7 @@ export default function EnquiriesPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {visibleEnquiries.map((e, i) => (
-                    <motion.tr
-                      key={e.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.05 * i }}
-                      className={`hover:bg-gray-50/50 transition-colors group ${!e.read ? 'bg-orange-50/30' : ''}`}
-                    >
+                    <tr key={e.id}>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
@@ -326,6 +395,14 @@ export default function EnquiriesPage() {
                       </td>
                       <td className="px-3 py-4 max-w-[220px]">
                         <p className="text-xs text-gray-500 line-clamp-2">{e.message}</p>
+                        {replyingTo === e.id && authToken && e.email && (
+                          <InlineReply
+                            enquiryId={e.id}
+                            enquiryEmail={e.email}
+                            token={authToken}
+                            onSent={handleReplySent}
+                          />
+                        )}
                       </td>
                       <td className="px-3 py-4 whitespace-nowrap">
                         <span className="text-xs text-gray-400 flex items-center gap-1">
@@ -362,9 +439,22 @@ export default function EnquiriesPage() {
                               Mark read
                             </button>
                           )}
-                          <a href={`mailto:${e.email}`} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" aria-label="Email">
-                            <Mail className="w-3.5 h-3.5" />
-                          </a>
+                          {e.email && (
+                            <button
+                              onClick={() => setReplyingTo(replyingTo === e.id ? null : e.id)}
+                              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                replyingTo === e.id
+                                  ? 'bg-blue-600 text-white hover:bg-blue-500'
+                                  : e.replied_at
+                                  ? 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-200'
+                                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                              }`}
+                              title={e.replied_at ? `Replied ${new Date(e.replied_at).toLocaleDateString()}` : 'Reply'}
+                            >
+                              {replyingTo === e.id ? <X className="w-3 h-3" /> : <Reply className="w-3 h-3" />}
+                              {e.replied_at ? 'Replied' : 'Reply'}
+                            </button>
+                          )}
                           <button
                             onClick={() => handleArchive(e.id, !e.archived)}
                             disabled={archiving === e.id}
@@ -386,7 +476,7 @@ export default function EnquiriesPage() {
                           </button>
                         </div>
                       </td>
-                    </motion.tr>
+                    </tr>
                   ))}
                 </tbody>
               </table>
@@ -442,16 +532,37 @@ export default function EnquiriesPage() {
 
                 <p className="text-sm text-gray-600 leading-relaxed">{e.message}</p>
 
+                {replyingTo === e.id && authToken && e.email && (
+                  <InlineReply
+                    enquiryId={e.id}
+                    enquiryEmail={e.email}
+                    token={authToken}
+                    onSent={handleReplySent}
+                  />
+                )}
+
                 <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     {e.phone && (
                       <a href={`tel:${e.phone}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100 transition-colors">
                         <Phone className="w-3 h-3" /> Call
                       </a>
                     )}
-                    <a href={`mailto:${e.email}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100 transition-colors">
-                      <Mail className="w-3 h-3" /> Email
-                    </a>
+                    {e.email && (
+                      <button
+                        onClick={() => setReplyingTo(replyingTo === e.id ? null : e.id)}
+                        className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                          replyingTo === e.id
+                            ? 'bg-blue-600 text-white'
+                            : e.replied_at
+                            ? 'bg-green-50 text-green-600 border border-green-200'
+                            : 'bg-blue-50 text-blue-600'
+                        }`}
+                      >
+                        {replyingTo === e.id ? <X className="w-3 h-3" /> : <Reply className="w-3 h-3" />}
+                        {e.replied_at ? 'Replied' : 'Reply'}
+                      </button>
+                    )}
                     <button
                       onClick={() => handleArchive(e.id, !e.archived)}
                       disabled={archiving === e.id}

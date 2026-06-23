@@ -762,12 +762,12 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           className="mb-6"
         />
 
-        {/* Cover Banner (Item 16) */}
+        {/* Cover Banner */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: prefersReduced ? 0 : 0.5 }}
-          className="relative w-full h-[150px] sm:h-[200px] rounded-2xl overflow-hidden mb-8"
+          className="relative w-full h-[220px] sm:h-[280px] rounded-2xl overflow-hidden mb-8"
         >
           {provider.cover_image_url ? (
             <Image
@@ -782,18 +782,23 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           ) : (
             <div
               className="w-full h-full"
-              style={{ background: "linear-gradient(135deg, #2563eb 0%, #1e40af 40%, #f97316 100%)" }}
-            />
+              style={{ background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 45%, #7c3aed 75%, #f97316 100%)" }}
+            >
+              {/* subtle light orbs */}
+              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.12) 0%, transparent 60%), radial-gradient(ellipse at 80% 30%, rgba(249,115,22,0.18) 0%, transparent 50%)" }} />
+            </div>
           )}
+          {/* Dark gradient at bottom so logo always visible */}
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.35) 100%)" }} />
           {/* Provider avatar overlaid on banner */}
           <div className="absolute bottom-0 left-8 translate-y-1/2">
-            <div className="w-20 h-20 rounded-2xl border-4 border-white shadow-lg overflow-hidden bg-white">
+            <div className="w-24 h-24 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-white">
               {provider.logo_url ? (
                 <Image
                   src={provider.logo_url}
                   alt={`${provider.name} logo`}
-                  width={80}
-                  height={80}
+                  width={96}
+                  height={96}
                   className="object-cover w-full h-full"
                   placeholder="blur"
                   blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAF0lEQVR4nGNkYGD4z8BQDwAAAf8A/ob0qgAAAABJRU5ErkJggg=="
@@ -801,12 +806,17 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               ) : (
                 <div
                   className="w-full h-full flex items-center justify-center"
-                  style={{ background: `linear-gradient(135deg, ${accentLight}, rgba(249,115,22,0.15))` }}
+                  style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
                 >
-                  <span className="text-3xl font-black" style={{ color: accent }}>{provider.name[0]}</span>
+                  <span className="text-4xl font-black text-white">{provider.name[0]}</span>
                 </div>
               )}
             </div>
+          </div>
+          {/* Provider name in banner (bottom right) */}
+          <div className="absolute bottom-4 right-6 text-right">
+            <p className="text-white/90 text-xs font-medium tracking-wide uppercase">NDIS Provider</p>
+            <p className="text-white font-black text-lg leading-tight max-w-[200px] truncate">{provider.name}</p>
           </div>
         </motion.div>
 

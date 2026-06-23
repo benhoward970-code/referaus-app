@@ -249,7 +249,68 @@ const testimonials = [
   },
 ];
 
-// featured providers removed - using early access CTA instead
+// Featured providers section — pulled from DB where featured = true
+function useFeaturedProviders() {
+  const [providers, setProviders] = useState<Array<{ id: string; name: string; slug: string; category: string; location: string; rating: number; review_count: number; verified: boolean; logo_url: string | null }>>([]);
+  useEffect(() => {
+    fetch('/api/providers/featured')
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setProviders(data); })
+      .catch(() => {});
+  }, []);
+  return providers;
+}
+
+function FeaturedProviders() {
+  const featured = useFeaturedProviders();
+  if (featured.length === 0) return null;
+  return (
+    <section className="py-10 px-6 max-w-[1200px] mx-auto">
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <span className="text-xs font-semibold tracking-widest uppercase text-yellow-600 mb-1 block">Featured</span>
+          <h2 className="text-2xl font-black tracking-tight text-gray-900">Spotlight Providers</h2>
+        </div>
+        <Link href="/providers" className="text-sm text-blue-600 hover:underline font-medium">View all →</Link>
+      </div>
+      <div className="flex gap-4 overflow-x-auto pb-2 -mx-2 px-2 snap-x snap-mandatory">
+        {featured.map((p) => (
+          <Link
+            key={p.id}
+            href={`/providers/${p.slug}`}
+            className="flex-shrink-0 w-64 snap-start bg-white rounded-2xl border border-yellow-200 hover:border-yellow-400 hover:shadow-lg transition-all p-5 group"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center text-white text-sm font-bold overflow-hidden flex-shrink-0">
+                {p.logo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.logo_url} alt={p.name} className="w-full h-full object-cover" />
+                ) : (
+                  p.name[0]
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="font-bold text-gray-900 text-sm truncate">{p.name}</p>
+                <p className="text-xs text-gray-500 truncate">{p.category}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 mb-2">
+              <span className="text-orange-400 text-sm">{"★".repeat(Math.round(p.rating))}{"☆".repeat(5 - Math.round(p.rating))}</span>
+              <span className="text-xs text-gray-500">({p.review_count})</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-400">📍 {p.location}</span>
+              {p.verified && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">✓ Verified</span>}
+            </div>
+            <div className="mt-3 text-xs font-semibold text-yellow-700 bg-yellow-50 rounded-lg px-2.5 py-1 flex items-center gap-1">
+              ⭐ Featured Provider
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 function useProviderCount() {
   const [count, setCount] = useState<number | null>(null);
@@ -481,6 +542,8 @@ export default function Home() {
       </section>
 
       <div className="divider max-w-[800px] mx-auto" />
+
+      <FeaturedProviders />
 
       {/* How It Works */}
       <ScrollSection className="py-10 px-6 max-w-[1200px] mx-auto">

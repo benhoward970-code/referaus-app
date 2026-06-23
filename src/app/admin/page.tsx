@@ -21,6 +21,7 @@ interface ProviderRow {
   email: string;
   plan: string;
   verified: boolean;
+  featured: boolean;
   created_at: string;
   phone: string | null;
   suburb: string | null;
@@ -242,7 +243,7 @@ export default function AdminPage() {
             {error && (
               <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600">{error}</div>
             )}
-            {section === "overview" && <OverviewSection data={overview} loading={loading} />}
+            {section === "overview" && <OverviewSection data={overview} loading={loading} token={token} />}
             {section === "providers" && (
               <ProvidersSection
                 data={providers}
@@ -299,17 +300,47 @@ function StatCard({ label, value, accent }: { label: string; value: number | str
   );
 }
 
-function OverviewSection({ data, loading }: { data: OverviewData | null; loading: boolean }) {
+function OverviewSection({ data, loading, token }: { data: OverviewData | null; loading: boolean; token: string }) {
+  const [digestSending, setDigestSending] = useState(false);
+  const [digestResult, setDigestResult] = useState<string | null>(null);
+
+  const sendDigest = async () => {
+    if (!confirm("Send weekly digest email to all providers with activity?")) return;
+    setDigestSending(true);
+    setDigestResult(null);
+    try {
+      const res = await fetch("/api/admin/weekly-digest", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const d = await res.json();
+      setDigestResult(res.ok ? `✓ Sent ${d.sent} emails, skipped ${d.skipped}` : `Error: ${d.error}`);
+    } catch {
+      setDigestResult("Network error");
+    }
+    setDigestSending(false);
+  };
+
   if (loading || !data) return <LoadingSkeleton count={5} />;
   return (
     <div>
       <h1 className="text-2xl font-black mb-6">Dashboard</h1>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
         <StatCard label="Total Users" value={data.totalUsers} accent="text-blue-600" />
         <StatCard label="Providers" value={data.totalProviders} accent="text-orange-500" />
         <StatCard label="Enquiries" value={data.totalEnquiries} />
         <StatCard label="Contacts" value={data.totalContacts} />
         <StatCard label="New Today" value={data.newUsersToday} accent="text-green-600" />
+      </div>
+      <div className="flex flex-wrap gap-3 items-center">
+        <button
+          onClick={sendDigest}
+          disabled={digestSending}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-500 transition-colors disabled:opacity-60"
+        >
+          {digestSending ? "Sending..." : "📧 Send Weekly Digest"}
+        </button>
+        {digestResult && <span className="text-sm text-gray-600">{digestResult}</span>}
       </div>
     </div>
   );
@@ -326,6 +357,17 @@ function ProvidersSection({
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       body: JSON.stringify({ id: p.id, verified: !p.verified }),
+    });
+    setBusy(null);
+    onRefresh();
+  }
+
+  async function toggleFeatured(p: ProviderRow) {
+    setBusy(p.id);
+    await fetch("/api/admin/providers", {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ id: p.id, featured: !p.featured }),
     });
     setBusy(null);
     onRefresh();
@@ -361,6 +403,7 @@ function ProvidersSection({
                     : "bg-purple-50 text-purple-600"
                   }`}>{p.plan}</span>
                   {p.verified && <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600">✓ Verified</span>}
+                  {p.featured && <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-50 text-yellow-700">⭐ Featured</span>}
                   {p.enquiry_count > 0 && (
                     <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-600">{p.enquiry_count} enquiries</span>
                   )}
@@ -390,11 +433,22 @@ function ProvidersSection({
                 >
                   {p.verified ? "✓ Verified" : "Mark verified"}
                 </button>
+                <button
+                  onClick={() => toggleFeatured(p)}
+                  disabled={busy === p.id}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${
+                    p.featured
+                      ? "bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
+                      : "border border-gray-200 text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {p.featured ? "⭐ Featured" : "Feature"}
+                </button>
                 <a
                   href={`mailto:${p.email}`}
                   className="px-3 py-1.5 rounded-xl border border-gray-200 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
                 >
-                  Reply
+                  Email
                 </a>
                 <button
                   onClick={() => deleteProv(p.id)}
