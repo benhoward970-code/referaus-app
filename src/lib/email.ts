@@ -96,6 +96,7 @@ export async function getNewsletterUnsubscribeToken(
     .select("unsubscribe_token, unsubscribed")
     .eq("email", email)
     .maybeSingle();
-  if (!data || data.unsubscribed) return null;
-  return data.unsubscribe_token as string;
+  const row = data as { unsubscribe_token: string; unsubscribed: boolean } | null;
+  if (!row || row.unsubscribed) return null;
+  return row.unsubscribe_token;
 }

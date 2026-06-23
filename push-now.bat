@@ -1,7 +1,7 @@
 @echo off
 cd /d "%~dp0"
 git add -A
-git commit -m "fix: pass auth header string to verifyAdmin in review-flags route (TS build error)"
+git commit -m "fix: email.ts TS error (never type); add review flags to admin panel; wire notifications settings to DB; respect email_notifications flag on enquiry/review emails"
 git pull origin master --rebase
 git push origin HEAD:master
 echo.

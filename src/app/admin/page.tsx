@@ -63,7 +63,24 @@ interface NewsletterRow {
   created_at: string;
 }
 
-type Section = "overview" | "providers" | "enquiries" | "contacts" | "newsletter";
+interface ReviewFlagRow {
+  id: string;
+  review_id: string;
+  reporter_email: string | null;
+  reason: string;
+  details: string | null;
+  status: string;
+  created_at: string;
+  review?: {
+    id: string;
+    reviewer_name: string | null;
+    text: string | null;
+    rating: number;
+    provider_slug: string | null;
+  } | null;
+}
+
+type Section = "overview" | "providers" | "enquiries" | "contacts" | "newsletter" | "review_flags";
 
 const NAV_ITEMS: { key: Section; label: string; icon: string }[] = [
   { key: "overview", label: "Overview", icon: "📊" },
@@ -71,6 +88,7 @@ const NAV_ITEMS: { key: Section; label: string; icon: string }[] = [
   { key: "enquiries", label: "Enquiries", icon: "📩" },
   { key: "contacts", label: "Contacts", icon: "📬" },
   { key: "newsletter", label: "Newsletter", icon: "✉️" },
+  { key: "review_flags", label: "Review Flags", icon: "🚩" },
 ];
 
 function formatDate(d: string | null) {
@@ -94,6 +112,7 @@ export default function AdminPage() {
   const [enquiries, setEnquiries] = useState<EnquiryRow[]>([]);
   const [contacts, setContacts] = useState<ContactRow[]>([]);
   const [newsletter, setNewsletter] = useState<NewsletterRow[]>([]);
+  const [reviewFlags, setReviewFlags] = useState<ReviewFlagRow[]>([]);
 
   useEffect(() => {
     if (!isConfigured() || !supabase) {
@@ -147,6 +166,11 @@ export default function AdminPage() {
         if (!res.ok) throw new Error((await res.json()).error || `HTTP ${res.status}`);
         const data = await res.json();
         setNewsletter(data.signups || []);
+      } else if (s === "review_flags") {
+        const res = await fetch("/api/admin/review-flags", { headers: authHeaders() });
+        if (!res.ok) throw new Error((await res.json()).error || `HTTP ${res.status}`);
+        const data = await res.json();
+        setReviewFlags(data.flags || []);
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to load data");
@@ -249,6 +273,14 @@ export default function AdminPage() {
                 loading={loading}
                 token={token}
                 onRefresh={() => fetchSection("newsletter")}
+              />
+            )}
+            {section === "review_flags" && (
+              <ReviewFlagsSection
+                data={reviewFlags}
+                loading={loading}
+                token={token}
+                onRefresh={() => fetchSection("review_flags")}
               />
             )}
           </motion.div>
@@ -631,6 +663,105 @@ function NewsletterSection({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function ReviewFlagsSection({
+  data, loading, token, onRefresh,
+}: { data: ReviewFlagRow[]; loading: boolean; token: string; onRefresh: () => void }) {
+  const [busy, setBusy] = useState<string | null>(null);
+
+  async function updateFlag(flagId: string, status: string, reviewId?: string, deleteReview?: boolean) {
+    setBusy(flagId);
+    await fetch("/api/admin/review-flags", {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ flag_id: flagId, status, review_id: reviewId, delete_review: deleteReview }),
+    });
+    setBusy(null);
+    onRefresh();
+  }
+
+  const pending = data.filter((f) => f.status === "pending");
+  const actioned = data.filter((f) => f.status !== "pending");
+
+  if (loading) return <LoadingSkeleton count={3} />;
+  return (
+    <div>
+      <h1 className="text-2xl font-black mb-2">Review Flags</h1>
+      <p className="text-sm text-gray-500 mb-6">{pending.length} pending · {actioned.length} actioned</p>
+
+      {pending.length === 0 && <EmptyState text="No pending review flags 🎉" />}
+
+      <div className="space-y-3">
+        {pending.map((f) => (
+          <div key={f.id} className="bg-white rounded-2xl border border-orange-200 p-5">
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-orange-50 text-orange-600 border border-orange-200">🚩 {f.reason}</span>
+                  <span className="text-xs text-gray-400">{formatDate(f.created_at)}</span>
+                  {f.reporter_email && <span className="text-xs text-gray-400">by {f.reporter_email}</span>}
+                </div>
+                {f.details && <p className="text-sm text-gray-600 mb-2">Details: &ldquo;{f.details}&rdquo;</p>}
+                {f.review && (
+                  <div className="bg-gray-50 rounded-xl p-3 border border-gray-200 mt-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-semibold text-gray-700">{f.review.reviewer_name || "Anonymous"}</span>
+                      <span className="text-xs text-gray-400">{"★".repeat(f.review.rating)}{"☆".repeat(5 - f.review.rating)}</span>
+                      {f.review.provider_slug && (
+                        <a href={`/providers/${f.review.provider_slug}`} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">View listing ↗</a>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-700">&ldquo;{f.review.text}&rdquo;</p>
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-2 flex-wrap shrink-0">
+                <button
+                  onClick={() => updateFlag(f.id, "dismissed")}
+                  disabled={busy === f.id}
+                  className="px-3 py-1.5 rounded-xl text-xs font-medium border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+                >
+                  Dismiss
+                </button>
+                <button
+                  onClick={() => {
+                    if (confirm("Delete this review? This cannot be undone.")) {
+                      updateFlag(f.id, "actioned", f.review_id, true);
+                    }
+                  }}
+                  disabled={busy === f.id}
+                  className="px-3 py-1.5 rounded-xl text-xs font-medium text-red-500 hover:bg-red-50 transition-colors"
+                >
+                  Delete Review
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {actioned.length > 0 && (
+        <details className="mt-8">
+          <summary className="text-sm font-semibold text-gray-400 cursor-pointer hover:text-gray-600">
+            Show {actioned.length} actioned flags
+          </summary>
+          <div className="space-y-3 mt-3">
+            {actioned.map((f) => (
+              <div key={f.id} className="bg-white rounded-2xl border border-gray-200 p-4 opacity-60">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">{f.reason}</span>
+                  <span className="text-xs text-gray-400">{f.status}</span>
+                  <span className="text-xs text-gray-400">{formatDate(f.created_at)}</span>
+                  {f.review && <span className="text-xs text-gray-500 truncate max-w-[200px]">&ldquo;{f.review.text}&rdquo;</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
     </div>
   );
 }

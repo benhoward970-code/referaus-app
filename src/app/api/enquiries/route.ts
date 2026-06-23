@@ -119,11 +119,11 @@ export async function POST(request: NextRequest) {
   try {
     const { data: provider } = await admin
       .from("providers")
-      .select("email, name")
+      .select("email, name, email_notifications")
       .eq("slug", provider_slug)
       .maybeSingle();
 
-    if (provider?.email) {
+    if (provider?.email && provider?.email_notifications !== false) {
       const esc = (s: string) => s
         .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 

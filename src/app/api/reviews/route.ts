@@ -169,11 +169,11 @@ export async function POST(request: NextRequest) {
   try {
     const { data: providerRecord } = await client
       .from("providers")
-      .select("name, email")
+      .select("name, email, email_notifications")
       .eq("id", provider.id)
       .maybeSingle();
 
-    if (providerRecord?.email) {
+    if (providerRecord?.email && providerRecord?.email_notifications !== false) {
       const stars = "★".repeat(Math.round(rating)) + "☆".repeat(5 - Math.round(rating));
       await sendEmail({
         to: providerRecord.email,
