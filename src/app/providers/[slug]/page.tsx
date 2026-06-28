@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { providers } from "@/lib/providers";
 import ProviderDetailClient from "./ProviderDetailClient";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -40,16 +39,15 @@ async function fetchProviderForSchema(slug: string) {
 }
 
 function buildJsonLd(slug: string, prov: Record<string, unknown> | null, revs: Record<string, unknown>[]) {
-  const hardcoded = providers.find((p) => p.slug === slug);
-  const name = (prov?.name || hardcoded?.name || "NDIS Provider") as string;
-  const description = (prov?.bio || prov?.description || hardcoded?.description || "") as string;
-  const suburb = (prov?.suburb || hardcoded?.location || "") as string;
+  const name = (prov?.name || "NDIS Provider") as string;
+  const description = (prov?.bio || prov?.description || "") as string;
+  const suburb = (prov?.suburb || "") as string;
   const state = (prov?.state || "NSW") as string;
-  const phone = (prov?.phone || hardcoded?.phone || "") as string;
+  const phone = (prov?.phone || "") as string;
   const website = (prov?.website || "") as string;
   const logo = (prov?.logo_url || "") as string;
   const rating = prov?.rating as number | undefined;
-  const categories = (prov?.categories as string[]) || (hardcoded?.category ? [hardcoded.category] : []);
+  const categories = (prov?.categories as string[]) || [];
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -93,32 +91,47 @@ function buildJsonLd(slug: string, prov: Record<string, unknown> | null, revs: R
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
 
-  // Try hardcoded data first (available at build time, no async DB call needed)
-  const provider = providers.find((p) => p.slug === slug);
+  // Fetch real provider data from DB for accurate meta tags
+  let name = "NDIS Provider | ReferAus";
+  let description = "View NDIS provider details on ReferAus — the Hunter Region NDIS marketplace.";
+  let imageAlt = "ReferAus";
 
-  if (!provider) {
-    // Provider might exist only in DB - return generic metadata
-    return {
-      title: "Provider | ReferAus",
-      description: "View NDIS provider details on ReferAus - the Hunter Region NDIS marketplace.",
-    };
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/providers?select=name,bio,description,category,suburb,state&slug=eq.${encodeURIComponent(slug)}&limit=1`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, next: { revalidate: 3600 } }
+    );
+    if (res.ok) {
+      const rows = await res.json();
+      const p = rows[0];
+      if (p) {
+        name = `${p.name} | ReferAus`;
+        const location = [p.suburb, p.state].filter(Boolean).join(", ");
+        description = p.bio || p.description
+          ? `${p.name} — ${p.category || "NDIS"} provider${location ? ` in ${location}` : ""}. ${(p.bio || p.description || "").slice(0, 120)}`
+          : `${p.name} — NDIS provider${location ? ` in ${location}` : ""} on ReferAus.`;
+        imageAlt = p.name;
+      }
+    }
+  } catch {
+    // Fall back to generic metadata silently
   }
 
   return {
-    title: provider.name,
-    description: `${provider.name} — ${provider.category} provider in ${provider.location}. ${provider.description}`,
+    title: name,
+    description,
     openGraph: {
-      title: `${provider.name} | ReferAus`,
-      description: provider.description,
-      url: `https://referaus.com/providers/${provider.slug}`,
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: provider.name }],
+      title: name,
+      description,
+      url: `https://referaus.com/providers/${slug}`,
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: imageAlt }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${provider.name} | ReferAus`,
-      description: provider.description,
+      title: name,
+      description,
     },
-    alternates: { canonical: `https://referaus.com/providers/${provider.slug}` },
+    alternates: { canonical: `https://referaus.com/providers/${slug}` },
   };
 }
 

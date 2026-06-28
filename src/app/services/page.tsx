@@ -1,7 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { providers } from "@/lib/providers";
 import { ServiceCategoryGrid } from "@/components/ServiceCategoryGrid";
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+async function fetchProviderCounts(): Promise<Record<string, number>> {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/providers?select=category,categories,services&registration_ready=eq.true`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return {};
+    const rows: { category?: string; categories?: string[]; services?: string[] }[] = await res.json();
+    const counts: Record<string, number> = {};
+    for (const row of rows) {
+      const cats = new Set<string>();
+      if (row.category) cats.add(row.category);
+      for (const c of row.categories ?? []) cats.add(c);
+      for (const c of cats) {
+        counts[c] = (counts[c] ?? 0) + 1;
+      }
+    }
+    return counts;
+  } catch {
+    return {};
+  }
+}
 
 export const metadata: Metadata = {
   title: "NDIS Services Directory | ReferAus",
@@ -133,13 +158,8 @@ function CategoryIcon({ type, className }: { type: string; className?: string })
   }
 }
 
-export default function ServicesPage() {
-  const providerCounts = Object.fromEntries(
-    supportCategories.map((cat) => [
-      cat.category,
-      providers.filter((p) => p.category === cat.category || p.services?.some((s) => s.toLowerCase().includes(cat.name.toLowerCase()))).length,
-    ])
-  );
+export default async function ServicesPage() {
+  const providerCounts = await fetchProviderCounts();
 
   return (
     <div className="min-h-screen bg-white">

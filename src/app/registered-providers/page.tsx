@@ -1,13 +1,26 @@
 "use client";
-import type { Metadata } from "next";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { providers } from "@/lib/providers";
+import { getAllProviders } from "@/lib/supabase";
+import { mapDbProvider } from "@/lib/map-provider";
 import { ProviderCard } from "@/components/ProviderCard";
-
-const registrationReadyProviders = providers.filter((p) => p.registrationReady);
-const verifiedProviders = providers.filter((p) => p.verified && !p.registrationReady);
+import type { Provider } from "@/lib/providers";
 
 export default function RegisteredProvidersPage() {
+  const [registrationReadyProviders, setRegistrationReadyProviders] = useState<Provider[]>([]);
+  const [verifiedProviders, setVerifiedProviders] = useState<Provider[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllProviders().then((rows) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const all = rows.map((r: any) => mapDbProvider(r));
+      setRegistrationReadyProviders(all.filter((p) => p.registrationReady));
+      setVerifiedProviders(all.filter((p) => p.verified && !p.registrationReady));
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
@@ -53,7 +66,7 @@ export default function RegisteredProvidersPage() {
               </p>
             </div>
             <div className="flex-1">
-              <h2 className="text-base font-bold text-blue-900 mb-1">What is "Registration Ready"?</h2>
+              <h2 className="text-base font-bold text-blue-900 mb-1">What is &ldquo;Registration Ready&rdquo;?</h2>
               <p className="text-sm text-blue-700">
                 Providers marked Reg Ready have confirmed they are actively pursuing NDIS registration
                 and are on track to be fully registered by July 2026.
@@ -69,48 +82,69 @@ export default function RegisteredProvidersPage() {
           </div>
         </div>
 
-        {registrationReadyProviders.length > 0 && (
-          <section className="mb-14">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm font-bold px-3 py-1.5 rounded-full">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
-                </svg>
-                Registration Ready
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="bg-white border border-gray-200 rounded-2xl p-6 animate-pulse">
+                <div className="h-12 w-12 rounded-xl bg-gray-100 mb-4" />
+                <div className="h-4 bg-gray-100 rounded w-3/4 mb-2" />
+                <div className="h-3 bg-gray-100 rounded w-1/2" />
               </div>
-              <span className="text-sm text-gray-400">{registrationReadyProviders.length} providers</span>
-            </div>
-            <p className="text-sm text-gray-500 mb-6">
-              These providers are actively preparing for mandatory NDIS registration ahead of the July 2026 deadline.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {registrationReadyProviders.map((p) => (
-                <ProviderCard key={p.slug} provider={p} />
-              ))}
-            </div>
-          </section>
-        )}
+            ))}
+          </div>
+        ) : (
+          <>
+            {registrationReadyProviders.length > 0 && (
+              <section className="mb-14">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm font-bold px-3 py-1.5 rounded-full">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+                    </svg>
+                    Registration Ready
+                  </div>
+                  <span className="text-sm text-gray-400">{registrationReadyProviders.length} providers</span>
+                </div>
+                <p className="text-sm text-gray-500 mb-6">
+                  These providers are actively preparing for mandatory NDIS registration ahead of the July 2026 deadline.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {registrationReadyProviders.map((p) => (
+                    <ProviderCard key={p.slug} provider={p} />
+                  ))}
+                </div>
+              </section>
+            )}
 
-        {verifiedProviders.length > 0 && (
-          <section className="mb-14">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 text-blue-700 text-sm font-bold px-3 py-1.5 rounded-full">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                </svg>
-                Verified Providers
+            {verifiedProviders.length > 0 && (
+              <section className="mb-14">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 text-blue-700 text-sm font-bold px-3 py-1.5 rounded-full">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                    Verified Providers
+                  </div>
+                  <span className="text-sm text-gray-400">{verifiedProviders.length} providers</span>
+                </div>
+                <p className="text-sm text-gray-500 mb-6">
+                  Verified providers have been reviewed by the ReferAus team and confirmed as active NDIS participants.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {verifiedProviders.map((p) => (
+                    <ProviderCard key={p.slug} provider={p} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {registrationReadyProviders.length === 0 && verifiedProviders.length === 0 && (
+              <div className="text-center py-20 text-gray-400">
+                <p className="text-lg font-medium mb-2">No verified or registration-ready providers yet.</p>
+                <p className="text-sm">Be the first to get verified — list your organisation free.</p>
               </div>
-              <span className="text-sm text-gray-400">{verifiedProviders.length} providers</span>
-            </div>
-            <p className="text-sm text-gray-500 mb-6">
-              Verified providers have been reviewed by the ReferAus team and confirmed as active NDIS participants.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {verifiedProviders.map((p) => (
-                <ProviderCard key={p.slug} provider={p} />
-              ))}
-            </div>
-          </section>
+            )}
+          </>
         )}
 
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-center text-white">

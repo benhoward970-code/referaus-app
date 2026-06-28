@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReferAus — Social Media Graphics</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f1f5f9; padding: 40px; }
+  h1 { font-size: 18px; font-weight: 600; color: #334155; margin-bottom: 8px; }
+  p { font-size: 13px; color: #64748b; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 32px; }
+  .label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #94a3b8; margin-bottom: 10px; }
+
+  /* Card base */
+  .card { width: 100%; aspect-ratio: 1/1; border-radius: 20px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 44px; }
+  .dot-grid { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px); background-size: 28px 28px; }
+  .z1 { position: relative; z-index: 1; }
+  .logo { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 5px 13px; border-radius: 20px; margin-top: 12px; }
+
+  /* Card 1 — Launch — Blue */
+  .c1 { background: #1e40af; }
+  .c1 .logo { color: #fff; }
+  .c1 .logo span { color: #f97316; }
+  .c1 .tag { background: rgba(255,255,255,0.15); color: #e0e7ff; }
+  .c1 h2 { font-size: 46px; font-weight: 700; color: #ffffff; line-height: 1.1; margin: 18px 0 14px; }
+  .c1 .sub { font-size: 16px; color: #bfdbfe; line-height: 1.55; max-width: 380px; }
+  .c1 .cta { display: inline-block; background: #f97316; color: #fff; font-size: 15px; font-weight: 600; padding: 12px 26px; border-radius: 12px; text-decoration: none; }
+  .c1 .domain { font-size: 13px; color: #93c5fd; margin-top: 10px; }
+  .c1 .big-r { font-size: 220px; font-weight: 700; line-height: 1; opacity: 0.06; position: absolute; right: 20px; bottom: -20px; color: #fff; }
+
+  /* Card 2 — Provider — Dark */
+  .c2 { background: #0f172a; }
+  .c2 .logo { color: #f8fafc; }
+  .c2 .logo span { color: #f97316; }
+  .c2 .tag { background: rgba(249,115,22,0.2); color: #fdba74; }
+  .c2 h2 { font-size: 40px; font-weight: 700; color: #f8fafc; line-height: 1.15; margin: 18px 0 20px; }
+  .c2 .features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+  .c2 .feat { display: flex; align-items: center; gap: 12px; font-size: 15px; color: #e2e8f0; }
+  .c2 .check { width: 22px; height: 22px; border-radius: 50%; background: #22c55e; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .c2 .check svg { width: 12px; height: 12px; stroke: #fff; }
+  .c2 .cta { display: inline-block; background: #f97316; color: #fff; font-size: 15px; font-weight: 600; padding: 12px 26px; border-radius: 12px; text-decoration: none; }
+  .c2 .domain { font-size: 12px; color: #475569; margin-top: 10px; }
+
+  /* Card 3 — Participant — Warm */
+  .c3 { background: #fff7ed; }
+  .c3 .logo { color: #1e293b; }
+  .c3 .logo span { color: #f97316; }
+  .c3 .tag { background: #fed7aa; color: #9a3412; }
+  .c3 h2 { font-size: 42px; font-weight: 700; color: #1e293b; line-height: 1.15; margin: 18px 0 14px; }
+  .c3 .sub { font-size: 15px; color: #64748b; line-height: 1.55; max-width: 380px; margin-bottom: 20px; }
+  .c3 .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .c3 .pill { background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px; color: #334155; padding: 6px 16px; font-weight: 500; }
+  .c3 .cta { display: inline-block; background: #1e40af; color: #fff; font-size: 15px; font-weight: 600; padding: 12px 26px; border-radius: 12px; text-decoration: none; }
+  .c3 .domain { font-size: 12px; color: #94a3b8; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<h1>ReferAus — Social Media Graphics</h1>
+<p>Screenshot each card at 1:1. For best results, open in a browser, zoom to fit, and use a screenshot tool to capture each card individually at ~1080×1080px.</p>
+
+<div class="grid">
+
+  <!-- Card 1: Launch Announcement -->
+  <div>
+    <div class="label">1 — Launch Announcement</div>
+    <div class="card c1">
+      <div class="dot-grid"></div>
+      <div class="z1">
+        <div class="logo">Refer<span>Aus</span></div>
+        <div class="tag">Newcastle &amp; Hunter Region</div>
+        <h2>Find your NDIS<br>provider — finally.</h2>
+        <div class="sub">Search, compare, and connect with local NDIS providers. Free to use, no sign-up needed.</div>
+      </div>
+      <div class="z1">
+        <div><a href="#" class="cta">Explore now</a></div>
+        <div class="domain">referaus.com</div>
+      </div>
+      <div class="big-r">R</div>
+    </div>
+  </div>
+
+  <!-- Card 2: Provider Recruitment -->
+  <div>
+    <div class="label">2 — Provider Recruitment</div>
+    <div class="card c2">
+      <div class="dot-grid"></div>
+      <div class="z1">
+        <div class="logo">Refer<span>Aus</span></div>
+        <div class="tag">NDIS Providers</div>
+        <h2>Get found by<br>participants today.</h2>
+        <div class="features">
+          <div class="feat">
+            <div class="check"><svg fill="none" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            Free profile page — live in minutes
+          </div>
+          <div class="feat">
+            <div class="check"><svg fill="none" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            Direct enquiries to your inbox
+          </div>
+          <div class="feat">
+            <div class="check"><svg fill="none" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            Verified reviews build trust
+          </div>
+        </div>
+      </div>
+      <div class="z1">
+        <div><a href="#" class="cta">List for free</a></div>
+        <div class="domain">referaus.com/register</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: Participant Awareness -->
+  <div>
+    <div class="label">3 — Participant Awareness</div>
+    <div class="card c3">
+      <div class="z1">
+        <div class="logo">Refer<span>Aus</span></div>
+        <div class="tag">For participants &amp; families</div>
+        <h2>Your support.<br>Your choice.</h2>
+        <div class="sub">Browse real reviews, compare local providers, and reach out directly — no middlemen.</div>
+        <div class="pills">
+          <span class="pill">Daily Living</span>
+          <span class="pill">Allied Health</span>
+          <span class="pill">SIL</span>
+          <span class="pill">Transport</span>
+          <span class="pill">Behaviour Support</span>
+          <span class="pill">Assistive Tech</span>
+        </div>
+      </div>
+      <div class="z1">
+        <div><a href="#" class="cta">Start searching</a></div>
+        <div class="domain">referaus.com</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

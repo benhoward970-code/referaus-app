@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { providers } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
+import { getAllProviders } from "@/lib/supabase";
+import { mapDbProvider } from "@/lib/map-provider";
 
 const MAX_COMPARE = 3;
 
@@ -117,7 +118,17 @@ function ProviderCard({ provider, onRemove, allServices }: { provider: Provider;
 }
 
 export default function ComparePage() {
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [loadingProviders, setLoadingProviders] = useState(true);
   const [selections, setSelections] = useState<(string | "")[]>(["", "", ""]);
+
+  useEffect(() => {
+    getAllProviders().then((rows) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setProviders(rows.map((r: any) => mapDbProvider(r)));
+      setLoadingProviders(false);
+    }).catch(() => setLoadingProviders(false));
+  }, []);
 
   const selectedProviders = useMemo(
     () =>
@@ -251,9 +262,10 @@ export default function ComparePage() {
               <select
                 value={selections[idx]}
                 onChange={(e) => handleSelect(idx, e.target.value)}
-                className="w-full appearance-none bg-white border border-gray-200 rounded-xl px-4 py-3 pr-10 text-sm text-gray-800 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer"
+                disabled={loadingProviders}
+                className="w-full appearance-none bg-white border border-gray-200 rounded-xl px-4 py-3 pr-10 text-sm text-gray-800 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer disabled:opacity-60"
               >
-                <option value="">— Select a provider —</option>
+                <option value="">{loadingProviders ? 'Loading…' : '— Select a provider —'}</option>
                 {providers.map((p) => (
                   <option
                     key={p.slug}

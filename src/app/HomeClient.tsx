@@ -1,10 +1,88 @@
 "use client";
-import { motion, useInView, useReducedMotion, Variants, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useInView, useReducedMotion, Variants, useScroll, useTransform, AnimatePresence, useSpring } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { SearchAutocomplete } from '@/components/SearchAutocomplete';
 import { AuroraBackground } from '@/components/AuroraBackground';
 // ActivitySocialProof removed — no fake data
+
+/* ─── Scroll Progress Bar ─── */
+function ScrollProgressBar() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
+  return <motion.div className="scroll-progress-bar" style={{ scaleX, width: "100%" }} />;
+}
+
+/* ─── Infinite Marquee Strip ─── */
+const MARQUEE_ITEMS = [
+  "NDIS Provider Directory",
+  "Free for Participants",
+  "Verified Reviews",
+  "Newcastle & Hunter Region",
+  "Secure & Private",
+  "Australian Owned",
+  "Real Local Providers",
+  "Compare Side by Side",
+  "Direct Enquiries",
+  "No Sign-up to Browse",
+];
+function MarqueeStrip() {
+  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS]; // duplicate for seamless loop
+  return (
+    <div className="marquee-wrap border-y border-gray-100 bg-gray-50 py-3">
+      <div className="marquee-track">
+        {items.map((item, i) => (
+          <span key={i} className="inline-flex items-center gap-3 px-6 text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+            <span className="w-1 h-1 rounded-full bg-orange-400 flex-shrink-0" />
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Hero floating provider cards (desktop only) ─── */
+const HERO_CARDS = [
+  { name: "Sunshine Support Services", category: "Daily Living", rating: 4.9, reviews: 23, suburb: "Newcastle CBD", verified: true, initial: "SS", color: "#2563eb" },
+  { name: "Hunter Valley Therapy", category: "Allied Health", rating: 4.8, reviews: 17, suburb: "Maitland", verified: true, initial: "HV", color: "#059669" },
+  { name: "Newcastle Behaviour Support", category: "Behaviour Support", rating: 4.7, reviews: 11, suburb: "Charlestown", verified: false, initial: "NB", color: "#7c3aed" },
+];
+function HeroCards() {
+  return (
+    <div className="hidden lg:block relative w-[380px] xl:w-[440px] flex-shrink-0 h-[420px] pointer-events-none select-none">
+      {HERO_CARDS.map((card, i) => (
+        <div
+          key={card.name}
+          className={`absolute bg-white rounded-2xl border border-gray-200 shadow-lg p-5 w-[280px] ${i === 0 ? "float-a top-0 left-8" : i === 1 ? "float-b top-[120px] left-[80px]" : "float-c top-[240px] left-4"}`}
+          style={{ zIndex: 3 - i }}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold flex-shrink-0" style={{ background: card.color }}>
+              {card.initial}
+            </div>
+            <div className="min-w-0">
+              <p className="font-bold text-sm text-gray-900 truncate">{card.name}</p>
+              <p className="text-xs text-gray-500">{card.category}</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <span className="text-orange-400 text-xs">{"★".repeat(5)}</span>
+              <span className="text-xs text-gray-500 ml-1">{card.rating} ({card.reviews})</span>
+            </div>
+            {card.verified && (
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">✓ Verified</span>
+            )}
+          </div>
+          <p className="text-xs text-gray-400 mt-2">📍 {card.suburb}, NSW</p>
+        </div>
+      ))}
+      {/* Subtle glow behind cards */}
+      <div className="absolute inset-0 -z-10 rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(ellipse, #2563eb 0%, #f97316 70%, transparent 100%)" }} />
+    </div>
+  );
+}
 
 /* Word-by-word blur-in text animation */
 function BlurInText({ text, className = "", delay = 0 }: { text: string; className?: string; delay?: number }) {
@@ -347,9 +425,12 @@ export default function Home() {
 
   return (
     <>
+      <ScrollProgressBar />
+
       {/* Hero — white background matching rest of page */}
       <div className="relative overflow-hidden bg-white">
-        <section ref={heroRef} className="min-h-[85vh] flex flex-col justify-center px-6 pt-28 pb-12 max-w-[1200px] mx-auto relative z-10">
+        <section ref={heroRef} className="min-h-[85vh] flex flex-row items-center gap-12 px-6 pt-28 pb-12 max-w-[1200px] mx-auto relative z-10">
+        <div className="flex-1 min-w-0">
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5) }}
           className="mb-6">
@@ -442,10 +523,12 @@ export default function Home() {
             </div>
           ))}
         </motion.div>
+        </div>{/* end flex-1 */}
+        <HeroCards />
       </section>
       </div>
 
-      <div className="divider max-w-[800px] mx-auto" />
+      <MarqueeStrip />
 
       {/* Trust Badges */}
       <section className="py-10 px-6 max-w-[1200px] mx-auto">
@@ -459,86 +542,31 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               {
-                icon: (
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-blue-600">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                  </svg>
-                ),
-                label: "Verified Providers",
-                desc: "Every provider reviewed",
+                icon: (<svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-blue-600"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>),
+                label: "Verified Providers", desc: "Every provider reviewed",
               },
               {
-                icon: (
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-orange-500">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                  </svg>
-                ),
-                label: "Free for Participants",
-                desc: "Always. No hidden costs",
+                icon: (<svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-orange-500"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>),
+                label: "Free for Participants", desc: "Always. No hidden costs",
               },
               {
-                icon: (
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-blue-600">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                  </svg>
-                ),
-                label: "Secure & Private",
-                desc: "Your data is protected",
+                icon: (<svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-blue-600"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>),
+                label: "Secure & Private", desc: "Your data is protected",
               },
               {
-                icon: (
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-orange-500">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                ),
-                label: "Australian Owned",
-                desc: "Built in the Hunter Region",
+                icon: (<svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-orange-500"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>),
+                label: "Australian Owned", desc: "Built in the Hunter Region",
               },
             ].map((badge) => (
               <div key={badge.label} className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center">
-                  {badge.icon}
-                </div>
+                <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center">{badge.icon}</div>
                 <div className="font-semibold text-gray-900 text-sm">{badge.label}</div>
                 <div className="text-xs text-gray-500">{badge.desc}</div>
               </div>
             ))}
           </div>
+          <p className="text-center text-xs text-gray-400 mt-6">ReferAus is an independent directory. We are not affiliated with the NDIA.</p>
         </motion.div>
-      </section>
-
-      <div className="divider max-w-[800px] mx-auto" />
-
-      {/* NDIS Trust Markers */}
-      <section className="bg-gray-50 border-y border-gray-100 py-8 px-6">
-        <div className="max-w-[1200px] mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="flex flex-wrap justify-center gap-3 mb-4">
-              {[
-                { icon: "🏛️", label: "NDIS Provider Directory" },
-                { icon: "🛡️", label: "Verified Providers" },
-                { icon: "🇦🇺", label: "Australian Owned" },
-                { icon: "🔒", label: "Privacy Compliant" },
-              ].map((badge) => (
-                <span
-                  key={badge.label}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm text-sm font-medium text-gray-700"
-                >
-                  <span>{badge.icon}</span>
-                  {badge.label}
-                </span>
-              ))}
-            </div>
-            <p className="text-center text-xs text-gray-400">
-              ReferAus is an independent directory. We are not affiliated with the NDIA.
-            </p>
-          </motion.div>
-        </div>
       </section>
 
       <div className="divider max-w-[800px] mx-auto" />
@@ -574,15 +602,32 @@ export default function Home() {
 
       <div className="divider max-w-[800px] mx-auto" />
 
-      {/* Features */}
+      {/* Features — bento grid */}
       <ScrollSection className="py-10 px-6 max-w-[1200px] mx-auto">
         <span className="glass-pill rounded-full px-3.5 py-1 text-xs font-medium text-orange-500 inline-block mb-4">Why ReferAus</span>
         <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Built for the NDIS community</h2>
         <p className="text-gray-500 max-w-[600px] mb-8 font-light">Everything participants and providers need to find each other — nothing they don&apos;t.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {features.map((f, i) => (
-            <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.08), duration: d(0.4) }}
+        {/* Bento: row 1 = 1 wide + 1 tall, row 2 = 3 equal */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {/* Wide card */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(0), duration: d(0.4) }}
+            className="md:col-span-2 glass-card relative overflow-hidden p-8 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-600 to-blue-700 text-white border-0">
+            <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center mb-4 text-xl">{features[0].icon}</div>
+            <h3 className="font-bold text-xl mb-2 text-white">{features[0].title}</h3>
+            <p className="text-blue-100 text-sm leading-relaxed max-w-[440px]">{features[0].desc}</p>
+            <div className="absolute right-6 bottom-6 text-[5rem] opacity-10 leading-none">{features[0].icon}</div>
+          </motion.div>
+          {/* Tall card */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(0.08), duration: d(0.4) }}
+            className="glass-card relative overflow-hidden p-8 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300 bg-orange-50 border border-orange-100">
+            <div className="w-11 h-11 rounded-xl bg-orange-100 flex items-center justify-center mb-4 text-xl">{features[1].icon}</div>
+            <h3 className="font-bold text-lg mb-2 text-gray-900">{features[1].title}</h3>
+            <p className="text-gray-500 text-sm leading-relaxed">{features[1].desc}</p>
+          </motion.div>
+          {/* Bottom row — 3 equal */}
+          {features.slice(2).map((f, i) => (
+            <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d((i + 2) * 0.08), duration: d(0.4) }}
               className="glass-card relative overflow-hidden p-8 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
               <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-lg">{f.icon}</div>
               <h3 className="font-semibold text-[1.05rem] mb-2">{f.title}</h3>

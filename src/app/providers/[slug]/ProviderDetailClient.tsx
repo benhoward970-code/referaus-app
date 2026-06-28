@@ -840,7 +840,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <span className="text-sm text-orange-500 font-medium">{provider.category}</span>
               <span className="hidden sm:inline text-gray-300">|</span>
-              <span className="text-sm text-gray-500">{provider.location}, {provider.state || "NSW"}</span>
+              <span className="text-sm text-gray-500">{provider.suburb || provider.location}, {provider.state || "NSW"}</span>
               <span className="hidden sm:inline text-gray-300">|</span>
               <div className="flex items-center gap-1">
                 {[1,2,3,4,5].map((star) => (
@@ -951,7 +951,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.15, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
               <div className="px-8 pt-8 pb-4">
                 <h2 className="text-xl font-bold text-gray-900">Location</h2>
-                <p className="text-sm text-gray-500 mt-1">{provider.location}, {provider.state || "NSW"}, Australia</p>
+                <p className="text-sm text-gray-500 mt-1">{provider.suburb || provider.location}, {provider.state || "NSW"}, Australia</p>
               </div>
               <div className="relative bg-gray-100 h-56 flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 opacity-30" style={{backgroundImage: "linear-gradient(#c8d6e5 1px, transparent 1px), linear-gradient(90deg, #c8d6e5 1px, transparent 1px)", backgroundSize: "40px 40px"}} />
@@ -1226,7 +1226,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 )}
                 <div className="flex items-center gap-3 text-gray-600">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                  {provider.location}, {provider.state || "NSW"}
+                  {provider.suburb || provider.location}, {provider.state || "NSW"}
                 </div>
                 {(provider as any).ndis_registration_number && (
                   <div className="flex items-start gap-3 text-gray-600">

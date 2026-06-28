@@ -2,7 +2,7 @@
 import { useState, useMemo, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, useReducedMotion, useInView } from "framer-motion";
-import { providers as hardcodedProviders, categories, locations } from "@/lib/providers";
+import { categories, locations } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
 import { ProviderCard } from "@/components/ProviderCard";
 import { RecentlyViewed } from "@/components/RecentlyViewed";
