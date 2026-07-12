@@ -175,9 +175,9 @@ function TypingWord() {
   }, []);
 
   return (
-    <span className="text-orange-500 inline-block">
+    <span className="text-orange-400 inline-block">
       {displayed}
-      <span className={`ml-0.5 inline-block w-[3px] h-[0.85em] bg-orange-500 align-middle transition-opacity ${showCursor ? "opacity-100" : "opacity-0"}`} />
+      <span className={`ml-0.5 inline-block w-[3px] h-[0.85em] bg-orange-400 align-middle transition-opacity ${showCursor ? "opacity-100" : "opacity-0"}`} />
     </span>
   );
 }
@@ -427,20 +427,23 @@ export default function Home() {
     <>
       <ScrollProgressBar />
 
-      {/* Hero — white background matching rest of page */}
-      <div className="relative overflow-hidden bg-white">
+      {/* Hero — aurora dark background */}
+      <div className="relative overflow-hidden">
+        <AuroraBackground />
+        {/* Fade aurora into page below */}
+        <div className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none z-[1]" style={{ background: "linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%)" }} />
         <section ref={heroRef} className="min-h-[85vh] flex flex-row items-center gap-12 px-6 pt-28 pb-12 max-w-[1200px] mx-auto relative z-10">
         <div className="flex-1 min-w-0">
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5) }}
           className="mb-6">
-          <span className="rounded-full px-4 py-1.5 text-[0.7rem] text-blue-600 tracking-[0.15em] uppercase font-medium inline-flex items-center gap-3 bg-blue-50 border border-blue-100">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+          <span className="rounded-full px-4 py-1.5 text-[0.7rem] text-blue-300 tracking-[0.15em] uppercase font-medium inline-flex items-center gap-3 bg-white/10 border border-white/20 backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             referaus.com — Australia&apos;s NDIS Marketplace
           </span>
         </motion.div>
 
-        <h1 className="heading-bold text-[clamp(2.8rem,7vw,5rem)] leading-[1.05] mb-6 max-w-[820px]">
+        <h1 className="heading-bold text-[clamp(2.8rem,7vw,5rem)] leading-[1.05] mb-6 max-w-[820px]" style={{ color: 'white' }}>
           <BlurInText text="Find Trusted" delay={d(0.2)} />
           <br />
           <motion.span
@@ -463,16 +466,16 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.3) }}
           className="mb-7">
           <SearchAutocomplete className="w-full max-w-[600px]" />
-          <p className="mt-2 text-xs text-gray-400">Press <kbd className="inline-flex items-center px-1.5 py-0.5 rounded border border-gray-200 bg-gray-50 font-mono text-[10px] text-gray-500">/</kbd> to search</p>
+          <p className="mt-2 text-xs text-white/40">Press <kbd className="inline-flex items-center px-1.5 py-0.5 rounded border border-white/20 bg-white/10 font-mono text-[10px] text-white/60">/</kbd> to search</p>
           {/* Quick-Filter Chips */}
           <div className="mt-4 max-w-[600px]">
-            <p className="text-xs text-gray-500 mb-2 font-medium">Popular searches:</p>
+            <p className="text-xs text-white/50 mb-2 font-medium">Popular searches:</p>
             <div className="flex flex-wrap gap-2">
               {["OT", "Speech", "Physio", "Psychology", "Support Coordination", "Plan Management", "Daily Living"].map((chip) => (
                 <a
                   key={chip}
                   href={`/providers?q=${encodeURIComponent(chip)}`}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 bg-white text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium border border-white/20 bg-white/10 text-white/70 hover:border-white/40 hover:text-white hover:bg-white/20 transition-all duration-200 backdrop-blur-sm"
                 >
                   {chip}
                 </a>
@@ -489,14 +492,14 @@ export default function Home() {
             { icon: "🆓", label: "100% Free" },
           ].map((badge) => (
             <span key={badge.label}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200">
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-white/70 bg-white/10 border border-white/20 backdrop-blur-sm">
               <span>{badge.icon}</span>
               {badge.label}
             </span>
           ))}
           {providerCount !== null && (
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-blue-600 bg-blue-50 border border-blue-100">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-blue-300 bg-blue-500/20 border border-blue-400/30 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
               {providerCount >= 10
                 ? `Join ${providerCount} NDIS providers already on ReferAus`
                 : "Join our growing network of NDIS providers"}
@@ -505,7 +508,7 @@ export default function Home() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.6), delay: d(0.55) }}
-          className="flex flex-wrap gap-6 sm:gap-12 mt-12 pt-8 border-t border-gray-100">
+          className="flex flex-wrap gap-6 sm:gap-12 mt-12 pt-8 border-t border-white/10">
           {(siteStats && siteStats.providers > 0 ? [
             { num: siteStats.providers, suffix: "+", label: "Providers Listed" },
             { num: siteStats.enquiries, suffix: "+", label: "Enquiries Sent" },
@@ -516,10 +519,10 @@ export default function Home() {
             { num: 5, suffix: "min", label: "To Get Listed" },
           ]).map((s) => (
             <div key={s.label}>
-              <div className="heading-bold text-[2rem] sm:text-[2.5rem] text-blue-600">
+              <div className="heading-bold text-[2rem] sm:text-[2.5rem] text-orange-400">
                 <AnimatedCounter target={s.num} suffix={s.suffix} />
               </div>
-              <div className="text-[0.75rem] text-gray-500 uppercase tracking-[0.1em] mt-1">{s.label}</div>
+              <div className="text-[0.75rem] text-white/50 uppercase tracking-[0.1em] mt-1">{s.label}</div>
             </div>
           ))}
         </motion.div>

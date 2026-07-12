@@ -21,7 +21,12 @@ input[type="text"], input[type="email"], input[type="password"], input[type="tel
 
 html { scroll-behavior: smooth; }
 body {
-  background: #f0f9ff;
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(ellipse 120% 65% at 50% -5%,  rgba(37, 99, 235, 0.38) 0%, transparent 62%),
+    radial-gradient(ellipse 70%  60% at 98% 105%, rgba(249, 115, 22, 0.28) 0%, transparent 58%),
+    radial-gradient(ellipse 60%  50% at 0%  85%,  rgba(139, 92, 246, 0.24) 0%, transparent 52%);
+  background-attachment: fixed;
   color: #1a1d23;
 }
 
