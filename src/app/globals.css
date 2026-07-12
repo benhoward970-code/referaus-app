@@ -78,6 +78,23 @@ body {
 }
 ::selection { background: rgba(37, 99, 235, 0.15); }
 
+/* ─── Inner page top gradient ─── */
+/* Add .page-top to any page wrapper — gives subtle blue gradient + orange accent line */
+.page-top {
+  position: relative;
+  background-image: linear-gradient(160deg, rgba(37,99,235,0.07) 0%, rgba(249,115,22,0.03) 40%, transparent 70%);
+}
+.page-top::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #2563eb 0%, #f97316 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
 /* Serif display headings */
 .serif { font-family: 'Instrument Serif', Georgia, serif; }
 .serif-i { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; }

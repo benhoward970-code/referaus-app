@@ -9,6 +9,7 @@ import { RecentlyViewed } from "@/components/RecentlyViewed";
 import { getAllProviders } from "@/lib/supabase";
 import { mapDbProvider } from "@/lib/map-provider";
 import { fetchWithSWR } from "@/lib/swr-cache";
+import { PageHeader } from "@/components/PageHeader";
 
 type SortOption = "rating" | "name" | "reviews" | "newest";
 const PAGE_SIZE = 12;
@@ -163,22 +164,13 @@ function ProvidersContent() {
   }, [hasMore, loadingMore]);
 
   return (
-    <div className="min-h-screen pt-28 pb-14 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: prefersReduced ? 0 : 0.5 }}
-          className="mb-12"
-        >
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
-            Browse <span className="text-orange-500">Providers</span>
-          </h1>
-          <p className="text-gray-500 text-lg max-w-xl">
-            {providers.length > 0 ? `${providers.length} NDIS providers across Newcastle & the Hunter Region` : "Find NDIS providers in Newcastle & the Hunter Region"}
-          </p>
-        </motion.div>
-
+    <div className="min-h-screen pb-14">
+      <PageHeader
+        label="Newcastle & Hunter Region"
+        title={<>Browse <span className="text-orange-500">Providers</span></>}
+        subtitle={providers.length > 0 ? `${providers.length} NDIS providers across Newcastle & the Hunter Region` : "Find NDIS providers in Newcastle & the Hunter Region"}
+      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

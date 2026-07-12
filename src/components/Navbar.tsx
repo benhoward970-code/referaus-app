@@ -196,9 +196,15 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
 
+  // Transparent navbar only on homepage when not scrolled
+  const isHome = pathname === "/";
+  const transparent = isHome && !scrolled;
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
+    // Set initial state in case page loaded mid-scroll
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -224,15 +230,15 @@ export function Navbar() {
     <>
       <nav
         style={{ top: "var(--announcement-height, 0px)" }}
-        className={`fixed left-0 right-0 z-50 transition-all duration-200 ${
-          scrolled
-            ? "bg-white shadow-sm border-b border-gray-200"
-            : "bg-white border-b border-gray-100"
+        className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
+          transparent
+            ? "bg-transparent border-b border-transparent"
+            : "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-200"
         }`}
       >
         <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex-shrink-0">
-            <Logo />
+            <Logo forceWhite={transparent} />
           </Link>
 
           <div className="hidden md:flex items-center md:gap-4 lg:gap-7">
@@ -243,9 +249,13 @@ export function Navbar() {
                   key={href}
                   href={href}
                   className={`text-sm font-medium transition-colors ${
-                    active
-                      ? "text-gray-900 border-b-2 border-orange-500 pb-0.5"
-                      : "text-gray-500 hover:text-gray-900"
+                    transparent
+                      ? active
+                        ? "text-white border-b-2 border-orange-400 pb-0.5"
+                        : "text-white/75 hover:text-white"
+                      : active
+                        ? "text-gray-900 border-b-2 border-orange-500 pb-0.5"
+                        : "text-gray-500 hover:text-gray-900"
                   }`}
                 >
                   {label}
@@ -259,7 +269,7 @@ export function Navbar() {
               onClick={() => {
                 window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true }));
               }}
-              className="hidden lg:flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors px-2 py-1 rounded-lg border border-gray-200 hover:border-gray-300 bg-gray-50"
+              className={`hidden lg:flex items-center gap-1.5 text-xs transition-colors px-2 py-1 rounded-lg border ${transparent ? "border-white/20 bg-white/10 text-white/60 hover:text-white" : "border-gray-200 hover:border-gray-300 bg-gray-50 text-gray-400 hover:text-gray-600"}`}
               aria-label="Open command palette"
             >
               <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -271,19 +281,19 @@ export function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="text-sm font-medium px-4 py-2 rounded-lg text-gray-600 hover:text-gray-900 transition-all"
+                  className={`text-sm font-medium px-4 py-2 rounded-lg transition-all ${transparent ? "text-white/75 hover:text-white" : "text-gray-600 hover:text-gray-900"}`}
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:border-gray-400 hover:text-gray-900 transition-all"
+                  className={`text-sm font-medium px-4 py-2 rounded-lg border transition-all ${transparent ? "border-white/25 text-white/80 hover:border-white/50 hover:text-white" : "border-gray-300 text-gray-700 hover:border-gray-400 hover:text-gray-900"}`}
                 >
                   Sign Up
                 </Link>
                 <Link
                   href="/register?role=provider"
-                  className="text-sm font-semibold px-5 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-sm"
+                  className="text-sm font-semibold px-5 py-2 rounded-lg bg-orange-500 hover:bg-orange-400 text-white transition-all shadow-sm"
                 >
                   List Your Business
                 </Link>

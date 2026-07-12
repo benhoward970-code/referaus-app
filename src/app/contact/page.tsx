@@ -277,7 +277,7 @@ export default function ContactPage() {
   const messageField = getFieldState("message");
 
   return (
-    <div className="min-h-screen pt-28 pb-14">
+    <div className="page-top min-h-screen pt-28 pb-14">
       {/* Hero */}
       <section className="px-4 sm:px-6 pb-10">
         <div className="max-w-4xl mx-auto">

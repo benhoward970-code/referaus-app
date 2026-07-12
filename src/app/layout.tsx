@@ -20,6 +20,7 @@ import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { MobileFAB } from "@/components/MobileFAB";
+import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -123,6 +124,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning className="font-sans antialiased text-gray-900">
 
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:outline-none">Skip to main content</a>
+        <SmoothScrollProvider>
         <AuthProvider>
           <ToastProvider>
             <CookieConsent />
@@ -146,6 +148,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <MobileFAB />
           </ToastProvider>
         </AuthProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

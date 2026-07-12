@@ -121,7 +121,7 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen pt-28 pb-14 px-4 sm:px-6">
+    <div className="page-top min-h-screen pt-28 pb-14 px-4 sm:px-6">
       {/* Sticky CTA Bar */}
       <AnimatePresence>
         {showStickyCTA && (

@@ -20,7 +20,7 @@ export default function BlogPage() {
   const rest = filtered.slice(2);
 
   return (
-    <div className="min-h-screen pt-28 pb-14 px-4 sm:px-6">
+    <div className="page-top min-h-screen pt-28 pb-14 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
           <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Resources</span>

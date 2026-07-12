@@ -7,7 +7,7 @@ function HexIcon({ size = 32 }: { size?: number }) {
   );
 }
 
-export function Logo({ size = "default" }: { size?: "small" | "default" | "large" }) {
+export function Logo({ size = "default", forceWhite = false }: { size?: "small" | "default" | "large"; forceWhite?: boolean }) {
   const sizes = {
     small: { icon: 26, text: "text-lg", tag: "text-[7px]" },
     default: { icon: 32, text: "text-2xl", tag: "text-[8px]" },
@@ -19,8 +19,8 @@ export function Logo({ size = "default" }: { size?: "small" | "default" | "large
     <div className="flex items-center gap-2.5 group">
       <HexIcon size={s.icon} />
       <div className="flex flex-col">
-        <div className={`${s.text} leading-none tracking-wider`} style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, textTransform: "uppercase" as const }}>
-          <span className="text-gray-900">REFER</span>
+        <div className={`${s.text} leading-none tracking-wider transition-colors duration-300`} style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, textTransform: "uppercase" as const }}>
+          <span className={forceWhite ? "text-white" : "text-gray-900"}>REFER</span>
           <span className="text-orange-500">AUS</span>
         </div>
       </div>

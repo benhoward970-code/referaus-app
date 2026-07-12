@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { SearchAutocomplete } from '@/components/SearchAutocomplete';
 import { AuroraBackground } from '@/components/AuroraBackground';
+import { MagneticButton } from '@/components/MagneticButton';
 // ActivitySocialProof removed — no fake data
 
 /* ─── Scroll Progress Bar ─── */
@@ -432,7 +433,7 @@ export default function Home() {
         <AuroraBackground />
         {/* Fade aurora into page below */}
         <div className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none z-[1]" style={{ background: "linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%)" }} />
-        <section ref={heroRef} className="min-h-[85vh] flex flex-row items-center gap-12 px-6 pt-28 pb-12 max-w-[1200px] mx-auto relative z-10">
+        <section ref={heroRef} className="min-h-[85vh] flex flex-col lg:flex-row items-center gap-12 px-6 pt-24 pb-16 lg:pt-28 lg:pb-12 max-w-[1200px] mx-auto relative z-10">
         <div className="flex-1 min-w-0">
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5) }}
@@ -461,6 +462,24 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.6), delay: d(0.2) }}
           className="mb-8">
           <HeroSubtitle />
+        </motion.div>
+
+        {/* Hero CTA buttons */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.25) }}
+          className="flex flex-wrap gap-3 mb-8">
+          <MagneticButton>
+            <Link href="/providers"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-orange-500 hover:bg-orange-400 text-white font-bold rounded-xl transition-colors hover:shadow-xl hover:shadow-orange-500/30 text-sm">
+              Browse Providers
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </Link>
+          </MagneticButton>
+          <MagneticButton>
+            <Link href="/register"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/25 transition-colors backdrop-blur-sm text-sm">
+              List Your Organisation Free
+            </Link>
+          </MagneticButton>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.3) }}

@@ -49,6 +49,8 @@ export function AuroraBackground({ className = "" }: { className?: string }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    // Skip canvas animation on mobile — use CSS gradient fallback instead
+    if (window.innerWidth < 768) return;
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -140,7 +142,10 @@ export function AuroraBackground({ className = "" }: { className?: string }) {
     <canvas
       ref={canvasRef}
       className={`absolute inset-0 w-full h-full ${className}`}
-      style={{ display: "block" }}
+      style={{
+        display: "block",
+        background: "#030712", // fallback for mobile where canvas doesn't animate
+      }}
       aria-hidden="true"
     />
   );

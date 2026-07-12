@@ -43,7 +43,7 @@ const stats = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen pt-28 pb-14">
+    <div className="page-top min-h-screen pt-28 pb-14">
 
       {/* Hero */}
       <section className="px-4 sm:px-6 pb-12 sm:pb-12">
