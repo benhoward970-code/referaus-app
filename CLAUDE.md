@@ -13,11 +13,15 @@ You are implementing the **ReferAus design system** in this Next.js + Tailwind C
 
 Do these in order. After each step, run `npm run build` (or `npm run dev`) and confirm with the user before moving on.
 
-### Step 1 — Install the token system
+### Step 1 — Install the token system ✅ done (2026-08-08)
 
-1. Replace `tailwind.config.ts` at the project root with `design-system/tailwind.config.ts`.
-2. Replace `src/app/globals.css` with `design-system/globals.css`.
-3. Restart the dev server (Tailwind config changes require it).
+The project runs Tailwind v4 (CSS-first config, `@import "tailwindcss"` + `@theme`), not v3 — a literal file-replace of `tailwind.config.ts` doesn't apply cleanly and the root `tailwind.config.ts` was never actually wired into the build. So Step 1 was implemented as:
+
+1. The color/shadow tokens from `design-system/tailwind.config.ts` were added as an `@theme { ... }` block directly in `src/app/globals.css` (ink/line/surface colors, `shadow-card`, `shadow-cta`). Existing `shadow-sm/md/lg/xl` and the default radius scale were deliberately **not** overridden, to avoid shifting anything already using them.
+2. The component classes and type scale from `design-system/globals.css` (`.card`, `.card-pad`, `.btn-*`, `.pill-*`, `.input`, `.label`, `.field`, `.section-head`, `.eyebrow`, `.h-display`, `text-h1`...`text-micro`) were appended to `src/app/globals.css` inside `@layer components`, written as plain CSS/`@apply`-on-real-utilities only — Tailwind v4's `@apply` can't reference another hand-written custom class, so `.btn-primary` etc. don't chain off a `.btn` base via `@apply`.
+3. `design-system/` now holds the original reference files (`tailwind.config.ts`, `globals.css`, `components-reference.tsx`) as read-only source-of-truth documentation — they are not built from directly.
+
+All new tokens/classes above are live and usable now (`card`, `btn-primary`, `pill-verified`, `text-ink-700`, `border-line-200`, etc.). Steps 2–5 below (pilot migrate `ProviderCard`, then page-by-page) are unstarted as of this note.
 4. Verify: the home page should look identical or very close — the new config **extends** the default Tailwind theme, it doesn't replace working classes.
 
 **Important:** the existing codebase uses raw Tailwind colors (`bg-blue-600`, `text-gray-500`, etc.). These still work. The new config adds **semantic tokens** alongside them. Don't refactor existing files in this step — just install the foundation.
