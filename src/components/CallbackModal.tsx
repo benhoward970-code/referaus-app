@@ -61,7 +61,7 @@ export function CallbackModal({ providerName, providerSlug, open, onClose }: Pro
           <button
             onClick={onClose}
             aria-label="Close callback modal"
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-ink-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-ink-400 hover:text-ink-700 transition-colors rounded-full hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 6l12 12M6 18L18 6" /></svg>
           </button>
@@ -75,7 +75,7 @@ export function CallbackModal({ providerName, providerSlug, open, onClose }: Pro
               <p className="text-sm text-ink-500">{providerName} will call you back during your preferred time.</p>
               <button
                 onClick={onClose}
-                className="mt-6 px-6 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                className="mt-6 px-6 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
               >
                 Close
               </button>
@@ -96,7 +96,7 @@ export function CallbackModal({ providerName, providerSlug, open, onClose }: Pro
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="callback-name" className="block text-xs font-medium text-gray-600 mb-1.5">
+                  <label htmlFor="callback-name" className="block text-xs font-medium text-ink-700 mb-1.5">
                     Your Name <span aria-hidden="true" className="text-red-500">*</span>
                   </label>
                   <input
@@ -106,11 +106,11 @@ export function CallbackModal({ providerName, providerSlug, open, onClose }: Pro
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="Jane Smith"
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-line-200 text-ink-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus:border-blue-500 transition-colors min-h-[44px]"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-line-200 text-ink-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus:border-orange-500 transition-colors min-h-[44px]"
                   />
                 </div>
                 <div>
-                  <label htmlFor="callback-phone" className="block text-xs font-medium text-gray-600 mb-1.5">
+                  <label htmlFor="callback-phone" className="block text-xs font-medium text-ink-700 mb-1.5">
                     Phone Number <span aria-hidden="true" className="text-red-500">*</span>
                   </label>
                   <input
@@ -120,18 +120,18 @@ export function CallbackModal({ providerName, providerSlug, open, onClose }: Pro
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     placeholder="04xx xxx xxx"
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-line-200 text-ink-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus:border-blue-500 transition-colors min-h-[44px]"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-line-200 text-ink-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus:border-orange-500 transition-colors min-h-[44px]"
                   />
                 </div>
                 <div>
-                  <label htmlFor="callback-time" className="block text-xs font-medium text-gray-600 mb-1.5">
+                  <label htmlFor="callback-time" className="block text-xs font-medium text-ink-700 mb-1.5">
                     Preferred Time
                   </label>
                   <select
                     id="callback-time"
                     value={form.preferredTime}
                     onChange={(e) => setForm({ ...form, preferredTime: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-line-200 text-ink-700 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus:border-blue-500 transition-colors min-h-[44px] appearance-none"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-line-200 text-ink-700 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus:border-orange-500 transition-colors min-h-[44px] appearance-none"
                   >
                     <option value="Morning">Morning (8am – 12pm)</option>
                     <option value="Afternoon">Afternoon (12pm – 5pm)</option>
@@ -142,7 +142,7 @@ export function CallbackModal({ providerName, providerSlug, open, onClose }: Pro
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full min-h-[44px] py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold text-sm transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  className="w-full min-h-[44px] py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold text-sm transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
                 >
                   {sending ? "Sending..." : "Request Callback"}
                 </button>

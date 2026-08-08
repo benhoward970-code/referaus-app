@@ -41,13 +41,13 @@ function MFAChallenge({ factorId, onSuccess }: { factorId: string; onSuccess: ()
   };
 
   return (
-    <div className="glass rounded-2xl p-8">
+    <div className="card-flat p-8">
       <div className="text-center mb-6">
-        <div className="w-14 h-14 rounded-full bg-blue-600/10 text-blue-600 flex items-center justify-center mx-auto mb-3">
+        <div className="w-14 h-14 rounded-[3px] border border-ink-950 bg-white text-orange-500 flex items-center justify-center mx-auto mb-3">
           <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
         </div>
         <h2 className="text-lg font-bold mb-1">Two-Factor Authentication</h2>
-        <p className="text-sm text-gray-500">Enter the 6-digit code from your authenticator app</p>
+        <p className="text-sm text-ink-500">Enter the 6-digit code from your authenticator app</p>
       </div>
       <form onSubmit={handleVerify} className="space-y-4">
         {error && (
@@ -65,13 +65,13 @@ function MFAChallenge({ factorId, onSuccess }: { factorId: string; onSuccess: ()
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
             placeholder="000000"
             required
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-center text-2xl tracking-[0.5em] font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500"
+            className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 text-center text-2xl tracking-[0.5em] font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1"
           />
         </div>
         <button
           type="submit"
           disabled={loading || code.length !== 6}
-          className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25"
+          className="w-full py-3 rounded-[3px] bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-ink-950 font-semibold text-sm transition-all"
         >
           {loading ? "Verifying..." : "Verify Code"}
         </button>
@@ -157,7 +157,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="glass rounded-2xl p-8">
+    <div className="card-flat p-8">
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
           <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600">
@@ -168,25 +168,25 @@ function LoginForm() {
           </div>
         )}
         <div>
-          <label className="text-xs font-medium text-gray-500 mb-1.5 block">Email</label>
+          <label className="text-xs font-medium text-ink-500 mb-1.5 block">Email</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500" />
+            className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1" />
         </div>
         <div>
-          <label className="text-xs font-medium text-gray-500 mb-1.5 block">Password</label>
+          <label className="text-xs font-medium text-ink-500 mb-1.5 block">Password</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter password" required
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500" />
+            className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1" />
         </div>
         <button type="submit" disabled={loading}
-          className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25">
+          className="w-full py-3 rounded-[3px] bg-orange-500 hover:bg-orange-400 disabled:opacity-50 text-ink-950 font-semibold text-sm transition-all">
           {loading ? "Signing in..." : "Sign In"}
         </button>
       </form>
       <div className="mt-6 text-center space-y-2">
-        <p className="text-xs text-gray-500">
-          <Link href="/forgot-password" className="text-blue-600 hover:text-blue-700">Forgot your password?</Link>
+        <p className="text-xs text-ink-500">
+          <Link href="/forgot-password" className="text-orange-600 hover:text-orange-500 underline underline-offset-2">Forgot your password?</Link>
         </p>
-        <p className="text-xs text-gray-500">No account? <Link href="/register" className="text-blue-600 hover:text-blue-700">Create one</Link></p>
+        <p className="text-xs text-ink-500">No account? <Link href="/register" className="text-orange-600 hover:text-orange-500 underline underline-offset-2">Create one</Link></p>
       </div>
     </div>
   );
@@ -212,7 +212,7 @@ function ResendVerificationButton({ email }: { email: string }) {
     <button
       onClick={handleResend}
       disabled={sending}
-      className="block mt-2 text-blue-600 hover:text-blue-500 text-xs font-medium underline"
+      className="block mt-2 text-orange-600 hover:text-orange-500 text-xs font-medium underline"
     >
       {sending ? "Sending..." : "Resend verification email"}
     </button>
@@ -222,14 +222,14 @@ function ResendVerificationButton({ email }: { email: string }) {
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-6 pt-16">
-      <div className="absolute top-[-20%] left-[30%] w-[500px] h-[500px] rounded-full bg-blue-600/[0.04] blur-[120px]" />
+      
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <div className="mx-auto mb-4"><LogoMark /></div>
-          <h1 className="text-2xl font-black tracking-tight mb-2">Welcome back</h1>
-          <p className="text-sm text-gray-500">Sign in to your ReferAus account</p>
+          <h1 className="h-editorial text-3xl mb-2">Welcome <em>back.</em></h1>
+          <p className="text-sm text-ink-500">Sign in to your ReferAus account</p>
         </div>
-        <Suspense fallback={<div className="glass rounded-2xl p-8 animate-pulse h-64" />}>
+        <Suspense fallback={<div className="card-flat p-8 animate-pulse h-64" />}>
           <LoginForm />
         </Suspense>
       </motion.div>
