@@ -28,19 +28,19 @@ export default function NotificationsPage() {
     <div className="">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center justify-between mb-8">
-          <div><h1 className="text-3xl font-black tracking-tight">Notifications</h1><p className="text-gray-500 text-sm mt-1">Choose how you want to be notified</p></div>
+          <div><h1 className="text-3xl font-black tracking-tight">Notifications</h1><p className="text-ink-500 text-sm mt-1">Choose how you want to be notified</p></div>
           <Link href="/dashboard" className="text-sm text-blue-600 hover:underline">Back to Dashboard</Link>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100 grid grid-cols-[1fr_80px_80px] items-center">
-            <span className="text-sm font-medium text-gray-500">Notification</span>
-            <span className="text-xs font-medium text-gray-400 text-center">Email</span>
-            <span className="text-xs font-medium text-gray-400 text-center">Push</span>
+        <div className="bg-white border border-line-200 rounded-xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-line-100 grid grid-cols-[1fr_80px_80px] items-center">
+            <span className="text-sm font-medium text-ink-500">Notification</span>
+            <span className="text-xs font-medium text-ink-400 text-center">Email</span>
+            <span className="text-xs font-medium text-ink-400 text-center">Push</span>
           </div>
           {settings.map((s, i) => (
             <motion.div key={s.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }} className="px-6 py-5 border-b border-gray-50 grid grid-cols-[1fr_80px_80px] items-center">
-              <div><div className="text-sm font-medium text-gray-900">{s.label}</div><div className="text-xs text-gray-400 mt-0.5">{s.description}</div></div>
+              <div><div className="text-sm font-medium text-ink-900">{s.label}</div><div className="text-xs text-ink-400 mt-0.5">{s.description}</div></div>
               <div className="flex justify-center">
                 <button onClick={() => toggle(s.id, 'email')} className={'w-10 h-6 rounded-full transition-colors duration-200 relative ' + (s.email ? 'bg-blue-600' : 'bg-gray-200')} aria-label={'Toggle email for ' + s.label}>
                   <span className={'absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ' + (s.email ? 'left-[18px]' : 'left-0.5')} />

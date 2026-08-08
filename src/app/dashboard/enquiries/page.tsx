@@ -34,7 +34,7 @@ function ReplyTemplates() {
 
   return (
     <div className="relative">
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Quick Reply Templates</p>
+      <p className="text-xs font-semibold text-ink-400 uppercase tracking-wider mb-2">Quick Reply Templates</p>
       <div className="flex flex-wrap gap-2">
         {REPLY_TEMPLATES.map((template) => (
           <button
@@ -151,10 +151,10 @@ export default function EnquiriesPage() {
 
   if (!provider) {
     return (
-      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-gray-200 p-8 text-center shadow-sm">
+      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-line-200 p-8 text-center shadow-sm">
         <AlertCircle className="w-10 h-10 text-orange-400 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">No Provider Profile Found</h2>
-        <p className="text-sm text-gray-500 mb-4">Set up your profile first to receive enquiries.</p>
+        <h2 className="text-xl font-bold text-ink-900 mb-2">No Provider Profile Found</h2>
+        <p className="text-sm text-ink-500 mb-4">Set up your profile first to receive enquiries.</p>
         <Link href="/dashboard/profile" className="text-sm text-blue-600 hover:underline">Set Up Profile</Link>
       </motion.div>
     );
@@ -168,7 +168,7 @@ export default function EnquiriesPage() {
           <h1 className="text-3xl font-black tracking-tight" style={{ fontFamily: "'Oswald'" }}>
             Enquiries
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-ink-500 text-sm mt-1">
             {enquiries.length} total enquirie{enquiries.length !== 1 ? 's' : ''}
             {unreadCount > 0 && (
               <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-orange-600 text-xs font-semibold border border-orange-200">
@@ -181,7 +181,7 @@ export default function EnquiriesPage() {
           {enquiries.length > 0 && (
             <button
               onClick={() => exportEnquiriesToCSV(enquiries)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-ink-700 text-sm font-medium transition-colors"
             >
               <Download className="w-4 h-4" />
               Export CSV
@@ -195,34 +195,34 @@ export default function EnquiriesPage() {
 
       {/* Reply Templates */}
       {enquiries.length > 0 && (
-        <motion.div {...fadeUp(0.05)} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <motion.div {...fadeUp(0.05)} className="bg-white rounded-xl border border-line-200 p-4 shadow-sm">
           <ReplyTemplates />
         </motion.div>
       )}
 
       {/* Empty state */}
       {enquiries.length === 0 ? (
-        <motion.div {...fadeUp(0.1)} className="bg-white rounded-2xl border border-gray-200 p-12 text-center shadow-sm">
-          <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-lg font-bold text-gray-900 mb-2">No Enquiries Yet</h2>
-          <p className="text-sm text-gray-500 max-w-sm mx-auto">
+        <motion.div {...fadeUp(0.1)} className="bg-white rounded-2xl border border-line-200 p-12 text-center shadow-sm">
+          <MessageSquare className="w-12 h-12 text-ink-300 mx-auto mb-4" />
+          <h2 className="text-lg font-bold text-ink-900 mb-2">No Enquiries Yet</h2>
+          <p className="text-sm text-ink-500 max-w-sm mx-auto">
             When participants send you enquiries through your listing, they will appear here.
           </p>
         </motion.div>
       ) : (
         <>
           {/* Desktop table */}
-          <motion.div {...fadeUp(0.1)} className="hidden sm:block bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          <motion.div {...fadeUp(0.1)} className="hidden sm:block bg-white rounded-2xl border border-line-200 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Participant</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Phone</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Service</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Message</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Date</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Status</th>
+                  <tr className="border-b border-line-100">
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Participant</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Phone</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Service</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Message</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Date</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Status</th>
                     <th className="px-3 py-3" />
                   </tr>
                 </thead>
@@ -243,8 +243,8 @@ export default function EnquiriesPage() {
                             {(e.name || '?').charAt(0)}
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900 text-sm">{e.name}</p>
-                            <p className="text-xs text-gray-400">{e.email}</p>
+                            <p className="font-semibold text-ink-900 text-sm">{e.name}</p>
+                            <p className="text-xs text-ink-400">{e.email}</p>
                           </div>
                         </div>
                       </td>
@@ -254,7 +254,7 @@ export default function EnquiriesPage() {
                             <Phone className="w-3 h-3" /> {e.phone}
                           </a>
                         ) : (
-                          <span className="text-xs text-gray-400">--</span>
+                          <span className="text-xs text-ink-400">--</span>
                         )}
                       </td>
                       <td className="px-3 py-4">
@@ -263,17 +263,17 @@ export default function EnquiriesPage() {
                         </span>
                       </td>
                       <td className="px-3 py-4 max-w-[220px]">
-                        <p className="text-xs text-gray-500 line-clamp-2">{e.message}</p>
+                        <p className="text-xs text-ink-500 line-clamp-2">{e.message}</p>
                       </td>
                       <td className="px-3 py-4 whitespace-nowrap">
-                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                        <span className="text-xs text-ink-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {e.created_at ? new Date(e.created_at).toLocaleDateString() : ''}
                         </span>
                       </td>
                       <td className="px-3 py-4">
                         {e.read ? (
-                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-ink-500 border border-line-200">
                             <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
                             Read
                           </span>
@@ -321,7 +321,7 @@ export default function EnquiriesPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * i, duration: 0.35 }}
                 className={`bg-white rounded-2xl border shadow-sm p-4 space-y-3 ${
-                  !e.read ? 'border-orange-200 bg-orange-50/30' : 'border-gray-200'
+                  !e.read ? 'border-orange-200 bg-orange-50/30' : 'border-line-200'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -332,8 +332,8 @@ export default function EnquiriesPage() {
                       {(e.name || '?').charAt(0)}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">{e.name}</p>
-                      <p className="text-xs text-gray-400">{e.email}</p>
+                      <p className="font-semibold text-ink-900">{e.name}</p>
+                      <p className="text-xs text-ink-400">{e.email}</p>
                     </div>
                   </div>
                   {!e.read ? (
@@ -342,7 +342,7 @@ export default function EnquiriesPage() {
                       New
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-ink-500 border border-line-200">
                       <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
                       Read
                     </span>
@@ -353,7 +353,7 @@ export default function EnquiriesPage() {
                   <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-1 rounded-lg">
                     {e.service || 'General'}
                   </span>
-                  <span className="text-xs text-gray-400 flex items-center gap-1">
+                  <span className="text-xs text-ink-400 flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {e.created_at ? new Date(e.created_at).toLocaleDateString() : ''}
                   </span>

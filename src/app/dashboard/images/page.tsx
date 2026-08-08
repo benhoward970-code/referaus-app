@@ -56,21 +56,21 @@ function DropZone({ label, hint, currentUrl, uploading, onUpload, onDelete, acce
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-      <h3 className="text-sm font-bold text-gray-900 mb-1">{label}</h3>
-      <p className="text-xs text-gray-500 mb-3">{hint}</p>
+    <div className="bg-white border border-line-200 rounded-2xl p-5 shadow-sm">
+      <h3 className="text-sm font-bold text-ink-900 mb-1">{label}</h3>
+      <p className="text-xs text-ink-500 mb-3">{hint}</p>
 
       {currentUrl ? (
         <div className="relative group">
           <img
             src={currentUrl}
             alt={label}
-            className="w-full h-48 object-cover rounded-xl border border-gray-100"
+            className="w-full h-48 object-cover rounded-xl border border-line-100"
           />
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-2">
             <button
               onClick={() => inputRef.current?.click()}
-              className="p-2 bg-white rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+              className="p-2 bg-white rounded-lg text-ink-700 hover:bg-gray-100 transition-colors"
               disabled={uploading}
             >
               <Upload className="w-4 h-4" />
@@ -96,16 +96,16 @@ function DropZone({ label, hint, currentUrl, uploading, onUpload, onDelete, acce
           onDragLeave={() => setDragging(false)}
           onDrop={handleDrop}
           className={`w-full h-48 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all ${
-            dragging ? 'border-blue-400 bg-blue-50' : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+            dragging ? 'border-blue-400 bg-blue-50' : 'border-line-200 hover:border-blue-300 hover:bg-gray-50'
           }`}
         >
           {uploading ? (
             <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
           ) : (
             <>
-              <Upload className="w-8 h-8 text-gray-400 mb-2" />
-              <p className="text-sm text-gray-500 font-medium">Click or drag to upload</p>
-              <p className="text-xs text-gray-400 mt-1">PNG, JPG up to 5MB</p>
+              <Upload className="w-8 h-8 text-ink-400 mb-2" />
+              <p className="text-sm text-ink-500 font-medium">Click or drag to upload</p>
+              <p className="text-xs text-ink-400 mt-1">PNG, JPG up to 5MB</p>
             </>
           )}
         </div>
@@ -273,10 +273,10 @@ export default function ImagesPage() {
 
   if (!provider) {
     return (
-      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-gray-200 p-8 text-center shadow-sm">
+      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-line-200 p-8 text-center shadow-sm">
         <AlertCircle className="w-10 h-10 text-orange-400 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">No Provider Profile Found</h2>
-        <p className="text-sm text-gray-500 mb-4">Set up your profile first to manage images.</p>
+        <h2 className="text-xl font-bold text-ink-900 mb-2">No Provider Profile Found</h2>
+        <p className="text-sm text-ink-500 mb-4">Set up your profile first to manage images.</p>
         <Link href="/dashboard/profile" className="text-sm text-blue-600 hover:underline">Set Up Profile</Link>
       </motion.div>
     );
@@ -311,7 +311,7 @@ export default function ImagesPage() {
           <h1 className="text-3xl font-black tracking-tight" style={{ fontFamily: "'Oswald'" }}>
             Images
           </h1>
-          <p className="text-gray-500 text-sm mt-1">Manage your logo, cover photo, and gallery images.</p>
+          <p className="text-ink-500 text-sm mt-1">Manage your logo, cover photo, and gallery images.</p>
         </div>
         <Link href="/dashboard" className="text-sm text-blue-600 hover:underline">
           Back to Dashboard
@@ -343,11 +343,11 @@ export default function ImagesPage() {
       </div>
 
       {/* Gallery */}
-      <motion.section {...fadeUp(0.15)} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+      <motion.section {...fadeUp(0.15)} className="bg-white border border-line-200 rounded-2xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-sm font-bold text-gray-900">Gallery Images</h2>
-            <p className="text-xs text-gray-500 mt-0.5">{galleryUrls.length}/6 images uploaded</p>
+            <h2 className="text-sm font-bold text-ink-900">Gallery Images</h2>
+            <p className="text-xs text-ink-500 mt-0.5">{galleryUrls.length}/6 images uploaded</p>
           </div>
           {galleryUrls.length < 6 && (
             <button
@@ -369,7 +369,7 @@ export default function ImagesPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05 }}
-              className="relative group aspect-[4/3] rounded-xl overflow-hidden border border-gray-100"
+              className="relative group aspect-[4/3] rounded-xl overflow-hidden border border-line-100"
             >
               <NextImage src={url} alt={`Gallery ${i + 1}`} fill sizes="(max-width: 640px) 50vw, 33vw" className="object-cover" />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -391,15 +391,15 @@ export default function ImagesPage() {
               onDragLeave={() => setGalleryDragging(false)}
               onDrop={handleGalleryDrop}
               className={`aspect-[4/3] border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all ${
-                galleryDragging ? 'border-blue-400 bg-blue-50' : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                galleryDragging ? 'border-blue-400 bg-blue-50' : 'border-line-200 hover:border-blue-300 hover:bg-gray-50'
               }`}
             >
               {uploadingGallery ? (
                 <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
               ) : (
                 <>
-                  <ImageIcon className="w-6 h-6 text-gray-400 mb-1" />
-                  <p className="text-xs text-gray-500 font-medium">Add image</p>
+                  <ImageIcon className="w-6 h-6 text-ink-400 mb-1" />
+                  <p className="text-xs text-ink-500 font-medium">Add image</p>
                 </>
               )}
             </div>

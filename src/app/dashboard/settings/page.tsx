@@ -129,7 +129,7 @@ function TwoFactorSection() {
 
   if (loading) {
     return (
-      <section className="bg-white border border-gray-200 rounded-xl p-6">
+      <section className="bg-white border border-line-200 rounded-xl p-6">
         <h2 className="font-bold mb-4">Two-Factor Authentication</h2>
         <div className="animate-pulse h-8 bg-gray-100 rounded w-48" />
       </section>
@@ -137,9 +137,9 @@ function TwoFactorSection() {
   }
 
   return (
-    <section className="bg-white border border-gray-200 rounded-xl p-6">
+    <section className="bg-white border border-line-200 rounded-xl p-6">
       <h2 className="font-bold mb-2">Two-Factor Authentication</h2>
-      <p className="text-sm text-gray-500 mb-4">
+      <p className="text-sm text-ink-500 mb-4">
         Add an extra layer of security to your account using an authenticator app.
       </p>
 
@@ -184,7 +184,7 @@ function TwoFactorSection() {
             value={disableCode}
             onChange={(e) => setDisableCode(e.target.value.replace(/\D/g, ''))}
             placeholder="000000"
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-center text-xl tracking-[0.4em] font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-line-200 text-ink-900 text-center text-xl tracking-[0.4em] font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <div className="flex gap-2">
             <button
@@ -197,7 +197,7 @@ function TwoFactorSection() {
             <button
               type="button"
               onClick={() => { setDisabling(false); setDisableCode(''); setError(''); }}
-              className="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
+              className="px-6 py-2.5 bg-gray-100 text-ink-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
             >
               Cancel
             </button>
@@ -222,9 +222,9 @@ function TwoFactorSection() {
         >
           <div className="text-sm text-gray-600">
             <p className="font-medium mb-2">1. Scan this QR code with your authenticator app</p>
-            <p className="text-xs text-gray-400">(Google Authenticator, Authy, 1Password, etc.)</p>
+            <p className="text-xs text-ink-400">(Google Authenticator, Authy, 1Password, etc.)</p>
           </div>
-          <div className="bg-white border border-gray-200 rounded-xl p-4 inline-block">
+          <div className="bg-white border border-line-200 rounded-xl p-4 inline-block">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qrCode} alt="2FA QR Code" width={200} height={200} />
           </div>
@@ -238,7 +238,7 @@ function TwoFactorSection() {
               value={verifyCode}
               onChange={(e) => setVerifyCode(e.target.value.replace(/\D/g, ''))}
               placeholder="000000"
-              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-center text-xl tracking-[0.4em] font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-line-200 text-ink-900 text-center text-xl tracking-[0.4em] font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div className="flex gap-2">
               <button
@@ -251,7 +251,7 @@ function TwoFactorSection() {
               <button
                 type="button"
                 onClick={handleCancelEnroll}
-                className="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
+                className="px-6 py-2.5 bg-gray-100 text-ink-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
               >
                 Cancel
               </button>
@@ -287,9 +287,9 @@ function NotificationPreferences() {
   };
 
   return (
-    <section className="bg-white border border-gray-200 rounded-xl p-6">
+    <section className="bg-white border border-line-200 rounded-xl p-6">
       <h2 className="font-bold mb-2">Notification Preferences</h2>
-      <p className="text-sm text-gray-500 mb-5">Choose what you want to be notified about.</p>
+      <p className="text-sm text-ink-500 mb-5">Choose what you want to be notified about.</p>
       <div className="space-y-4 max-w-md">
         {[
           { key: 'newEnquiries' as const, label: 'New Enquiries', desc: 'When a participant sends you an enquiry' },
@@ -298,8 +298,8 @@ function NotificationPreferences() {
         ].map(({ key, label, desc }) => (
           <div key={key} className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-sm font-medium text-gray-900">{label}</p>
-              <p className="text-xs text-gray-400">{desc}</p>
+              <p className="text-sm font-medium text-ink-900">{label}</p>
+              <p className="text-xs text-ink-400">{desc}</p>
             </div>
             <button
               role="switch"
@@ -345,20 +345,20 @@ export default function SettingsPage() {
     <div className="">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-black tracking-tight mb-2">Settings</h1>
-        <p className="text-gray-500 text-sm mb-8">Account and security settings</p>
+        <p className="text-ink-500 text-sm mb-8">Account and security settings</p>
 
         <div className="space-y-8">
-          <section className="bg-white border border-gray-200 rounded-xl p-6">
+          <section className="bg-white border border-line-200 rounded-xl p-6">
             <h2 className="font-bold mb-4">Account Email</h2>
-            <div><label className="block text-sm font-medium mb-1.5">Email Address</label><input type="email" value={form.email} onChange={e => update('email', e.target.value)} className="w-full max-w-md px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+            <div><label className="block text-sm font-medium mb-1.5">Email Address</label><input type="email" value={form.email} onChange={e => update('email', e.target.value)} className="w-full max-w-md px-4 py-3 rounded-lg border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
           </section>
 
-          <section className="bg-white border border-gray-200 rounded-xl p-6">
+          <section className="bg-white border border-line-200 rounded-xl p-6">
             <h2 className="font-bold mb-4">Change Password</h2>
             <div className="space-y-4 max-w-md">
-              <div><label className="block text-sm font-medium mb-1.5">Current Password</label><input type="password" value={form.currentPassword} onChange={e => update('currentPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-              <div><label className="block text-sm font-medium mb-1.5">New Password</label><input type="password" value={form.newPassword} onChange={e => update('newPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
-              <div><label className="block text-sm font-medium mb-1.5">Confirm New Password</label><input type="password" value={form.confirmPassword} onChange={e => update('confirmPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+              <div><label className="block text-sm font-medium mb-1.5">Current Password</label><input type="password" value={form.currentPassword} onChange={e => update('currentPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+              <div><label className="block text-sm font-medium mb-1.5">New Password</label><input type="password" value={form.newPassword} onChange={e => update('newPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
+              <div><label className="block text-sm font-medium mb-1.5">Confirm New Password</label><input type="password" value={form.confirmPassword} onChange={e => update('confirmPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" /></div>
             </div>
           </section>
 
@@ -366,11 +366,11 @@ export default function SettingsPage() {
 
           <NotificationPreferences />
 
-          <section className="bg-white border border-gray-200 rounded-xl p-6">
+          <section className="bg-white border border-line-200 rounded-xl p-6">
             <h2 className="font-bold mb-4">Preferences</h2>
             <div className="grid sm:grid-cols-2 gap-4 max-w-md">
-              <div><label className="block text-sm font-medium mb-1.5">Timezone</label><select value={form.timezone} onChange={e => update('timezone', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="Australia/Sydney">Sydney (AEST)</option><option value="Australia/Melbourne">Melbourne (AEST)</option><option value="Australia/Brisbane">Brisbane (AEST)</option><option value="Australia/Perth">Perth (AWST)</option></select></div>
-              <div><label className="block text-sm font-medium mb-1.5">Language</label><select value={form.language} onChange={e => update('language', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="en">English</option></select></div>
+              <div><label className="block text-sm font-medium mb-1.5">Timezone</label><select value={form.timezone} onChange={e => update('timezone', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="Australia/Sydney">Sydney (AEST)</option><option value="Australia/Melbourne">Melbourne (AEST)</option><option value="Australia/Brisbane">Brisbane (AEST)</option><option value="Australia/Perth">Perth (AWST)</option></select></div>
+              <div><label className="block text-sm font-medium mb-1.5">Language</label><select value={form.language} onChange={e => update('language', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="en">English</option></select></div>
             </div>
           </section>
 

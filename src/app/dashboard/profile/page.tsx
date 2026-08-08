@@ -28,7 +28,7 @@ function Skeleton({ className = '' }: { className?: string }) {
 }
 
 const inputClass =
-  'w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white';
+  'w-full px-4 py-3 rounded-xl border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white';
 
 export default function EditProfilePage() {
   const { user, loading: authLoading } = useAuth();
@@ -130,7 +130,7 @@ export default function EditProfilePage() {
           </div>
         </div>
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-white border border-gray-200 rounded-2xl p-6">
+          <div key={i} className="bg-white border border-line-200 rounded-2xl p-6">
             <Skeleton className="h-5 w-40 mb-4" />
             <div className="grid sm:grid-cols-2 gap-4">
               <Skeleton className="h-12 w-full" />
@@ -144,10 +144,10 @@ export default function EditProfilePage() {
 
   if (!provider) {
     return (
-      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-gray-200 p-8 text-center shadow-sm">
+      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-line-200 p-8 text-center shadow-sm">
         <AlertCircle className="w-10 h-10 text-orange-400 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">No Provider Profile Found</h2>
-        <p className="text-sm text-gray-500 mb-4">Please contact support to set up your provider profile.</p>
+        <h2 className="text-xl font-bold text-ink-900 mb-2">No Provider Profile Found</h2>
+        <p className="text-sm text-ink-500 mb-4">Please contact support to set up your provider profile.</p>
         <Link href="/dashboard" className="text-sm text-blue-600 hover:underline">Back to Dashboard</Link>
       </motion.div>
     );
@@ -180,7 +180,7 @@ export default function EditProfilePage() {
             <h1 className="text-3xl font-black tracking-tight" style={{ fontFamily: "'Oswald'" }}>
               Edit Profile
             </h1>
-            <p className="text-gray-500 text-sm mt-1">Update your listing details</p>
+            <p className="text-ink-500 text-sm mt-1">Update your listing details</p>
           </div>
           <Link href="/dashboard" className="text-sm text-blue-600 hover:underline">
             Back to Dashboard
@@ -189,14 +189,14 @@ export default function EditProfilePage() {
 
         <div className="space-y-8">
           {/* Business Information */}
-          <motion.section {...fadeUp(0.05)} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <h2 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <motion.section {...fadeUp(0.05)} className="bg-white border border-line-200 rounded-2xl p-6 shadow-sm">
+            <h2 className="font-bold text-ink-900 mb-4 flex items-center gap-2">
               <Pencil className="w-4 h-4 text-blue-500" /> Business Information
             </h2>
             <div className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Business Name</label>
+                  <label className="block text-sm font-medium text-ink-700 mb-1.5">Business Name</label>
                   <input
                     value={form.name}
                     onChange={(e) => update('name', e.target.value)}
@@ -205,7 +205,7 @@ export default function EditProfilePage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+                  <label className="block text-sm font-medium text-ink-700 mb-1.5">Category</label>
                   <select
                     value={form.category}
                     onChange={(e) => update('category', e.target.value)}
@@ -219,7 +219,7 @@ export default function EditProfilePage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Short Bio</label>
+                <label className="block text-sm font-medium text-ink-700 mb-1.5">Short Bio</label>
                 <input
                   value={form.bio}
                   onChange={(e) => update('bio', e.target.value)}
@@ -227,10 +227,10 @@ export default function EditProfilePage() {
                   placeholder="A short tagline for your business"
                   maxLength={160}
                 />
-                <p className="text-xs text-gray-400 mt-1">{form.bio.length}/160 characters</p>
+                <p className="text-xs text-ink-400 mt-1">{form.bio.length}/160 characters</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Description</label>
+                <label className="block text-sm font-medium text-ink-700 mb-1.5">Full Description</label>
                 <textarea
                   value={form.description}
                   onChange={(e) => update('description', e.target.value)}
@@ -240,7 +240,7 @@ export default function EditProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">ABN</label>
+                <label className="block text-sm font-medium text-ink-700 mb-1.5">ABN</label>
                 <input
                   value={form.abn}
                   onChange={(e) => update('abn', e.target.value)}
@@ -252,12 +252,12 @@ export default function EditProfilePage() {
           </motion.section>
 
           {/* Contact Information */}
-          <motion.section {...fadeUp(0.1)} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <h2 className="font-bold text-gray-900 mb-4">Contact Information</h2>
+          <motion.section {...fadeUp(0.1)} className="bg-white border border-line-200 rounded-2xl p-6 shadow-sm">
+            <h2 className="font-bold text-ink-900 mb-4">Contact Information</h2>
             <div className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone</label>
+                  <label className="block text-sm font-medium text-ink-700 mb-1.5">Phone</label>
                   <input
                     value={form.phone}
                     onChange={(e) => update('phone', e.target.value)}
@@ -266,7 +266,7 @@ export default function EditProfilePage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+                  <label className="block text-sm font-medium text-ink-700 mb-1.5">Email</label>
                   <input
                     type="email"
                     value={form.email}
@@ -277,7 +277,7 @@ export default function EditProfilePage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Website</label>
+                <label className="block text-sm font-medium text-ink-700 mb-1.5">Website</label>
                 <input
                   value={form.website}
                   onChange={(e) => update('website', e.target.value)}
@@ -289,9 +289,9 @@ export default function EditProfilePage() {
           </motion.section>
 
           {/* Services */}
-          <motion.section {...fadeUp(0.15)} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <h2 className="font-bold text-gray-900 mb-4">Services</h2>
-            <p className="text-sm text-gray-500 mb-3">Select all services you provide.</p>
+          <motion.section {...fadeUp(0.15)} className="bg-white border border-line-200 rounded-2xl p-6 shadow-sm">
+            <h2 className="font-bold text-ink-900 mb-4">Services</h2>
+            <p className="text-sm text-ink-500 mb-3">Select all services you provide.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {SERVICE_OPTIONS.map((s) => (
                 <button
@@ -301,7 +301,7 @@ export default function EditProfilePage() {
                     'px-4 py-3 rounded-xl text-sm font-medium border transition-all ' +
                     (form.services.includes(s)
                       ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-blue-300')
+                      : 'bg-white text-ink-700 border-line-200 hover:border-blue-300')
                   }
                 >
                   {s}
@@ -311,11 +311,11 @@ export default function EditProfilePage() {
           </motion.section>
 
           {/* Location */}
-          <motion.section {...fadeUp(0.2)} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <h2 className="font-bold text-gray-900 mb-4">Location</h2>
+          <motion.section {...fadeUp(0.2)} className="bg-white border border-line-200 rounded-2xl p-6 shadow-sm">
+            <h2 className="font-bold text-ink-900 mb-4">Location</h2>
             <div className="grid sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Suburb</label>
+                <label className="block text-sm font-medium text-ink-700 mb-1.5">Suburb</label>
                 <input
                   value={form.suburb}
                   onChange={(e) => update('suburb', e.target.value)}
@@ -324,7 +324,7 @@ export default function EditProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">State</label>
+                <label className="block text-sm font-medium text-ink-700 mb-1.5">State</label>
                 <select
                   value={form.state}
                   onChange={(e) => update('state', e.target.value)}
@@ -337,7 +337,7 @@ export default function EditProfilePage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Postcode</label>
+                <label className="block text-sm font-medium text-ink-700 mb-1.5">Postcode</label>
                 <input
                   value={form.postcode}
                   onChange={(e) => update('postcode', e.target.value)}
@@ -349,15 +349,15 @@ export default function EditProfilePage() {
           </motion.section>
 
           {/* Brand Colour */}
-          <motion.section {...fadeUp(0.25)} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-            <h2 className="font-bold text-gray-900 mb-4">Brand Colour</h2>
-            <p className="text-sm text-gray-500 mb-3">Choose a colour to personalise your listing.</p>
+          <motion.section {...fadeUp(0.25)} className="bg-white border border-line-200 rounded-2xl p-6 shadow-sm">
+            <h2 className="font-bold text-ink-900 mb-4">Brand Colour</h2>
+            <p className="text-sm text-ink-500 mb-3">Choose a colour to personalise your listing.</p>
             <div className="flex items-center gap-4">
               <input
                 type="color"
                 value={form.brand_color}
                 onChange={(e) => update('brand_color', e.target.value)}
-                className="w-12 h-12 rounded-xl border border-gray-200 cursor-pointer p-1"
+                className="w-12 h-12 rounded-xl border border-line-200 cursor-pointer p-1"
               />
               <input
                 value={form.brand_color}
@@ -367,7 +367,7 @@ export default function EditProfilePage() {
                 maxLength={7}
               />
               <div
-                className="h-12 flex-1 rounded-xl border border-gray-200 flex items-center justify-center text-sm font-semibold text-white"
+                className="h-12 flex-1 rounded-xl border border-line-200 flex items-center justify-center text-sm font-semibold text-white"
                 style={{ backgroundColor: form.brand_color }}
               >
                 Preview
@@ -377,7 +377,7 @@ export default function EditProfilePage() {
 
           {/* Save */}
           <motion.div {...fadeUp(0.3)} className="flex items-center justify-between pt-2 pb-8">
-            <Link href="/dashboard" className="text-sm text-gray-500 hover:text-gray-700">
+            <Link href="/dashboard" className="text-sm text-ink-500 hover:text-ink-700">
               Cancel
             </Link>
             <button

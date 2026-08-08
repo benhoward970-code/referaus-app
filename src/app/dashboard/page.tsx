@@ -48,28 +48,28 @@ function RankingIndicator({ providerId, avgRating, hasReviews }: { providerId?: 
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.15 }}
-      className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex items-center gap-4"
+      className="bg-white rounded-2xl border border-line-200 shadow-sm p-5 flex items-center gap-4"
     >
       <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0">
         <TrendingUp className="w-5 h-5 text-orange-500" />
       </div>
       <div>
-        <p className="text-xs text-gray-400 font-medium mb-0.5">Your ranking</p>
+        <p className="text-xs text-ink-400 font-medium mb-0.5">Your ranking</p>
         {!hasReviews ? (
-          <p className="text-sm font-semibold text-gray-700">Get reviews to improve your ranking</p>
+          <p className="text-sm font-semibold text-ink-700">Get reviews to improve your ranking</p>
         ) : rank ? (
           rank.rank > 0 ? (
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-ink-900">
               You rank{" "}
               <span className="text-orange-500 font-black">#{rank.rank}</span>
               {" "}out of{" "}
               <span className="font-bold">{rank.total}</span> providers
             </p>
           ) : (
-            <p className="text-sm font-semibold text-gray-700">Keep collecting reviews to build your ranking</p>
+            <p className="text-sm font-semibold text-ink-700">Keep collecting reviews to build your ranking</p>
           )
         ) : (
-          <p className="text-sm text-gray-400">Calculating...</p>
+          <p className="text-sm text-ink-400">Calculating...</p>
         )}
       </div>
     </motion.div>
@@ -143,12 +143,12 @@ function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (upda
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.18 }}
-      className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5"
+      className="bg-white rounded-2xl border border-line-200 shadow-sm p-5"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-base font-bold text-gray-900">Quick Edit Profile</h2>
-          <p className="text-xs text-gray-400 mt-0.5">Update key fields without leaving the dashboard</p>
+          <h2 className="text-base font-bold text-ink-900">Quick Edit Profile</h2>
+          <p className="text-xs text-ink-400 mt-0.5">Update key fields without leaving the dashboard</p>
         </div>
         <Link href="/dashboard/profile" className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
           Full edit <ArrowUpRight className="w-3 h-3" />
@@ -156,10 +156,10 @@ function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (upda
       </div>
       <div className="space-y-3">
         {fields.map((f) => (
-          <div key={f.key} className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-gray-50 border border-gray-200">
+          <div key={f.key} className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-gray-50 border border-line-200">
             <span className="shrink-0">{f.icon}</span>
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-400 font-medium">{f.label}</p>
+              <p className="text-xs text-ink-400 font-medium">{f.label}</p>
               {editField === f.key ? (
                 <div className="flex items-center gap-2 mt-1">
                   <input
@@ -168,7 +168,7 @@ function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (upda
                     onChange={(e) => setValue(f.key === "bio" ? e.target.value.slice(0, 100) : e.target.value)}
                     placeholder={f.placeholder}
                     autoFocus
-                    className="flex-1 text-sm px-2.5 py-1.5 rounded-lg border border-gray-200 focus:outline-none focus:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 text-gray-900 min-w-0"
+                    className="flex-1 text-sm px-2.5 py-1.5 rounded-lg border border-line-200 focus:outline-none focus:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 text-ink-900 min-w-0"
                     onKeyDown={(e) => { if (e.key === "Enter") handleSave(); if (e.key === "Escape") setEditField(null); }}
                   />
                   <button
@@ -180,13 +180,13 @@ function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (upda
                   </button>
                   <button
                     onClick={() => setEditField(null)}
-                    className="px-2 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs hover:bg-gray-200 transition-colors shrink-0"
+                    className="px-2 py-1.5 rounded-lg bg-gray-100 text-ink-500 text-xs hover:bg-gray-200 transition-colors shrink-0"
                   >
                     ✕
                   </button>
                 </div>
               ) : (
-                <p className={`text-sm truncate ${f.value === "Not set" ? "text-gray-400 italic" : "text-gray-800"}`}>
+                <p className={`text-sm truncate ${f.value === "Not set" ? "text-ink-400 italic" : "text-gray-800"}`}>
                   {f.value}
                   {savedField === f.key && <span className="ml-2 text-green-600 text-xs font-semibold">✓ Saved</span>}
                 </p>
@@ -195,7 +195,7 @@ function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (upda
             {editField !== f.key && (
               <button
                 onClick={() => startEdit(f.key)}
-                className="shrink-0 p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                className="shrink-0 p-1.5 rounded-lg text-ink-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                 aria-label={`Edit ${f.label}`}
               >
                 <Pencil className="w-3.5 h-3.5" />
@@ -249,8 +249,8 @@ function ConfettiCelebration({ onDone }: { onDone: () => void }) {
         className="absolute top-1/3 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-2xl px-8 py-6 text-center pointer-events-auto"
       >
         <div className="text-4xl mb-2">🎉</div>
-        <h3 className="text-xl font-black text-gray-900 mb-1">Your profile is complete!</h3>
-        <p className="text-sm text-gray-500">You&apos;re ready to attract more NDIS participants.</p>
+        <h3 className="text-xl font-black text-ink-900 mb-1">Your profile is complete!</h3>
+        <p className="text-sm text-ink-500">You&apos;re ready to attract more NDIS participants.</p>
       </motion.div>
     </div>
   );
@@ -278,7 +278,7 @@ function Skeleton({ className = "" }: { className?: string }) {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+    <div className="bg-white rounded-2xl border border-line-200 p-5 shadow-sm">
       <Skeleton className="h-4 w-24 mb-3" />
       <Skeleton className="h-8 w-16 mb-2" />
       <Skeleton className="h-3 w-20" />
@@ -295,7 +295,7 @@ const statColors: Record<string, { bg: string; icon: string; border: string }> =
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const PLAN_CONFIG: Record<string, { label: string; icon: any; color: string; bg: string; border: string }> = {
-  free: { label: "Free", icon: User, color: "text-gray-500", bg: "bg-gray-50", border: "border-gray-200" },
+  free: { label: "Free", icon: User, color: "text-ink-500", bg: "bg-gray-50", border: "border-line-200" },
   starter: { label: "Starter", icon: Award, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-200" },
   pro: { label: "Professional", icon: Shield, color: "text-purple-600", bg: "bg-purple-50", border: "border-purple-200" },
   premium: { label: "Premium", icon: Crown, color: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200" },
@@ -415,14 +415,14 @@ function DashboardContent() {
   if (!provider) {
     return (
       <div className="space-y-8">
-        <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-gray-200 p-8 sm:p-12 text-center shadow-sm">
+        <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-line-200 p-8 sm:p-12 text-center shadow-sm">
           <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
             <User className="w-8 h-8 text-blue-500" />
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-gray-900 mb-2" style={{ fontFamily: "'Oswald'" }}>
+          <h1 className="text-2xl font-black tracking-tight text-ink-900 mb-2" style={{ fontFamily: "'Oswald'" }}>
             Complete Your Provider Profile
           </h1>
-          <p className="text-gray-500 max-w-md mx-auto mb-6">
+          <p className="text-ink-500 max-w-md mx-auto mb-6">
             Set up your provider profile to start receiving enquiries and appearing in search results on ReferAus.
           </p>
           <Link href="/dashboard/profile" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-all shadow-sm">
@@ -481,20 +481,20 @@ function DashboardContent() {
       <motion.div {...fadeUp(0)} className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">Provider Dashboard</p>
-          <h1 className="text-3xl font-black tracking-tight text-gray-900" style={{ fontFamily: "'Oswald'" }}>
+          <h1 className="text-3xl font-black tracking-tight text-ink-900" style={{ fontFamily: "'Oswald'" }}>
             Welcome back,{" "}
             <span className="bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
               {provider.name}
             </span>
           </h1>
-          <p className="text-gray-500 text-sm mt-1">Here&apos;s what&apos;s happening with your listing.</p>
+          <p className="text-ink-500 text-sm mt-1">Here&apos;s what&apos;s happening with your listing.</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <div className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-sm font-semibold ${planConfig.bg} ${planConfig.border} ${planConfig.color}`}>
             <PlanIcon className="w-4 h-4" />
             {planConfig.label} Plan
           </div>
-          <Link href={`/providers/${provider.slug}`} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-semibold text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all shadow-sm">
+          <Link href={`/providers/${provider.slug}`} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-line-200 text-sm font-semibold text-ink-700 hover:border-gray-300 hover:bg-gray-50 transition-all shadow-sm">
             <ExternalLink className="w-4 h-4" /> View Listing
           </Link>
           {/* Item 63: Preview Profile button */}
@@ -503,7 +503,7 @@ function DashboardContent() {
             target="_blank"
             rel="noopener noreferrer"
             title="Preview your public profile"
-            className="group relative inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-semibold text-gray-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm"
+            className="group relative inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-line-200 text-sm font-semibold text-ink-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm"
             aria-label="Preview your public profile"
           >
             <Eye className="w-4 h-4" />
@@ -521,20 +521,20 @@ function DashboardContent() {
           const Icon = s.icon;
           const isComingSoon = (s as any).comingSoon;
           return (
-            <motion.div key={s.label} {...fadeUp(0.05 + i * 0.06)} className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+            <motion.div key={s.label} {...fadeUp(0.05 + i * 0.06)} className="bg-white rounded-2xl border border-line-200 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
               <div className="flex items-start justify-between mb-3">
-                <p className="text-xs text-gray-500 font-medium leading-tight">{s.label}</p>
+                <p className="text-xs text-ink-500 font-medium leading-tight">{s.label}</p>
                 <span className={`p-1.5 rounded-lg ${colors.bg} ${colors.border} border`}>
                   <Icon className={`w-3.5 h-3.5 ${colors.icon}`} />
                 </span>
               </div>
               {isComingSoon ? (
                 <div>
-                  <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2 py-1 rounded-lg">Coming soon</span>
-                  <p className="text-[10px] text-gray-400 mt-1.5">Tracking being set up</p>
+                  <span className="text-xs font-semibold text-ink-400 bg-gray-100 px-2 py-1 rounded-lg">Coming soon</span>
+                  <p className="text-[10px] text-ink-400 mt-1.5">Tracking being set up</p>
                 </div>
               ) : (
-                <span className="text-3xl font-black text-gray-900">{s.value}</span>
+                <span className="text-3xl font-black text-ink-900">{s.value}</span>
               )}
             </motion.div>
           );
@@ -561,11 +561,11 @@ function DashboardContent() {
         const total = onboardingItems.length;
         const allDone = doneCount === total;
         return (
-          <motion.div {...fadeUp(0.17)} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+          <motion.div {...fadeUp(0.17)} className="bg-white rounded-2xl border border-line-200 shadow-sm p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-base font-bold text-gray-900">Getting Started</h2>
-                <p className="text-xs text-gray-400 mt-0.5">{doneCount}/{total} complete</p>
+                <h2 className="text-base font-bold text-ink-900">Getting Started</h2>
+                <p className="text-xs text-ink-400 mt-0.5">{doneCount}/{total} complete</p>
               </div>
               <div className="text-right">
                 <span className={`text-sm font-black ${allDone ? "text-green-600" : "text-blue-600"}`}>{Math.round((doneCount / total) * 100)}%</span>
@@ -585,9 +585,9 @@ function DashboardContent() {
                   {item.done ? (
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                   ) : (
-                    <Circle className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                    <Circle className="w-4 h-4 text-ink-300 flex-shrink-0" />
                   )}
-                  <span className={`text-xs ${item.done ? "text-gray-700 font-medium" : "text-gray-400"}`}>{item.label}</span>
+                  <span className={`text-xs ${item.done ? "text-ink-700 font-medium" : "text-ink-400"}`}>{item.label}</span>
                 </div>
               ))}
             </div>
@@ -596,11 +596,11 @@ function DashboardContent() {
       })()}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <motion.section {...fadeUp(0.2)} className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <motion.section {...fadeUp(0.2)} className="lg:col-span-2 bg-white rounded-2xl border border-line-200 shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-line-100">
             <div>
-              <h2 className="text-base font-bold text-gray-900">Recent Enquiries</h2>
-              <p className="text-xs text-gray-400 mt-0.5">{unreadCount} unread requiring action</p>
+              <h2 className="text-base font-bold text-ink-900">Recent Enquiries</h2>
+              <p className="text-xs text-ink-400 mt-0.5">{unreadCount} unread requiring action</p>
             </div>
             <Link href="/dashboard/enquiries" className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
               View all <ChevronRight className="w-3.5 h-3.5" />
@@ -608,19 +608,19 @@ function DashboardContent() {
           </div>
           {recentEnquiries.length === 0 ? (
             <div className="p-8 text-center">
-              <MessageSquare className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-              <p className="text-sm text-gray-500 font-medium">No enquiries yet</p>
-              <p className="text-xs text-gray-400 mt-1">Enquiries from participants will appear here.</p>
+              <MessageSquare className="w-10 h-10 text-ink-300 mx-auto mb-3" />
+              <p className="text-sm text-ink-500 font-medium">No enquiries yet</p>
+              <p className="text-xs text-ink-400 mt-1">Enquiries from participants will appear here.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-50">
-                    <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Participant</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Service</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide hidden md:table-cell">Date</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Status</th>
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Participant</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Service</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide hidden md:table-cell">Date</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Status</th>
                     <th className="px-3 py-3" />
                   </tr>
                 </thead>
@@ -633,8 +633,8 @@ function DashboardContent() {
                             {(e.name || "?").charAt(0)}
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900 text-sm">{e.name}</p>
-                            <p className="text-xs text-gray-400">{e.email}</p>
+                            <p className="font-semibold text-ink-900 text-sm">{e.name}</p>
+                            <p className="text-xs text-ink-400">{e.email}</p>
                           </div>
                         </div>
                       </td>
@@ -642,14 +642,14 @@ function DashboardContent() {
                         <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-1 rounded-lg">{e.service || "General"}</span>
                       </td>
                       <td className="px-3 py-4 hidden md:table-cell">
-                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                        <span className="text-xs text-ink-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {e.created_at ? new Date(e.created_at).toLocaleDateString() : ""}
                         </span>
                       </td>
                       <td className="px-3 py-4">
                         {e.read ? (
-                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-ink-500 border border-line-200">
                             <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />Read
                           </span>
                         ) : (
@@ -681,7 +681,7 @@ function DashboardContent() {
         <div className="space-y-5">
           <motion.div {...fadeUp(0.22)} className={`rounded-2xl border shadow-sm p-5 ${planConfig.bg} ${planConfig.border}`}>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base font-bold text-gray-900">Current Plan</h2>
+              <h2 className="text-base font-bold text-ink-900">Current Plan</h2>
               <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${planConfig.color} bg-white/70`}>
                 <PlanIcon className="w-3.5 h-3.5" />
                 {planConfig.label}
@@ -697,7 +697,7 @@ function DashboardContent() {
             ) : (
               <div className="space-y-1 mb-4">
                 <p className="text-sm text-gray-600">You are on the free plan.</p>
-                <p className="text-xs text-gray-400">Upgrade to get verified badge, priority ranking, and direct bookings.</p>
+                <p className="text-xs text-ink-400">Upgrade to get verified badge, priority ranking, and direct bookings.</p>
               </div>
             )}
             {!isPaid && (
@@ -707,9 +707,9 @@ function DashboardContent() {
             )}
           </motion.div>
 
-          <motion.div {...fadeUp(0.25)} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+          <motion.div {...fadeUp(0.25)} className="bg-white rounded-2xl border border-line-200 shadow-sm p-5">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base font-bold text-gray-900">Profile Strength</h2>
+              <h2 className="text-base font-bold text-ink-900">Profile Strength</h2>
               <span className={`text-sm font-black ${profileCompletion >= 80 ? "text-green-600" : profileCompletion >= 50 ? "text-orange-500" : "text-red-500"}`}>
                 {profileCompletion}%
               </span>
@@ -728,9 +728,9 @@ function DashboardContent() {
                   {check.done ? (
                     <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                   ) : (
-                    <Circle className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                    <Circle className="w-4 h-4 text-ink-300 flex-shrink-0" />
                   )}
-                  <span className={`text-xs ${check.done ? "text-gray-600" : "text-gray-400"}`}>{check.label}</span>
+                  <span className={`text-xs ${check.done ? "text-gray-600" : "text-ink-400"}`}>{check.label}</span>
                 </div>
               ))}
             </div>
@@ -739,20 +739,20 @@ function DashboardContent() {
             </Link>
           </motion.div>
 
-          <motion.div {...fadeUp(0.3)} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-            <h2 className="text-base font-bold text-gray-900 mb-3">Quick Actions</h2>
+          <motion.div {...fadeUp(0.3)} className="bg-white rounded-2xl border border-line-200 shadow-sm p-5">
+            <h2 className="text-base font-bold text-ink-900 mb-3">Quick Actions</h2>
             <div className="space-y-2">
-              <Link href="/dashboard/profile" className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-gray-700 border border-gray-200 transition-all group">
+              <Link href="/dashboard/profile" className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-ink-700 border border-line-200 transition-all group">
                 <span className="flex items-center gap-2"><Pencil className="w-4 h-4 text-blue-500" /> Edit Profile</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-gray-600 transition-colors" />
               </Link>
-              <Link href={`/providers/${provider.slug}`} className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-gray-700 border border-gray-200 transition-all group">
+              <Link href={`/providers/${provider.slug}`} className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-ink-700 border border-line-200 transition-all group">
                 <span className="flex items-center gap-2"><ExternalLink className="w-4 h-4 text-blue-500" /> View Public Listing</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-gray-600 transition-colors" />
               </Link>
-              <Link href="/dashboard/images" className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-gray-700 border border-gray-200 transition-all group">
+              <Link href="/dashboard/images" className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-ink-700 border border-line-200 transition-all group">
                 <span className="flex items-center gap-2"><Image className="w-4 h-4 text-blue-500" /> Manage Images</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-gray-600 transition-colors" />
               </Link>
               {!isPaid && (
                 <Link href="/pricing" className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-orange-50 hover:bg-orange-100 text-sm font-medium text-orange-700 border border-orange-200 transition-all group">
@@ -765,14 +765,14 @@ function DashboardContent() {
         </div>
       </div>
 
-      <motion.section {...fadeUp(0.35)} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+      <motion.section {...fadeUp(0.35)} className="bg-white rounded-2xl border border-line-200 shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-line-100">
           <div>
-            <h2 className="text-base font-bold text-gray-900">Recent Reviews</h2>
+            <h2 className="text-base font-bold text-ink-900">Recent Reviews</h2>
             {reviews.length > 0 && (
               <div className="flex items-center gap-2 mt-0.5">
                 <Stars rating={Math.round(Number(avgRating))} />
-                <span className="text-xs text-gray-500">{avgRating} avg from {reviews.length} review{reviews.length !== 1 ? "s" : ""}</span>
+                <span className="text-xs text-ink-500">{avgRating} avg from {reviews.length} review{reviews.length !== 1 ? "s" : ""}</span>
               </div>
             )}
           </div>
@@ -782,9 +782,9 @@ function DashboardContent() {
         </div>
         {recentReviews.length === 0 ? (
           <div className="p-8 text-center">
-            <Star className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-sm text-gray-500 font-medium">No reviews yet</p>
-            <p className="text-xs text-gray-400 mt-1">Reviews from participants will appear here.</p>
+            <Star className="w-10 h-10 text-ink-300 mx-auto mb-3" />
+            <p className="text-sm text-ink-500 font-medium">No reviews yet</p>
+            <p className="text-xs text-ink-400 mt-1">Reviews from participants will appear here.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
@@ -796,8 +796,8 @@ function DashboardContent() {
                       <User className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">{r.author || r.reviewer_name || "Anonymous"}</p>
-                      <p className="text-xs text-gray-400">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ""}</p>
+                      <p className="text-sm font-semibold text-ink-900">{r.author || r.reviewer_name || "Anonymous"}</p>
+                      <p className="text-xs text-ink-400">{r.created_at ? new Date(r.created_at).toLocaleDateString() : ""}</p>
                     </div>
                   </div>
                   <Stars rating={r.rating || 0} />
@@ -810,16 +810,16 @@ function DashboardContent() {
       </motion.section>
 
       {/* Item 67: Activity Feed */}
-      <motion.section {...fadeUp(0.38)} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="text-base font-bold text-gray-900">Recent Activity</h2>
-          <p className="text-xs text-gray-400 mt-0.5">Your last 5 activities</p>
+      <motion.section {...fadeUp(0.38)} className="bg-white rounded-2xl border border-line-200 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-line-100">
+          <h2 className="text-base font-bold text-ink-900">Recent Activity</h2>
+          <p className="text-xs text-ink-400 mt-0.5">Your last 5 activities</p>
         </div>
         {enquiries.length === 0 && reviews.length === 0 ? (
           <div className="p-8 text-center">
-            <TrendingUp className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-            <p className="text-sm text-gray-500 font-medium">No activity yet</p>
-            <p className="text-xs text-gray-400 mt-1">Activity will appear as enquiries and reviews come in.</p>
+            <TrendingUp className="w-10 h-10 text-ink-300 mx-auto mb-3" />
+            <p className="text-sm text-ink-500 font-medium">No activity yet</p>
+            <p className="text-xs text-ink-400 mt-1">Activity will appear as enquiries and reviews come in.</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-50">
@@ -861,10 +861,10 @@ function DashboardContent() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 truncate">{activity.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5 truncate">{activity.desc}</p>
+                      <p className="text-sm font-semibold text-ink-900 truncate">{activity.title}</p>
+                      <p className="text-xs text-ink-500 mt-0.5 truncate">{activity.desc}</p>
                     </div>
-                    <span className="text-xs text-gray-400 shrink-0">{relTime}</span>
+                    <span className="text-xs text-ink-400 shrink-0">{relTime}</span>
                   </div>
                 );
               })}
@@ -875,18 +875,18 @@ function DashboardContent() {
       <motion.section {...fadeUp(0.4)}>
         <div className="flex items-center gap-2 mb-4">
           <Lightbulb className="w-4 h-4 text-orange-500" />
-          <h2 className="text-base font-bold text-gray-900">Tips to Improve Your Listing</h2>
+          <h2 className="text-base font-bold text-ink-900">Tips to Improve Your Listing</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {tips.map((tip, i) => {
             const TipIcon = tip.icon;
             return (
-              <motion.div key={tip.title} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 + i * 0.06 }} className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+              <motion.div key={tip.title} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 + i * 0.06 }} className="bg-white rounded-2xl border border-line-200 p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center mb-2">
                   <TipIcon className="w-4 h-4 text-blue-500" />
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1">{tip.title}</h3>
-                <p className="text-xs text-gray-500 mb-3 leading-relaxed">{tip.desc}</p>
+                <h3 className="text-sm font-bold text-ink-900 mb-1">{tip.title}</h3>
+                <p className="text-xs text-ink-500 mb-3 leading-relaxed">{tip.desc}</p>
                 <Link href={tip.href} className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
                   {tip.action} <ArrowUpRight className="w-3 h-3" />
                 </Link>
