@@ -171,8 +171,9 @@ function ProvidersContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: prefersReduced ? 0 : 0.5 }}
           >
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
-              Browse <span className="text-orange-500">Providers</span>
+            <div className="eyebrow-rule text-orange-500 mb-4">The directory</div>
+            <h1 className="h-editorial text-4xl sm:text-5xl mb-4">
+              Browse <em>providers.</em>
             </h1>
             <p className="text-ink-500 text-lg max-w-xl">
               {providers.length > 0 ? `${providers.length} NDIS providers across Newcastle & the Hunter Region` : "Find NDIS providers in Newcastle & the Hunter Region"}
@@ -183,9 +184,9 @@ function ProvidersContent() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: prefersReduced ? 0 : 0.5 }}
             href="/register"
-            className="flex-shrink-0 inline-block px-6 py-3.5 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-400 transition-all text-sm sm:text-base whitespace-nowrap shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+            className="btn-block flex-shrink-0 whitespace-nowrap"
           >
-            List Your Organisation
+            List Your Organisation →
           </motion.a>
         </div>
 
@@ -208,13 +209,13 @@ function ProvidersContent() {
                 placeholder="Search providers, services..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-line-200 text-ink-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 transition-colors"
+                className="w-full pl-10 pr-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1 transition-colors"
               />
             </div>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-surface border border-line-200 text-ink-500 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
+              className="px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-700 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
             >
               {categories.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -223,7 +224,7 @@ function ProvidersContent() {
             <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-surface border border-line-200 text-ink-500 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
+              className="px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-700 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
             >
               {locations.map((l) => (
                 <option key={l} value={l}>{l}</option>
@@ -240,7 +241,7 @@ function ProvidersContent() {
                   tabIndex={0}
                   onClick={() => setVerifiedOnly(!verifiedOnly)}
                   onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); setVerifiedOnly(!verifiedOnly); } }}
-                  className={`w-5 h-5 rounded flex items-center justify-center border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${verifiedOnly ? "bg-blue-600 border-blue-600" : "border-gray-300 bg-white"}`}
+                  className={`w-5 h-5 rounded-[2px] flex items-center justify-center border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 ${verifiedOnly ? "bg-orange-500 border-orange-500" : "border-ink-950 bg-white"}`}
                 >
                   {verifiedOnly && (
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
@@ -276,11 +277,11 @@ function ProvidersContent() {
 
             {/* Sort Dropdown */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-ink-400 whitespace-nowrap">Sort by:</span>
+              <span className="font-mono text-[10.5px] uppercase tracking-wide text-ink-400 whitespace-nowrap">Sort by</span>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                className="px-3 py-2 rounded-lg bg-white border border-line-200 text-ink-700 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus:border-blue-500/40 appearance-none cursor-pointer"
+                className="px-3 py-2 rounded-[3px] bg-white border border-ink-950 text-ink-700 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 appearance-none cursor-pointer"
               >
                 <option value="rating">Highest Rated</option>
                 <option value="reviews">Most Reviews</option>
@@ -383,7 +384,7 @@ function ProvidersContent() {
           transition={{ duration: 0.3 }}
           className="text-sm text-ink-500 font-medium mb-6 flex items-center gap-1.5"
         >
-          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold">
+          <span className="font-mono text-[10.5px] uppercase tracking-wide text-ink-500">
             Showing <AnimatedCount value={Math.min(visibleCount, filtered.length)} /> of <AnimatedCount value={filtered.length} /> providers
           </span>
         </motion.p>
