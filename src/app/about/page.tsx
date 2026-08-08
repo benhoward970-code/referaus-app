@@ -55,7 +55,7 @@ export default function AboutPage() {
               Built for the<br />
               <span className="gradient-text">NDIS Community</span>
             </h1>
-            <p className="text-lg text-gray-500 max-w-2xl leading-relaxed">
+            <p className="text-lg text-ink-500 max-w-2xl leading-relaxed">
               ReferAus is a modern, searchable directory that makes it easy to find, compare, and connect with quality NDIS providers — starting in the Hunter Region, NSW.
             </p>
           </motion.div>
@@ -64,7 +64,7 @@ export default function AboutPage() {
             {stats.map((s) => (
               <div key={s.label} className="text-center">
                 <p className="text-2xl sm:text-3xl font-black text-blue-600 mb-1">{s.value}</p>
-                <p className="text-xs text-gray-400 font-medium">{s.label}</p>
+                <p className="text-xs text-ink-400 font-medium">{s.label}</p>
               </div>
             ))}
           </motion.div>
@@ -72,15 +72,15 @@ export default function AboutPage() {
       </section>
 
       {/* Mission */}
-      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-gray-50">
+      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-line-100">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}>
             <span className="section-label mb-4 block">Our Mission</span>
             <div className="rounded-2xl bg-white border border-gray-200 p-6 sm:p-14 shadow-sm">
-              <p className="text-2xl sm:text-3xl font-bold leading-snug text-gray-700">
+              <p className="text-2xl sm:text-3xl font-bold leading-snug text-ink-700">
                 To connect every NDIS participant with the{" "}
                 <span className="gradient-text">right provider</span> — based on real reviews, verified quality, and genuine compatibility.{" "}
-                <span className="text-gray-400">Not who pays the most to advertise.</span>
+                <span className="text-ink-400">Not who pays the most to advertise.</span>
               </p>
             </div>
           </motion.div>
@@ -94,7 +94,7 @@ export default function AboutPage() {
             className="rounded-2xl border border-red-100 bg-red-50/50 p-8 sm:p-10">
             <span className="inline-block text-xs font-bold tracking-widest uppercase text-red-400 mb-4">The Problem</span>
             <h2 className="text-2xl font-black mb-4 text-gray-800">Finding NDIS providers is broken</h2>
-            <ul className="space-y-3 text-gray-600 text-sm leading-relaxed">
+            <ul className="space-y-3 text-ink-700 text-sm leading-relaxed">
               <li className="flex gap-2"><X className="text-red-400 mt-0.5 shrink-0 w-4 h-4" /> Outdated government directories with missing or stale information</li>
               <li className="flex gap-2"><X className="text-red-400 mt-0.5 shrink-0 w-4 h-4" /> No way to compare providers side-by-side</li>
               <li className="flex gap-2"><X className="text-red-400 mt-0.5 shrink-0 w-4 h-4" /> Participants rely on word-of-mouth and hope for the best</li>
@@ -106,7 +106,7 @@ export default function AboutPage() {
             className="rounded-2xl border border-green-100 bg-green-50/50 p-8 sm:p-10">
             <span className="inline-block text-xs font-bold tracking-widest uppercase text-green-500 mb-4">Our Solution</span>
             <h2 className="text-2xl font-black mb-4 text-gray-800">ReferAus: the directory you deserve</h2>
-            <ul className="space-y-3 text-gray-600 text-sm leading-relaxed">
+            <ul className="space-y-3 text-ink-700 text-sm leading-relaxed">
               <li className="flex gap-2"><Check className="text-green-500 mt-0.5 shrink-0 w-4 h-4" /> Modern, searchable directory — fast and always up to date</li>
               <li className="flex gap-2"><Check className="text-green-500 mt-0.5 shrink-0 w-4 h-4" /> Real reviews from verified NDIS participants</li>
               <li className="flex gap-2"><Check className="text-green-500 mt-0.5 shrink-0 w-4 h-4" /> Side-by-side provider comparison built in</li>
@@ -118,7 +118,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-gray-50">
+      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-line-100">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12">
             <span className="section-label mb-4 block">Our Values</span>
@@ -132,7 +132,7 @@ export default function AboutPage() {
                   <v.Icon className="w-5 h-5 text-orange-500" />
                 </div>
                 <h3 className="text-lg font-bold mb-2">{v.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{v.desc}</p>
+                <p className="text-sm text-ink-500 leading-relaxed">{v.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -154,7 +154,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-lg font-bold mb-1">Ben Howard</h3>
               <p className="text-sm font-medium text-orange-500 mb-3">Founder &amp; CEO</p>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-sm text-ink-500 leading-relaxed">
                 Passionate about using technology to improve disability services in Australia. Based in the Hunter Region, NSW — building the platform he wished existed.
               </p>
             </motion.div>
@@ -165,7 +165,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-lg font-bold mb-1">Hunter Region, NSW</h3>
               <p className="text-sm font-medium text-blue-500 mb-3">Home Base</p>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className="text-sm text-ink-500 leading-relaxed">
                 We are proudly local. ReferAus was founded and operates out of the Hunter Region — built for this community, by this community. Expanding across NSW while keeping the local focus that makes us different.
               </p>
             </motion.div>
@@ -174,22 +174,22 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-gray-50">
+      <section className="px-4 sm:px-6 py-10 sm:py-10 bg-line-100">
         <div className="max-w-2xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="heading-bold text-3xl sm:text-4xl mb-4">
               Ready to <span className="gradient-text">get started?</span>
             </h2>
-            <p className="text-gray-500 mb-8 text-lg">
+            <p className="text-ink-500 mb-8 text-lg">
               Whether you are a participant looking for support or a provider wanting to reach more people — ReferAus is here for you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/providers"
-                className="px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-all hover:shadow-lg hover:shadow-blue-600/25">
+                className="px-8 py-3.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-ink-950 font-semibold transition-all hover:shadow-lg hover:shadow-blue-600/25">
                 Find Providers
               </Link>
               <Link href="/register"
-                className="px-8 py-3.5 rounded-xl bg-white hover:bg-gray-50 text-gray-900 font-medium border border-gray-200 transition-all hover:border-orange-300">
+                className="px-8 py-3.5 rounded-xl bg-white hover:bg-line-100 text-ink-900 font-medium border border-gray-200 transition-all hover:border-orange-300">
                 List Your Business
               </Link>
             </div>
@@ -197,7 +197,7 @@ export default function AboutPage() {
         </div>
       </section>
       <div className="text-center pb-8">
-        <p className="text-xs text-gray-400">Last updated: March 2026</p>
+        <p className="text-xs text-ink-400">Last updated: March 2026</p>
       </div>
     </div>
   );
