@@ -174,7 +174,7 @@ function NewsletterSection() {
       >
         <div className="rounded-2xl bg-white px-8 py-10 sm:py-12 flex flex-col sm:flex-row items-center gap-8">
           <div className="flex-1 text-center sm:text-left">
-            <div className="text-2xl mb-2">📬</div>
+            <div className="eyebrow-rule text-orange-500 mb-2">Newsletter</div>
             <h2 className="heading-bold text-xl sm:text-2xl text-ink-900 mb-1">Stay in the loop</h2>
             <p className="text-ink-500 text-sm">
               Get NDIS updates and new listings straight to your inbox.
@@ -495,7 +495,7 @@ export default function Home() {
               },
             ].map((badge) => (
               <div key={badge.label} className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-xl bg-white border border-line-100 shadow-sm flex items-center justify-center">
+                <div className="w-12 h-12 rounded-[3px] bg-white border border-ink-900 flex items-center justify-center">
                   {badge.icon}
                 </div>
                 <div className="font-semibold text-ink-900 text-sm">{badge.label}</div>
@@ -519,17 +519,16 @@ export default function Home() {
           >
             <div className="flex flex-wrap justify-center gap-3 mb-4">
               {[
-                { icon: "🏛️", label: "NDIS Provider Directory" },
-                { icon: "🛡️", label: "Verified Providers" },
-                { icon: "🇦🇺", label: "Australian Owned" },
-                { icon: "🔒", label: "Privacy Compliant" },
-              ].map((badge) => (
+                "NDIS Provider Directory",
+                "Verified Providers",
+                "Australian Owned",
+                "Privacy Compliant",
+              ].map((label) => (
                 <span
-                  key={badge.label}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-line-200 shadow-sm text-sm font-medium text-ink-700"
+                  key={label}
+                  className="font-mono text-[11px] uppercase tracking-wide px-3.5 py-2 rounded-[2px] bg-white border border-line-200 text-ink-700"
                 >
-                  <span>{badge.icon}</span>
-                  {badge.label}
+                  {label}
                 </span>
               ))}
             </div>
@@ -544,24 +543,22 @@ export default function Home() {
 
       {/* How It Works */}
       <ScrollSection className="py-10 px-6 max-w-[1200px] mx-auto">
-        <span className="glass-pill rounded-full px-3.5 py-1 text-xs font-medium text-orange-500 inline-block mb-4">How It Works</span>
-        <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Three steps. That&apos;s it.</h2>
+        <div className="eyebrow-rule text-orange-500 mb-4">How it works</div>
+        <h2 className="h-editorial text-[clamp(2rem,5vw,3.2rem)] mb-3">Three steps. <em>That&apos;s it.</em></h2>
         <p className="text-ink-500 max-w-[600px] mb-6 font-light">No sign-up required to browse. Find the support you need in minutes, not weeks.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { icon: "🔍", num: "01", title: "Search", desc: "Enter your location and what kind of support you need. Filter by category, rating, availability, and distance." },
-            { icon: "⚖️", num: "02", title: "Compare", desc: "Browse provider profiles with real reviews from other participants. See services, specialties, and ratings side by side." },
-            { icon: "🤝", num: "03", title: "Connect", desc: "Send an enquiry or message the provider directly. No phone tag, no waiting on hold. Get a response and start." },
+            { num: "01", title: "Search", desc: "Enter your location and what kind of support you need. Filter by category, rating, availability, and distance." },
+            { num: "02", title: "Compare", desc: "Browse provider profiles with real reviews from other participants. See services, specialties, and ratings side by side." },
+            { num: "03", title: "Connect", desc: "Send an enquiry or message the provider directly. No phone tag, no waiting on hold. Get a response and start." },
           ].map((step, i) => (
             <motion.div key={step.num} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.15), duration: d(0.5) }}
-              className="card p-8 relative overflow-hidden group">
-              <div className="absolute top-4 right-5 heading-bold text-[4rem] text-gray-100 leading-none select-none group-hover:text-orange-50 transition-colors">
+              className="card-flat p-8 relative overflow-hidden group">
+              <div className="absolute top-4 right-5 h-editorial text-[4rem] text-line-100 leading-none select-none group-hover:text-orange-50 transition-colors">
                 {step.num}
               </div>
-              <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-2xl mb-5">
-                {step.icon}
-              </div>
+              <div className="font-mono text-[11px] text-orange-500 mb-4 relative">{step.num} / {step.title.toUpperCase()}</div>
               <h3 className="font-bold text-xl mb-2">{step.title}</h3>
               <p className="text-ink-500 text-sm leading-relaxed">{step.desc}</p>
             </motion.div>
@@ -573,15 +570,15 @@ export default function Home() {
 
       {/* Features */}
       <ScrollSection className="py-10 px-6 max-w-[1200px] mx-auto">
-        <span className="glass-pill rounded-full px-3.5 py-1 text-xs font-medium text-orange-500 inline-block mb-4">Why ReferAus</span>
-        <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Built for the NDIS community</h2>
+        <div className="eyebrow-rule text-orange-500 mb-4">Why ReferAus</div>
+        <h2 className="h-editorial text-[clamp(2rem,5vw,3.2rem)] mb-3">Built for the <em>NDIS community.</em></h2>
         <p className="text-ink-500 max-w-[600px] mb-8 font-light">Everything participants and providers need to find each other — nothing they don&apos;t.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((f, i) => (
             <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.08), duration: d(0.4) }}
-              className="glass-card relative overflow-hidden p-8 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-lg">{f.icon}</div>
+              className="card-flat p-8">
+              <div className="w-8 h-1 bg-orange-500 mb-4" />
               <h3 className="font-semibold text-[1.05rem] mb-2">{f.title}</h3>
               <p className="text-ink-500 text-[0.85rem] leading-relaxed">{f.desc}</p>
             </motion.div>
@@ -609,20 +606,20 @@ export default function Home() {
       {/* Early Access CTA */}
       <ScrollSection className="py-10 px-6 max-w-[1200px] mx-auto">
         <div className="text-center mb-8">
-          <span className="glass-pill rounded-full px-3.5 py-1 text-xs font-medium text-orange-500 inline-block mb-4">Now Live</span>
-          <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight">Be one of the first providers on ReferAus</h2>
+          <div className="eyebrow-rule text-orange-500 justify-center mb-4">Now live</div>
+          <h2 className="h-editorial text-[clamp(2rem,5vw,3.2rem)]">Be one of the first providers <em>on ReferAus.</em></h2>
           <p className="text-ink-500 max-w-[600px] mx-auto mt-4 font-light">We&apos;re building the Hunter Region&apos;s most trusted NDIS provider directory. Early providers get maximum visibility as we grow.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[900px] mx-auto">
           {[
-            { icon: "🥇", title: "First Mover Advantage", desc: "Be found first by participants searching for services in your area." },
-            { icon: "📈", title: "Free to List", desc: "Create your profile in 5 minutes. No cost, no commitment. Upgrade when you're ready." },
-            { icon: "✅", title: "Get Verified", desc: "Stand out with a verified badge that builds trust with NDIS participants." },
+            { title: "First Mover Advantage", desc: "Be found first by participants searching for services in your area." },
+            { title: "Free to List", desc: "Create your profile in 5 minutes. No cost, no commitment. Upgrade when you're ready." },
+            { title: "Get Verified", desc: "Stand out with a verified badge that builds trust with NDIS participants." },
           ].map((item, i) => (
             <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.1), duration: d(0.4) }}
-              className="glass-card-strong rounded-xl p-6 text-center">
-              <div className="text-3xl mb-3">{item.icon}</div>
+              className="card-flat p-6 text-center">
+              <div className="font-mono text-[11px] text-orange-500 mb-3">{String(i + 1).padStart(2, "0")}</div>
               <h3 className="font-bold text-ink-900 mb-2">{item.title}</h3>
               <p className="text-sm text-ink-500">{item.desc}</p>
             </motion.div>
@@ -630,13 +627,9 @@ export default function Home() {
         </div>
 
         <div className="text-center mt-10">
-          <div className="btn-gradient-border inline-block">
-            <span className="block px-2 py-1 rounded-[10px]">
-              <Link href="/register" className="inline-block px-8 py-4 bg-orange-500 text-white font-bold rounded-[8px] hover:bg-orange-400 hover:-translate-y-0.5 transition-all shadow-lg">
-                List Your Organisation Free
-              </Link>
-            </span>
-          </div>
+          <Link href="/register" className="btn-block !inline-flex">
+            List Your Organisation Free →
+          </Link>
         </div>
       </ScrollSection>
 

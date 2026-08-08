@@ -453,14 +453,17 @@ html, body {
     @apply flex items-baseline justify-between gap-6 pb-3.5
            border-b border-line-200 mb-6;
   }
-}
 
-/* ══════════════════════════════════════════════════════════════════════
-   Editorial / map direction — dark split hero, serif-led headings, flat
-   hard-shadow cards. Additive alongside the tokens above (card/btn-*/
-   pill-*), which other already-migrated components still use.
-   ══════════════════════════════════════════════════════════════════════ */
-@layer components {
+  /* ────────────────────────────────────────────────────────────────────
+     Editorial / map direction — dark split hero, serif-led headings, flat
+     hard-shadow cards. Additive alongside the tokens above (card/btn-*/
+     pill-*), which other already-migrated components still use. Merged
+     into this single @layer components block rather than a second one —
+     this Tailwind v4 setup silently drops rules in a second @layer
+     components block the same way it silently dropped a second @theme
+     block (see the note in Step 1 above and the commit that fixed it).
+     ──────────────────────────────────────────────────────────────────── */
+
   /* Eyebrow with a leading rule, used on dark or light grounds */
   .eyebrow-rule {
     @apply font-mono text-[11px] tracking-[0.1em] uppercase text-orange-500
