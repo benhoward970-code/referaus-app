@@ -4,7 +4,7 @@ import { createServerClient } from '@supabase/ssr';
 
 const protectedRoutes = ['/dashboard'];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isProtected = protectedRoutes.some(route => pathname.startsWith(route));
 
