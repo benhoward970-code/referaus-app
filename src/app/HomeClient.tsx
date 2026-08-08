@@ -587,18 +587,21 @@ export default function Home() {
         </div>
       </ScrollSection>
 
-      {/* Stats bar */}
-      <ScrollSection className="bg-blue-600 text-white py-12 px-6">
-        <div className="max-w-[1200px] mx-auto flex justify-around text-center flex-wrap gap-8">
+      {/* Stat rail — hairline-divided mono figures, matching the hero's footer rail */}
+      <ScrollSection className="border-y border-line-200 py-10 px-6">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4">
           {[
-            { num: "Growing", label: "Provider Network" },
-            { num: "Free", label: "For Participants" },
-            { num: "24/7", label: "Always Available" },
-            { num: "Hunter", label: "Region Focus" },
-          ].map((s) => (
-            <div key={s.label}>
-              <div className="heading-bold text-[2rem] sm:text-[3rem]">{s.num}</div>
-              <div className="text-sm opacity-80 mt-1">{s.label}</div>
+            { num: "Growing", label: "Provider network" },
+            { num: "Free", label: "For participants" },
+            { num: "24/7", label: "Always available" },
+            { num: "Hunter", label: "Region focus" },
+          ].map((s, i) => (
+            <div
+              key={s.label}
+              className={`py-3 px-6 ${i > 0 ? "md:border-l md:border-line-200" : ""}`}
+            >
+              <div className="font-mono text-[26px] font-medium tracking-tight text-ink-900">{s.num}</div>
+              <div className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-500 mt-1">{s.label}</div>
             </div>
           ))}
         </div>
@@ -728,11 +731,14 @@ export default function Home() {
 
       {/* Participant CTA Banner */}
       <section className="max-w-[1200px] mx-auto px-6 pb-10">
-        <div className="bg-gradient-to-br from-orange-500 to-orange-400 text-white rounded-2xl p-8 sm:p-12 text-center">
-          <h2 className="heading-bold text-[clamp(1.8rem,4vw,2.8rem)] mb-4">Ready to find the right provider?</h2>
-          <p className="opacity-90 max-w-[500px] mx-auto mb-8">Search, compare, and connect with NDIS providers in Newcastle and the Hunter Region. Free, fast, and built for participants.</p>
-          <Link href="/providers" className="inline-block px-8 py-3.5 bg-white text-orange-500 font-bold rounded-lg hover:-translate-y-0.5 hover:shadow-lg transition-all">
-            Search Providers Now
+        <div className="bg-ink-950 text-cream rounded-[3px] p-8 sm:p-14 text-center">
+          <div className="eyebrow-rule text-orange-500 justify-center mb-4">For participants</div>
+          <h2 className="h-editorial text-[clamp(1.9rem,4vw,2.8rem)] text-cream mb-4">
+            Ready to find <em>the right provider?</em>
+          </h2>
+          <p className="text-ink-soft max-w-[500px] mx-auto mb-8">Search, compare, and message NDIS providers across Newcastle and the Hunter Region. Free, fast, and built for participants.</p>
+          <Link href="/providers" className="btn-block">
+            Search providers now →
           </Link>
         </div>
       </section>
