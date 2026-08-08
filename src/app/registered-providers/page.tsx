@@ -19,10 +19,10 @@ export default function RegisteredProvidersPage() {
             </svg>
             Mandatory from July 2026
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4 text-gray-900">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4 text-ink-900">
             NDIS <span className="text-orange-500">Registered Providers</span>
           </h1>
-          <p className="text-gray-500 text-lg max-w-2xl mb-6">
+          <p className="text-ink-500 text-lg max-w-2xl mb-6">
             From July 2026, all NDIS providers must be registered with the NDIS Quality and Safeguards Commission.
             Browse providers who are already registered or actively preparing so you can choose with confidence.
           </p>
@@ -35,7 +35,7 @@ export default function RegisteredProvidersPage() {
             </Link>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl hover:border-blue-400 hover:text-blue-600 transition-colors"
+              className="inline-flex items-center gap-2 bg-white border border-line-200 text-ink-700 text-sm font-semibold px-5 py-2.5 rounded-xl hover:border-blue-400 hover:text-blue-600 transition-colors"
             >
               List your organisation Free
             </Link>
@@ -78,9 +78,9 @@ export default function RegisteredProvidersPage() {
                 </svg>
                 Registration Ready
               </div>
-              <span className="text-sm text-gray-400">{registrationReadyProviders.length} providers</span>
+              <span className="text-sm text-ink-400">{registrationReadyProviders.length} providers</span>
             </div>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-ink-500 mb-6">
               These providers are actively preparing for mandatory NDIS registration ahead of the July 2026 deadline.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -100,9 +100,9 @@ export default function RegisteredProvidersPage() {
                 </svg>
                 Verified Providers
               </div>
-              <span className="text-sm text-gray-400">{verifiedProviders.length} providers</span>
+              <span className="text-sm text-ink-400">{verifiedProviders.length} providers</span>
             </div>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-ink-500 mb-6">
               Verified providers have been reviewed by the ReferAus team and confirmed as active NDIS participants.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -122,7 +122,7 @@ export default function RegisteredProvidersPage() {
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/register"
-              className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 py-3 rounded-xl transition-colors"
+              className="bg-orange-500 hover:bg-orange-400 text-ink-950 font-bold px-6 py-3 rounded-xl transition-colors"
             >
               List Free - Takes 10 Minutes
             </Link>

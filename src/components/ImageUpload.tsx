@@ -137,7 +137,7 @@ export function ImageUpload({
 
   return (
     <div className={className}>
-      <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+      <label className="block text-sm font-medium text-ink-700 mb-2">{label}</label>
 
       <AnimatePresence mode="wait">
         {displayUrl ? (
@@ -185,7 +185,7 @@ export function ImageUpload({
                   <button
                     type="button"
                     onClick={() => inputRef.current?.click()}
-                    className="p-2.5 rounded-xl bg-white/90 hover:bg-white text-gray-700 shadow-lg transition-colors"
+                    className="p-2.5 rounded-xl bg-white/90 hover:bg-white text-ink-700 shadow-lg transition-colors"
                     aria-label="Replace image"
                   >
                     <Upload size={18} />
@@ -201,9 +201,9 @@ export function ImageUpload({
                 animate={{ opacity: 1, y: 0 }}
                 className="flex items-center gap-2 mt-3"
               >
-                <span className="text-sm text-gray-600 truncate flex-1">
+                <span className="text-sm text-ink-700 truncate flex-1">
                   {selectedFile.name}{" "}
-                  <span className="text-gray-400">
+                  <span className="text-ink-400">
                     ({(selectedFile.size / 1024 / 1024).toFixed(1)} MB)
                   </span>
                 </span>
@@ -211,7 +211,7 @@ export function ImageUpload({
                   type="button"
                   onClick={clearSelection}
                   disabled={uploading}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="p-1.5 rounded-lg hover:bg-gray-100 text-ink-400 hover:text-ink-700 transition-colors"
                   aria-label="Cancel selection"
                 >
                   <X size={16} />
@@ -220,7 +220,7 @@ export function ImageUpload({
                   type="button"
                   onClick={handleUpload}
                   disabled={uploading}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-all hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-400 text-ink-950 text-sm font-semibold transition-all hover:shadow-lg hover:shadow-blue-500/25 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {uploading ? (
                     <>
@@ -281,7 +281,7 @@ export function ImageUpload({
                 flex flex-col items-center justify-center gap-3 px-6 py-10
                 border-2 border-dashed rounded-2xl cursor-pointer
                 transition-colors duration-200
-                focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400
                 ${
                   dragActive
                     ? "border-blue-500 bg-blue-50"
@@ -292,17 +292,17 @@ export function ImageUpload({
               <div
                 className={`
                   w-12 h-12 rounded-xl flex items-center justify-center transition-colors
-                  ${dragActive ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-400"}
+                  ${dragActive ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-ink-400"}
                 `}
               >
                 {dragActive ? <ImageIcon size={24} /> : <Upload size={24} />}
               </div>
 
               <div className="text-center">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-ink-700">
                   {dragActive ? "Drop image here" : "Drag & drop an image, or click to browse"}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-ink-400 mt-1">
                   {accept
                     .split(",")
                     .map((t) => t.trim().split("/")[1]?.toUpperCase())
@@ -310,7 +310,7 @@ export function ImageUpload({
                   &middot; Max {maxSizeMB} MB
                 </p>
                 {aspectHint && (
-                  <p className="text-xs text-gray-400 mt-0.5">
+                  <p className="text-xs text-ink-400 mt-0.5">
                     Recommended aspect ratio: {aspectHint}
                   </p>
                 )}

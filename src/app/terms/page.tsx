@@ -8,16 +8,16 @@ export default function TermsPage() {
       <div className="max-w-3xl mx-auto">
         <span className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4 block">Legal</span>
         <h1 className="text-4xl font-black tracking-tight mb-2">Terms of Service</h1>
-        <p className="text-sm text-gray-400 mb-10">Last updated: March 2026</p>
+        <p className="text-sm text-ink-400 mb-10">Last updated: March 2026</p>
 
-        <div className="space-y-8 text-gray-600 leading-relaxed">
+        <div className="space-y-8 text-ink-700 leading-relaxed">
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">1. About ReferAus</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">1. About ReferAus</h2>
             <p>ReferAus (ABN 83 588 359 423) is an online platform connecting NDIS participants with disability service providers in Australia. By using our platform, you agree to these terms.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">2. For Participants</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">2. For Participants</h2>
             <ul className="space-y-2 list-disc pl-6">
               <li>ReferAus is free for NDIS participants. Always.</li>
               <li>We provide information and connections, but we are not a provider ourselves.</li>
@@ -28,7 +28,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">3. For Providers</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">3. For Providers</h2>
             <ul className="space-y-2 list-disc pl-6">
               <li>You must provide accurate and current information about your services.</li>
               <li>Paid plans are billed monthly or annually as selected. Cancel anytime.</li>
@@ -39,7 +39,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">4. Reviews and Content</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">4. Reviews and Content</h2>
             <ul className="space-y-2 list-disc pl-6">
               <li>Reviews must be honest and based on genuine experiences.</li>
               <li>We reserve the right to remove reviews that are fake, abusive, or defamatory.</li>
@@ -49,7 +49,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">5. Payments and Refunds</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">5. Payments and Refunds</h2>
             <ul className="space-y-2 list-disc pl-6">
               <li>All prices are in AUD.</li>
               <li>Payments are processed securely through Stripe.</li>
@@ -59,26 +59,26 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">6. Limitation of Liability</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">6. Limitation of Liability</h2>
             <p>ReferAus is a directory and connection platform. We do not provide disability services and are not responsible for the quality, safety, or outcomes of services provided by listed providers. We recommend participants conduct their own due diligence.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">7. Changes to Terms</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">7. Changes to Terms</h2>
             <p>We may update these terms from time to time. Continued use of the platform constitutes acceptance of updated terms. We will notify registered users of material changes.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">8. Governing Law</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">8. Governing Law</h2>
             <p>These terms are governed by the laws of New South Wales, Australia.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">9. Contact</h2>
+            <h2 className="text-xl font-bold text-ink-900 mb-3">9. Contact</h2>
             <p>Questions about these terms? Contact us at <a href="mailto:hello@referaus.com" className="text-blue-600 hover:underline">hello@referaus.com</a>.</p>
           </section>
         </div>
-        <p className="text-xs text-gray-400 mt-10 pb-4">Last updated: March 2026</p>
+        <p className="text-xs text-ink-400 mt-10 pb-4">Last updated: March 2026</p>
       </div>
     </div>
   );

@@ -43,16 +43,16 @@ export default function ForgotPasswordPage() {
         <div className="text-center mb-8">
           <div className="mx-auto mb-4"><LogoMark /></div>
           <h1 className="text-2xl font-black tracking-tight mb-2">Reset your password</h1>
-          <p className="text-sm text-gray-500">We&apos;ll send you a link to reset it</p>
+          <p className="text-sm text-ink-500">We&apos;ll send you a link to reset it</p>
         </div>
 
         {sent ? (
-          <div className="glass rounded-2xl p-8 text-center">
+          <div className="card-flat p-8 text-center">
             <div className="w-14 h-14 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-4">
               <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" /></svg>
             </div>
             <h2 className="text-lg font-bold mb-2">Check your email</h2>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-ink-500 mb-6">
               We&apos;ve sent a password reset link to <strong>{email}</strong>. Click the link in the email to set a new password.
             </p>
             <Link href="/login" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
@@ -60,7 +60,7 @@ export default function ForgotPasswordPage() {
             </Link>
           </div>
         ) : (
-          <div className="glass rounded-2xl p-8">
+          <div className="card-flat p-8">
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
                 <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600">
@@ -68,14 +68,14 @@ export default function ForgotPasswordPage() {
                 </div>
               )}
               <div>
-                <label className="text-xs font-medium text-gray-500 mb-1.5 block">Email address</label>
+                <label className="text-xs font-medium text-ink-500 mb-1.5 block">Email address</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500"
+                  className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1 focus:border-orange-500"
                 />
               </div>
               <button
@@ -87,7 +87,7 @@ export default function ForgotPasswordPage() {
               </button>
             </form>
             <div className="mt-6 text-center">
-              <Link href="/login" className="text-xs text-gray-500 hover:text-blue-600">
+              <Link href="/login" className="text-xs text-ink-500 hover:text-blue-600">
                 Back to login
               </Link>
             </div>

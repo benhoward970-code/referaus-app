@@ -20,11 +20,11 @@ export class ErrorBoundary extends Component<Props, State> {
                 <line x1="12" y1="16" x2="12.01" y2="16" />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h2>
-            <p className="text-gray-500 text-sm mb-6">We hit an unexpected error. Please try again — if the problem persists, contact support.</p>
+            <h2 className="text-xl font-bold text-ink-900 mb-2">Something went wrong</h2>
+            <p className="text-ink-500 text-sm mb-6">We hit an unexpected error. Please try again — if the problem persists, contact support.</p>
             <button
               onClick={() => this.setState({ hasError: false, error: undefined })}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-500 transition-all hover:shadow-lg hover:shadow-blue-600/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-500 transition-all hover:shadow-lg hover:shadow-blue-600/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
             >
               <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path d="M1 4v6h6M23 20v-6h-6" />

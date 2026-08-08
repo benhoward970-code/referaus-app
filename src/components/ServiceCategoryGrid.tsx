@@ -116,7 +116,7 @@ export function ServiceCategoryGrid() {
   return (
     <section className="px-4 sm:px-6 py-12 max-w-5xl mx-auto">
       <Breadcrumbs className="mb-4" />
-      <h2 className="text-xl font-bold text-gray-800 mb-6">Browse by Category</h2>
+      <h2 className="text-xl font-bold text-ink-900 mb-6">Browse by Category</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {SERVICE_CATEGORIES.map((cat, i) => {
           const c = colorMap[cat.color] ?? colorMap.blue;
@@ -136,7 +136,7 @@ export function ServiceCategoryGrid() {
                   <span className="text-2xl">{cat.emoji}</span>
                   <span className={`font-semibold text-sm ${c.text}`}>{cat.name}</span>
                 </div>
-                <p className="text-xs text-gray-500 leading-relaxed">{cat.desc}</p>
+                <p className="text-xs text-ink-500 leading-relaxed">{cat.desc}</p>
                 <span className={`text-xs font-medium ${c.text} flex items-center gap-1 mt-auto`}>
                   Find providers
                   <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

@@ -109,7 +109,7 @@ const supportCategories = [
 
 const colorMap: Record<string, { bg: string; border: string; text: string; badge: string; icon: string; cta: string }> = {
   blue:   { bg: "bg-blue-50",   border: "border-blue-100",   text: "text-blue-700",   badge: "bg-blue-100 text-blue-700",   icon: "bg-blue-100 text-blue-600",   cta: "bg-blue-600 hover:bg-blue-700 text-white" },
-  orange: { bg: "bg-orange-50", border: "border-orange-100", text: "text-orange-700", badge: "bg-orange-100 text-orange-700", icon: "bg-orange-100 text-orange-600", cta: "bg-orange-500 hover:bg-orange-600 text-white" },
+  orange: { bg: "bg-orange-50", border: "border-orange-100", text: "text-orange-700", badge: "bg-orange-100 text-orange-700", icon: "bg-orange-100 text-orange-600", cta: "bg-orange-500 hover:bg-orange-400 text-ink-950" },
   green:  { bg: "bg-green-50",  border: "border-green-100",  text: "text-green-700",  badge: "bg-green-100 text-green-700",  icon: "bg-green-100 text-green-600",  cta: "bg-green-600 hover:bg-green-700 text-white" },
   red:    { bg: "bg-red-50",    border: "border-red-100",    text: "text-red-700",    badge: "bg-red-100 text-red-700",    icon: "bg-red-100 text-red-600",    cta: "bg-red-600 hover:bg-red-700 text-white" },
   purple: { bg: "bg-purple-50", border: "border-purple-100", text: "text-purple-700", badge: "bg-purple-100 text-purple-700", icon: "bg-purple-100 text-purple-600", cta: "bg-purple-600 hover:bg-purple-700 text-white" },
@@ -150,11 +150,11 @@ export default function ServicesPage() {
             <span className="w-8 h-px bg-orange-500" />
             NDIS Support Categories
           </p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-gray-900 mb-5 leading-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-ink-900 mb-5 leading-tight">
             Find providers by<br />
             <span className="text-orange-500">support category</span>
           </h1>
-          <p className="text-gray-500 text-lg sm:text-xl max-w-2xl mb-8 font-light leading-relaxed">
+          <p className="text-ink-500 text-lg sm:text-xl max-w-2xl mb-8 font-light leading-relaxed">
             Browse all NDIS support categories and connect with qualified providers in Newcastle and the Hunter Region. Every category. Every need.
           </p>
           <div className="flex flex-wrap gap-3">
@@ -162,7 +162,7 @@ export default function ServicesPage() {
               Browse All Providers
               <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </Link>
-            <Link href="/register" className="inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-orange-300 text-gray-700 hover:text-orange-600 font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
+            <Link href="/register" className="inline-flex items-center gap-2 bg-white border border-line-200 hover:border-orange-300 text-ink-700 hover:text-orange-600 font-semibold px-6 py-3 rounded-xl transition-colors text-sm">
               List your organisation
             </Link>
           </div>
@@ -173,7 +173,7 @@ export default function ServicesPage() {
       <ServiceCategoryGrid />
 
       {/* Quick jump */}
-      <section className="sticky top-[72px] z-10 bg-white border-b border-gray-100 px-4 sm:px-6 py-3">
+      <section className="sticky top-[72px] z-10 bg-white border-b border-line-100 px-4 sm:px-6 py-3">
         <div className="max-w-5xl mx-auto">
           <div className="flex gap-2 overflow-x-auto pb-1" style={{scrollbarWidth: "none"}}>
             {supportCategories.map((cat) => {
@@ -211,14 +211,14 @@ export default function ServicesPage() {
                         {count > 0 ? `${count} provider${count === 1 ? "" : "s"}` : "Providers available"}
                       </span>
                     </div>
-                    <p className="text-gray-500 text-sm mb-1">{cat.tagline}</p>
-                    <p className="text-[0.7rem] text-gray-400 font-mono uppercase tracking-wider mb-4">{cat.ndisCategory}</p>
-                    <p className="text-gray-600 text-sm leading-relaxed mb-5">{cat.description}</p>
+                    <p className="text-ink-500 text-sm mb-1">{cat.tagline}</p>
+                    <p className="text-[0.7rem] text-ink-400 font-mono uppercase tracking-wider mb-4">{cat.ndisCategory}</p>
+                    <p className="text-ink-700 text-sm leading-relaxed mb-5">{cat.description}</p>
                     <div className="mb-6">
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">What this covers</p>
+                      <p className="text-xs font-semibold text-ink-500 uppercase tracking-wider mb-2">What this covers</p>
                       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
                         {cat.examples.map((ex) => (
-                          <li key={ex} className="flex items-start gap-2 text-sm text-gray-600">
+                          <li key={ex} className="flex items-start gap-2 text-sm text-ink-700">
                             <svg className={`flex-shrink-0 mt-0.5 w-4 h-4 ${c.text}`} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                             </svg>
@@ -242,7 +242,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section className="px-4 sm:px-6 py-16 bg-gray-50 border-t border-gray-100">
+      <section className="px-4 sm:px-6 py-16 bg-gray-50 border-t border-line-100">
         <div className="max-w-5xl mx-auto">
           <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-2xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
@@ -262,23 +262,23 @@ export default function ServicesPage() {
           </div>
 
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-5">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-bold text-base mb-2 text-gray-900">Are you a provider?</h3>
-              <p className="text-sm text-gray-500 mb-4">List your organisation on ReferAus and get found by participants searching for your services.</p>
+            <div className="bg-white rounded-[3px] border border-ink-950 bg-white p-6">
+              <h3 className="font-bold text-base mb-2 text-ink-900">Are you a provider?</h3>
+              <p className="text-sm text-ink-500 mb-4">List your organisation on ReferAus and get found by participants searching for your services.</p>
               <Link href="/register" className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
                 Create free listing &rarr;
               </Link>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-bold text-base mb-2 text-gray-900">Support Coordinators</h3>
-              <p className="text-sm text-gray-500 mb-4">Free tools to find registered providers for your clients. Share personalised provider shortlists.</p>
+            <div className="bg-white rounded-[3px] border border-ink-950 bg-white p-6">
+              <h3 className="font-bold text-base mb-2 text-ink-900">Support Coordinators</h3>
+              <p className="text-sm text-ink-500 mb-4">Free tools to find registered providers for your clients. Share personalised provider shortlists.</p>
               <Link href="/for-coordinators" className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
                 Learn more &rarr;
               </Link>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-bold text-base mb-2 text-gray-900">July 2026 Registration</h3>
-              <p className="text-sm text-gray-500 mb-4">All NDIS providers must be registered from 1 July 2026. Find providers who are already prepared.</p>
+            <div className="bg-white rounded-[3px] border border-ink-950 bg-white p-6">
+              <h3 className="font-bold text-base mb-2 text-ink-900">July 2026 Registration</h3>
+              <p className="text-sm text-ink-500 mb-4">All NDIS providers must be registered from 1 July 2026. Find providers who are already prepared.</p>
               <Link href="/registered-providers" className="text-sm font-semibold text-orange-500 hover:text-orange-600 transition-colors">
                 View registered providers &rarr;
               </Link>

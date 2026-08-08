@@ -67,22 +67,22 @@ export default function VerifyPage() {
         <div className="mx-auto mb-4"><LogoMark /></div>
 
         {status === "loading" && (
-          <div className="glass rounded-2xl p-8">
+          <div className="card-flat p-8">
             <div className="w-12 h-12 rounded-full border-4 border-blue-600 border-t-transparent animate-spin mx-auto mb-4" />
-            <p className="text-gray-500 text-sm">Verifying your email...</p>
+            <p className="text-ink-500 text-sm">Verifying your email...</p>
           </div>
         )}
 
         {status === "success" && (
-          <div className="glass rounded-2xl p-8">
+          <div className="card-flat p-8">
             <div className="w-16 h-16 rounded-full bg-green-500/10 text-green-500 flex items-center justify-center mx-auto mb-4">
               <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
             </div>
             <h2 className="text-2xl font-black mb-2">Email Verified</h2>
-            <p className="text-gray-500 text-sm mb-6">{message}</p>
+            <p className="text-ink-500 text-sm mb-6">{message}</p>
             <Link
               href="/login"
-              className="inline-block px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25"
+              className="inline-block px-8 py-3 rounded-xl bg-orange-500 hover:bg-orange-400 text-ink-950 font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25"
             >
               Sign In
             </Link>
@@ -90,15 +90,15 @@ export default function VerifyPage() {
         )}
 
         {status === "error" && (
-          <div className="glass rounded-2xl p-8">
+          <div className="card-flat p-8">
             <div className="w-16 h-16 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-4">
               <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></svg>
             </div>
             <h2 className="text-2xl font-black mb-2">Verification Failed</h2>
-            <p className="text-gray-500 text-sm mb-6">{message}</p>
+            <p className="text-ink-500 text-sm mb-6">{message}</p>
             <Link
               href="/register"
-              className="inline-block px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25"
+              className="inline-block px-8 py-3 rounded-xl bg-orange-500 hover:bg-orange-400 text-ink-950 font-semibold text-sm transition-all hover:shadow-lg hover:shadow-blue-600/25"
             >
               Try Again
             </Link>

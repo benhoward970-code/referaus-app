@@ -22,7 +22,7 @@ export function Logo({ size = "default" }: { size?: "small" | "default" | "large
       <HexIcon size={s.icon} />
       <div className="flex flex-col">
         <div className={`${s.text} leading-none tracking-wider`} style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, textTransform: "uppercase" as const }}>
-          <span className="text-gray-900">REFER</span>
+          <span className="text-ink-900">REFER</span>
           <span className="text-orange-500">AUS</span>
         </div>
       </div>
