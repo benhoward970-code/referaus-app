@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Message = { from: "bot" | "user"; text: string; options?: string[] };
@@ -41,16 +42,17 @@ export function ChatWidget() {
   const [enquiry, setEnquiry] = useState({ name: "", email: "", message: "" });
   const [input, setInput] = useState("");
   const [unread, setUnread] = useState(false);
-  const [onAuthPage, setOnAuthPage] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const path = window.location.pathname;
-    const authPaths = ["/login", "/register", "/forgot-password", "/reset-password", "/admin"];
-    setOnAuthPage(authPaths.some((p) => path.startsWith(p)));
-  }, []);
-
-  if (onAuthPage) return null;
+  // Read the route directly rather than deriving it in an effect: this is
+  // known on the very first render (server included), so the widget never
+  // flashes in and out on auth pages, and — critically — the early return
+  // below can sit after every hook. It previously returned before two
+  // useEffects, which broke the Rules of Hooks and crashed /login,
+  // /register and /forgot-password with "Rendered fewer hooks than expected".
+  const pathname = usePathname();
+  const AUTH_PATHS = ["/login", "/register", "/forgot-password", "/reset-password", "/admin"];
+  const onAuthPage = AUTH_PATHS.some((p) => pathname?.startsWith(p));
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -63,6 +65,9 @@ export function ChatWidget() {
     }, 10000);
     return () => clearTimeout(timer);
   }, [open, started]);
+
+  // Safe here: every hook above has already run on this render.
+  if (onAuthPage) return null;
 
   const addBot = (text: string, options?: string[]) => {
     setMessages((prev) => [...prev, { from: "bot", text, options }]);

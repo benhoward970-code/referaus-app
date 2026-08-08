@@ -231,9 +231,12 @@ export function Navbar() {
         }`}
       >
         <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex-shrink-0">
+          {/* Logo renders its own <Link href="/">, so it must not be wrapped
+              in another one — nested <a> is invalid HTML and broke hydration
+              on every page (React #418). */}
+          <div className="flex-shrink-0">
             <Logo />
-          </Link>
+          </div>
 
           <div className="hidden md:flex items-center md:gap-4 lg:gap-7">
             {NAV_LINKS.map(({ label, href }) => {

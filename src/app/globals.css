@@ -456,12 +456,13 @@ html, body {
 
   /* ────────────────────────────────────────────────────────────────────
      Editorial / map direction — dark split hero, serif-led headings, flat
-     hard-shadow cards. Additive alongside the tokens above (card/btn-*/
-     pill-*), which other already-migrated components still use. Merged
-     into this single @layer components block rather than a second one —
-     this Tailwind v4 setup silently drops rules in a second @layer
-     components block the same way it silently dropped a second @theme
-     block (see the note in Step 1 above and the commit that fixed it).
+     hard-shadow cards. Additive alongside the card, btn-, and pill-
+     classes above, which other already-migrated components still use.
+     Kept in this single @layer components block: an early "*" + "/"
+     sequence inside this very comment (from writing "btn-" with a glob
+     suffix) used to terminate the comment early and corrupt every rule
+     after it — dev crashed outright while the production build silently
+     dropped the rules. Never write glob suffixes inside CSS comments.
      ──────────────────────────────────────────────────────────────────── */
 
   /* Eyebrow with a leading rule, used on dark or light grounds */
