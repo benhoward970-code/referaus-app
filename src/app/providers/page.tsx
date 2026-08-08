@@ -174,7 +174,7 @@ function ProvidersContent() {
             <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4">
               Browse <span className="text-orange-500">Providers</span>
             </h1>
-            <p className="text-gray-500 text-lg max-w-xl">
+            <p className="text-ink-500 text-lg max-w-xl">
               {providers.length > 0 ? `${providers.length} NDIS providers across Newcastle & the Hunter Region` : "Find NDIS providers in Newcastle & the Hunter Region"}
             </p>
           </motion.div>
@@ -198,7 +198,7 @@ function ProvidersContent() {
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <svg
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-500"
                 width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"
               >
                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -208,13 +208,13 @@ function ProvidersContent() {
                 placeholder="Search providers, services..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 transition-colors"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-line-200 text-ink-900 placeholder-gray-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 transition-colors"
               />
             </div>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
+              className="px-4 py-3 rounded-xl bg-surface border border-line-200 text-ink-500 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
             >
               {categories.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -223,7 +223,7 @@ function ProvidersContent() {
             <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="px-4 py-3 rounded-xl bg-surface border border-gray-200 text-gray-500 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
+              className="px-4 py-3 rounded-xl bg-surface border border-line-200 text-ink-500 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500/40 appearance-none cursor-pointer w-full sm:min-w-[180px] sm:w-auto"
             >
               {locations.map((l) => (
                 <option key={l} value={l}>{l}</option>
@@ -253,7 +253,7 @@ function ProvidersContent() {
 
               {/* Min Rating Filter */}
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-400">Min rating:</span>
+                <span className="text-xs text-ink-400">Min rating:</span>
                 <div className="flex items-center gap-0.5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -268,7 +268,7 @@ function ProvidersContent() {
                     </button>
                   ))}
                   {minRating > 0 && (
-                    <button onClick={() => setMinRating(0)} className="ml-1 text-xs text-gray-400 hover:text-gray-600">✕</button>
+                    <button onClick={() => setMinRating(0)} className="ml-1 text-xs text-ink-400 hover:text-gray-600">✕</button>
                   )}
                 </div>
               </div>
@@ -276,11 +276,11 @@ function ProvidersContent() {
 
             {/* Sort Dropdown */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-400 whitespace-nowrap">Sort by:</span>
+              <span className="text-xs text-ink-400 whitespace-nowrap">Sort by:</span>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                className="px-3 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus:border-blue-500/40 appearance-none cursor-pointer"
+                className="px-3 py-2 rounded-lg bg-white border border-line-200 text-ink-700 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus:border-blue-500/40 appearance-none cursor-pointer"
               >
                 <option value="rating">Highest Rated</option>
                 <option value="reviews">Most Reviews</option>
@@ -341,7 +341,7 @@ function ProvidersContent() {
             )}
             <button
               onClick={() => { setSearch(""); setCategory("All"); setLocation("All Locations"); setVerifiedOnly(false); setMinRating(0); setSort("rating"); }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-medium border border-gray-200 hover:bg-gray-200 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-ink-500 text-xs font-medium border border-line-200 hover:bg-gray-200 transition-colors"
             >
               Clear all
             </button>
@@ -357,16 +357,16 @@ function ProvidersContent() {
             transition={{ duration: 0.35 }}
             className="mb-4 flex flex-wrap items-center gap-3"
           >
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-bold text-ink-900">
               Results for <span className="text-orange-500">&ldquo;{search}&rdquo;</span>
             </h2>
-            <span className="text-sm text-gray-500 font-medium">
+            <span className="text-sm text-ink-500 font-medium">
               {filtered.length} provider{filtered.length !== 1 ? "s" : ""} found
             </span>
             <button
               onClick={() => setSearch("")}
               aria-label="Clear search"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 text-xs font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 hover:bg-gray-200 text-ink-500 text-xs font-medium transition-colors"
             >
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M18 6L6 18M6 6l12 12" />
@@ -381,7 +381,7 @@ function ProvidersContent() {
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="text-sm text-gray-500 font-medium mb-6 flex items-center gap-1.5"
+          className="text-sm text-ink-500 font-medium mb-6 flex items-center gap-1.5"
         >
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold">
             Showing <AnimatedCount value={Math.min(visibleCount, filtered.length)} /> of <AnimatedCount value={filtered.length} /> providers
@@ -391,7 +391,7 @@ function ProvidersContent() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-200 p-6 animate-pulse">
+              <div key={i} className="bg-white rounded-2xl border border-line-200 p-6 animate-pulse">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-14 h-14 rounded-xl bg-gray-200" />
                   <div className="flex-1 space-y-2">
@@ -420,8 +420,8 @@ function ProvidersContent() {
             {hasActiveFilters ? (
               <>
                 <div className="text-6xl mb-4">🔍</div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">No providers found matching your search</h2>
-                <p className="text-gray-500 text-sm mb-6">Try adjusting your filters or broadening your search.</p>
+                <h2 className="text-xl font-bold text-ink-900 mb-2">No providers found matching your search</h2>
+                <p className="text-ink-500 text-sm mb-6">Try adjusting your filters or broadening your search.</p>
                 <button
                   onClick={() => { setSearch(""); setCategory("All"); setLocation("All Locations"); setVerifiedOnly(false); setMinRating(0); setSort("rating"); }}
                   className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all text-sm"
@@ -432,13 +432,13 @@ function ProvidersContent() {
             ) : (
               <>
                 <div className="text-5xl mb-4">🏗️</div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">We&apos;re just getting started</h2>
-                <p className="text-gray-500 text-sm mb-6">
+                <h2 className="text-xl font-bold text-ink-900 mb-2">We&apos;re just getting started</h2>
+                <p className="text-ink-500 text-sm mb-6">
                   ReferAus is new and we&apos;re onboarding NDIS providers in the Hunter Region right now. Check back soon — or if you&apos;re a provider, be one of the first to list.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <a href="/register" className="px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-400 transition-all text-sm">List Your Organisation</a>
-                  <a href="/contact" className="px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-all text-sm">Get in Touch</a>
+                  <a href="/contact" className="px-6 py-3 bg-gray-100 text-ink-700 font-medium rounded-xl hover:bg-gray-200 transition-all text-sm">Get in Touch</a>
                 </div>
               </>
             )}
@@ -460,7 +460,7 @@ function ProvidersContent() {
             {/* Infinite scroll sentinel */}
             <div ref={sentinelRef} className="mt-8 flex justify-center min-h-[40px]">
               {loadingMore && (
-                <div className="flex items-center gap-2 text-sm text-gray-400">
+                <div className="flex items-center gap-2 text-sm text-ink-400">
                   <svg className="animate-spin w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -469,7 +469,7 @@ function ProvidersContent() {
                 </div>
               )}
               {!hasMore && filtered.length > PAGE_SIZE && (
-                <p className="text-xs text-gray-400">All {filtered.length} providers loaded</p>
+                <p className="text-xs text-ink-400">All {filtered.length} providers loaded</p>
               )}
             </div>
           </>

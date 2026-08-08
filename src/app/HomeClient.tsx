@@ -97,10 +97,10 @@ function TypingWord() {
   }, []);
 
   return (
-    <span className="text-orange-500 inline-block">
+    <em className="gradient-accent-text inline-block">
       {displayed}
       <span className={`ml-0.5 inline-block w-[3px] h-[0.85em] bg-orange-500 align-middle transition-opacity ${showCursor ? "opacity-100" : "opacity-0"}`} />
-    </span>
+    </em>
   );
 }
 
@@ -130,7 +130,7 @@ function HeroSubtitle() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -12 }}
           transition={{ duration: prefersReduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="text-gray-300 text-lg max-w-[550px] font-light leading-relaxed absolute"
+          className="text-ink-300 text-lg max-w-[550px] font-light leading-relaxed absolute"
         >
           {HERO_SUBTITLES[idx]}
         </motion.p>
@@ -175,8 +175,8 @@ function NewsletterSection() {
         <div className="rounded-2xl bg-white px-8 py-10 sm:py-12 flex flex-col sm:flex-row items-center gap-8">
           <div className="flex-1 text-center sm:text-left">
             <div className="text-2xl mb-2">📬</div>
-            <h2 className="heading-bold text-xl sm:text-2xl text-gray-900 mb-1">Stay in the loop</h2>
-            <p className="text-gray-500 text-sm">
+            <h2 className="heading-bold text-xl sm:text-2xl text-ink-900 mb-1">Stay in the loop</h2>
+            <p className="text-ink-500 text-sm">
               Get NDIS updates and new listings straight to your inbox.
             </p>
           </div>
@@ -201,7 +201,7 @@ function NewsletterSection() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
-                  className="flex-1 px-4 py-3.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                  className="flex-1 px-4 py-3.5 rounded-xl border border-line-200 text-sm focus:outline-none focus:border-blue-500 transition-colors"
                 />
                 <button
                   type="submit"
@@ -309,16 +309,16 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.3) }}
           className="mb-7">
           <SearchAutocomplete className="w-full max-w-[600px]" />
-          <p className="mt-2 text-xs text-gray-400">Press <kbd className="inline-flex items-center px-1.5 py-0.5 rounded border border-gray-200 bg-gray-50 font-mono text-[10px] text-gray-500">/</kbd> to search</p>
+          <p className="mt-2 text-xs text-ink-400">Press <kbd className="inline-flex items-center px-1.5 py-0.5 rounded border border-line-200 bg-gray-50 font-mono text-[10px] text-ink-500">/</kbd> to search</p>
           {/* Quick-Filter Chips */}
           <div className="mt-4 max-w-[600px]">
-            <p className="text-xs text-gray-500 mb-2 font-medium">Popular searches:</p>
+            <p className="text-xs text-ink-500 mb-2 font-medium">Popular searches:</p>
             <div className="flex flex-wrap gap-2">
               {["OT", "Speech", "Physio", "Psychology", "Support Coordination", "Plan Management", "Daily Living"].map((chip) => (
                 <a
                   key={chip}
                   href={`/providers?q=${encodeURIComponent(chip)}`}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 bg-white text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium border border-line-200 bg-white text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
                 >
                   {chip}
                 </a>
@@ -335,7 +335,7 @@ export default function Home() {
             { icon: "🆓", label: "100% Free" },
           ].map((badge) => (
             <span key={badge.label}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200">
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-gray-600 bg-gray-50 border border-line-200">
               <span>{badge.icon}</span>
               {badge.label}
             </span>
@@ -351,7 +351,7 @@ export default function Home() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.6), delay: d(0.55) }}
-          className="flex flex-wrap gap-6 sm:gap-12 mt-12 pt-8 border-t border-gray-100">
+          className="flex flex-wrap gap-6 sm:gap-12 mt-12 pt-8 border-t border-line-100">
           {[
             { num: 100, suffix: "%", label: "Free for Participants" },
             { num: 24, suffix: "/7", label: "Always Available" },
@@ -361,7 +361,7 @@ export default function Home() {
               <div className="heading-bold text-[2rem] sm:text-[2.5rem] text-blue-600">
                 <AnimatedCounter target={s.num} suffix={s.suffix} />
               </div>
-              <div className="text-[0.75rem] text-gray-500 uppercase tracking-[0.1em] mt-1">{s.label}</div>
+              <div className="text-[0.75rem] text-ink-500 uppercase tracking-[0.1em] mt-1">{s.label}</div>
             </div>
           ))}
         </motion.div>
@@ -419,11 +419,11 @@ export default function Home() {
               },
             ].map((badge) => (
               <div key={badge.label} className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-white border border-line-100 shadow-sm flex items-center justify-center">
                   {badge.icon}
                 </div>
-                <div className="font-semibold text-gray-900 text-sm">{badge.label}</div>
-                <div className="text-xs text-gray-500">{badge.desc}</div>
+                <div className="font-semibold text-ink-900 text-sm">{badge.label}</div>
+                <div className="text-xs text-ink-500">{badge.desc}</div>
               </div>
             ))}
           </div>
@@ -433,7 +433,7 @@ export default function Home() {
       <div className="divider max-w-[800px] mx-auto" />
 
       {/* NDIS Trust Markers */}
-      <section className="bg-gray-50 border-y border-gray-100 py-8 px-6">
+      <section className="bg-gray-50 border-y border-line-100 py-8 px-6">
         <div className="max-w-[1200px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -450,14 +450,14 @@ export default function Home() {
               ].map((badge) => (
                 <span
                   key={badge.label}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm text-sm font-medium text-gray-700"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-line-200 shadow-sm text-sm font-medium text-ink-700"
                 >
                   <span>{badge.icon}</span>
                   {badge.label}
                 </span>
               ))}
             </div>
-            <p className="text-center text-xs text-gray-400">
+            <p className="text-center text-xs text-ink-400">
               ReferAus is an independent directory. We are not affiliated with the NDIA.
             </p>
           </motion.div>
@@ -470,7 +470,7 @@ export default function Home() {
       <ScrollSection className="py-10 px-6 max-w-[1200px] mx-auto">
         <span className="glass-pill rounded-full px-3.5 py-1 text-xs font-medium text-orange-500 inline-block mb-4">How It Works</span>
         <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Three steps. That&apos;s it.</h2>
-        <p className="text-gray-500 max-w-[600px] mb-6 font-light">No sign-up required to browse. Find the support you need in minutes, not weeks.</p>
+        <p className="text-ink-500 max-w-[600px] mb-6 font-light">No sign-up required to browse. Find the support you need in minutes, not weeks.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
@@ -487,7 +487,7 @@ export default function Home() {
                 {step.icon}
               </div>
               <h3 className="font-bold text-xl mb-2">{step.title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">{step.desc}</p>
+              <p className="text-ink-500 text-sm leading-relaxed">{step.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -499,7 +499,7 @@ export default function Home() {
       <ScrollSection className="py-10 px-6 max-w-[1200px] mx-auto">
         <span className="glass-pill rounded-full px-3.5 py-1 text-xs font-medium text-orange-500 inline-block mb-4">Why ReferAus</span>
         <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Built for the NDIS community</h2>
-        <p className="text-gray-500 max-w-[600px] mb-8 font-light">Everything participants and providers need to find each other — nothing they don&apos;t.</p>
+        <p className="text-ink-500 max-w-[600px] mb-8 font-light">Everything participants and providers need to find each other — nothing they don&apos;t.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((f, i) => (
@@ -507,7 +507,7 @@ export default function Home() {
               className="glass-card relative overflow-hidden p-8 rounded-2xl hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
               <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-lg">{f.icon}</div>
               <h3 className="font-semibold text-[1.05rem] mb-2">{f.title}</h3>
-              <p className="text-gray-500 text-[0.85rem] leading-relaxed">{f.desc}</p>
+              <p className="text-ink-500 text-[0.85rem] leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -535,7 +535,7 @@ export default function Home() {
         <div className="text-center mb-8">
           <span className="glass-pill rounded-full px-3.5 py-1 text-xs font-medium text-orange-500 inline-block mb-4">Now Live</span>
           <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight">Be one of the first providers on ReferAus</h2>
-          <p className="text-gray-500 max-w-[600px] mx-auto mt-4 font-light">We&apos;re building the Hunter Region&apos;s most trusted NDIS provider directory. Early providers get maximum visibility as we grow.</p>
+          <p className="text-ink-500 max-w-[600px] mx-auto mt-4 font-light">We&apos;re building the Hunter Region&apos;s most trusted NDIS provider directory. Early providers get maximum visibility as we grow.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[900px] mx-auto">
@@ -547,8 +547,8 @@ export default function Home() {
             <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.1), duration: d(0.4) }}
               className="glass-card-strong rounded-xl p-6 text-center">
               <div className="text-3xl mb-3">{item.icon}</div>
-              <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-sm text-gray-500">{item.desc}</p>
+              <h3 className="font-bold text-ink-900 mb-2">{item.title}</h3>
+              <p className="text-sm text-ink-500">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -575,7 +575,7 @@ export default function Home() {
           {testimonials.map((t, i) => (
             <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: d(i * 0.1), duration: d(0.4) }}
               className="glass-card rounded-2xl p-8">
-              <div className="font-bold text-lg mb-2 text-gray-900">{t.name}</div>
+              <div className="font-bold text-lg mb-2 text-ink-900">{t.name}</div>
               <div className="text-xs text-orange-500 font-medium uppercase tracking-wider mb-4">{t.role}</div>
               <p className="text-gray-600 text-sm leading-relaxed">{t.text}</p>
             </motion.div>
@@ -588,11 +588,11 @@ export default function Home() {
       {/* Provider CTA */}
       <section className="py-10 px-6 max-w-[1200px] mx-auto">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: d(0.5) }}
-          className="bg-white border border-gray-200 rounded-2xl p-8 sm:p-14 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
+          className="bg-white border border-line-200 rounded-2xl p-8 sm:p-14 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
           <div>
             <p className="font-mono text-[0.7rem] tracking-[0.2em] uppercase text-orange-500 mb-3">For Providers</p>
-            <h2 className="heading-bold text-[clamp(1.8rem,4vw,2.8rem)] mb-3 text-gray-900">Are you an NDIS Provider?</h2>
-            <p className="text-gray-500 max-w-[480px] leading-relaxed text-sm">
+            <h2 className="heading-bold text-[clamp(1.8rem,4vw,2.8rem)] mb-3 text-ink-900">Are you an NDIS Provider?</h2>
+            <p className="text-ink-500 max-w-[480px] leading-relaxed text-sm">
               Get listed in front of NDIS participants actively searching for your services in the Hunter Region. Free to list — upgrade when you&apos;re ready.
             </p>
             <ul className="mt-5 space-y-2">
@@ -612,7 +612,7 @@ export default function Home() {
                 </Link>
               </span>
             </div>
-            <Link href="/pricing" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+            <Link href="/pricing" className="text-sm text-ink-400 hover:text-gray-600 transition-colors">
               View pricing plans &rarr;
             </Link>
           </div>
@@ -623,7 +623,7 @@ export default function Home() {
       <section className="py-8 pb-10 px-6 max-w-[1200px] mx-auto">
         <p className="section-label mb-3">For Providers</p>
         <h2 className="heading-bold text-[clamp(2rem,5vw,3.5rem)] leading-tight mb-3">Grow your organisation</h2>
-        <p className="text-gray-500 max-w-[600px] mb-8 font-light">Get found by participants actively looking for your services. Free to list. Upgrade when you&apos;re ready.</p>
+        <p className="text-ink-500 max-w-[600px] mb-8 font-light">Get found by participants actively looking for your services. Free to list. Upgrade when you&apos;re ready.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[
@@ -632,20 +632,20 @@ export default function Home() {
             { tier: "Pro", price: "$79", desc: "Everything you need to grow.", features: ["Everything in Starter", "Direct messaging", "Analytics dashboard", "Unlimited categories", "Area alerts"], cta: "Get Pro", style: "orange", popular: true },
             { tier: "Premium", price: "$149", desc: "Maximum visibility and dedicated support.", features: ["Everything in Pro", "Featured placement", "Multi-location support", "Custom branded profile", "Dedicated manager"], cta: "Get Premium", style: "outline" },
           ].map((plan) => (
-            <div key={plan.tier} className={`bg-white border rounded-xl p-8 relative ${plan.popular ? "border-orange-500 shadow-lg shadow-orange-500/10" : "border-gray-200"}`}>
+            <div key={plan.tier} className={`bg-white border rounded-xl p-8 relative ${plan.popular ? "border-orange-500 shadow-lg shadow-orange-500/10" : "border-line-200"}`}>
               {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-500 text-white text-[0.6rem] font-bold px-3 py-0.5 rounded-full tracking-wider">MOST POPULAR</div>}
-              <div className="text-sm text-gray-500 uppercase tracking-wider">{plan.tier}</div>
-              <div className="heading-bold text-[3rem] my-2">{plan.price}<span className="text-base text-gray-400 font-sans not-italic">/mo</span></div>
-              <p className="text-sm text-gray-500 mb-6">{plan.desc}</p>
+              <div className="text-sm text-ink-500 uppercase tracking-wider">{plan.tier}</div>
+              <div className="heading-bold text-[3rem] my-2">{plan.price}<span className="text-base text-ink-400 font-sans not-italic">/mo</span></div>
+              <p className="text-sm text-ink-500 mb-6">{plan.desc}</p>
               <ul className="space-y-2 mb-8">
                 {plan.features.map((f) => (
-                  <li key={f} className="text-sm text-gray-500 flex items-center gap-2">
+                  <li key={f} className="text-sm text-ink-500 flex items-center gap-2">
                     <span className="text-orange-500 font-bold">✓</span> {f}
                   </li>
                 ))}
               </ul>
               <Link href="/register"
-                className={`block text-center py-3 rounded-lg font-semibold text-sm transition-all ${plan.style === "orange" ? "bg-orange-500 text-white hover:bg-orange-600" : "border border-gray-200 text-gray-700 hover:border-blue-600 hover:text-blue-600"}`}>
+                className={`block text-center py-3 rounded-lg font-semibold text-sm transition-all ${plan.style === "orange" ? "bg-orange-500 text-white hover:bg-orange-600" : "border border-line-200 text-ink-700 hover:border-blue-600 hover:text-blue-600"}`}>
                 {plan.cta}
               </Link>
             </div>
