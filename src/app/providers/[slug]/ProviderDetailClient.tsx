@@ -50,7 +50,7 @@ function ProviderFAQ() {
         <div key={i} className="border border-line-200 rounded-xl overflow-hidden">
           <button
             onClick={() => setOpenIndex(openIndex === i ? null : i)}
-            className="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-ink-900 hover:bg-line-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-expanded={openIndex === i}
           >
             <span>{faq.q}</span>
@@ -62,7 +62,7 @@ function ProviderFAQ() {
             </svg>
           </button>
           {openIndex === i && (
-            <div className="px-5 pb-4 text-sm text-gray-600 leading-relaxed border-t border-line-100 pt-3">
+            <div className="px-5 pb-4 text-sm text-ink-700 leading-relaxed border-t border-line-100 pt-3">
               {faq.a}
             </div>
           )}
@@ -87,7 +87,7 @@ function RatingDistribution({ reviews }: { reviews: ReviewData[] }) {
           <svg width="11" height="11" viewBox="0 0 24 24" fill="#F97316" className="shrink-0">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>
-          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="flex-1 h-2 bg-line-100 rounded-full overflow-hidden">
             <div
               className="h-full bg-orange-400 rounded-full transition-all duration-500"
               style={{ width: `${(count / max) * 100}%` }}
@@ -229,7 +229,7 @@ function ReviewItem({
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-600">
             {(review.author || "A")[0]}
           </div>
-          <span className="text-sm font-semibold text-gray-800">{review.author}</span>
+          <span className="text-sm font-semibold text-ink-900">{review.author}</span>
           <div className="flex gap-0.5">
             {[...Array(review.rating)].map((_, j) => (
               <svg key={j} width="12" height="12" viewBox="0 0 24 24" fill="#F97316"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
@@ -240,7 +240,7 @@ function ReviewItem({
         </div>
         <span className="text-xs text-ink-400">{review.date}</span>
       </div>
-      <p className="text-sm text-gray-600 leading-relaxed ml-10">{review.text}</p>
+      <p className="text-sm text-ink-700 leading-relaxed ml-10">{review.text}</p>
 
       {/* Provider Reply */}
       {savedReply && (
@@ -272,7 +272,7 @@ function ReviewItem({
                 </button>
                 <button
                   onClick={() => setShowReplyInput(false)}
-                  className="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 text-xs font-medium hover:bg-gray-200 transition-colors"
+                  className="px-3 py-1.5 rounded-lg bg-line-100 text-ink-700 text-xs font-medium hover:bg-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
@@ -528,8 +528,8 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           <div className="w-24 h-24 rounded-2xl bg-gray-200" />
           <div className="flex-1 space-y-3">
             <div className="h-8 bg-gray-200 rounded w-2/3" />
-            <div className="h-4 bg-gray-100 rounded w-1/2" />
-            <div className="h-16 bg-gray-100 rounded w-full" />
+            <div className="h-4 bg-line-100 rounded w-1/2" />
+            <div className="h-16 bg-line-100 rounded w-full" />
           </div>
         </div>
       </div>
@@ -686,7 +686,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 <span className="text-xs text-ink-400">({provider.reviewCount} reviews)</span>
               </div>
             </div>
-            <p className="text-gray-600 leading-relaxed mb-6">{provider.bio || provider.description}</p>
+            <p className="text-ink-700 leading-relaxed mb-6">{provider.bio || provider.description}</p>
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={() => setEnquiryOpen(true)}
@@ -733,20 +733,20 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             {/* Services */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
               <h2 className="text-xl font-bold mb-6 text-ink-900">Services Offered</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {provider.services.map((s) => (
                   <div key={s} className="flex items-center gap-3 py-2">
                     <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: accent }} />
-                    <span className="text-sm text-gray-600">{s}</span>
+                    <span className="text-sm text-ink-700">{s}</span>
                   </div>
                 ))}
               </div>
             </motion.div>
 
             {/* Operating Hours (Item 29) */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.11, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.11, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
               <h2 className="text-xl font-bold mb-5 text-ink-900">Operating Hours</h2>
               <div className="space-y-2">
                 {[
@@ -760,7 +760,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 ].map(({ day, hours, open }) => (
                   <div key={day} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
                     <span className="text-sm font-medium text-ink-700 w-28">{day}</span>
-                    <span className={`text-sm ${open ? "text-gray-600" : "text-ink-400"}`}>{hours}</span>
+                    <span className={`text-sm ${open ? "text-ink-700" : "text-ink-400"}`}>{hours}</span>
                   </div>
                 ))}
               </div>
@@ -769,11 +769,11 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
 
             {/* Gallery */}
             {provider.gallery_urls && provider.gallery_urls.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.12, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 p-8">
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.12, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
                 <h2 className="text-xl font-bold mb-6 text-ink-900">Gallery</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {provider.gallery_urls.map((url, i) => (
-                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
+                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-line-100">
                       <Image src={url} alt={`${provider.name} gallery ${i + 1}`} fill className="object-cover hover:scale-105 transition-transform duration-300" placeholder="blur" blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAF0lEQVR4nGNkYGD4z8BQDwAAAf8A/ob0qgAAAABJRU5ErkJggg==" />
                     </div>
                   ))}
@@ -787,7 +787,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 <h2 className="text-xl font-bold text-ink-900">Location</h2>
                 <p className="text-sm text-ink-500 mt-1">{provider.location}, {provider.state || "NSW"}, Australia</p>
               </div>
-              <div className="relative bg-gray-100 h-56 flex items-center justify-center overflow-hidden">
+              <div className="relative bg-line-100 h-56 flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 opacity-30" style={{backgroundImage: "linear-gradient(#c8d6e5 1px, transparent 1px), linear-gradient(90deg, #c8d6e5 1px, transparent 1px)", backgroundSize: "40px 40px"}} />
                 <div className="relative flex flex-col items-center gap-2 text-center">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" style={{ backgroundColor: accent }}>
@@ -809,7 +809,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             </motion.div>
 
             {/* Contact Form */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.2, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.2, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
               <h2 className="text-xl font-bold mb-2 text-ink-900">Send a Message</h2>
               <p className="text-sm text-ink-500 mb-6">Get in touch with {provider.name} directly.</p>
               {formSubmitted ? (
@@ -817,14 +817,14 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                   </div>
-                  <p className="font-semibold text-gray-800">Message sent!</p>
+                  <p className="font-semibold text-ink-900">Message sent!</p>
                   <p className="text-sm text-ink-500 mt-1">{provider.name} will be in touch soon.</p>
                 </div>
               ) : (
                 <form onSubmit={handleFormSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Full Name</label>
+                      <label className="block text-xs font-medium text-ink-700 mb-1.5">Full Name</label>
                       <input
                         type="text"
                         required
@@ -835,7 +835,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Email Address</label>
+                      <label className="block text-xs font-medium text-ink-700 mb-1.5">Email Address</label>
                       <input
                         type="email"
                         required
@@ -847,7 +847,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Phone (optional)</label>
+                    <label className="block text-xs font-medium text-ink-700 mb-1.5">Phone (optional)</label>
                     <input
                       type="tel"
                       value={formData.phone}
@@ -857,7 +857,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Message</label>
+                    <label className="block text-xs font-medium text-ink-700 mb-1.5">Message</label>
                     <textarea
                       required
                       rows={4}
@@ -883,20 +883,20 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             </motion.div>
 
             {/* FAQ Section (Item 28) */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.22, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.22, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
               <h2 className="text-xl font-bold mb-1 text-ink-900">Frequently Asked Questions</h2>
               <p className="text-xs text-ink-400 mb-6">Common questions about NDIS providers</p>
               <ProviderFAQ />
             </motion.div>
 
             {/* Reviews */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.25, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.25, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
               <div className="flex items-start justify-between mb-6 flex-wrap gap-4">
                 <div className="flex items-center gap-3">
                   <h2 className="text-xl font-bold text-ink-900">Reviews</h2>
                   <button
                     onClick={() => setReviewOpen(true)}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-line-200 text-gray-600 hover:border-orange-400 hover:text-orange-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-line-200 text-ink-700 hover:border-orange-400 hover:text-orange-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
                   >
                     Write a Review
                   </button>
@@ -942,7 +942,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
 
           {/* Sidebar */}
           <div>
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 p-6 sticky top-24">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-6 sticky top-24">
               <h3 className="text-lg font-bold mb-4 text-ink-900">Get in Touch</h3>
               <button
                 onClick={() => setEnquiryOpen(true)}
@@ -963,21 +963,21 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 Request Callback
               </button>
               <div className="space-y-3 text-sm">
-                <a href={`tel:${provider.phone}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href={`tel:${provider.phone}`} className="flex items-center gap-3 text-ink-700 hover:text-blue-600 transition-colors">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                   {provider.phone}
                 </a>
-                <a href={`mailto:${provider.email}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href={`mailto:${provider.email}`} className="flex items-center gap-3 text-ink-700 hover:text-blue-600 transition-colors">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   {provider.email}
                 </a>
                 {provider.website && (
-                  <a href={provider.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors">
+                  <a href={provider.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-ink-700 hover:text-blue-600 transition-colors">
                     <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" /></svg>
                     Website
                   </a>
                 )}
-                <div className="flex items-center gap-3 text-gray-600">
+                <div className="flex items-center gap-3 text-ink-700">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                   {provider.location}, {provider.state || "NSW"}
                 </div>
@@ -1063,7 +1063,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             >
               <button
                 onClick={() => setReportOpen(false)}
-                className="absolute top-4 right-4 text-ink-400 hover:text-gray-600 transition-colors"
+                className="absolute top-4 right-4 text-ink-400 hover:text-ink-700 transition-colors"
                 aria-label="Close"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" /></svg>
@@ -1073,7 +1073,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                   </div>
-                  <p className="font-semibold text-gray-800">Report submitted</p>
+                  <p className="font-semibold text-ink-900">Report submitted</p>
                   <p className="text-sm text-ink-500 mt-1">Thank you for helping keep ReferAus accurate.</p>
                 </div>
               ) : (
@@ -1082,7 +1082,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   <p className="text-xs text-ink-500 mb-5">Help us keep ReferAus accurate and trustworthy.</p>
                   <form onSubmit={handleReportSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Reason</label>
+                      <label className="block text-xs font-medium text-ink-700 mb-1.5">Reason</label>
                       <select
                         value={reportReason}
                         onChange={(e) => setReportReason(e.target.value)}
@@ -1095,7 +1095,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Additional details (optional)</label>
+                      <label className="block text-xs font-medium text-ink-700 mb-1.5">Additional details (optional)</label>
                       <textarea
                         rows={3}
                         value={reportText}
@@ -1139,7 +1139,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             >
               <button
                 onClick={() => setShowQrModal(false)}
-                className="absolute top-4 right-4 text-ink-400 hover:text-gray-600 transition-colors"
+                className="absolute top-4 right-4 text-ink-400 hover:text-ink-700 transition-colors"
                 aria-label="Close"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" /></svg>
@@ -1178,7 +1178,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           <button
             onClick={() => setCallbackOpen(true)}
             aria-label={`Request a callback from ${provider.name}`}
-            className="shrink-0 min-w-[44px] min-h-[44px] px-3 py-2.5 rounded-xl text-blue-600 border border-line-200 bg-white hover:border-blue-400 active:bg-gray-50 transition-colors flex items-center justify-center"
+            className="shrink-0 min-w-[44px] min-h-[44px] px-3 py-2.5 rounded-xl text-blue-600 border border-line-200 bg-white hover:border-blue-400 active:bg-line-100 transition-colors flex items-center justify-center"
           >
             <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
