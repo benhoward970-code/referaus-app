@@ -1,19 +1,18 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
+const AUTH_PATHS = ["/login", "/register", "/forgot-password", "/reset-password", "/admin", "/dashboard"];
+
 export function MobileFAB() {
   const [hidden, setHidden] = useState(false);
-  const [onAuthPage, setOnAuthPage] = useState(false);
   const baseHeightRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    // Hide on auth/admin pages to avoid covering forms
-    const path = window.location.pathname;
-    const authPaths = ["/login", "/register", "/forgot-password", "/reset-password", "/admin", "/dashboard"];
-    setOnAuthPage(authPaths.some((p) => path.startsWith(p)));
-  }, []);
+  const pathname = usePathname();
+  // Computed synchronously on first render — avoids a flash of the FAB on
+  // auth pages before a useEffect would otherwise catch up (see ChatWidget).
+  const onAuthPage = AUTH_PATHS.some((p) => pathname?.startsWith(p));
 
   useEffect(() => {
     // Detect keyboard open via viewport height change

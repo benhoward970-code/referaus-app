@@ -41,7 +41,7 @@ export default function ForgotPasswordPage() {
       <div className="absolute top-[-20%] left-[30%] w-[500px] h-[500px] rounded-full bg-blue-600/[0.04] blur-[120px]" />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <div className="mx-auto mb-4"><LogoMark /></div>
+          <div className="flex justify-center mb-4"><LogoMark /></div>
           <h1 className="text-2xl font-black tracking-tight mb-2">Reset your password</h1>
           <p className="text-sm text-ink-500">We&apos;ll send you a link to reset it</p>
         </div>

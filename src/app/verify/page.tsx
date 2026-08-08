@@ -64,7 +64,7 @@ export default function VerifyPage() {
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         className="w-full max-w-md relative z-10 text-center"
       >
-        <div className="mx-auto mb-4"><LogoMark /></div>
+        <div className="flex justify-center mb-4"><LogoMark /></div>
 
         {status === "loading" && (
           <div className="card-flat p-8">

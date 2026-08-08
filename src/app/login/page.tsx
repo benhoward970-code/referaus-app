@@ -225,7 +225,7 @@ export default function LoginPage() {
       
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <div className="mx-auto mb-4"><LogoMark /></div>
+          <div className="flex justify-center mb-4"><LogoMark /></div>
           <h1 className="h-editorial text-3xl mb-2">Welcome <em>back.</em></h1>
           <p className="text-sm text-ink-500">Sign in to your ReferAus account</p>
         </div>
