@@ -16,7 +16,7 @@ export function ProviderCard({ provider }: { provider: Provider }) {
 
   return (
     <PrefetchLink href={`/providers/${provider.slug}`}>
-      <div className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
+      <div className="group relative card overflow-hidden hover:border-blue-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 pt-5 pb-8">
           <div className="flex items-start justify-between gap-2">
             <div>
@@ -90,25 +90,25 @@ export function ProviderCard({ provider }: { provider: Provider }) {
                 </svg>
               ))}
             </div>
-            <span className="text-sm font-semibold text-gray-700">{provider.rating}</span>
-            <span className="text-xs text-gray-400">({provider.reviewCount} reviews)</span>
+            <span className="text-sm font-semibold text-ink-700">{provider.rating}</span>
+            <span className="text-xs text-ink-400">({provider.reviewCount} reviews)</span>
           </div>
 
           <div className="flex flex-wrap gap-1.5 mb-3">
             {provider.services.slice(0, 3).map((s) => (
-              <span key={s} className="text-[11px] px-2.5 py-1 rounded-lg bg-gray-100 text-gray-600 border border-gray-200">{s}</span>
+              <span key={s} className="pill-neutral">{s}</span>
             ))}
             {provider.services.length > 3 && (
-              <span className="text-[11px] px-2 py-1 text-gray-400">+{provider.services.length - 3}</span>
+              <span className="text-[11px] px-2 py-1 text-ink-400">+{provider.services.length - 3}</span>
             )}
           </div>
 
           <div className="flex items-center gap-1.5 mb-1">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-            <span className="text-sm text-gray-500">{provider.location}</span>
+            <span className="text-sm text-ink-500">{provider.location}</span>
           </div>
           <div className="flex items-center gap-1 mb-3">
-            <span className="text-xs text-gray-400">🌐 {((provider as any).languages as string[] | undefined)?.join(", ") || "English"}</span>
+            <span className="text-xs text-ink-400">🌐 {((provider as any).languages as string[] | undefined)?.join(", ") || "English"}</span>
           </div>
 
           <div className="mt-auto">
@@ -124,10 +124,18 @@ export function ProviderCard({ provider }: { provider: Provider }) {
                   View Profile &rarr;
                 </span>
                 <span
-                  className="text-[11px] px-2.5 py-1 rounded-lg bg-orange-50 text-orange-600 border border-orange-200 font-medium hover:bg-orange-100 transition-colors"
+                  role="button"
+                  tabIndex={0}
+                  className="pill-pending font-medium hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
                   onClick={(e) => {
                     e.preventDefault();
                     window.location.href = "/register";
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      window.location.href = "/register";
+                    }
                   }}
                 >
                   Claim listing
