@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 
 const protectedRoutes = ['/dashboard'];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isProtected = protectedRoutes.some(route => pathname.startsWith(route));
 
@@ -11,31 +12,36 @@ export function middleware(request: NextRequest) {
 
   // If no Supabase configured (no env vars), allow access (demo mode)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!supabaseUrl) return NextResponse.next();
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnonKey) return NextResponse.next();
 
-  // Check for Supabase auth cookie: sb-{ref}-auth-token
-  // The ref from the Supabase URL is "zfhapnnlxfhxsqpqcuje"
-  const authCookie = request.cookies.get('sb-zfhapnnlxfhxsqpqcuje-auth-token')?.value;
+  let response = NextResponse.next({ request });
 
-  // Also check chunked cookies (Supabase splits large tokens into .0, .1, etc.)
-  const authCookieChunked = request.cookies.getAll().some(
-    c => c.name.startsWith('sb-zfhapnnlxfhxsqpqcuje-auth-token') && c.value
-  );
+  // Real session validation: getUser() round-trips to Supabase Auth to
+  // verify the token, unlike just checking whether an auth cookie is
+  // present (which let expired/invalid sessions through).
+  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+        response = NextResponse.next({ request });
+        cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+      },
+    },
+  });
 
-  // Fallback: check for any auth-token cookie (for different Supabase refs)
-  const fallbackToken = request.cookies.getAll().find(
-    c => c.name.includes('auth-token') && c.value
-  )?.value;
+  const { data: { user } } = await supabase.auth.getUser();
 
-  const hasToken = !!authCookie || authCookieChunked || !!fallbackToken;
-
-  if (!hasToken) {
+  if (!user) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {
