@@ -7,6 +7,7 @@ import { providers } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
 import { EnquiryModal } from "@/components/EnquiryModal";
 import { CallbackModal } from "@/components/CallbackModal";
+import { ReviewModal } from "@/components/ReviewModal";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ShareButtons } from "@/components/ShareButtons";
 import { RecentlyViewed, saveRecentlyViewed } from "@/components/RecentlyViewed";
@@ -355,6 +356,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
   const [isLoading, setIsLoading] = useState(true);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
@@ -890,7 +892,15 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             {/* Reviews */}
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.25, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
               <div className="flex items-start justify-between mb-6 flex-wrap gap-4">
-                <h2 className="text-xl font-bold text-gray-900">Reviews</h2>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-bold text-gray-900">Reviews</h2>
+                  <button
+                    onClick={() => setReviewOpen(true)}
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-orange-400 hover:text-orange-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                  >
+                    Write a Review
+                  </button>
+                </div>
                 <div className="flex items-start gap-6">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl font-black text-orange-500">{provider.rating}</span>
@@ -1021,6 +1031,16 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
         providerSlug={provider.slug}
         open={callbackOpen}
         onClose={() => setCallbackOpen(false)}
+      />
+
+      <ReviewModal
+        providerName={provider.name}
+        providerSlug={provider.slug}
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        onSubmitted={() => {
+          showToast("Thanks! Your review is pending moderation and will appear once approved.", "success");
+        }}
       />
 
       {/* Report Modal */}

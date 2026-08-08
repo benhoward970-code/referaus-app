@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
     .from("reviews")
     .select("*")
     .eq("provider_slug", slug)
+    .eq("status", "approved")
     .order("created_at", { ascending: false })
     .limit(50);
 
@@ -72,12 +73,13 @@ export async function POST(request: NextRequest) {
     rating,
     text: text.trim().substring(0, 1000),
     service_type: service_type?.trim().substring(0, 80),
+    status: "pending",
     created_at: new Date().toISOString(),
   };
 
   const client = getClient();
   if (!client) {
-    return NextResponse.json({ success: true, review: { ...review, id: "demo-" + Date.now() }, demo: true });
+    return NextResponse.json({ success: true, pending: true, review: { ...review, id: "demo-" + Date.now() }, demo: true });
   }
 
   const { data, error } = await client.from("reviews").insert(review).select().single();
@@ -86,5 +88,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to save review" }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true, review: data });
+  return NextResponse.json({ success: true, pending: true, review: data });
 }

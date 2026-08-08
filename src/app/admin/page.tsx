@@ -59,13 +59,25 @@ interface ContactRow {
   created_at: string;
 }
 
-type Section = "overview" | "users" | "providers" | "enquiries" | "contacts";
+interface ReviewRow {
+  id: string;
+  provider_slug: string;
+  reviewer_name: string;
+  rating: number;
+  text: string;
+  service_type: string | null;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+}
+
+type Section = "overview" | "users" | "providers" | "enquiries" | "contacts" | "reviews";
 
 const NAV_ITEMS: { key: Section; label: string; icon: string }[] = [
   { key: "overview", label: "Overview", icon: "📊" },
   { key: "users", label: "Users", icon: "👤" },
   { key: "providers", label: "Providers", icon: "🏢" },
   { key: "enquiries", label: "Enquiries", icon: "📩" },
+  { key: "reviews", label: "Reviews", icon: "⭐" },
   { key: "contacts", label: "Contacts", icon: "📬" },
 ];
 
@@ -94,6 +106,7 @@ export default function AdminPage() {
   const [providers, setProviders] = useState<ProviderRow[]>([]);
   const [enquiries, setEnquiries] = useState<EnquiryRow[]>([]);
   const [contacts, setContacts] = useState<ContactRow[]>([]);
+  const [reviews, setReviews] = useState<ReviewRow[]>([]);
 
   // Auth check
   useEffect(() => {
@@ -118,7 +131,8 @@ export default function AdminPage() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`/api/admin?section=${s}`, {
+        const endpoint = s === "reviews" ? "/api/admin/reviews" : `/api/admin?section=${s}`;
+        const res = await fetch(endpoint, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) {
@@ -131,6 +145,7 @@ export default function AdminPage() {
         if (s === "providers") setProviders(data);
         if (s === "enquiries") setEnquiries(data);
         if (s === "contacts") setContacts(data);
+        if (s === "reviews") setReviews(data.reviews || []);
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : "Failed to load data");
       }
@@ -220,6 +235,9 @@ export default function AdminPage() {
             )}
             {section === "enquiries" && (
               <EnquiriesSection data={enquiries} loading={loading} />
+            )}
+            {section === "reviews" && (
+              <ReviewsSection data={reviews} loading={loading} token={token} onChange={() => fetchSection("reviews")} />
             )}
             {section === "contacts" && (
               <ContactsSection data={contacts} loading={loading} />
@@ -394,6 +412,116 @@ function EnquiriesSection({ data, loading }: { data: EnquiryRow[]; loading: bool
         ))}
         {data.length === 0 && (
           <p className="text-gray-400 text-sm text-center py-8">No enquiries yet</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ReviewsSection({
+  data,
+  loading,
+  token,
+  onChange,
+}: {
+  data: ReviewRow[];
+  loading: boolean;
+  token: string;
+  onChange: () => void;
+}) {
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const pending = data.filter((r) => r.status === "pending");
+  const decided = data.filter((r) => r.status !== "pending");
+
+  async function setStatus(id: string, status: "approved" | "rejected") {
+    setBusyId(id);
+    try {
+      await fetch("/api/admin/reviews", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ id, status }),
+      });
+      onChange();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  if (loading) return <LoadingSkeleton count={3} />;
+
+  const Row = ({ r }: { r: ReviewRow }) => (
+    <div key={r.id} className="bg-white rounded-2xl border border-gray-200 p-5">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 className="font-bold text-gray-900">{r.reviewer_name}</h3>
+            <span className="text-xs text-gray-400">→ {r.provider_slug}</span>
+          </div>
+          <div className="flex gap-0.5 mt-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <svg key={star} width="12" height="12" viewBox="0 0 24 24" fill={star <= r.rating ? "#F97316" : "#e5e7eb"}>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+            ))}
+          </div>
+        </div>
+        <span
+          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+            r.status === "approved"
+              ? "bg-green-50 text-green-600"
+              : r.status === "rejected"
+              ? "bg-red-50 text-red-600"
+              : "bg-yellow-50 text-yellow-600"
+          }`}
+        >
+          {r.status}
+        </span>
+      </div>
+      <p className="mt-2 text-sm text-gray-600">{r.text}</p>
+      <div className="mt-3 flex items-center gap-3">
+        <span className="text-xs text-gray-400">{formatDate(r.created_at)}</span>
+        {r.status === "pending" && (
+          <div className="flex gap-2 ml-auto">
+            <button
+              onClick={() => setStatus(r.id, "approved")}
+              disabled={busyId === r.id}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-green-50 text-green-600 hover:bg-green-100 disabled:opacity-50"
+            >
+              Approve
+            </button>
+            <button
+              onClick={() => setStatus(r.id, "rejected")}
+              disabled={busyId === r.id}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-50"
+            >
+              Reject
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <div>
+      <h1 className="text-2xl font-black mb-6">Reviews ({data.length})</h1>
+      {pending.length > 0 && (
+        <>
+          <p className="text-xs font-bold text-yellow-600 uppercase tracking-wider mb-3">
+            Pending moderation ({pending.length})
+          </p>
+          <div className="space-y-3 mb-8">
+            {pending.map((r) => <Row key={r.id} r={r} />)}
+          </div>
+        </>
+      )}
+      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+        Decided
+      </p>
+      <div className="space-y-3">
+        {decided.map((r) => <Row key={r.id} r={r} />)}
+        {data.length === 0 && (
+          <p className="text-gray-400 text-sm text-center py-8">No reviews yet</p>
         )}
       </div>
     </div>

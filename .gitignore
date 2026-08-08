@@ -5,3 +5,6 @@ cloudflared.exe
 .credentials
 _archive/
 refer-demo.mp4
+.next/
+next-env.d.ts
+*.tsbuildinfo
