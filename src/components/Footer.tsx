@@ -57,7 +57,7 @@ export function Footer() {
           {/* Link columns */}
           {COLUMNS.map(({ heading, links }) => (
             <div key={heading}>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-ink-400 mb-3">{heading}</h4>
+              <h4 className="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-orange-500 mb-3">{heading}</h4>
               <ul className="flex flex-col gap-2">
                 {links.map(({ label, href }) => (
                   <li key={label}>
@@ -76,9 +76,10 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-line-200 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-          <p className="text-xs text-ink-400">
-            &copy; {new Date().getFullYear()} ReferAus. Built in the Hunter Region.
+          <p className="font-mono text-[11px] text-ink-400">
+            REFERAUS © {new Date().getFullYear()} — Built in the Hunter Region
           </p>
+          <p className="font-mono text-[11px] text-ink-400">32.9283° S, 151.7817° E — NEWCASTLE, NSW</p>
         </div>
       </div>
     </footer>

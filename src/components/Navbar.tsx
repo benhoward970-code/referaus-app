@@ -271,19 +271,19 @@ export function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="text-sm font-medium px-4 py-2 rounded-lg text-gray-600 hover:text-ink-900 transition-all"
+                  className="text-sm font-medium px-2 text-ink-700 hover:text-ink-900 transition-all"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="text-sm font-medium px-4 py-2 rounded-lg border border-gray-300 text-ink-700 hover:border-gray-400 hover:text-ink-900 transition-all"
+                  className="link-underline border-line-200 text-ink-700 hover:border-orange-500 hover:text-ink-900"
                 >
                   Sign Up
                 </Link>
                 <Link
                   href="/register?role=provider"
-                  className="text-sm font-semibold px-5 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-sm"
+                  className="btn-block"
                 >
                   List Your Business
                 </Link>
@@ -348,19 +348,19 @@ export function Navbar() {
                 <div className="px-5 pt-5 pb-3 flex flex-col gap-3">
                   <Link
                     href="/login"
-                    className="text-center text-base font-semibold px-4 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm"
+                    className="text-center text-base font-semibold px-4 py-3.5 rounded bg-ink-950 hover:bg-ink-900 text-cream transition-all"
                   >
                     Login
                   </Link>
                   <Link
                     href="/register"
-                    className="text-center text-base font-semibold px-4 py-3.5 rounded-xl border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-all"
+                    className="text-center text-base font-semibold px-4 py-3.5 rounded border-2 border-ink-950 text-ink-900 hover:bg-line-100 transition-all"
                   >
                     Sign Up
                   </Link>
                   <Link
                     href="/register?role=provider"
-                    className="text-center text-sm font-semibold px-4 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-sm"
+                    className="text-center text-sm font-semibold px-4 py-3 rounded bg-orange-500 hover:bg-orange-400 text-ink-950 transition-all"
                   >
                     List Your Business
                   </Link>
