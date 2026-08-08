@@ -251,21 +251,66 @@ const testimonials = [
 
 // featured providers removed - using early access CTA instead
 
-function useProviderCount() {
-  const [count, setCount] = useState<number | null>(null);
+// Approximate placement (% within the hero map panel) for Hunter Region
+// suburbs — the map itself is a stylised illustration, not a real
+// projection, so these are hand-placed rather than real lat/lng.
+const SUBURB_MAP_POSITIONS: Record<string, { top: string; left: string }> = {
+  "newcastle": { top: "52%", left: "60%" },
+  "newcastle west": { top: "50%", left: "58%" },
+  "mayfield": { top: "44%", left: "56%" },
+  "wallsend": { top: "40%", left: "62%" },
+  "hamilton": { top: "48%", left: "62%" },
+  "lambton": { top: "42%", left: "64%" },
+  "adamstown": { top: "56%", left: "62%" },
+  "merewether": { top: "58%", left: "66%" },
+  "charlestown": { top: "64%", left: "68%" },
+  "belmont": { top: "70%", left: "72%" },
+  "lake macquarie": { top: "72%", left: "68%" },
+  "toronto": { top: "76%", left: "60%" },
+  "morisset": { top: "82%", left: "58%" },
+  "swansea": { top: "78%", left: "70%" },
+  "maitland": { top: "30%", left: "46%" },
+  "cessnock": { top: "34%", left: "36%" },
+  "kurri kurri": { top: "30%", left: "38%" },
+  "singleton": { top: "20%", left: "30%" },
+  "muswellbrook": { top: "12%", left: "24%" },
+  "port stephens": { top: "24%", left: "78%" },
+  "raymond terrace": { top: "26%", left: "66%" },
+};
+
+interface HomeProvider {
+  slug: string;
+  name: string;
+  category: string;
+  suburb: string;
+  rating: number;
+  review_count: number;
+}
+
+function useHomeProviders() {
+  const [providers, setProviders] = useState<HomeProvider[] | null>(null);
   useEffect(() => {
     fetch('/api/providers-public')
       .then(r => r.json())
-      .then((data: unknown[]) => { if (Array.isArray(data)) setCount(data.length); })
+      .then((data: unknown[]) => { if (Array.isArray(data)) setProviders(data as HomeProvider[]); })
       .catch(() => {});
   }, []);
-  return count;
+  return providers;
 }
 
 export default function Home() {
   const prefersReduced = useReducedMotion();
   const d = (n: number) => prefersReduced ? 0 : n;
-  const providerCount = useProviderCount();
+  const homeProviders = useHomeProviders();
+  const providerCount = homeProviders?.length ?? null;
+
+  // Only plot pins for providers that are actually listed, matched to a
+  // known Hunter Region suburb — no placeholder/dummy pins.
+  const mapPins = (homeProviders ?? [])
+    .map((p) => ({ provider: p, pos: SUBURB_MAP_POSITIONS[(p.suburb || "").trim().toLowerCase()] }))
+    .filter((p): p is { provider: HomeProvider; pos: { top: string; left: string } } => !!p.pos)
+    .slice(0, 6);
+  const featuredMapProvider = [...mapPins].sort((a, b) => (b.provider.rating || 0) - (a.provider.rating || 0))[0];
 
   // Parallax for hero background blobs
   const heroRef = useRef<HTMLElement>(null);
@@ -274,98 +319,129 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero — white background matching rest of page */}
-      <div className="relative overflow-hidden bg-white">
-        <section ref={heroRef} className="min-h-[85vh] flex flex-col justify-center px-6 pt-28 pb-12 max-w-[1200px] mx-auto relative z-10">
+      {/* Hero — dark editorial panel + Hunter Region map */}
+      <div className="bg-paper">
+        <section ref={heroRef} className="grid lg:grid-cols-[42%_58%] min-h-[85vh]">
+          {/* Left: editorial copy */}
+          <div className="relative flex flex-col justify-center bg-ink-950 text-cream px-8 sm:px-12 py-14 overflow-hidden">
+            <div className="relative z-10">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5) }}
+                className="eyebrow-rule text-orange-500 mb-6">
+                Newcastle — Hunter Region, NSW
+              </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5) }}
-          className="mb-6">
-          <span className="rounded-full px-4 py-1.5 text-[0.7rem] text-blue-600 tracking-[0.15em] uppercase font-medium inline-flex items-center gap-3 bg-blue-50 border border-blue-100">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            referaus.com — Australia&apos;s NDIS Marketplace
-          </span>
-        </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: d(0.6), delay: d(0.1) }}
+                className="h-editorial text-[clamp(2.4rem,4vw,3.6rem)] mb-6"
+              >
+                Support,<br />sorted by <em>people<br />who live here.</em>
+              </motion.h1>
 
-        <h1 className="heading-bold text-[clamp(2.8rem,7vw,5rem)] leading-[1.05] mb-6 max-w-[820px]">
-          <BlurInText text="Find Trusted" delay={d(0.2)} />
-          <br />
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: d(0.5), delay: d(0.4) }}
-            className="inline-block"
-          >
-            NDIS{" "}<TypingWord />
-          </motion.span>
-          <br />
-          <BlurInText text="Near You" delay={d(0.6)} />
-        </h1>
+              <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.25) }}
+                className="text-[15px] leading-relaxed text-ink-soft font-light max-w-[340px] mb-8">
+                Not a national call centre. A directory built and checked by the Hunter Region community — search, compare, and message providers directly.
+              </motion.p>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.6), delay: d(0.2) }}
-          className="mb-8">
-          <HeroSubtitle />
-        </motion.div>
+              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.35) }}
+                className="mb-7">
+                <SearchAutocomplete className="w-full max-w-[420px]" />
+                <p className="mt-2 text-xs text-ink-soft">Press <kbd className="inline-flex items-center px-1.5 py-0.5 rounded border border-line-dark font-mono text-[10px] text-ink-soft">/</kbd> to search</p>
+                <div className="mt-4 flex flex-wrap gap-2 max-w-[420px]">
+                  {["OT", "Speech", "Physio", "Psychology", "Support Coordination", "Plan Management", "Daily Living"].map((chip) => (
+                    <a
+                      key={chip}
+                      href={`/providers?q=${encodeURIComponent(chip)}`}
+                      className="link-underline border-line-dark text-cream hover:border-orange-500 !text-xs"
+                    >
+                      {chip}
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.3) }}
-          className="mb-7">
-          <SearchAutocomplete className="w-full max-w-[600px]" />
-          <p className="mt-2 text-xs text-ink-400">Press <kbd className="inline-flex items-center px-1.5 py-0.5 rounded border border-line-200 bg-gray-50 font-mono text-[10px] text-ink-500">/</kbd> to search</p>
-          {/* Quick-Filter Chips */}
-          <div className="mt-4 max-w-[600px]">
-            <p className="text-xs text-ink-500 mb-2 font-medium">Popular searches:</p>
-            <div className="flex flex-wrap gap-2">
-              {["OT", "Speech", "Physio", "Psychology", "Support Coordination", "Plan Management", "Daily Living"].map((chip) => (
-                <a
-                  key={chip}
-                  href={`/providers?q=${encodeURIComponent(chip)}`}
-                  className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium border border-line-200 bg-white text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
-                >
-                  {chip}
-                </a>
-              ))}
+              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.45) }}
+                className="flex items-center gap-7">
+                <a href="/providers" className="btn-block">Search the network →</a>
+                <a href="/register" className="link-underline border-line-dark text-cream hover:border-orange-500">List a business</a>
+              </motion.div>
             </div>
-          </div>
-        </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.4) }}
-          className="flex flex-wrap gap-3 mb-4">
-          {[
-            { icon: "🏢", label: "NDIS Providers" },
-            { icon: "✅", label: "Verified Reviews" },
-            { icon: "🆓", label: "100% Free" },
-          ].map((badge) => (
-            <span key={badge.label}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-gray-600 bg-gray-50 border border-line-200">
-              <span>{badge.icon}</span>
-              {badge.label}
-            </span>
-          ))}
-          {providerCount !== null && (
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-blue-600 bg-blue-50 border border-blue-100">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-              {providerCount >= 10
-                ? `Join ${providerCount} NDIS providers already on ReferAus`
-                : "Join our growing network of NDIS providers"}
-            </span>
-          )}
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.6), delay: d(0.55) }}
-          className="flex flex-wrap gap-6 sm:gap-12 mt-12 pt-8 border-t border-line-100">
-          {[
-            { num: 100, suffix: "%", label: "Free for Participants" },
-            { num: 24, suffix: "/7", label: "Always Available" },
-            { num: 5, suffix: "min", label: "To Get Listed" },
-          ].map((s) => (
-            <div key={s.label}>
-              <div className="heading-bold text-[2rem] sm:text-[2.5rem] text-blue-600">
-                <AnimatedCounter target={s.num} suffix={s.suffix} />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: d(0.6), delay: d(0.6) }}
+              className="relative z-10 flex justify-between items-end border-t border-line-dark pt-5 mt-12">
+              <div className="font-mono">
+                <div className="text-[22px] font-medium text-cream">
+                  {providerCount !== null ? providerCount : "—"}
+                </div>
+                <div className="text-[10.5px] text-ink-soft uppercase tracking-[0.08em] mt-0.5">Active listings</div>
               </div>
-              <div className="text-[0.75rem] text-ink-500 uppercase tracking-[0.1em] mt-1">{s.label}</div>
+              <div className="font-mono">
+                <div className="text-[22px] font-medium text-cream">100%</div>
+                <div className="text-[10.5px] text-ink-soft uppercase tracking-[0.08em] mt-0.5">Free to search</div>
+              </div>
+              <div className="font-mono">
+                <div className="text-[22px] font-medium text-cream">24/7</div>
+                <div className="text-[10.5px] text-ink-soft uppercase tracking-[0.08em] mt-0.5">Search anytime</div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right: Hunter Region map */}
+          <div className="relative overflow-hidden bg-map-panel min-h-[420px]">
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 900 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <path fill="var(--color-map-panel-deep)" d="M900,0 L900,1000 L280,1000 C240,900 300,820 260,760 C210,690 300,640 270,570 C240,500 340,470 310,400 C280,330 380,300 350,220 C320,140 420,110 400,40 C390,10 420,0 420,0 Z"/>
+              <path fill="none" stroke="var(--color-line-map)" strokeWidth="1" d="M900,90 C560,60 480,150 430,90 C400,55 420,10 420,10"/>
+              <path fill="none" stroke="var(--color-line-map)" strokeWidth="1" d="M900,180 C520,150 440,240 380,180 C340,140 360,80 340,60"/>
+              <path fill="none" stroke="var(--color-line-map)" strokeWidth="1" d="M900,270 C480,240 400,330 330,270 C280,220 300,150 270,120"/>
+              <path fill="none" stroke="var(--color-line-map)" strokeWidth="1" d="M900,420 C440,390 360,480 290,420 C240,370 260,300 230,270"/>
+              <path fill="none" stroke="var(--color-line-map)" strokeWidth="1" d="M900,560 C400,540 320,620 260,560 C220,520 230,460 200,430"/>
+              <path fill="none" stroke="var(--color-line-map)" strokeWidth="1" d="M900,700 C380,690 300,760 250,710 C210,670 220,610 190,590"/>
+            </svg>
+
+            <div className="absolute top-7 right-10 font-mono text-[11px] text-ink-900 text-right tracking-wide">
+              HUNTER REGION<br />
+              <span className="text-orange-500 font-medium">
+                {providerCount !== null ? `${providerCount} ACTIVE LISTINGS` : "LOADING LISTINGS…"}
+              </span>
             </div>
-          ))}
-        </motion.div>
-      </section>
+
+            {mapPins.map(({ provider, pos }) => (
+              <Link
+                key={provider.slug}
+                href={`/providers/${provider.slug}`}
+                className="map-pin"
+                style={pos}
+                aria-label={provider.name}
+              >
+                {provider.slug === featuredMapProvider?.provider.slug && <span className="map-pin-ring" />}
+              </Link>
+            ))}
+
+            {featuredMapProvider && (
+              <Link
+                href={`/providers/${featuredMapProvider.provider.slug}`}
+                className="card-flat absolute p-4 w-[200px] block"
+                style={{
+                  top: `calc(${featuredMapProvider.pos.top} - 14px)`,
+                  left: `calc(${featuredMapProvider.pos.left} + 18px)`,
+                }}
+              >
+                <div className="text-[13px] font-bold text-ink-900 mb-0.5">{featuredMapProvider.provider.name}</div>
+                <div className="text-[11px] text-ink-500">{featuredMapProvider.provider.category} · {featuredMapProvider.provider.suburb}</div>
+                <div className="font-mono text-[10.5px] text-orange-500 mt-2">★ {featuredMapProvider.provider.rating?.toFixed(1) ?? "—"} · {featuredMapProvider.provider.review_count ?? 0} reviews</div>
+              </Link>
+            )}
+
+            {homeProviders !== null && mapPins.length === 0 && (
+              <div className="absolute inset-0 flex items-center justify-center px-10 text-center">
+                <p className="font-mono text-[11px] text-ink-500 uppercase tracking-wide">New listings coming to the map soon</p>
+              </div>
+            )}
+
+            <div className="absolute bottom-6 left-10 font-mono text-[10.5px] text-ink-500">32.9283° S, 151.7817° E</div>
+          </div>
+        </section>
       </div>
 
       <div className="divider max-w-[800px] mx-auto" />
