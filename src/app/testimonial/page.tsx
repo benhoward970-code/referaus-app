@@ -1,6 +1,7 @@
 ﻿'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Icon } from "@/components/Icon";
 
 export default function TestimonialPage() {
   const [form, setForm] = useState({ name: '', role: 'participant', provider: '', rating: 5, message: '' });
@@ -10,7 +11,7 @@ export default function TestimonialPage() {
   if (submitted) return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 max-w-xl mx-auto flex items-center justify-center">
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
-        <div className="text-5xl mb-4">🎉</div>
+        <Icon name="sparkles" size={40} className="mx-auto mb-4 text-orange-500" />
         <h2 className="text-2xl font-black mb-2">Thank you!</h2>
         <p className="text-ink-500">Your testimonial has been submitted for review. We appreciate your feedback.</p>
       </motion.div>

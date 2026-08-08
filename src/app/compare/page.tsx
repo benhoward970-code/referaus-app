@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { providers } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
+import { Icon } from "@/components/Icon";
 
 const MAX_COMPARE = 3;
 
@@ -276,7 +277,7 @@ export default function ComparePage() {
             animate={{ opacity: 1 }}
             className="text-center py-24 rounded-2xl border border-dashed border-line-200 bg-gray-50"
           >
-            <div className="text-5xl mb-4">⚖️</div>
+            <Icon name="scales" size={40} className="mx-auto mb-4 text-ink-400" />
             <p className="text-ink-700 text-lg font-medium mb-2">No providers selected yet</p>
             <p className="text-ink-400 text-sm">Pick 2 or 3 providers from the dropdowns above to start comparing</p>
           </motion.div>

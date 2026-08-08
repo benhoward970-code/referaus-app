@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import type { BlogPost } from "@/data/blog-posts";
+import { Icon } from "@/components/Icon";
 
 interface Props {
   post: BlogPost;
@@ -69,7 +70,7 @@ function ContentFreshnessIndicator({ date }: { date: string }) {
   if (diffMonths < 6) return null;
   return (
     <div className="mt-4 px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-start gap-2">
-      <span className="text-amber-500 shrink-0 mt-0.5">⚠</span>
+      <Icon name="warning" size={16} className="text-orange-500 shrink-0 mt-0.5" />
       <span>
         This article was published {diffMonths} month{diffMonths !== 1 ? "s" : ""} ago. Some information may have changed.
       </span>

@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { SearchAutocomplete } from '@/components/SearchAutocomplete';
 import { AuroraBackground } from '@/components/AuroraBackground';
+import { Icon } from "@/components/Icon";
 // ActivitySocialProof removed — no fake data
 
 /* Word-by-word blur-in text animation */
@@ -223,12 +224,12 @@ function NewsletterSection() {
 }
 
 const features = [
-  { icon: "🔍", title: "Smart Search", desc: "Search by location, NDIS support category, availability, and ratings. Find providers who offer what you need, near where you are." },
-  { icon: "⭐", title: "Real Reviews", desc: "Verified reviews from real NDIS participants. No fake ratings, no paid placements. See what people actually think." },
-  { icon: "💬", title: "Direct Messaging", desc: "Message providers instantly. Ask questions, check availability, discuss your needs before you pick up the phone." },
-  { icon: "📋", title: "Detailed Profiles", desc: "Every provider shows services, areas covered, qualifications, availability, and what participants say about them." },
-  { icon: "📍", title: "Location-Based", desc: "Find providers near you. Search by suburb, region, or postcode. See distance and service areas at a glance." },
-  { icon: "🆓", title: "Free for Participants", desc: "Always. No sign-up fees, no premium tiers, no hidden costs. Browse, search, message, connect completely free." },
+  { icon: "search" as const, title: "Smart Search", desc: "Search by location, NDIS support category, availability, and ratings. Find providers who offer what you need, near where you are." },
+  { icon: "star" as const, title: "Real Reviews", desc: "Verified reviews from real NDIS participants. No fake ratings, no paid placements. See what people actually think." },
+  { icon: "message" as const, title: "Direct Messaging", desc: "Message providers instantly. Ask questions, check availability, discuss your needs before you pick up the phone." },
+  { icon: "clipboard" as const, title: "Detailed Profiles", desc: "Every provider shows services, areas covered, qualifications, availability, and what participants say about them." },
+  { icon: "pin" as const, title: "Location-Based", desc: "Find providers near you. Search by suburb, region, or postcode. See distance and service areas at a glance." },
+  { icon: "check" as const, title: "Free for Participants", desc: "Always. No sign-up fees, no premium tiers, no hidden costs. Browse, search, message, connect completely free." },
 ];
 
 const testimonials = [

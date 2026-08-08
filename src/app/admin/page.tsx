@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { supabase, isConfigured } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { Icon, type IconName } from "@/components/Icon";
 
 // Admin emails are managed server-side via ADMIN_EMAILS env var (src/lib/admin.ts)
 // The client-side check here is a UX convenience only — real enforcement is on the API
@@ -72,13 +73,13 @@ interface ReviewRow {
 
 type Section = "overview" | "users" | "providers" | "enquiries" | "contacts" | "reviews";
 
-const NAV_ITEMS: { key: Section; label: string; icon: string }[] = [
-  { key: "overview", label: "Overview", icon: "📊" },
-  { key: "users", label: "Users", icon: "👤" },
-  { key: "providers", label: "Providers", icon: "🏢" },
-  { key: "enquiries", label: "Enquiries", icon: "📩" },
-  { key: "reviews", label: "Reviews", icon: "⭐" },
-  { key: "contacts", label: "Contacts", icon: "📬" },
+const NAV_ITEMS: { key: Section; label: string; icon: IconName }[] = [
+  { key: "overview", label: "Overview", icon: "chart" },
+  { key: "users", label: "Users", icon: "users" },
+  { key: "providers", label: "Providers", icon: "building" },
+  { key: "enquiries", label: "Enquiries", icon: "inbox" },
+  { key: "reviews", label: "Reviews", icon: "star" },
+  { key: "contacts", label: "Contacts", icon: "mail" },
 ];
 
 function formatDate(d: string | null) {
@@ -185,7 +186,7 @@ export default function AdminPage() {
                     : "text-ink-700 hover:bg-gray-50 hover:text-ink-900"
                 }`}
               >
-                <span>{item.icon}</span>
+                <Icon name={item.icon} size={16} />
                 {item.label}
               </button>
             ))}
@@ -204,7 +205,7 @@ export default function AdminPage() {
                   : "text-ink-500"
               }`}
             >
-              <span className="block text-lg mb-0.5">{item.icon}</span>
+              <Icon name={item.icon} size={18} className="mx-auto mb-0.5" />
               {item.label}
             </button>
           ))}
@@ -367,9 +368,9 @@ function ProvidersSection({ data, loading }: { data: ProviderRow[]; loading: boo
               </span>
             </div>
             <div className="mt-3 flex flex-wrap gap-4 text-xs text-ink-400">
-              {p.category && <span>📂 {p.category}</span>}
-              {p.location && <span>📍 {p.location}</span>}
-              {p.phone && <span>📞 {p.phone}</span>}
+              {p.category && <span>{p.category}</span>}
+              {p.location && <span>{p.location}</span>}
+              {p.phone && <span>{p.phone}</span>}
               {p.abn && <span>ABN: {p.abn}</span>}
               <span>Joined: {formatDate(p.created_at)}</span>
             </div>
@@ -407,7 +408,7 @@ function EnquiriesSection({ data, loading }: { data: EnquiryRow[]; loading: bool
               </span>
             )}
             <p className="mt-2 text-sm text-ink-700">{e.message}</p>
-            {e.phone && <p className="mt-1 text-xs text-ink-400">📞 {e.phone}</p>}
+            {e.phone && <p className="mt-1 text-xs text-ink-400">{e.phone}</p>}
           </div>
         ))}
         {data.length === 0 && (

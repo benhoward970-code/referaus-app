@@ -17,6 +17,7 @@ import {
   supabase,
 } from "@/lib/supabase";
 import { Globe } from "lucide-react";
+import { Icon } from "@/components/Icon";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ProviderRecord = Record<string, any>;
@@ -248,7 +249,7 @@ function ConfettiCelebration({ onDone }: { onDone: () => void }) {
         exit={{ opacity: 0, scale: 0.8 }}
         className="absolute top-1/3 left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-2xl px-8 py-6 text-center pointer-events-auto"
       >
-        <div className="text-4xl mb-2">🎉</div>
+        <Icon name="sparkles" size={34} className="mx-auto mb-2 text-orange-500" />
         <h3 className="text-xl font-black text-ink-900 mb-1">Your profile is complete!</h3>
         <p className="text-sm text-ink-500">You&apos;re ready to attract more NDIS participants.</p>
       </motion.div>

@@ -9,6 +9,7 @@ import { RecentlyViewed } from "@/components/RecentlyViewed";
 import { getAllProviders } from "@/lib/supabase";
 import { mapDbProvider } from "@/lib/map-provider";
 import { fetchWithSWR } from "@/lib/swr-cache";
+import { Icon } from "@/components/Icon";
 
 type SortOption = "rating" | "name" | "reviews" | "newest";
 const PAGE_SIZE = 12;
@@ -420,7 +421,7 @@ function ProvidersContent() {
           >
             {hasActiveFilters ? (
               <>
-                <div className="text-6xl mb-4">🔍</div>
+                <Icon name="search" size={44} className="mx-auto mb-4 text-ink-400" />
                 <h2 className="text-xl font-bold text-ink-900 mb-2">No providers found matching your search</h2>
                 <p className="text-ink-500 text-sm mb-6">Try adjusting your filters or broadening your search.</p>
                 <button
@@ -432,7 +433,7 @@ function ProvidersContent() {
               </>
             ) : (
               <>
-                <div className="text-5xl mb-4">🏗️</div>
+                <Icon name="construction" size={40} className="mx-auto mb-4 text-ink-400" />
                 <h2 className="text-xl font-bold text-ink-900 mb-2">We&apos;re just getting started</h2>
                 <p className="text-ink-500 text-sm mb-6">
                   ReferAus is new and we&apos;re onboarding NDIS providers in the Hunter Region right now. Check back soon — or if you&apos;re a provider, be one of the first to list.

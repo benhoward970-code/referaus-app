@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Icon } from "@/components/Icon";
 
 const ndisServices = [
   "Occupational Therapy", "Speech Pathology", "Physiotherapy", "Psychology",
@@ -75,7 +76,7 @@ export function SearchAutocomplete({ className = '' }: { className?: string }) {
     else if (e.key === 'Escape') setOpen(false);
   };
 
-  const typeIcon = (t: string) => t === 'service' ? '🏷️' : '📍';
+  const typeIcon = (t: string) => <Icon name={t === 'service' ? 'tag' : 'pin'} size={14} />;
   const typeLabel = (t: string) => t === 'service' ? 'Service' : 'Location';
 
   return (
@@ -141,7 +142,7 @@ export function SearchAutocomplete({ className = '' }: { className?: string }) {
               onClick={() => go(query)}
               className="flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-blue-600 hover:bg-blue-50 transition-colors border-t border-line-100"
             >
-              <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-xs flex-shrink-0">🔍</span>
+              <span className="w-8 h-8 rounded-[3px] border border-ink-950 bg-white flex items-center justify-center flex-shrink-0"><Icon name="search" size={14} /></span>
               <span>Search for &ldquo;<strong>{query}</strong>&rdquo;</span>
             </li>
           )}

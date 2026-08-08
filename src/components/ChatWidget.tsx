@@ -81,7 +81,7 @@ export function ChatWidget() {
     if (started) return;
     setStarted(true);
     setUnread(false);
-    addBot("G'day! 👋 I'm the ReferAus assistant. How can I help you today?", INITIAL_OPTIONS);
+    addBot("G'day! I'm the ReferAus assistant. How can I help you today?", INITIAL_OPTIONS);
   };
 
   const handleOption = (option: string) => {
@@ -146,7 +146,7 @@ export function ChatWidget() {
       }
 
       setTimeout(() => {
-        addBot("Thanks! I've passed your message to our team. We'll get back to you at " + enquiry.email + " as soon as possible. 🙌");
+        addBot("Thanks! I've passed your message to our team. We'll get back to you at " + enquiry.email + " as soon as possible.");
         setTimeout(() => addBot("Is there anything else I can help with?", INITIAL_OPTIONS.slice(0, 4)), 800);
         setEnquiryStep(null);
       }, 600);
