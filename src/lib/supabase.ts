@@ -66,7 +66,7 @@ export async function getProviderByUserId(userId: string) {
     .from("providers")
     .select("*")
     .eq("user_id", userId)
-    .single();
+    .maybeSingle();
   if (error) {
     console.error("[supabase] getProviderByUserId error:", error.message);
     return null;
@@ -80,7 +80,7 @@ export async function getProviderBySlug(slug: string) {
     .from("providers")
     .select("*")
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
   if (error) {
     console.error("[supabase] getProviderBySlug error:", error.message);
     return null;
@@ -132,53 +132,26 @@ export async function submitEnquiry(data: {
   service: string;
   message: string;
 }) {
-  if (!supabase) {
-    console.log("[Demo] Enquiry submitted:", data);
-    return { success: true, demo: true };
+  // Route through the API so email notifications, rate limiting, and server-side
+  // validation all fire correctly. Direct Supabase inserts bypass all of that.
+  try {
+    const baseUrl = typeof window !== "undefined"
+      ? window.location.origin
+      : (process.env.NEXT_PUBLIC_APP_URL || "https://referaus.com");
+    const res = await fetch(`${baseUrl}/api/enquiries`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    if (!res.ok) {
+      return { success: false, error: json.error || "Failed to submit enquiry" };
+    }
+    return { success: true, error: null };
+  } catch (err) {
+    console.error("[submitEnquiry] fetch failed:", err);
+    return { success: false, error: "Network error. Please try again." };
   }
-
-  // Try new schema first (flat columns)
-  const newRow = {
-    provider_slug: data.provider_slug,
-    name: data.name,
-    email: data.email,
-    phone: data.phone || null,
-    service: data.service || "General Enquiry",
-    message: data.message,
-    read: false,
-  };
-
-  const { error } = await supabase.from("enquiries").insert(newRow);
-
-  // Fallback: if new schema fails, try legacy column mapping
-  if (error) {
-    console.warn(
-      "[supabase] New enquiry schema failed, trying legacy:",
-      error.message,
-    );
-    const legacyRow = {
-      participant_name: data.name,
-      provider_name: data.provider_name,
-      subject: data.service || "General Enquiry",
-      messages: JSON.stringify([
-        {
-          from: "participant",
-          name: data.name,
-          email: data.email,
-          phone: data.phone || null,
-          text: data.message,
-          sent_at: new Date().toISOString(),
-        },
-      ]),
-      status: "open",
-    };
-    const { error: legacyError } = await supabase
-      .from("enquiries")
-      .insert(legacyRow);
-    return { success: !legacyError, error: legacyError };
-  }
-
-  return { success: true, error: null };
 }
 
 export async function getProviderEnquiries(providerSlug: string) {

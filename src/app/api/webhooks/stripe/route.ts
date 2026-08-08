@@ -51,11 +51,21 @@ export async function POST(req: NextRequest) {
         const status = subscription.status;
 
         // If subscription becomes active again (e.g. after failed payment recovery)
-        if (status === 'active' && customerId) {
-          // Get plan from subscription metadata or price lookup
+        if (status === 'active' && customerId && stripe) {
+          // Get plan from subscription metadata
           const planId = subscription.metadata?.planId;
-          if (planId && customerId) {
-            await updateProviderPlan('', planId, customerId, subscription.id);
+          if (planId) {
+            // Look up the customer's email from Stripe
+            try {
+              const customer = await stripe.customers.retrieve(customerId);
+              const customerEmail = !('deleted' in customer) ? customer.email || '' : '';
+              if (customerEmail) {
+                await updateProviderPlan(customerEmail, planId, customerId, subscription.id);
+                console.log('[Stripe] Plan refreshed on renewal:', customerEmail, '->', planId);
+              }
+            } catch (err) {
+              console.error('[Stripe] Failed to retrieve customer for renewal:', err);
+            }
           }
         }
         break;

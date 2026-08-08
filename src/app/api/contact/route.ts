@@ -6,7 +6,7 @@ import { sendEmail } from "@/lib/email";
 export async function POST(request: Request) {
   try {
     const ip = request.headers.get('x-forwarded-for') || 'unknown';
-    const { allowed } = checkRateLimit('contact:' + ip, 5, 300000);
+    const { allowed } = await checkRateLimit('contact:' + ip, 5, 300000);
     if (!allowed) return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 });
     const body = await request.json();
     const { name, email, phone, message, type } = body;

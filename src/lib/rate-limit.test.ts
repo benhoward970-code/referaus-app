@@ -1,50 +1,67 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { checkRateLimit } from "./rate-limit";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 describe("checkRateLimit", () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(0);
+    vi.resetModules();
+    delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
+  it("fails open (allows) when Supabase is not configured", async () => {
+    const { checkRateLimit } = await import("./rate-limit");
+    const result = await checkRateLimit("test:no-config", 3, 60000);
+    expect(result.allowed).toBe(true);
+    expect(result.remaining).toBe(2);
   });
 
-  it("allows requests under the limit", () => {
-    const key = "test:" + Math.random();
-    const first = checkRateLimit(key, 3, 60000);
-    expect(first.allowed).toBe(true);
-    expect(first.remaining).toBe(2);
+  it("allows the request when the RPC count is within the limit", async () => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-key";
+
+    const rpc = vi.fn(() => Promise.resolve({ data: 2, error: null }));
+    vi.doMock("@supabase/supabase-js", () => ({
+      createClient: vi.fn(() => ({ rpc })),
+    }));
+
+    const { checkRateLimit } = await import("./rate-limit");
+    const result = await checkRateLimit("test:under-limit", 5, 60000);
+
+    expect(result.allowed).toBe(true);
+    expect(result.remaining).toBe(3);
+    expect(rpc).toHaveBeenCalledWith(
+      "upsert_rate_limit",
+      expect.objectContaining({ p_key: "test:under-limit", p_max: 5 })
+    );
   });
 
-  it("blocks requests once the limit is hit", () => {
-    const key = "test:" + Math.random();
-    checkRateLimit(key, 2, 60000);
-    checkRateLimit(key, 2, 60000);
-    const third = checkRateLimit(key, 2, 60000);
-    expect(third.allowed).toBe(false);
-    expect(third.remaining).toBe(0);
+  it("blocks the request when the RPC count exceeds the limit", async () => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-key";
+
+    const rpc = vi.fn(() => Promise.resolve({ data: 6, error: null }));
+    vi.doMock("@supabase/supabase-js", () => ({
+      createClient: vi.fn(() => ({ rpc })),
+    }));
+
+    const { checkRateLimit } = await import("./rate-limit");
+    const result = await checkRateLimit("test:over-limit", 5, 60000);
+
+    expect(result.allowed).toBe(false);
+    expect(result.remaining).toBe(0);
   });
 
-  it("resets once the window passes", () => {
-    const key = "test:" + Math.random();
-    checkRateLimit(key, 1, 60000);
-    const blocked = checkRateLimit(key, 1, 60000);
-    expect(blocked.allowed).toBe(false);
+  it("fails open when the RPC errors, so an outage doesn't lock out real users", async () => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-key";
 
-    vi.setSystemTime(60001);
-    const afterWindow = checkRateLimit(key, 1, 60000);
-    expect(afterWindow.allowed).toBe(true);
-  });
+    const rpc = vi.fn(() => Promise.resolve({ data: null, error: { message: "connection refused" } }));
+    vi.doMock("@supabase/supabase-js", () => ({
+      createClient: vi.fn(() => ({ rpc })),
+    }));
 
-  it("tracks separate keys independently", () => {
-    const keyA = "a:" + Math.random();
-    const keyB = "b:" + Math.random();
-    checkRateLimit(keyA, 1, 60000);
-    const blockedA = checkRateLimit(keyA, 1, 60000);
-    const allowedB = checkRateLimit(keyB, 1, 60000);
-    expect(blockedA.allowed).toBe(false);
-    expect(allowedB.allowed).toBe(true);
+    const { checkRateLimit } = await import("./rate-limit");
+    const result = await checkRateLimit("test:db-error", 5, 60000);
+
+    expect(result.allowed).toBe(true);
   });
 });

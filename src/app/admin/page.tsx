@@ -71,7 +71,25 @@ interface ReviewRow {
   created_at: string;
 }
 
-type Section = "overview" | "users" | "providers" | "enquiries" | "contacts" | "reviews";
+interface NewsletterRow {
+  id: string;
+  email: string;
+  created_at: string;
+  unsubscribed: boolean;
+}
+
+interface ReviewFlagRow {
+  id: string;
+  review_id: string;
+  reason: string;
+  details: string | null;
+  reporter_email: string | null;
+  status: string;
+  created_at: string;
+  review: { id: string; reviewer_name: string; text: string; rating: number; provider_slug: string } | null;
+}
+
+type Section = "overview" | "users" | "providers" | "enquiries" | "contacts" | "reviews" | "newsletter" | "reviewFlags";
 
 const NAV_ITEMS: { key: Section; label: string; icon: IconName }[] = [
   { key: "overview", label: "Overview", icon: "chart" },
@@ -79,7 +97,9 @@ const NAV_ITEMS: { key: Section; label: string; icon: IconName }[] = [
   { key: "providers", label: "Providers", icon: "building" },
   { key: "enquiries", label: "Enquiries", icon: "inbox" },
   { key: "reviews", label: "Reviews", icon: "star" },
+  { key: "reviewFlags", label: "Flagged Reviews", icon: "warning" },
   { key: "contacts", label: "Contacts", icon: "mail" },
+  { key: "newsletter", label: "Newsletter", icon: "mail" },
 ];
 
 function formatDate(d: string | null) {
@@ -108,6 +128,8 @@ export default function AdminPage() {
   const [enquiries, setEnquiries] = useState<EnquiryRow[]>([]);
   const [contacts, setContacts] = useState<ContactRow[]>([]);
   const [reviews, setReviews] = useState<ReviewRow[]>([]);
+  const [newsletter, setNewsletter] = useState<NewsletterRow[]>([]);
+  const [reviewFlags, setReviewFlags] = useState<ReviewFlagRow[]>([]);
 
   // Auth check
   useEffect(() => {
@@ -132,7 +154,11 @@ export default function AdminPage() {
       setLoading(true);
       setError("");
       try {
-        const endpoint = s === "reviews" ? "/api/admin/reviews" : `/api/admin?section=${s}`;
+        const endpoint =
+          s === "reviews" ? "/api/admin/reviews" :
+          s === "newsletter" ? "/api/admin/newsletter" :
+          s === "reviewFlags" ? "/api/admin/review-flags" :
+          `/api/admin?section=${s}`;
         const res = await fetch(endpoint, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -147,6 +173,8 @@ export default function AdminPage() {
         if (s === "enquiries") setEnquiries(data);
         if (s === "contacts") setContacts(data);
         if (s === "reviews") setReviews(data.reviews || []);
+        if (s === "newsletter") setNewsletter(data.signups || []);
+        if (s === "reviewFlags") setReviewFlags(data.flags || []);
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : "Failed to load data");
       }
@@ -242,6 +270,12 @@ export default function AdminPage() {
             )}
             {section === "contacts" && (
               <ContactsSection data={contacts} loading={loading} />
+            )}
+            {section === "newsletter" && (
+              <NewsletterSection data={newsletter} loading={loading} token={token} onChange={() => fetchSection("newsletter")} />
+            )}
+            {section === "reviewFlags" && (
+              <ReviewFlagsSection data={reviewFlags} loading={loading} token={token} onChange={() => fetchSection("reviewFlags")} />
             )}
           </motion.div>
         </main>
@@ -557,6 +591,180 @@ function ContactsSection({ data, loading }: { data: ContactRow[]; loading: boole
         ))}
         {data.length === 0 && (
           <p className="text-ink-400 text-sm text-center py-8">No contacts yet</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function NewsletterSection({
+  data,
+  loading,
+  token,
+  onChange,
+}: {
+  data: NewsletterRow[];
+  loading: boolean;
+  token: string;
+  onChange: () => void;
+}) {
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const active = data.filter((n) => !n.unsubscribed);
+
+  async function removeSignup(id: string) {
+    setBusyId(id);
+    try {
+      await fetch("/api/admin/newsletter", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ id }),
+      });
+      onChange();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  if (loading) return <LoadingSkeleton count={3} />;
+
+  return (
+    <div>
+      <h1 className="text-2xl font-black mb-6">Newsletter ({active.length} active)</h1>
+      <div className="space-y-2">
+        {data.map((n) => (
+          <div key={n.id} className="card-flat p-4 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-ink-900">{n.email}</p>
+              <p className="text-xs text-ink-400">{formatDate(n.created_at)}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              {n.unsubscribed && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-ink-500">Unsubscribed</span>
+              )}
+              <button
+                onClick={() => removeSignup(n.id)}
+                disabled={busyId === n.id}
+                className="text-xs font-semibold text-red-600 hover:text-red-700 disabled:opacity-50"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ))}
+        {data.length === 0 && (
+          <p className="text-ink-400 text-sm text-center py-8">No newsletter signups yet</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ReviewFlagsSection({
+  data,
+  loading,
+  token,
+  onChange,
+}: {
+  data: ReviewFlagRow[];
+  loading: boolean;
+  token: string;
+  onChange: () => void;
+}) {
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const pending = data.filter((f) => f.status === "pending");
+  const actioned = data.filter((f) => f.status !== "pending");
+
+  async function dismiss(flagId: string) {
+    setBusyId(flagId);
+    try {
+      await fetch("/api/admin/review-flags", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ flag_id: flagId, status: "dismissed" }),
+      });
+      onChange();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function deleteReview(flagId: string, reviewId: string) {
+    setBusyId(flagId);
+    try {
+      await fetch("/api/admin/review-flags", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ flag_id: flagId, delete_review: true, review_id: reviewId }),
+      });
+      onChange();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  if (loading) return <LoadingSkeleton count={3} />;
+
+  const Row = ({ f }: { f: ReviewFlagRow }) => (
+    <div key={f.id} className="card-flat p-5">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 className="font-bold text-ink-900">{f.reason}</h3>
+            {f.review && <span className="text-xs text-ink-400">→ {f.review.provider_slug}</span>}
+          </div>
+          {f.reporter_email && <p className="text-xs text-ink-400 mt-0.5">Reported by {f.reporter_email}</p>}
+        </div>
+        <span
+          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+            f.status === "pending" ? "bg-yellow-50 text-yellow-600" : "bg-gray-100 text-ink-500"
+          }`}
+        >
+          {f.status}
+        </span>
+      </div>
+      {f.details && <p className="mt-2 text-sm text-ink-700">{f.details}</p>}
+      {f.review && (
+        <div className="mt-3 p-3 rounded-lg bg-gray-50 border border-line-100">
+          <p className="text-xs font-semibold text-ink-500 mb-1">Flagged review — {f.review.reviewer_name}, {f.review.rating}★</p>
+          <p className="text-sm text-ink-700">&ldquo;{f.review.text}&rdquo;</p>
+        </div>
+      )}
+      {f.status === "pending" && (
+        <div className="mt-3 flex items-center gap-3">
+          <button
+            onClick={() => dismiss(f.id)}
+            disabled={busyId === f.id}
+            className="px-3 py-1.5 rounded-lg bg-gray-100 text-ink-700 text-xs font-semibold hover:bg-gray-200 disabled:opacity-50"
+          >
+            Dismiss
+          </button>
+          {f.review && (
+            <button
+              onClick={() => deleteReview(f.id, f.review!.id)}
+              disabled={busyId === f.id}
+              className="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 text-xs font-semibold hover:bg-red-100 disabled:opacity-50"
+            >
+              Delete Review
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div>
+      <h1 className="text-2xl font-black mb-6">Flagged Reviews ({pending.length} pending)</h1>
+      <div className="space-y-3">
+        {pending.map((f) => <Row key={f.id} f={f} />)}
+        {actioned.length > 0 && (
+          <>
+            <h2 className="text-sm font-bold text-ink-500 mt-6 mb-2">Actioned</h2>
+            {actioned.map((f) => <Row key={f.id} f={f} />)}
+          </>
+        )}
+        {data.length === 0 && (
+          <p className="text-ink-400 text-sm text-center py-8">No flagged reviews</p>
         )}
       </div>
     </div>
