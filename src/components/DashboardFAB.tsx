@@ -92,7 +92,7 @@ export function DashboardFAB() {
       <motion.button
         onClick={() => setOpen((v) => !v)}
         whileTap={{ scale: 0.9 }}
-        className="w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-400 text-white shadow-lg shadow-orange-500/30 flex items-center justify-center transition-colors"
+        className="w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-400 text-ink-950 shadow-lg shadow-orange-500/30 flex items-center justify-center transition-colors"
         aria-label={open ? 'Close quick actions' : 'Open quick actions'}
       >
         <motion.span

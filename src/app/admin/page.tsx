@@ -161,7 +161,7 @@ export default function AdminPage() {
   if (!authed) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-20">
-        <div className="text-gray-400 text-sm">Checking access...</div>
+        <div className="text-ink-400 text-sm">Checking access...</div>
       </div>
     );
   }
@@ -171,8 +171,8 @@ export default function AdminPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex gap-6">
         {/* Sidebar */}
         <aside className="hidden md:block w-56 shrink-0">
-          <div className="sticky top-24 bg-white rounded-2xl border border-gray-200 p-3">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider px-3 mb-3">
+          <div className="sticky top-24 card-flat p-3">
+            <p className="text-xs font-bold text-ink-400 uppercase tracking-wider px-3 mb-3">
               Admin
             </p>
             {NAV_ITEMS.map((item) => (
@@ -182,7 +182,7 @@ export default function AdminPage() {
                 className={`w-full text-left flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   section === item.key
                     ? "bg-blue-50 text-blue-700"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    : "text-ink-700 hover:bg-gray-50 hover:text-ink-900"
                 }`}
               >
                 <span>{item.icon}</span>
@@ -201,7 +201,7 @@ export default function AdminPage() {
               className={`flex-1 py-3 text-center text-xs font-medium transition-colors ${
                 section === item.key
                   ? "text-blue-600 bg-blue-50"
-                  : "text-gray-500"
+                  : "text-ink-500"
               }`}
             >
               <span className="block text-lg mb-0.5">{item.icon}</span>
@@ -259,11 +259,11 @@ function StatCard({
   accent?: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6">
-      <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+    <div className="card-flat p-6">
+      <p className="text-xs font-medium text-ink-400 uppercase tracking-wider mb-1">
         {label}
       </p>
-      <p className={`text-3xl font-black ${accent || "text-gray-900"}`}>
+      <p className={`text-3xl font-black ${accent || "text-ink-900"}`}>
         {value}
       </p>
     </div>
@@ -298,22 +298,22 @@ function UsersSection({ data, loading }: { data: UserRow[]; loading: boolean }) 
   return (
     <div>
       <h1 className="text-2xl font-black mb-6">Users ({data.length})</h1>
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+      <div className="card-flat overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 text-left">
-                <th className="px-4 py-3 font-semibold text-gray-500 text-xs uppercase">Email</th>
-                <th className="px-4 py-3 font-semibold text-gray-500 text-xs uppercase">Signed Up</th>
-                <th className="px-4 py-3 font-semibold text-gray-500 text-xs uppercase">Confirmed</th>
-                <th className="px-4 py-3 font-semibold text-gray-500 text-xs uppercase">Last Sign In</th>
+                <th className="px-4 py-3 font-semibold text-ink-500 text-xs uppercase">Email</th>
+                <th className="px-4 py-3 font-semibold text-ink-500 text-xs uppercase">Signed Up</th>
+                <th className="px-4 py-3 font-semibold text-ink-500 text-xs uppercase">Confirmed</th>
+                <th className="px-4 py-3 font-semibold text-ink-500 text-xs uppercase">Last Sign In</th>
               </tr>
             </thead>
             <tbody>
               {data.map((u) => (
                 <tr key={u.id} className="border-b border-gray-50 hover:bg-gray-50/50">
-                  <td className="px-4 py-3 font-medium text-gray-900">{u.email}</td>
-                  <td className="px-4 py-3 text-gray-500">{formatDate(u.created_at)}</td>
+                  <td className="px-4 py-3 font-medium text-ink-900">{u.email}</td>
+                  <td className="px-4 py-3 text-ink-500">{formatDate(u.created_at)}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -325,7 +325,7 @@ function UsersSection({ data, loading }: { data: UserRow[]; loading: boolean }) 
                       {u.confirmed ? "Yes" : "No"}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500">{formatDate(u.last_sign_in)}</td>
+                  <td className="px-4 py-3 text-ink-500">{formatDate(u.last_sign_in)}</td>
                 </tr>
               ))}
             </tbody>
@@ -345,17 +345,17 @@ function ProvidersSection({ data, loading }: { data: ProviderRow[]; loading: boo
         {data.map((p) => (
           <div
             key={p.id}
-            className="bg-white rounded-2xl border border-gray-200 p-5"
+            className="card-flat p-5"
           >
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <div>
-                <h3 className="font-bold text-gray-900">{p.name}</h3>
-                <p className="text-sm text-gray-500">{p.email}</p>
+                <h3 className="font-bold text-ink-900">{p.name}</h3>
+                <p className="text-sm text-ink-500">{p.email}</p>
               </div>
               <span
                 className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
                   p.plan === "free"
-                    ? "bg-gray-100 text-gray-500"
+                    ? "bg-gray-100 text-ink-500"
                     : p.plan === "starter"
                     ? "bg-blue-50 text-blue-600"
                     : p.plan === "pro"
@@ -366,7 +366,7 @@ function ProvidersSection({ data, loading }: { data: ProviderRow[]; loading: boo
                 {p.plan}
               </span>
             </div>
-            <div className="mt-3 flex flex-wrap gap-4 text-xs text-gray-400">
+            <div className="mt-3 flex flex-wrap gap-4 text-xs text-ink-400">
               {p.category && <span>📂 {p.category}</span>}
               {p.location && <span>📍 {p.location}</span>}
               {p.phone && <span>📞 {p.phone}</span>}
@@ -376,7 +376,7 @@ function ProvidersSection({ data, loading }: { data: ProviderRow[]; loading: boo
           </div>
         ))}
         {data.length === 0 && (
-          <p className="text-gray-400 text-sm text-center py-8">No providers yet</p>
+          <p className="text-ink-400 text-sm text-center py-8">No providers yet</p>
         )}
       </div>
     </div>
@@ -392,26 +392,26 @@ function EnquiriesSection({ data, loading }: { data: EnquiryRow[]; loading: bool
         {data.map((e) => (
           <div
             key={e.id}
-            className="bg-white rounded-2xl border border-gray-200 p-5"
+            className="card-flat p-5"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="font-bold text-gray-900">{e.name}</h3>
-                <p className="text-sm text-gray-500">{e.email}</p>
+                <h3 className="font-bold text-ink-900">{e.name}</h3>
+                <p className="text-sm text-ink-500">{e.email}</p>
               </div>
-              <span className="text-xs text-gray-400">{formatDate(e.created_at)}</span>
+              <span className="text-xs text-ink-400">{formatDate(e.created_at)}</span>
             </div>
             {e.service && (
               <span className="inline-block mt-2 px-2 py-0.5 rounded-full text-xs bg-blue-50 text-blue-600">
                 {e.service}
               </span>
             )}
-            <p className="mt-2 text-sm text-gray-600">{e.message}</p>
-            {e.phone && <p className="mt-1 text-xs text-gray-400">📞 {e.phone}</p>}
+            <p className="mt-2 text-sm text-ink-700">{e.message}</p>
+            {e.phone && <p className="mt-1 text-xs text-ink-400">📞 {e.phone}</p>}
           </div>
         ))}
         {data.length === 0 && (
-          <p className="text-gray-400 text-sm text-center py-8">No enquiries yet</p>
+          <p className="text-ink-400 text-sm text-center py-8">No enquiries yet</p>
         )}
       </div>
     </div>
@@ -450,12 +450,12 @@ function ReviewsSection({
   if (loading) return <LoadingSkeleton count={3} />;
 
   const Row = ({ r }: { r: ReviewRow }) => (
-    <div key={r.id} className="bg-white rounded-2xl border border-gray-200 p-5">
+    <div key={r.id} className="card-flat p-5">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="font-bold text-gray-900">{r.reviewer_name}</h3>
-            <span className="text-xs text-gray-400">→ {r.provider_slug}</span>
+            <h3 className="font-bold text-ink-900">{r.reviewer_name}</h3>
+            <span className="text-xs text-ink-400">→ {r.provider_slug}</span>
           </div>
           <div className="flex gap-0.5 mt-1">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -477,9 +477,9 @@ function ReviewsSection({
           {r.status}
         </span>
       </div>
-      <p className="mt-2 text-sm text-gray-600">{r.text}</p>
+      <p className="mt-2 text-sm text-ink-700">{r.text}</p>
       <div className="mt-3 flex items-center gap-3">
-        <span className="text-xs text-gray-400">{formatDate(r.created_at)}</span>
+        <span className="text-xs text-ink-400">{formatDate(r.created_at)}</span>
         {r.status === "pending" && (
           <div className="flex gap-2 ml-auto">
             <button
@@ -515,13 +515,13 @@ function ReviewsSection({
           </div>
         </>
       )}
-      <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+      <p className="text-xs font-bold text-ink-400 uppercase tracking-wider mb-3">
         Decided
       </p>
       <div className="space-y-3">
         {decided.map((r) => <Row key={r.id} r={r} />)}
         {data.length === 0 && (
-          <p className="text-gray-400 text-sm text-center py-8">No reviews yet</p>
+          <p className="text-ink-400 text-sm text-center py-8">No reviews yet</p>
         )}
       </div>
     </div>
@@ -537,25 +537,25 @@ function ContactsSection({ data, loading }: { data: ContactRow[]; loading: boole
         {data.map((c) => (
           <div
             key={c.id}
-            className="bg-white rounded-2xl border border-gray-200 p-5"
+            className="card-flat p-5"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="font-bold text-gray-900">{c.name}</h3>
-                <p className="text-sm text-gray-500">{c.email}</p>
+                <h3 className="font-bold text-ink-900">{c.name}</h3>
+                <p className="text-sm text-ink-500">{c.email}</p>
               </div>
-              <span className="text-xs text-gray-400">{formatDate(c.created_at)}</span>
+              <span className="text-xs text-ink-400">{formatDate(c.created_at)}</span>
             </div>
             {c.type && (
-              <span className="inline-block mt-2 px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-500">
+              <span className="inline-block mt-2 px-2 py-0.5 rounded-full text-xs bg-gray-100 text-ink-500">
                 {c.type}
               </span>
             )}
-            <p className="mt-2 text-sm text-gray-600">{c.message}</p>
+            <p className="mt-2 text-sm text-ink-700">{c.message}</p>
           </div>
         ))}
         {data.length === 0 && (
-          <p className="text-gray-400 text-sm text-center py-8">No contacts yet</p>
+          <p className="text-ink-400 text-sm text-center py-8">No contacts yet</p>
         )}
       </div>
     </div>
@@ -568,7 +568,7 @@ function LoadingSkeleton({ count }: { count: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="bg-white rounded-2xl border border-gray-200 p-6 animate-pulse"
+          className="card-flat p-6 animate-pulse"
         >
           <div className="h-4 bg-gray-100 rounded w-1/3 mb-3" />
           <div className="h-3 bg-gray-100 rounded w-1/2" />

@@ -273,7 +273,7 @@ export default function ImagesPage() {
 
   if (!provider) {
     return (
-      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-line-200 p-8 text-center shadow-sm">
+      <motion.div {...fadeUp(0)} className="card-flat p-8 text-center shadow-sm">
         <AlertCircle className="w-10 h-10 text-orange-400 mx-auto mb-3" />
         <h2 className="text-xl font-bold text-ink-900 mb-2">No Provider Profile Found</h2>
         <p className="text-sm text-ink-500 mb-4">Set up your profile first to manage images.</p>

@@ -48,7 +48,7 @@ function RankingIndicator({ providerId, avgRating, hasReviews }: { providerId?: 
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.15 }}
-      className="bg-white rounded-2xl border border-line-200 shadow-sm p-5 flex items-center gap-4"
+      className="card-flat shadow-sm p-5 flex items-center gap-4"
     >
       <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0">
         <TrendingUp className="w-5 h-5 text-orange-500" />
@@ -143,7 +143,7 @@ function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (upda
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.18 }}
-      className="bg-white rounded-2xl border border-line-200 shadow-sm p-5"
+      className="card-flat shadow-sm p-5"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -156,7 +156,7 @@ function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (upda
       </div>
       <div className="space-y-3">
         {fields.map((f) => (
-          <div key={f.key} className="flex items-center gap-3 py-2.5 px-3 rounded-xl bg-gray-50 border border-line-200">
+          <div key={f.key} className="flex items-center gap-3 py-2.5 px-3 rounded-[3px] bg-white border border-ink-950">
             <span className="shrink-0">{f.icon}</span>
             <div className="flex-1 min-w-0">
               <p className="text-xs text-ink-400 font-medium">{f.label}</p>
@@ -168,7 +168,7 @@ function QuickEditProfile({ provider, onSaved }: { provider: any; onSaved: (upda
                     onChange={(e) => setValue(f.key === "bio" ? e.target.value.slice(0, 100) : e.target.value)}
                     placeholder={f.placeholder}
                     autoFocus
-                    className="flex-1 text-sm px-2.5 py-1.5 rounded-lg border border-line-200 focus:outline-none focus:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 text-ink-900 min-w-0"
+                    className="flex-1 text-sm px-2.5 py-1.5 rounded-lg border border-line-200 focus:outline-none focus:border-orange-500 focus-visible:ring-2 focus-visible:ring-orange-400 text-ink-900 min-w-0"
                     onKeyDown={(e) => { if (e.key === "Enter") handleSave(); if (e.key === "Escape") setEditField(null); }}
                   />
                   <button
@@ -278,7 +278,7 @@ function Skeleton({ className = "" }: { className?: string }) {
 
 function SkeletonCard() {
   return (
-    <div className="bg-white rounded-2xl border border-line-200 p-5 shadow-sm">
+    <div className="card-flat p-5 shadow-sm">
       <Skeleton className="h-4 w-24 mb-3" />
       <Skeleton className="h-8 w-16 mb-2" />
       <Skeleton className="h-3 w-20" />
@@ -415,7 +415,7 @@ function DashboardContent() {
   if (!provider) {
     return (
       <div className="space-y-8">
-        <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-line-200 p-8 sm:p-12 text-center shadow-sm">
+        <motion.div {...fadeUp(0)} className="card-flat p-8 sm:p-12 text-center shadow-sm">
           <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
             <User className="w-8 h-8 text-blue-500" />
           </div>
@@ -521,7 +521,7 @@ function DashboardContent() {
           const Icon = s.icon;
           const isComingSoon = (s as any).comingSoon;
           return (
-            <motion.div key={s.label} {...fadeUp(0.05 + i * 0.06)} className="bg-white rounded-2xl border border-line-200 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+            <motion.div key={s.label} {...fadeUp(0.05 + i * 0.06)} className="card-flat p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
               <div className="flex items-start justify-between mb-3">
                 <p className="text-xs text-ink-500 font-medium leading-tight">{s.label}</p>
                 <span className={`p-1.5 rounded-lg ${colors.bg} ${colors.border} border`}>
@@ -561,7 +561,7 @@ function DashboardContent() {
         const total = onboardingItems.length;
         const allDone = doneCount === total;
         return (
-          <motion.div {...fadeUp(0.17)} className="bg-white rounded-2xl border border-line-200 shadow-sm p-5">
+          <motion.div {...fadeUp(0.17)} className="card-flat shadow-sm p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-base font-bold text-ink-900">Getting Started</h2>
@@ -596,7 +596,7 @@ function DashboardContent() {
       })()}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <motion.section {...fadeUp(0.2)} className="lg:col-span-2 bg-white rounded-2xl border border-line-200 shadow-sm overflow-hidden">
+        <motion.section {...fadeUp(0.2)} className="lg:col-span-2 card-flat shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-line-100">
             <div>
               <h2 className="text-base font-bold text-ink-900">Recent Enquiries</h2>
@@ -639,7 +639,7 @@ function DashboardContent() {
                         </div>
                       </td>
                       <td className="px-3 py-4">
-                        <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-1 rounded-lg">{e.service || "General"}</span>
+                        <span className="text-xs font-medium bg-gray-100 text-ink-700 px-2 py-1 rounded-lg">{e.service || "General"}</span>
                       </td>
                       <td className="px-3 py-4 hidden md:table-cell">
                         <span className="text-xs text-ink-400 flex items-center gap-1">
@@ -689,25 +689,25 @@ function DashboardContent() {
             </div>
             {isPaid ? (
               <div className="space-y-1.5 mb-3">
-                <p className="text-sm text-gray-600">Active subscription — thank you!</p>
+                <p className="text-sm text-ink-700">Active subscription — thank you!</p>
                 <Link href="/pricing" className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
                   Manage plan <ArrowUpRight className="w-3 h-3" />
                 </Link>
               </div>
             ) : (
               <div className="space-y-1 mb-4">
-                <p className="text-sm text-gray-600">You are on the free plan.</p>
+                <p className="text-sm text-ink-700">You are on the free plan.</p>
                 <p className="text-xs text-ink-400">Upgrade to get verified badge, priority ranking, and direct bookings.</p>
               </div>
             )}
             {!isPaid && (
-              <Link href="/pricing" className="w-full py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold text-center flex items-center justify-center gap-2 transition-all">
+              <Link href="/pricing" className="w-full py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 text-ink-950 text-sm font-semibold text-center flex items-center justify-center gap-2 transition-all">
                 <Zap className="w-3.5 h-3.5" /> Upgrade Now
               </Link>
             )}
           </motion.div>
 
-          <motion.div {...fadeUp(0.25)} className="bg-white rounded-2xl border border-line-200 shadow-sm p-5">
+          <motion.div {...fadeUp(0.25)} className="card-flat shadow-sm p-5">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-base font-bold text-ink-900">Profile Strength</h2>
               <span className={`text-sm font-black ${profileCompletion >= 80 ? "text-green-600" : profileCompletion >= 50 ? "text-orange-500" : "text-red-500"}`}>
@@ -730,7 +730,7 @@ function DashboardContent() {
                   ) : (
                     <Circle className="w-4 h-4 text-ink-300 flex-shrink-0" />
                   )}
-                  <span className={`text-xs ${check.done ? "text-gray-600" : "text-ink-400"}`}>{check.label}</span>
+                  <span className={`text-xs ${check.done ? "text-ink-700" : "text-ink-400"}`}>{check.label}</span>
                 </div>
               ))}
             </div>
@@ -739,20 +739,20 @@ function DashboardContent() {
             </Link>
           </motion.div>
 
-          <motion.div {...fadeUp(0.3)} className="bg-white rounded-2xl border border-line-200 shadow-sm p-5">
+          <motion.div {...fadeUp(0.3)} className="card-flat shadow-sm p-5">
             <h2 className="text-base font-bold text-ink-900 mb-3">Quick Actions</h2>
             <div className="space-y-2">
               <Link href="/dashboard/profile" className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-ink-700 border border-line-200 transition-all group">
                 <span className="flex items-center gap-2"><Pencil className="w-4 h-4 text-blue-500" /> Edit Profile</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-gray-600 transition-colors" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-ink-700 transition-colors" />
               </Link>
               <Link href={`/providers/${provider.slug}`} className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-ink-700 border border-line-200 transition-all group">
                 <span className="flex items-center gap-2"><ExternalLink className="w-4 h-4 text-blue-500" /> View Public Listing</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-gray-600 transition-colors" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-ink-700 transition-colors" />
               </Link>
               <Link href="/dashboard/images" className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-sm font-medium text-ink-700 border border-line-200 transition-all group">
                 <span className="flex items-center gap-2"><Image className="w-4 h-4 text-blue-500" /> Manage Images</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-gray-600 transition-colors" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-ink-400 group-hover:text-ink-700 transition-colors" />
               </Link>
               {!isPaid && (
                 <Link href="/pricing" className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl bg-orange-50 hover:bg-orange-100 text-sm font-medium text-orange-700 border border-orange-200 transition-all group">
@@ -765,7 +765,7 @@ function DashboardContent() {
         </div>
       </div>
 
-      <motion.section {...fadeUp(0.35)} className="bg-white rounded-2xl border border-line-200 shadow-sm overflow-hidden">
+      <motion.section {...fadeUp(0.35)} className="card-flat shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-line-100">
           <div>
             <h2 className="text-base font-bold text-ink-900">Recent Reviews</h2>
@@ -802,7 +802,7 @@ function DashboardContent() {
                   </div>
                   <Stars rating={r.rating || 0} />
                 </div>
-                <p className="text-sm text-gray-600 leading-relaxed">&ldquo;{r.text || r.comment || r.review || ""}&rdquo;</p>
+                <p className="text-sm text-ink-700 leading-relaxed">&ldquo;{r.text || r.comment || r.review || ""}&rdquo;</p>
               </motion.div>
             ))}
           </div>
@@ -810,7 +810,7 @@ function DashboardContent() {
       </motion.section>
 
       {/* Item 67: Activity Feed */}
-      <motion.section {...fadeUp(0.38)} className="bg-white rounded-2xl border border-line-200 shadow-sm overflow-hidden">
+      <motion.section {...fadeUp(0.38)} className="card-flat shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-line-100">
           <h2 className="text-base font-bold text-ink-900">Recent Activity</h2>
           <p className="text-xs text-ink-400 mt-0.5">Your last 5 activities</p>
@@ -881,7 +881,7 @@ function DashboardContent() {
           {tips.map((tip, i) => {
             const TipIcon = tip.icon;
             return (
-              <motion.div key={tip.title} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 + i * 0.06 }} className="bg-white rounded-2xl border border-line-200 p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
+              <motion.div key={tip.title} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 + i * 0.06 }} className="card-flat p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center mb-2">
                   <TipIcon className="w-4 h-4 text-blue-500" />
                 </div>

@@ -151,7 +151,7 @@ export default function EnquiriesPage() {
 
   if (!provider) {
     return (
-      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-line-200 p-8 text-center shadow-sm">
+      <motion.div {...fadeUp(0)} className="card-flat p-8 text-center shadow-sm">
         <AlertCircle className="w-10 h-10 text-orange-400 mx-auto mb-3" />
         <h2 className="text-xl font-bold text-ink-900 mb-2">No Provider Profile Found</h2>
         <p className="text-sm text-ink-500 mb-4">Set up your profile first to receive enquiries.</p>
@@ -195,14 +195,14 @@ export default function EnquiriesPage() {
 
       {/* Reply Templates */}
       {enquiries.length > 0 && (
-        <motion.div {...fadeUp(0.05)} className="bg-white rounded-xl border border-line-200 p-4 shadow-sm">
+        <motion.div {...fadeUp(0.05)} className="bg-white rounded-[3px] border border-ink-950 bg-white p-4 shadow-sm">
           <ReplyTemplates />
         </motion.div>
       )}
 
       {/* Empty state */}
       {enquiries.length === 0 ? (
-        <motion.div {...fadeUp(0.1)} className="bg-white rounded-2xl border border-line-200 p-12 text-center shadow-sm">
+        <motion.div {...fadeUp(0.1)} className="card-flat p-12 text-center shadow-sm">
           <MessageSquare className="w-12 h-12 text-ink-300 mx-auto mb-4" />
           <h2 className="text-lg font-bold text-ink-900 mb-2">No Enquiries Yet</h2>
           <p className="text-sm text-ink-500 max-w-sm mx-auto">
@@ -212,7 +212,7 @@ export default function EnquiriesPage() {
       ) : (
         <>
           {/* Desktop table */}
-          <motion.div {...fadeUp(0.1)} className="hidden sm:block bg-white rounded-2xl border border-line-200 shadow-sm overflow-hidden">
+          <motion.div {...fadeUp(0.1)} className="hidden sm:block card-flat shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -258,7 +258,7 @@ export default function EnquiriesPage() {
                         )}
                       </td>
                       <td className="px-3 py-4">
-                        <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-1 rounded-lg">
+                        <span className="text-xs font-medium bg-gray-100 text-ink-700 px-2 py-1 rounded-lg">
                           {e.service || 'General'}
                         </span>
                       </td>
@@ -350,7 +350,7 @@ export default function EnquiriesPage() {
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-1 rounded-lg">
+                  <span className="text-xs font-medium bg-gray-100 text-ink-700 px-2 py-1 rounded-lg">
                     {e.service || 'General'}
                   </span>
                   <span className="text-xs text-ink-400 flex items-center gap-1">
@@ -359,7 +359,7 @@ export default function EnquiriesPage() {
                   </span>
                 </div>
 
-                <p className="text-sm text-gray-600 leading-relaxed">{e.message}</p>
+                <p className="text-sm text-ink-700 leading-relaxed">{e.message}</p>
 
                 <div className="flex items-center justify-between pt-1">
                   <div className="flex gap-2">

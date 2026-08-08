@@ -102,7 +102,7 @@ export default function ReviewsPage() {
 
   if (!provider) {
     return (
-      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-line-200 p-8 text-center shadow-sm">
+      <motion.div {...fadeUp(0)} className="card-flat p-8 text-center shadow-sm">
         <AlertCircle className="w-10 h-10 text-orange-400 mx-auto mb-3" />
         <h2 className="text-xl font-bold text-ink-900 mb-2">No Provider Profile Found</h2>
         <p className="text-sm text-ink-500 mb-4">Set up your profile first to receive reviews.</p>
@@ -130,7 +130,7 @@ export default function ReviewsPage() {
 
       {/* Empty state */}
       {reviews.length === 0 ? (
-        <motion.div {...fadeUp(0.1)} className="bg-white rounded-2xl border border-line-200 p-12 text-center shadow-sm">
+        <motion.div {...fadeUp(0.1)} className="card-flat p-12 text-center shadow-sm">
           <Star className="w-12 h-12 text-ink-300 mx-auto mb-4" />
           <h2 className="text-lg font-bold text-ink-900 mb-2">No Reviews Yet</h2>
           <p className="text-sm text-ink-500 max-w-sm mx-auto">
@@ -140,7 +140,7 @@ export default function ReviewsPage() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Summary card */}
-          <motion.div {...fadeUp(0.05)} className="bg-white rounded-2xl border border-line-200 p-6 shadow-sm lg:sticky lg:top-24 self-start">
+          <motion.div {...fadeUp(0.05)} className="card-flat p-6 shadow-sm lg:sticky lg:top-24 self-start">
             <div className="text-center mb-5">
               <p className="text-5xl font-black text-ink-900">{avgRating.toFixed(1)}</p>
               <div className="flex justify-center mt-2">
@@ -165,7 +165,7 @@ export default function ReviewsPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
-                className="bg-white rounded-2xl border border-line-200 p-5 shadow-sm"
+                className="card-flat p-5 shadow-sm"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
@@ -190,7 +190,7 @@ export default function ReviewsPage() {
                     {r.service}
                   </span>
                 )}
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <p className="text-sm text-ink-700 leading-relaxed">
                   &ldquo;{r.text || r.comment || r.review || ''}&rdquo;
                 </p>
               </motion.div>
