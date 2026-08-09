@@ -82,8 +82,8 @@ export function TrustScore(props: TrustScoreProps) {
         </div>
 
         <div>
-          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-0.5">Trust Score</div>
-          <div className="text-lg font-black text-gray-900">{score}<span className="text-sm font-medium text-gray-400">/100</span></div>
+          <div className="text-xs font-semibold text-ink-500 uppercase tracking-wider mb-0.5">Trust Score</div>
+          <div className="text-lg font-black text-ink-900">{score}<span className="text-sm font-medium text-ink-400">/100</span></div>
           <div className="text-xs font-semibold mt-0.5" style={{ color: scoreColor }}>{scoreLabel}</div>
         </div>
       </div>
@@ -93,14 +93,14 @@ export function TrustScore(props: TrustScoreProps) {
         {breakdown.map((item) => (
           <div key={item.label} className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-1.5">
-              <span className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${item.earned ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"}`}>
+              <span className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${item.earned ? "bg-green-100 text-green-600" : "bg-gray-100 text-ink-400"}`}>
                 {item.earned ? (
                   <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                 ) : (
                   <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M6 6l12 12M6 18L18 6"/></svg>
                 )}
               </span>
-              <span className={item.earned ? "text-gray-700" : "text-gray-400"}>{item.label}</span>
+              <span className={item.earned ? "text-ink-700" : "text-ink-400"}>{item.label}</span>
             </div>
             <span className={`font-semibold ${item.earned ? "text-green-600" : "text-gray-300"}`}>
               {item.earned ? `+${item.points}` : `+${item.points}`}

@@ -1,6 +1,7 @@
 ﻿"use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { Icon } from "@/components/Icon";
 
 const plans = [
   { name: "Free", price: "$0", period: "forever", highlight: false, features: ["Basic profile", "Appear in search", "Receive enquiries", "Up to 5 categories"] },
@@ -10,12 +11,12 @@ const plans = [
 ];
 
 const benefits = [
-  { icon: "📈", title: "Get found by participants", desc: "Participants across Newcastle and the Hunter Region are actively searching for providers. A verified ReferAus listing puts you directly in front of people who need your services right now." },
-  { icon: "✅", title: "Build trust with a verified badge", desc: "The ReferAus verified badge signals to participants that your NDIS registration, qualifications, and details have been checked. It is one of the most effective ways to convert enquiries to clients." },
-  { icon: "⭐", title: "Let your reviews do the selling", desc: "Happy participants leave reviews. Those reviews build your reputation automatically — working 24 hours a day to convert new participants long after the work is done." },
-  { icon: "📊", title: "Track your performance", desc: "See how many participants view your profile, what they search for, how many enquiries you receive, and where your leads convert. Data-driven growth, not guesswork." },
-  { icon: "💬", title: "Respond to enquiries fast", desc: "Participants message through the platform. Respond quickly, demonstrate your expertise, and win clients before they enquire elsewhere. Speed wins in competitive categories." },
-  { icon: "🌏", title: "Grow beyond word-of-mouth", desc: "Word-of-mouth is great, but it has a ceiling. ReferAus extends your reach to participants who have never heard of you — but are actively searching for what you do." },
+  { icon: "chart" as const, title: "Get found by participants", desc: "Participants across Newcastle and the Hunter Region are actively searching for providers. A verified ReferAus listing puts you directly in front of people who need your services right now." },
+  { icon: "check" as const, title: "Build trust with a verified badge", desc: "The ReferAus verified badge signals to participants that your NDIS registration, qualifications, and details have been checked. It is one of the most effective ways to convert enquiries to clients." },
+  { icon: "star" as const, title: "Let your reviews do the selling", desc: "Happy participants leave reviews. Those reviews build your reputation automatically — working 24 hours a day to convert new participants long after the work is done." },
+  { icon: "chart" as const, title: "Track your performance", desc: "See how many participants view your profile, what they search for, how many enquiries you receive, and where your leads convert. Data-driven growth, not guesswork." },
+  { icon: "message" as const, title: "Respond to enquiries fast", desc: "Participants message through the platform. Respond quickly, demonstrate your expertise, and win clients before they enquire elsewhere. Speed wins in competitive categories." },
+  { icon: "globe" as const, title: "Grow beyond word-of-mouth", desc: "Word-of-mouth is great, but it has a ceiling. ReferAus extends your reach to participants who have never heard of you — but are actively searching for what you do." },
 ];
 
 const testimonials = [
@@ -94,12 +95,12 @@ export default function ForProvidersClient() {
             className="flex flex-wrap gap-6 mt-10 pt-8 border-t border-gray-100"
           >
             {[
-              { icon: "🚀", label: "Start free, upgrade anytime" },
-              { icon: "✅", label: "NDIS provider verified" },
-              { icon: "📊", label: "Analytics included" },
+              { icon: "sparkles" as const, label: "Start free, upgrade anytime" },
+              { icon: "check" as const, label: "NDIS provider verified" },
+              { icon: "chart" as const, label: "Analytics included" },
             ].map((b) => (
               <span key={b.label} className="flex items-center gap-2 text-sm text-gray-500">
-                <span>{b.icon}</span>
+                <Icon name={b.icon} size={16} className="text-orange-500" />
                 {b.label}
               </span>
             ))}
@@ -125,7 +126,7 @@ export default function ForProvidersClient() {
               transition={{ delay: i * 0.08 }}
               className="card p-8"
             >
-              <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-xl">{b.icon}</div>
+              <div className="w-11 h-11 rounded-[3px] border border-ink-950 bg-white flex items-center justify-center mb-4 text-orange-500"><Icon name={b.icon} size={20} /></div>
               <h3 className="font-semibold text-[1.05rem] mb-2">{b.title}</h3>
               <p className="text-gray-500 text-[0.85rem] leading-relaxed">{b.desc}</p>
             </motion.div>
@@ -243,7 +244,7 @@ export default function ForProvidersClient() {
           viewport={{ once: true }}
           className="max-w-[700px] mx-auto text-center"
         >
-          <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl mx-auto mb-6">🚀</div>
+          <div className="w-14 h-14 rounded-[3px] border border-ink-950 bg-white flex items-center justify-center text-orange-500 mx-auto"><Icon name="sparkles" size={24} /></div>
           <h2 className="heading-bold text-[clamp(2rem,5vw,3rem)] leading-tight mb-4">
             Ready to grow your caseload?
           </h2>

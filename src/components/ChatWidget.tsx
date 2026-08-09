@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Message = { from: "bot" | "user"; text: string; options?: string[] };
@@ -43,6 +44,16 @@ export function ChatWidget() {
   const [unread, setUnread] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Read the route directly rather than deriving it in an effect: this is
+  // known on the very first render (server included), so the widget never
+  // flashes in and out on auth pages, and — critically — the early return
+  // below can sit after every hook. It previously returned before two
+  // useEffects, which broke the Rules of Hooks and crashed /login,
+  // /register and /forgot-password with "Rendered fewer hooks than expected".
+  const pathname = usePathname();
+  const AUTH_PATHS = ["/login", "/register", "/forgot-password", "/reset-password", "/admin"];
+  const onAuthPage = AUTH_PATHS.some((p) => pathname?.startsWith(p));
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -54,6 +65,9 @@ export function ChatWidget() {
     }, 10000);
     return () => clearTimeout(timer);
   }, [open, started]);
+
+  // Safe here: every hook above has already run on this render.
+  if (onAuthPage) return null;
 
   const addBot = (text: string, options?: string[]) => {
     setMessages((prev) => [...prev, { from: "bot", text, options }]);
@@ -67,7 +81,7 @@ export function ChatWidget() {
     if (started) return;
     setStarted(true);
     setUnread(false);
-    addBot("G'day! 👋 I'm the ReferAus assistant. How can I help you today?", INITIAL_OPTIONS);
+    addBot("G'day! I'm the ReferAus assistant. How can I help you today?", INITIAL_OPTIONS);
   };
 
   const handleOption = (option: string) => {
@@ -132,7 +146,7 @@ export function ChatWidget() {
       }
 
       setTimeout(() => {
-        addBot("Thanks! I've passed your message to our team. We'll get back to you at " + enquiry.email + " as soon as possible. 🙌");
+        addBot("Thanks! I've passed your message to our team. We'll get back to you at " + enquiry.email + " as soon as possible.");
         setTimeout(() => addBot("Is there anything else I can help with?", INITIAL_OPTIONS.slice(0, 4)), 800);
         setEnquiryStep(null);
       }, 600);
@@ -156,7 +170,7 @@ export function ChatWidget() {
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
             onClick={() => { setOpen(true); startChat(); }}
-            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-600 text-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+            className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-400 text-ink-950 shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
             aria-label="Open chat"
           >
             <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -176,7 +190,7 @@ export function ChatWidget() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] h-[500px] max-h-[calc(100vh-3rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] h-[500px] max-h-[calc(100vh-3rem)] bg-white rounded-2xl shadow-2xl border border-line-200 flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="bg-blue-600 text-white px-5 py-4 flex items-center justify-between flex-shrink-0">
@@ -195,7 +209,7 @@ export function ChatWidget() {
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.from === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[85%] ${msg.from === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-800"} rounded-2xl px-4 py-2.5 text-sm leading-relaxed`}>
+                  <div className={`max-w-[85%] ${msg.from === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-ink-900"} rounded-2xl px-4 py-2.5 text-sm leading-relaxed`}>
                     {msg.text}
                     {msg.options && (
                       <div className="mt-3 space-y-1.5">
@@ -218,7 +232,7 @@ export function ChatWidget() {
 
             {/* Input (only shown during enquiry flow) */}
             {enquiryStep && enquiryStep !== "done" && (
-              <div className="border-t border-gray-100 px-4 py-3 flex gap-2 flex-shrink-0">
+              <div className="border-t border-line-100 px-4 py-3 flex gap-2 flex-shrink-0">
                 <input
                   type="text"
                   value={input}
@@ -229,7 +243,7 @@ export function ChatWidget() {
                     enquiryStep === "email" ? "your@email.com" :
                     "Type your message..."
                   }
-                  className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-3 py-2 rounded-[3px] border border-ink-950 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
                   autoFocus
                 />
                 <button

@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     provider_name,
     provider_id: providerRow?.id ?? null,
     name: name.trim().substring(0, 80),
-    email: email.trim().substring(0, 120),
+    email: email?.trim().substring(0, 120),
     phone: phone?.trim().substring(0, 20),
     service: service?.trim().substring(0, 80),
     message: message.trim().substring(0, 1000),
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
               <p style="color:#374151;margin:0 0 24px;">Someone on ReferAus just reached out to <strong>${esc(provider.name)}</strong>.</p>
               <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
                 <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;width:100px;">From</td><td style="padding:8px 0;font-weight:600;color:#111827;">${esc(name.trim())}</td></tr>
-                <tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">Email</td><td style="padding:8px 0;color:#2563eb;">${esc(email.trim())}</td></tr>
+                ${email ? `<tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">Email</td><td style="padding:8px 0;color:#2563eb;">${esc(email.trim())}</td></tr>` : ""}
                 ${phone ? `<tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">Phone</td><td style="padding:8px 0;color:#111827;">${esc(phone.trim())}</td></tr>` : ""}
                 ${service ? `<tr><td style="padding:8px 0;color:#6b7280;font-size:14px;">Service</td><td style="padding:8px 0;color:#111827;">${esc(service.trim())}</td></tr>` : ""}
               </table>

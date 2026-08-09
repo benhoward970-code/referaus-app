@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Icon } from "@/components/Icon";
 
 const ndisServices = [
   "Occupational Therapy", "Speech Pathology", "Physiotherapy", "Psychology",
@@ -75,13 +76,13 @@ export function SearchAutocomplete({ className = '' }: { className?: string }) {
     else if (e.key === 'Escape') setOpen(false);
   };
 
-  const typeIcon = (t: string) => t === 'service' ? '🏷️' : '📍';
+  const typeIcon = (t: string) => <Icon name={t === 'service' ? 'tag' : 'pin'} size={14} />;
   const typeLabel = (t: string) => t === 'service' ? 'Service' : 'Location';
 
   return (
     <div ref={ref} className={'relative ' + className}>
       <div className="relative">
-        <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input
@@ -92,7 +93,7 @@ export function SearchAutocomplete({ className = '' }: { className?: string }) {
           onFocus={() => setOpen(true)}
           onKeyDown={onKey}
           placeholder="What support do you need? e.g. coordination, therapy..."
-          className="w-full pl-11 pr-5 py-3.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white shadow-sm"
+          className="w-full pl-11 pr-5 py-3.5 rounded-[3px] border border-ink-950 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-white shadow-sm"
           aria-label="Search NDIS services and locations"
           aria-expanded={open && filtered.length > 0}
           role="combobox"
@@ -101,10 +102,10 @@ export function SearchAutocomplete({ className = '' }: { className?: string }) {
       </div>
 
       {open && filtered.length > 0 && (
-        <ul className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-50" role="listbox">
+        <ul className="absolute top-full left-0 right-0 mt-2 bg-white border border-line-200 rounded-xl shadow-xl overflow-hidden z-50" role="listbox">
           {/* Header when no query */}
           {query.length === 0 && (
-            <li className="px-4 pt-3 pb-1.5 text-[0.65rem] font-semibold text-gray-400 uppercase tracking-wider">
+            <li className="px-4 pt-3 pb-1.5 text-[0.65rem] font-semibold text-ink-400 uppercase tracking-wider">
               Popular services
             </li>
           )}
@@ -118,7 +119,7 @@ export function SearchAutocomplete({ className = '' }: { className?: string }) {
               onMouseEnter={() => setSelected(i)}
               className={
                 'flex items-center gap-3 px-4 py-3 text-sm cursor-pointer transition-colors ' +
-                (i === selected ? 'bg-orange-50 text-orange-700' : 'text-gray-700 hover:bg-gray-50')
+                (i === selected ? 'bg-orange-50 text-orange-700' : 'text-ink-700 hover:bg-gray-50')
               }
             >
               <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-xs flex-shrink-0">
@@ -129,7 +130,7 @@ export function SearchAutocomplete({ className = '' }: { className?: string }) {
                   {query.length > 0 ? highlightMatch(s.text, query) : s.text}
                 </div>
               </div>
-              <span className="text-[0.6rem] text-gray-400 uppercase tracking-wider flex-shrink-0">
+              <span className="text-[0.6rem] text-ink-400 uppercase tracking-wider flex-shrink-0">
                 {typeLabel(s.type)}
               </span>
             </li>
@@ -139,9 +140,9 @@ export function SearchAutocomplete({ className = '' }: { className?: string }) {
           {query.length > 0 && (
             <li
               onClick={() => go(query)}
-              className="flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-blue-600 hover:bg-blue-50 transition-colors border-t border-gray-100"
+              className="flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-blue-600 hover:bg-blue-50 transition-colors border-t border-line-100"
             >
-              <span className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-xs flex-shrink-0">🔍</span>
+              <span className="w-8 h-8 rounded-[3px] border border-ink-950 bg-white flex items-center justify-center flex-shrink-0"><Icon name="search" size={14} /></span>
               <span>Search for &ldquo;<strong>{query}</strong>&rdquo;</span>
             </li>
           )}

@@ -39,16 +39,16 @@ export function RecentlyViewed({ currentSlug }: { currentSlug?: string }) {
   if (recent.length === 0) return null;
 
   return (
-    <section className="mt-10 pt-8 border-t border-gray-100">
-      <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Recently Viewed</h3>
+    <section className="mt-10 pt-8 border-t border-line-100">
+      <h3 className="text-sm font-semibold text-ink-500 uppercase tracking-wider mb-4">Recently Viewed</h3>
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
         {recent.map(p => (
           <Link
             key={p.slug}
             href={`/providers/${p.slug}`}
-            className="shrink-0 flex flex-col gap-1 px-4 py-3 bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all min-w-[150px] max-w-[180px]"
+            className="shrink-0 flex flex-col gap-1 px-4 py-3 bg-white rounded-[3px] border border-ink-950 bg-white hover:border-blue-300 hover:shadow-sm transition-all min-w-[150px] max-w-[180px]"
           >
-            <span className="text-sm font-semibold text-gray-800 truncate">{p.name}</span>
+            <span className="text-sm font-semibold text-ink-900 truncate">{p.name}</span>
             <span className="text-xs text-orange-500 truncate">{p.category}</span>
           </Link>
         ))}

@@ -50,14 +50,14 @@ export default function FAQPage() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <p className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-4">Support</p>
         <h1 className="text-4xl font-black tracking-tight mb-3">Frequently Asked Questions</h1>
-        <p className="text-gray-500 mb-8">Everything you need to know about ReferAus and the NDIS</p>
+        <p className="text-ink-500 mb-8">Everything you need to know about ReferAus and the NDIS</p>
 
         <div className="flex gap-2 mb-8 flex-wrap">
           {categories.map(c => (
             <button
               key={c}
               onClick={() => { setCat(c); setOpen(null); }}
-              className={'min-h-[44px] px-4 py-2 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ' + (cat === c ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')}
+              className={'min-h-[44px] px-4 py-2 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 ' + (cat === c ? 'bg-gray-900 text-white' : 'bg-gray-100 text-ink-700 hover:bg-gray-200')}
             >
               {c}
             </button>
@@ -66,19 +66,19 @@ export default function FAQPage() {
 
         <div className="space-y-3">
           {filtered.map((faq, i) => (
-            <div key={faq.q} className="border border-gray-200 rounded-xl overflow-hidden">
+            <div key={faq.q} className="border border-line-200 rounded-xl overflow-hidden">
               <button
                 onClick={() => setOpen(open === i ? null : i)}
-                className="w-full min-h-[44px] px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+                className="w-full min-h-[44px] px-6 py-4 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-400"
                 aria-expanded={open === i}
               >
-                <span className="text-sm font-medium text-gray-900">{faq.q}</span>
-                <span className={'text-gray-400 transition-transform duration-200 ' + (open === i ? 'rotate-180' : '')} aria-hidden="true">&#9662;</span>
+                <span className="text-sm font-medium text-ink-900">{faq.q}</span>
+                <span className={'text-ink-400 transition-transform duration-200 ' + (open === i ? 'rotate-180' : '')} aria-hidden="true">&#9662;</span>
               </button>
               <AnimatePresence>
                 {open === i && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}>
-                    <div className="px-6 pb-5 text-sm text-gray-600 leading-relaxed">{faq.a}</div>
+                    <div className="px-6 pb-5 text-sm text-ink-700 leading-relaxed">{faq.a}</div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -88,16 +88,16 @@ export default function FAQPage() {
 
         <div className="mt-12 text-center bg-gray-50 rounded-xl p-8">
           <h3 className="font-bold mb-2">Still have questions?</h3>
-          <p className="text-sm text-gray-500 mb-4">Our team is here to help</p>
+          <p className="text-sm text-ink-500 mb-4">Our team is here to help</p>
           <Link
             href="/contact"
-            className="inline-block min-h-[44px] px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            className="inline-block min-h-[44px] px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
           >
             Contact Us
           </Link>
         </div>
       </motion.div>
-      <p className="text-xs text-gray-400 text-center mt-8 pb-4">Last updated: March 2026</p>
+      <p className="text-xs text-ink-400 text-center mt-8 pb-4">Last updated: March 2026</p>
     </div>
   );
 }

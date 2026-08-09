@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { providers } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
-import { getAllProviders } from "@/lib/supabase";
-import { mapDbProvider } from "@/lib/map-provider";
+import { Icon } from "@/components/Icon";
 
 const MAX_COMPARE = 3;
 
@@ -14,7 +14,7 @@ function StarRating({ rating }: { rating: number }) {
     <span className="flex items-center gap-1">
       <span className="text-orange-400">★</span>
       <span className="font-semibold">{rating.toFixed(1)}</span>
-      <span className="text-gray-400">/ 5.0</span>
+      <span className="text-ink-400">/ 5.0</span>
     </span>
   );
 }
@@ -25,7 +25,7 @@ function ServiceTag({ service, highlight }: { service: string; highlight?: boole
       className={`inline-block text-xs px-2 py-1 rounded-lg border mr-1 mb-1 ${
         highlight
           ? "bg-orange-50 border-orange-300 text-orange-700 font-medium"
-          : "bg-gray-50 border-gray-200 text-gray-600"
+          : "bg-gray-50 border-line-200 text-ink-700"
       }`}
     >
       {service}
@@ -42,46 +42,46 @@ function ProviderCard({ provider, onRemove, allServices }: { provider: Provider;
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm"
+      className="bg-white border border-line-200 rounded-2xl p-5 shadow-sm"
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600/20 to-orange-500/20 border border-gray-200 flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600/20 to-orange-500/20 border border-line-200 flex items-center justify-center shrink-0">
             <span className="text-lg font-black text-blue-600">{provider.name[0]}</span>
           </div>
           <div>
-            <h3 className="font-bold text-gray-900 text-sm leading-tight">{provider.name}</h3>
-            <p className="text-xs text-gray-500 mt-0.5">{provider.suburb}</p>
+            <h3 className="font-bold text-ink-900 text-sm leading-tight">{provider.name}</h3>
+            <p className="text-xs text-ink-500 mt-0.5">{provider.suburb}</p>
           </div>
         </div>
-        <button onClick={onRemove} className="text-gray-300 hover:text-gray-500 transition-colors text-lg leading-none p-1 min-w-[32px] min-h-[32px] flex items-center justify-center">✕</button>
+        <button onClick={onRemove} className="text-gray-300 hover:text-ink-500 transition-colors text-lg leading-none p-1 min-w-[32px] min-h-[32px] flex items-center justify-center">✕</button>
       </div>
 
       <div className="space-y-3 text-sm">
-        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-          <span className="text-gray-500">Category</span>
-          <span className="font-medium text-gray-800">{provider.category}</span>
+        <div className="flex justify-between items-center py-2 border-b border-line-100">
+          <span className="text-ink-500">Category</span>
+          <span className="font-medium text-ink-900">{provider.category}</span>
         </div>
-        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-          <span className="text-gray-500">Rating</span>
+        <div className="flex justify-between items-center py-2 border-b border-line-100">
+          <span className="text-ink-500">Rating</span>
           <StarRating rating={provider.rating} />
         </div>
-        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-          <span className="text-gray-500">Reviews</span>
-          <span className="font-medium text-gray-800">{provider.reviewCount} reviews</span>
+        <div className="flex justify-between items-center py-2 border-b border-line-100">
+          <span className="text-ink-500">Reviews</span>
+          <span className="font-medium text-ink-900">{provider.reviewCount} reviews</span>
         </div>
-        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-          <span className="text-gray-500">Verified</span>
+        <div className="flex justify-between items-center py-2 border-b border-line-100">
+          <span className="text-ink-500">Verified</span>
           {provider.verified ? (
             <span className="flex items-center gap-1 text-green-600 font-semibold text-xs">
               <span>✓</span> Verified
             </span>
           ) : (
-            <span className="text-gray-400 text-xs">Unverified</span>
+            <span className="text-ink-400 text-xs">Unverified</span>
           )}
         </div>
-        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-          <span className="text-gray-500">Plan Tier</span>
+        <div className="flex justify-between items-center py-2 border-b border-line-100">
+          <span className="text-ink-500">Plan Tier</span>
           <span className={`text-xs font-semibold px-2 py-1 rounded-lg ${
             provider.plan === "premium" ? "bg-blue-50 text-blue-700 border border-blue-200" :
             provider.plan === "free" ? "bg-green-50 text-green-700 border border-green-200" :
@@ -90,7 +90,7 @@ function ProviderCard({ provider, onRemove, allServices }: { provider: Provider;
           }`}>{provider.plan}</span>
         </div>
         <div className="py-2">
-          <p className="text-gray-500 mb-2">Services</p>
+          <p className="text-ink-500 mb-2">Services</p>
           <div>
             {provider.services.map((s) => (
               <ServiceTag key={s} service={s} />
@@ -108,7 +108,7 @@ function ProviderCard({ provider, onRemove, allServices }: { provider: Provider;
         </Link>
         <Link
           href={`/contact?provider=${provider.slug}`}
-          className="flex-1 text-center text-xs font-semibold py-2.5 rounded-xl border border-gray-200 text-gray-700 hover:border-orange-400 hover:text-orange-600 transition-colors"
+          className="flex-1 text-center text-xs font-semibold py-2.5 rounded-[3px] border border-ink-950 bg-white text-ink-700 hover:border-orange-400 hover:text-orange-600 transition-colors"
         >
           Send Enquiry
         </Link>
@@ -118,17 +118,7 @@ function ProviderCard({ provider, onRemove, allServices }: { provider: Provider;
 }
 
 export default function ComparePage() {
-  const [providers, setProviders] = useState<Provider[]>([]);
-  const [loadingProviders, setLoadingProviders] = useState(true);
   const [selections, setSelections] = useState<(string | "")[]>(["", "", ""]);
-
-  useEffect(() => {
-    getAllProviders().then((rows) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      setProviders(rows.map((r: any) => mapDbProvider(r)));
-      setLoadingProviders(false);
-    }).catch(() => setLoadingProviders(false));
-  }, []);
 
   const selectedProviders = useMemo(
     () =>
@@ -185,7 +175,7 @@ export default function ComparePage() {
         p.verified ? (
           <span className="flex items-center gap-1 text-green-600 font-semibold text-sm">✓ Yes</span>
         ) : (
-          <span className="text-gray-400">No</span>
+          <span className="text-ink-400">No</span>
         ),
       isDiff: (vals) => new Set(vals.map(String)).size > 1,
     },
@@ -216,7 +206,7 @@ export default function ComparePage() {
               className={`text-xs px-2 py-0.5 rounded-md border ${
                 p.services.includes(s)
                   ? "bg-blue-50 border-blue-200 text-blue-700 font-medium"
-                  : "bg-gray-50 border-gray-100 text-gray-300 line-through"
+                  : "bg-gray-50 border-line-100 text-gray-300 line-through"
               }`}
             >
               {s}
@@ -242,7 +232,7 @@ export default function ComparePage() {
           <h1 className="heading-bold text-4xl sm:text-5xl mb-3">
             Compare <span className="gradient-text">Providers</span>
           </h1>
-          <p className="text-gray-500 text-lg max-w-xl">
+          <p className="text-ink-500 text-lg max-w-xl">
             Select up to 3 NDIS providers to compare side by side. Differences are highlighted automatically.
           </p>
         </motion.div>
@@ -256,16 +246,15 @@ export default function ComparePage() {
         >
           {[0, 1, 2].map((idx) => (
             <div key={idx} className="relative">
-              <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">
+              <label className="block text-xs font-semibold text-ink-500 mb-2 uppercase tracking-wider">
                 Provider {idx + 1}
               </label>
               <select
                 value={selections[idx]}
                 onChange={(e) => handleSelect(idx, e.target.value)}
-                disabled={loadingProviders}
-                className="w-full appearance-none bg-white border border-gray-200 rounded-xl px-4 py-3 pr-10 text-sm text-gray-800 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer disabled:opacity-60"
+                className="w-full appearance-none bg-white border border-line-200 rounded-xl px-4 py-3 pr-10 text-sm text-ink-900 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer"
               >
-                <option value="">{loadingProviders ? 'Loading…' : '— Select a provider —'}</option>
+                <option value="">— Select a provider —</option>
                 {providers.map((p) => (
                   <option
                     key={p.slug}
@@ -276,7 +265,7 @@ export default function ComparePage() {
                   </option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute right-3 top-[2.35rem] text-gray-400">▾</div>
+              <div className="pointer-events-none absolute right-3 top-[2.35rem] text-ink-400">▾</div>
             </div>
           ))}
         </motion.div>
@@ -286,11 +275,11 @@ export default function ComparePage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-24 rounded-2xl border border-dashed border-gray-200 bg-gray-50"
+            className="text-center py-24 rounded-2xl border border-dashed border-line-200 bg-gray-50"
           >
-            <div className="text-5xl mb-4">⚖️</div>
-            <p className="text-gray-600 text-lg font-medium mb-2">No providers selected yet</p>
-            <p className="text-gray-400 text-sm">Pick 2 or 3 providers from the dropdowns above to start comparing</p>
+            <Icon name="scales" size={40} className="mx-auto mb-4 text-ink-400" />
+            <p className="text-ink-700 text-lg font-medium mb-2">No providers selected yet</p>
+            <p className="text-ink-400 text-sm">Pick 2 or 3 providers from the dropdowns above to start comparing</p>
           </motion.div>
         )}
 
@@ -331,32 +320,32 @@ export default function ComparePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="hidden sm:block rounded-2xl border border-gray-200 overflow-x-auto shadow-sm"
+            className="hidden sm:block rounded-2xl border border-line-200 overflow-x-auto shadow-sm"
           >
             {/* Provider header row */}
             <div
-              className="grid border-b border-gray-200 bg-gray-50"
+              className="grid border-b border-line-200 bg-gray-50"
               style={{ gridTemplateColumns: `220px repeat(${selectedProviders.length}, 1fr)` }}
             >
-              <div className="p-5 border-r border-gray-200" />
+              <div className="p-5 border-r border-line-200" />
               {selections.map((slug, idx) => {
                 const p = providers.find((pr) => pr.slug === slug);
-                if (!p) return <div key={idx} className="p-5 border-r border-gray-200 last:border-r-0" />;
+                if (!p) return <div key={idx} className="p-5 border-r border-line-200 last:border-r-0" />;
                 return (
-                  <div key={p.slug} className="p-5 border-r border-gray-200 last:border-r-0">
+                  <div key={p.slug} className="p-5 border-r border-line-200 last:border-r-0">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600/20 to-orange-500/20 border border-gray-200 flex items-center justify-center shrink-0">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600/20 to-orange-500/20 border border-line-200 flex items-center justify-center shrink-0">
                           <span className="text-lg font-black text-blue-600">{p.name[0]}</span>
                         </div>
                         <div>
-                          <h3 className="font-bold text-gray-900 text-sm">{p.name}</h3>
-                          <p className="text-xs text-gray-500 mt-0.5">{p.suburb}</p>
+                          <h3 className="font-bold text-ink-900 text-sm">{p.name}</h3>
+                          <p className="text-xs text-ink-500 mt-0.5">{p.suburb}</p>
                         </div>
                       </div>
                       <button
                         onClick={() => removeProvider(idx)}
-                        className="text-gray-300 hover:text-gray-500 transition-colors p-1 min-w-[32px] min-h-[32px] flex items-center justify-center"
+                        className="text-gray-300 hover:text-ink-500 transition-colors p-1 min-w-[32px] min-h-[32px] flex items-center justify-center"
                       >✕</button>
                     </div>
                     <div className="mt-4 flex gap-2">
@@ -368,7 +357,7 @@ export default function ComparePage() {
                       </Link>
                       <Link
                         href={`/contact?provider=${p.slug}`}
-                        className="flex-1 text-center text-xs font-semibold py-2 rounded-lg border border-gray-200 text-gray-700 hover:border-orange-400 hover:text-orange-600 transition-colors"
+                        className="flex-1 text-center text-xs font-semibold py-2 rounded-lg border border-line-200 text-ink-700 hover:border-orange-400 hover:text-orange-600 transition-colors"
                       >
                         Enquire
                       </Link>
@@ -385,17 +374,17 @@ export default function ComparePage() {
               return (
                 <div
                   key={row.label}
-                  className={`grid border-b border-gray-200 last:border-b-0 ${hasDiff ? "bg-amber-50/40" : ""}`}
+                  className={`grid border-b border-line-200 last:border-b-0 ${hasDiff ? "bg-amber-50/40" : ""}`}
                   style={{ gridTemplateColumns: `220px repeat(${selectedProviders.length}, 1fr)` }}
                 >
-                  <div className="p-4 px-5 border-r border-gray-200 flex items-start gap-2">
-                    <span className="text-sm font-semibold text-gray-600">{row.label}</span>
+                  <div className="p-4 px-5 border-r border-line-200 flex items-start gap-2">
+                    <span className="text-sm font-semibold text-ink-700">{row.label}</span>
                     {hasDiff && (
                       <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-medium shrink-0">diff</span>
                     )}
                   </div>
                   {selectedProviders.map((p, pIdx) => (
-                    <div key={p.slug} className="p-4 px-5 border-r border-gray-200 last:border-r-0 text-sm text-gray-700">
+                    <div key={p.slug} className="p-4 px-5 border-r border-line-200 last:border-r-0 text-sm text-ink-700">
                       {row.render(p)}
                     </div>
                   ))}

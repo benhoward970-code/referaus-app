@@ -7,11 +7,12 @@ import { providers } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
 import { EnquiryModal } from "@/components/EnquiryModal";
 import { CallbackModal } from "@/components/CallbackModal";
+import { ReviewModal } from "@/components/ReviewModal";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ShareButtons } from "@/components/ShareButtons";
 import { RecentlyViewed, saveRecentlyViewed } from "@/components/RecentlyViewed";
 import { showToast } from "@/components/Toast";
-import { getProviderBySlug, getProviderReviews, submitEnquiry, supabase } from "@/lib/supabase";
+import { getProviderBySlug, getProviderReviews, submitEnquiry } from "@/lib/supabase";
 import { fetchWithSWR } from "@/lib/swr-cache";
 import { mapDbProvider } from "@/lib/map-provider";
 import { useAuth } from "@/components/AuthProvider";
@@ -46,10 +47,10 @@ function ProviderFAQ() {
   return (
     <div className="space-y-2">
       {PROVIDER_FAQS.map((faq, i) => (
-        <div key={i} className="border border-gray-200 rounded-xl overflow-hidden">
+        <div key={i} className="border border-line-200 rounded-xl overflow-hidden">
           <button
             onClick={() => setOpenIndex(openIndex === i ? null : i)}
-            className="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-gray-800 hover:bg-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-ink-900 hover:bg-line-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-expanded={openIndex === i}
           >
             <span>{faq.q}</span>
@@ -61,7 +62,7 @@ function ProviderFAQ() {
             </svg>
           </button>
           {openIndex === i && (
-            <div className="px-5 pb-4 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-3">
+            <div className="px-5 pb-4 text-sm text-ink-700 leading-relaxed border-t border-line-100 pt-3">
               {faq.a}
             </div>
           )}
@@ -82,17 +83,17 @@ function RatingDistribution({ reviews }: { reviews: ReviewData[] }) {
     <div className="space-y-1.5">
       {counts.map(({ star, count }) => (
         <div key={star} className="flex items-center gap-2 text-xs">
-          <span className="w-6 text-right text-gray-500 shrink-0">{star}</span>
+          <span className="w-6 text-right text-ink-500 shrink-0">{star}</span>
           <svg width="11" height="11" viewBox="0 0 24 24" fill="#F97316" className="shrink-0">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>
-          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="flex-1 h-2 bg-line-100 rounded-full overflow-hidden">
             <div
               className="h-full bg-orange-400 rounded-full transition-all duration-500"
               style={{ width: `${(count / max) * 100}%` }}
             />
           </div>
-          <span className="w-4 text-gray-400 shrink-0 text-right">{count}</span>
+          <span className="w-4 text-ink-400 shrink-0 text-right">{count}</span>
         </div>
       ))}
     </div>
@@ -108,8 +109,7 @@ interface ReviewData {
   rating: number;
   text?: string;
   content?: string;
-  service?: string;
-  providerReply?: string | null;
+  providerReply?: string;
   // Item 85: verified review flag (true when reviewer sent an enquiry to this provider)
   isVerifiedReview?: boolean;
 }
@@ -229,7 +229,7 @@ function ReviewItem({
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-600">
             {(review.author || "A")[0]}
           </div>
-          <span className="text-sm font-semibold text-gray-800">{review.author}</span>
+          <span className="text-sm font-semibold text-ink-900">{review.author}</span>
           <div className="flex gap-0.5">
             {[...Array(review.rating)].map((_, j) => (
               <svg key={j} width="12" height="12" viewBox="0 0 24 24" fill="#F97316"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
@@ -238,15 +238,15 @@ function ReviewItem({
           {/* Item 85: Show verified badge only when review.isVerifiedReview is true */}
           {review.isVerifiedReview && <VerifiedReviewBadge />}
         </div>
-        <span className="text-xs text-gray-400">{review.date}</span>
+        <span className="text-xs text-ink-400">{review.date}</span>
       </div>
-      <p className="text-sm text-gray-600 leading-relaxed ml-10">{review.text}</p>
+      <p className="text-sm text-ink-700 leading-relaxed ml-10">{review.text}</p>
 
       {/* Provider Reply */}
       {savedReply && (
         <div className="ml-10 mt-3 p-3 rounded-xl bg-blue-50 border border-blue-100">
           <p className="text-xs font-semibold text-blue-700 mb-1">Provider response:</p>
-          <p className="text-sm text-gray-700 leading-relaxed">{savedReply}</p>
+          <p className="text-sm text-ink-700 leading-relaxed">{savedReply}</p>
         </div>
       )}
 
@@ -260,7 +260,7 @@ function ReviewItem({
                 value={replyText}
                 onChange={e => setReplyText(e.target.value)}
                 placeholder="Write a reply to this review..."
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-900 focus:outline-none focus:border-blue-400 resize-none"
+                className="w-full px-3 py-2 rounded-xl border border-line-200 text-sm text-ink-900 focus:outline-none focus:border-blue-400 resize-none"
               />
               <div className="flex gap-2">
                 <button
@@ -272,7 +272,7 @@ function ReviewItem({
                 </button>
                 <button
                   onClick={() => setShowReplyInput(false)}
-                  className="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 text-xs font-medium hover:bg-gray-200 transition-colors"
+                  className="px-3 py-1.5 rounded-lg bg-line-100 text-ink-700 text-xs font-medium hover:bg-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
@@ -292,14 +292,14 @@ function ReviewItem({
 
       {/* Helpfulness voting */}
       <div className="ml-10 mt-3 flex items-center gap-3">
-        <span className="text-xs text-gray-400">Was this helpful?</span>
+        <span className="text-xs text-ink-400">Was this helpful?</span>
         <button
           onClick={() => handleVote("up")}
           disabled={!!myVote}
           className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg border transition-colors ${
             myVote === "up"
               ? "border-green-300 bg-green-50 text-green-600"
-              : "border-gray-200 text-gray-500 hover:border-green-300 hover:text-green-600 disabled:opacity-50"
+              : "border-line-200 text-ink-500 hover:border-green-300 hover:text-green-600 disabled:opacity-50"
           }`}
           aria-label="Helpful"
         >
@@ -315,7 +315,7 @@ function ReviewItem({
           className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg border transition-colors ${
             myVote === "down"
               ? "border-red-200 bg-red-50 text-red-500"
-              : "border-gray-200 text-gray-500 hover:border-red-200 hover:text-red-500 disabled:opacity-50"
+              : "border-line-200 text-ink-500 hover:border-red-200 hover:text-red-500 disabled:opacity-50"
           }`}
           aria-label="Not helpful"
         >
@@ -326,87 +326,9 @@ function ReviewItem({
           No
         </button>
         {helpfulCount > 0 && (
-          <span className="text-xs text-gray-400">{helpfulCount} {helpfulCount === 1 ? "person" : "people"} found this helpful</span>
+          <span className="text-xs text-ink-400">{helpfulCount} {helpfulCount === 1 ? "person" : "people"} found this helpful</span>
         )}
-        <FlagButton reviewId={reviewId} />
       </div>
-    </div>
-  );
-}
-
-const FLAG_REASONS = ["Fake review", "Conflict of interest", "Inappropriate content", "Spam", "Other"] as const;
-
-function FlagButton({ reviewId }: { reviewId: string }) {
-  const [open, setOpen] = useState(false);
-  const [reason, setReason] = useState<string>("");
-  const [details, setDetails] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
-
-  const handleSubmit = async () => {
-    if (!reason) return;
-    setSubmitting(true);
-    try {
-      await fetch("/api/reviews/flag", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ review_id: reviewId, reason, details: details.trim() || undefined }),
-      });
-      setDone(true);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  if (done) {
-    return <span className="text-xs text-gray-400 ml-auto">Report submitted</span>;
-  }
-
-  return (
-    <div className="ml-auto relative">
-      <button
-        onClick={() => setOpen(v => !v)}
-        className="text-xs text-gray-300 hover:text-gray-500 transition-colors"
-        aria-label="Report this review"
-        title="Report this review"
-      >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" />
-        </svg>
-      </button>
-      {open && (
-        <div className="absolute right-0 bottom-6 z-20 bg-white rounded-xl border border-gray-200 shadow-lg p-4 w-56">
-          <p className="text-xs font-semibold text-gray-700 mb-2">Report this review</p>
-          <div className="space-y-1 mb-3">
-            {FLAG_REASONS.map(r => (
-              <label key={r} className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
-                <input type="radio" name={`flag-${reviewId}`} value={r} checked={reason === r} onChange={() => setReason(r)} className="accent-orange-500" />
-                {r}
-              </label>
-            ))}
-          </div>
-          {reason === "Other" && (
-            <textarea
-              rows={2}
-              value={details}
-              onChange={e => setDetails(e.target.value)}
-              placeholder="Tell us more…"
-              className="w-full text-xs px-2 py-1.5 border border-gray-200 rounded-lg resize-none mb-2 focus:outline-none focus:border-orange-300"
-              maxLength={500}
-            />
-          )}
-          <div className="flex gap-2">
-            <button
-              onClick={handleSubmit}
-              disabled={!reason || submitting}
-              className="flex-1 text-xs bg-orange-500 text-white rounded-lg py-1.5 font-semibold disabled:opacity-50"
-            >
-              {submitting ? "…" : "Submit"}
-            </button>
-            <button onClick={() => setOpen(false)} className="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -432,13 +354,9 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
   const [provider, setProvider] = useState<Provider | null>(hardcodedProvider || null);
   const [reviews, setReviews] = useState<ReviewData[]>(mockReviews);
   const [isLoading, setIsLoading] = useState(true);
-  const [reviewForm, setReviewForm] = useState({ rating: 0, text: "", reviewer_name: "", service_type: "" });
-  const [reviewSubmitting, setReviewSubmitting] = useState(false);
-  const [reviewSubmitted, setReviewSubmitted] = useState(false);
-  const [reviewError, setReviewError] = useState("");
-  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
@@ -469,12 +387,10 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           reviews: dbReviews.length > 0
             ? dbReviews.map((r: Record<string, unknown>) => ({
                 id: r.id as string | undefined,
-                author: (r.reviewer_name as string) || (r.author as string) || (r.name as string) || "Anonymous",
+                author: (r.author as string) || (r.name as string) || "Anonymous",
                 date: formatReviewDate(r.created_at as string),
                 rating: (r.rating as number) ?? 5,
                 text: (r.text as string) || (r.content as string) || "",
-                providerReply: (r.response as string) || null,
-                service: (r.service_type as string) || undefined,
               }))
             : [],
         };
@@ -532,34 +448,10 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
     return () => { cancelled = true; };
   }, [provider]);
 
-  // Check if user already reviewed this provider
-  useEffect(() => {
-    if (!user || !slug) return;
-    supabase?.auth.getSession().then(({ data: { session } }) => {
-      if (!session) return;
-      fetch(`/api/reviews?slug=${encodeURIComponent(slug)}`, {
-        headers: { Authorization: `Bearer ${session.access_token}` },
-      })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.reviews?.some((r: { user_id?: string }) => r.user_id === user.id)) {
-            setAlreadyReviewed(true);
-          }
-        })
-        .catch(() => {});
-    });
-  }, [user, slug]);
-
   // Save to recently viewed when provider loads
   useEffect(() => {
     if (provider) {
       saveRecentlyViewed({ slug: provider.slug, name: provider.name, category: provider.category });
-      // Track profile view (rate limited server-side to 1 per IP per 30 min)
-      fetch('/api/provider-view', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug: provider.slug }),
-      }).catch(() => {});
     }
   }, [provider]);
 
@@ -636,8 +528,8 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           <div className="w-24 h-24 rounded-2xl bg-gray-200" />
           <div className="flex-1 space-y-3">
             <div className="h-8 bg-gray-200 rounded w-2/3" />
-            <div className="h-4 bg-gray-100 rounded w-1/2" />
-            <div className="h-16 bg-gray-100 rounded w-full" />
+            <div className="h-4 bg-line-100 rounded w-1/2" />
+            <div className="h-16 bg-line-100 rounded w-full" />
           </div>
         </div>
       </div>
@@ -671,57 +563,11 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
     }
   };
 
-  const handleReviewSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-    if (reviewForm.rating === 0) { setReviewError("Please select a star rating."); return; }
-    if (reviewForm.text.trim().length < 10) { setReviewError("Review must be at least 10 characters."); return; }
-    if (!reviewForm.reviewer_name.trim()) { setReviewError("Please enter your name."); return; }
-    setReviewSubmitting(true);
-    setReviewError("");
-    try {
-      const { data: { session } } = await supabase!.auth.getSession();
-      const res = await fetch("/api/reviews", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session?.access_token}` },
-        body: JSON.stringify({
-          provider_slug: slug,
-          rating: reviewForm.rating,
-          text: reviewForm.text.trim(),
-          reviewer_name: reviewForm.reviewer_name.trim(),
-          service_type: reviewForm.service_type.trim() || undefined,
-        }),
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        setReviewError(json.error || "Failed to submit review.");
-      } else {
-        setReviewSubmitted(true);
-        setAlreadyReviewed(true);
-        // Append new review to local state
-        if (json.review) {
-          setReviews((prev) => [{
-            id: json.review.id,
-            author: reviewForm.reviewer_name,
-            rating: reviewForm.rating,
-            text: reviewForm.text,
-            service: reviewForm.service_type || undefined,
-            date: new Date().toISOString(),
-            providerReply: undefined,
-          }, ...prev]);
-        }
-      }
-    } catch {
-      setReviewError("Network error. Please try again.");
-    }
-    setReviewSubmitting(false);
-  };
-
   const handleReportSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setReportLoading(true);
     try {
-      const res = await fetch("/api/contact", {
+      await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -729,10 +575,9 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           provider_slug: provider!.slug,
           provider_name: provider!.name,
           reason: reportReason,
-          message: `Provider: ${provider!.name} (${provider!.slug})\nReason: ${reportReason}\n\n${reportText}`,
+          message: reportText,
         }),
       });
-      if (!res.ok) throw new Error("Report failed");
       setReportSubmitted(true);
       showToast("Report submitted. Thank you.", "success");
       setTimeout(() => { setReportOpen(false); setReportSubmitted(false); setReportText(""); setReportReason("Incorrect info"); }, 2000);
@@ -762,19 +607,18 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           className="mb-6"
         />
 
-        {/* Cover Banner */}
+        {/* Cover Banner (Item 16) */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: prefersReduced ? 0 : 0.5 }}
-          className="relative w-full h-[220px] sm:h-[280px] rounded-2xl overflow-hidden mb-8"
+          className="relative w-full h-[150px] sm:h-[200px] rounded-2xl overflow-hidden mb-8"
         >
           {provider.cover_image_url ? (
             <Image
               src={provider.cover_image_url}
               alt={`${provider.name} cover`}
               fill
-              priority
               className="object-cover"
               placeholder="blur"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAF0lEQVR4nGNkYGD4z8BQDwAAAf8A/ob0qgAAAABJRU5ErkJggg=="
@@ -782,23 +626,18 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
           ) : (
             <div
               className="w-full h-full"
-              style={{ background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 45%, #7c3aed 75%, #f97316 100%)" }}
-            >
-              {/* subtle light orbs */}
-              <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.12) 0%, transparent 60%), radial-gradient(ellipse at 80% 30%, rgba(249,115,22,0.18) 0%, transparent 50%)" }} />
-            </div>
+              style={{ background: "linear-gradient(135deg, #2563eb 0%, #1e40af 40%, #f97316 100%)" }}
+            />
           )}
-          {/* Dark gradient at bottom so logo always visible */}
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.35) 100%)" }} />
           {/* Provider avatar overlaid on banner */}
           <div className="absolute bottom-0 left-8 translate-y-1/2">
-            <div className="w-24 h-24 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-white">
+            <div className="w-20 h-20 rounded-2xl border-4 border-white shadow-lg overflow-hidden bg-white">
               {provider.logo_url ? (
                 <Image
                   src={provider.logo_url}
                   alt={`${provider.name} logo`}
-                  width={96}
-                  height={96}
+                  width={80}
+                  height={80}
                   className="object-cover w-full h-full"
                   placeholder="blur"
                   blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAF0lEQVR4nGNkYGD4z8BQDwAAAf8A/ob0qgAAAABJRU5ErkJggg=="
@@ -806,17 +645,12 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               ) : (
                 <div
                   className="w-full h-full flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
+                  style={{ background: `linear-gradient(135deg, ${accentLight}, rgba(249,115,22,0.15))` }}
                 >
-                  <span className="text-4xl font-black text-white">{provider.name[0]}</span>
+                  <span className="text-3xl font-black" style={{ color: accent }}>{provider.name[0]}</span>
                 </div>
               )}
             </div>
-          </div>
-          {/* Provider name in banner (bottom right) */}
-          <div className="absolute bottom-4 right-6 text-right">
-            <p className="text-white/90 text-xs font-medium tracking-wide uppercase">NDIS Provider</p>
-            <p className="text-white font-black text-lg leading-tight max-w-[200px] truncate">{provider.name}</p>
           </div>
         </motion.div>
 
@@ -824,7 +658,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
         <motion.div ref={heroRef} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: prefersReduced ? 0 : 0.5 }} className="mt-12 mb-12">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2 flex-wrap">
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-gray-900">{provider.name}</h1>
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-ink-900">{provider.name}</h1>
               {provider.verified && (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
@@ -839,9 +673,9 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             </div>
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <span className="text-sm text-orange-500 font-medium">{provider.category}</span>
-              <span className="hidden sm:inline text-gray-300">|</span>
-              <span className="text-sm text-gray-500">{provider.suburb || provider.location}, {provider.state || "NSW"}</span>
-              <span className="hidden sm:inline text-gray-300">|</span>
+              <span className="hidden sm:inline text-ink-300">|</span>
+              <span className="text-sm text-ink-500">{provider.location}, {provider.state || "NSW"}</span>
+              <span className="hidden sm:inline text-ink-300">|</span>
               <div className="flex items-center gap-1">
                 {[1,2,3,4,5].map((star) => (
                   <svg key={star} width="14" height="14" viewBox="0 0 24 24" fill={star <= Math.round(provider.rating) ? "#F97316" : "#e5e7eb"}>
@@ -849,10 +683,10 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   </svg>
                 ))}
                 <span className="text-sm font-semibold text-orange-500 ml-1">{provider.rating}</span>
-                <span className="text-xs text-gray-400">({provider.reviewCount} reviews)</span>
+                <span className="text-xs text-ink-400">({provider.reviewCount} reviews)</span>
               </div>
             </div>
-            <p className="text-gray-600 leading-relaxed mb-6">{provider.bio || provider.description}</p>
+            <p className="text-ink-700 leading-relaxed mb-6">{provider.bio || provider.description}</p>
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={() => setEnquiryOpen(true)}
@@ -865,7 +699,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               </button>
               <button
                 onClick={() => setCallbackOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-3 min-h-[44px] rounded-xl font-semibold text-sm transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 bg-white border border-gray-200 text-gray-700 hover:border-blue-400 hover:text-blue-600"
+                className="inline-flex items-center gap-2 px-5 py-3 min-h-[44px] rounded-xl font-semibold text-sm transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 bg-white border border-line-200 text-ink-700 hover:border-blue-400 hover:text-blue-600"
                 aria-label={`Request a callback from ${provider.name}`}
               >
                 <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -884,7 +718,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             <div className="mt-3">
               <button
                 onClick={() => setReportOpen(true)}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-ink-400 hover:text-red-500 transition-colors"
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
@@ -899,21 +733,21 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             {/* Services */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h2 className="text-xl font-bold mb-6 text-gray-900">Services Offered</h2>
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
+              <h2 className="text-xl font-bold mb-6 text-ink-900">Services Offered</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {provider.services.map((s) => (
                   <div key={s} className="flex items-center gap-3 py-2">
                     <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: accent }} />
-                    <span className="text-sm text-gray-600">{s}</span>
+                    <span className="text-sm text-ink-700">{s}</span>
                   </div>
                 ))}
               </div>
             </motion.div>
 
             {/* Operating Hours (Item 29) */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.11, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h2 className="text-xl font-bold mb-5 text-gray-900">Operating Hours</h2>
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.11, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
+              <h2 className="text-xl font-bold mb-5 text-ink-900">Operating Hours</h2>
               <div className="space-y-2">
                 {[
                   { day: "Monday", hours: "9:00 AM – 5:00 PM", open: true },
@@ -925,21 +759,21 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   { day: "Sunday", hours: "Closed", open: false },
                 ].map(({ day, hours, open }) => (
                   <div key={day} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
-                    <span className="text-sm font-medium text-gray-700 w-28">{day}</span>
-                    <span className={`text-sm ${open ? "text-gray-600" : "text-gray-400"}`}>{hours}</span>
+                    <span className="text-sm font-medium text-ink-700 w-28">{day}</span>
+                    <span className={`text-sm ${open ? "text-ink-700" : "text-ink-400"}`}>{hours}</span>
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-4">Contact provider to confirm hours.</p>
+              <p className="text-xs text-ink-400 mt-4">Contact provider to confirm hours.</p>
             </motion.div>
 
             {/* Gallery */}
             {provider.gallery_urls && provider.gallery_urls.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.12, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
-                <h2 className="text-xl font-bold mb-6 text-gray-900">Gallery</h2>
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.12, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
+                <h2 className="text-xl font-bold mb-6 text-ink-900">Gallery</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {provider.gallery_urls.map((url, i) => (
-                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
+                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-line-100">
                       <Image src={url} alt={`${provider.name} gallery ${i + 1}`} fill className="object-cover hover:scale-105 transition-transform duration-300" placeholder="blur" blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAF0lEQVR4nGNkYGD4z8BQDwAAAf8A/ob0qgAAAABJRU5ErkJggg==" />
                     </div>
                   ))}
@@ -948,18 +782,18 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             )}
 
             {/* Map */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.15, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.15, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 overflow-hidden">
               <div className="px-8 pt-8 pb-4">
-                <h2 className="text-xl font-bold text-gray-900">Location</h2>
-                <p className="text-sm text-gray-500 mt-1">{provider.suburb || provider.location}, {provider.state || "NSW"}, Australia</p>
+                <h2 className="text-xl font-bold text-ink-900">Location</h2>
+                <p className="text-sm text-ink-500 mt-1">{provider.location}, {provider.state || "NSW"}, Australia</p>
               </div>
-              <div className="relative bg-gray-100 h-56 flex items-center justify-center overflow-hidden">
+              <div className="relative bg-line-100 h-56 flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 opacity-30" style={{backgroundImage: "linear-gradient(#c8d6e5 1px, transparent 1px), linear-gradient(90deg, #c8d6e5 1px, transparent 1px)", backgroundSize: "40px 40px"}} />
                 <div className="relative flex flex-col items-center gap-2 text-center">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg" style={{ backgroundColor: accent }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                   </div>
-                  <span className="text-sm font-semibold text-gray-700 bg-white px-3 py-1 rounded-full shadow">{provider.location}</span>
+                  <span className="text-sm font-semibold text-ink-700 bg-white px-3 py-1 rounded-full shadow">{provider.location}</span>
                   <a
                     href={`https://maps.google.com/?q=${encodeURIComponent(provider.name + " " + provider.location + " " + (provider.state || "NSW"))}`}
                     target="_blank"
@@ -975,61 +809,61 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             </motion.div>
 
             {/* Contact Form */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.2, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h2 className="text-xl font-bold mb-2 text-gray-900">Send a Message</h2>
-              <p className="text-sm text-gray-500 mb-6">Get in touch with {provider.name} directly.</p>
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.2, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
+              <h2 className="text-xl font-bold mb-2 text-ink-900">Send a Message</h2>
+              <p className="text-sm text-ink-500 mb-6">Get in touch with {provider.name} directly.</p>
               {formSubmitted ? (
                 <div className="text-center py-8">
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                   </div>
-                  <p className="font-semibold text-gray-800">Message sent!</p>
-                  <p className="text-sm text-gray-500 mt-1">{provider.name} will be in touch soon.</p>
+                  <p className="font-semibold text-ink-900">Message sent!</p>
+                  <p className="text-sm text-ink-500 mt-1">{provider.name} will be in touch soon.</p>
                 </div>
               ) : (
                 <form onSubmit={handleFormSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Full Name</label>
+                      <label className="block text-xs font-medium text-ink-700 mb-1.5">Full Name</label>
                       <input
                         type="text"
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-line-200 text-ink-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
                         placeholder="Jane Smith"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Email Address</label>
+                      <label className="block text-xs font-medium text-ink-700 mb-1.5">Email Address</label>
                       <input
                         type="email"
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-line-200 text-ink-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
                         placeholder="jane@example.com"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Phone (optional)</label>
+                    <label className="block text-xs font-medium text-ink-700 mb-1.5">Phone (optional)</label>
                     <input
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-line-200 text-ink-900 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 focus:border-blue-500 transition-colors"
                       placeholder="04xx xxx xxx"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1.5">Message</label>
+                    <label className="block text-xs font-medium text-ink-700 mb-1.5">Message</label>
                     <textarea
                       required
                       rows={4}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors resize-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-line-200 text-ink-900 text-sm focus:outline-none focus:border-blue-500 transition-colors resize-none"
                       placeholder="Hi, I am interested in learning more about your services..."
                     />
                   </div>
@@ -1049,16 +883,24 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             </motion.div>
 
             {/* FAQ Section (Item 28) */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.22, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h2 className="text-xl font-bold mb-1 text-gray-900">Frequently Asked Questions</h2>
-              <p className="text-xs text-gray-400 mb-6">Common questions about NDIS providers</p>
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.22, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
+              <h2 className="text-xl font-bold mb-1 text-ink-900">Frequently Asked Questions</h2>
+              <p className="text-xs text-ink-400 mb-6">Common questions about NDIS providers</p>
               <ProviderFAQ />
             </motion.div>
 
             {/* Reviews */}
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.25, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-8">
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.25, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-8">
               <div className="flex items-start justify-between mb-6 flex-wrap gap-4">
-                <h2 className="text-xl font-bold text-gray-900">Reviews</h2>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-bold text-ink-900">Reviews</h2>
+                  <button
+                    onClick={() => setReviewOpen(true)}
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-line-200 text-ink-700 hover:border-orange-400 hover:text-orange-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                  >
+                    Write a Review
+                  </button>
+                </div>
                 <div className="flex items-start gap-6">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl font-black text-orange-500">{provider.rating}</span>
@@ -1070,7 +912,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                           </svg>
                         ))}
                       </div>
-                      <p className="text-xs text-gray-400">{provider.reviewCount} reviews</p>
+                      <p className="text-xs text-ink-400">{provider.reviewCount} reviews</p>
                     </div>
                   </div>
                   {reviews.length > 0 && (
@@ -1083,114 +925,25 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               <div className="space-y-6">
                 {reviews.map((r, i) => {
                   const reviewId = r.id || `${slug}-review-${i}`;
+                  // isOwner: user is logged in and provider email matches or user_id matches
                   const isOwner = !!(user && provider && (
                     user.email === provider.email ||
                     (provider as any).user_id === user.id
                   ));
                   return (
-                    <div key={reviewId} className={i > 0 ? "pt-6 border-t border-gray-100" : ""}>
+                    <div key={reviewId} className={i > 0 ? "pt-6 border-t border-line-100" : ""}>
                       <ReviewItem review={r} reviewId={reviewId} isOwner={isOwner} />
                     </div>
                   );
                 })}
-                {reviews.length === 0 && (
-                  <p className="text-sm text-gray-400 text-center py-4">No reviews yet. Be the first!</p>
-                )}
-              </div>
-
-              {/* Write a review */}
-              <div className="mt-8 pt-6 border-t border-gray-100">
-                {!user ? (
-                  <div className="bg-gray-50 rounded-xl p-5 text-center">
-                    <p className="text-sm text-gray-600 mb-3">Sign in to leave a review</p>
-                    <a href="/login" className="inline-block px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors">Sign in</a>
-                  </div>
-                ) : alreadyReviewed || reviewSubmitted ? (
-                  <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-center">
-                    <p className="text-sm font-semibold text-green-700">✓ {reviewSubmitted ? "Review submitted — thank you!" : "You've already reviewed this provider."}</p>
-                  </div>
-                ) : (provider as any)?.user_id === user.id ? null : (
-                  <div>
-                    <h3 className="text-base font-bold text-gray-900 mb-4">Write a review</h3>
-                    {reviewError && (
-                      <div className="mb-3 p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">{reviewError}</div>
-                    )}
-                    <form onSubmit={handleReviewSubmit} className="space-y-4">
-                      {/* Star picker */}
-                      <div>
-                        <p className="text-sm font-medium text-gray-700 mb-2">Rating</p>
-                        <div className="flex gap-1">
-                          {[1,2,3,4,5].map((star) => (
-                            <button
-                              key={star}
-                              type="button"
-                              onClick={() => setReviewForm((f) => ({ ...f, rating: star }))}
-                              className="p-1 focus:outline-none"
-                              aria-label={`${star} star`}
-                            >
-                              <svg width="28" height="28" viewBox="0 0 24 24" fill={star <= reviewForm.rating ? "#F97316" : "#e5e7eb"} className="transition-colors">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                              </svg>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor="review-name" className="block text-sm font-medium text-gray-700 mb-1">Your name</label>
-                        <input
-                          id="review-name"
-                          type="text"
-                          value={reviewForm.reviewer_name}
-                          onChange={(e) => setReviewForm((f) => ({ ...f, reviewer_name: e.target.value }))}
-                          placeholder="First name or initials"
-                          maxLength={60}
-                          autoComplete="name"
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="review-service" className="block text-sm font-medium text-gray-700 mb-1">Service received <span className="text-gray-400 font-normal">(optional)</span></label>
-                        <input
-                          id="review-service"
-                          type="text"
-                          value={reviewForm.service_type}
-                          onChange={(e) => setReviewForm((f) => ({ ...f, service_type: e.target.value }))}
-                          placeholder="e.g. Support Coordination"
-                          maxLength={80}
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="review-text" className="block text-sm font-medium text-gray-700 mb-1">Your review</label>
-                        <textarea
-                          id="review-text"
-                          value={reviewForm.text}
-                          onChange={(e) => setReviewForm((f) => ({ ...f, text: e.target.value }))}
-                          placeholder="Share your experience with this provider..."
-                          rows={4}
-                          maxLength={1000}
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 resize-none"
-                        />
-                        <p className="text-xs text-gray-400 mt-1 text-right" aria-live="polite">{reviewForm.text.length}/1000</p>
-                      </div>
-                      <button
-                        type="submit"
-                        disabled={reviewSubmitting}
-                        className="px-6 py-2.5 rounded-xl bg-orange-500 text-white text-sm font-semibold hover:bg-orange-600 transition-colors disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus:outline-none"
-                      >
-                        {reviewSubmitting ? "Submitting..." : "Submit Review"}
-                      </button>
-                    </form>
-                  </div>
-                )}
               </div>
             </motion.div>
           </div>
 
           {/* Sidebar */}
           <div>
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-gray-200 p-6 sticky top-24">
-              <h3 className="text-lg font-bold mb-4 text-gray-900">Get in Touch</h3>
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.1, duration: prefersReduced ? 0 : 0.5 }} className="card-flat p-6 sticky top-24">
+              <h3 className="text-lg font-bold mb-4 text-ink-900">Get in Touch</h3>
               <button
                 onClick={() => setEnquiryOpen(true)}
                 className="w-full min-h-[44px] py-3 rounded-xl text-white font-semibold text-sm transition-all hover:shadow-lg mb-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-orange-400"
@@ -1201,7 +954,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               </button>
               <button
                 onClick={() => setCallbackOpen(true)}
-                className="w-full min-h-[44px] py-3 rounded-xl font-semibold text-sm transition-all hover:shadow-md mb-6 bg-white border border-gray-200 text-gray-700 hover:border-blue-400 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 flex items-center justify-center gap-2"
+                className="w-full min-h-[44px] py-3 rounded-xl font-semibold text-sm transition-all hover:shadow-md mb-6 bg-white border border-line-200 text-ink-700 hover:border-blue-400 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 flex items-center justify-center gap-2"
                 aria-label={`Request a callback from ${provider.name}`}
               >
                 <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -1210,44 +963,27 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 Request Callback
               </button>
               <div className="space-y-3 text-sm">
-                <a href={`tel:${provider.phone}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href={`tel:${provider.phone}`} className="flex items-center gap-3 text-ink-700 hover:text-blue-600 transition-colors">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                   {provider.phone}
                 </a>
-                <a href={`mailto:${provider.email}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors">
+                <a href={`mailto:${provider.email}`} className="flex items-center gap-3 text-ink-700 hover:text-blue-600 transition-colors">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   {provider.email}
                 </a>
                 {provider.website && (
-                  <a href={provider.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-600 hover:text-blue-600 transition-colors">
+                  <a href={provider.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-ink-700 hover:text-blue-600 transition-colors">
                     <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" /></svg>
                     Website
                   </a>
                 )}
-                <div className="flex items-center gap-3 text-gray-600">
+                <div className="flex items-center gap-3 text-ink-700">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                  {provider.suburb || provider.location}, {provider.state || "NSW"}
+                  {provider.location}, {provider.state || "NSW"}
                 </div>
-                {(provider as any).ndis_registration_number && (
-                  <div className="flex items-start gap-3 text-gray-600">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="mt-0.5 shrink-0"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
-                    <div>
-                      <p className="text-xs text-gray-400">NDIS Reg. No.</p>
-                      <a
-                        href="https://www.ndiscommission.gov.au/participants/working-providers/find-registered-provider"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-green-700 font-medium hover:underline"
-                        title="Verify on NDIS Commission website"
-                      >
-                        {(provider as any).ndis_registration_number} ↗
-                      </a>
-                    </div>
-                  </div>
-                )}
               </div>
               {provider.verified && (
-                <div className="mt-6 pt-6 border-t border-gray-100">
+                <div className="mt-6 pt-6 border-t border-line-100">
                   <div className="flex items-center gap-2 text-xs text-green-700 bg-green-50 rounded-xl p-3 border border-green-200">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                     <span className="font-medium">Verified NDIS Provider</span>
@@ -1255,7 +991,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 </div>
               )}
               {!provider.verified && (
-                <div className="mt-6 pt-6 border-t border-gray-100">
+                <div className="mt-6 pt-6 border-t border-line-100">
                   <Link href="/register" className="block text-center text-xs font-medium text-orange-600 hover:text-orange-700 transition-colors">
                     Is this your business? Claim this listing
                   </Link>
@@ -1266,30 +1002,10 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      {/* NDIS Disclaimer — required for legal compliance */}
-      <div className="max-w-5xl mx-auto mt-10 px-1">
-        <div className="flex gap-3 items-start bg-blue-50 border border-blue-100 rounded-xl px-5 py-4">
-          <svg className="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-          <p className="text-xs text-blue-700 leading-relaxed">
-            <strong>Important:</strong> ReferAus is a directory service only. We do not verify, endorse, recommend, or refer any provider listed on this site. Always verify a provider&apos;s NDIS registration before engaging their services.{" "}
-            <a
-              href="https://www.ndiscommission.gov.au/participants/working-providers/find-registered-provider"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-blue-900 font-medium"
-            >
-              Verify registration on the NDIS Commission website →
-            </a>
-          </p>
-        </div>
-      </div>
-
       {/* Similar Providers */}
       {similarProviders.length > 0 && (
         <div className="max-w-5xl mx-auto mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Similar Providers</h2>
+          <h2 className="text-2xl font-bold text-ink-900 mb-6">Similar Providers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {similarProviders.map((p) => (
               <ProviderCard key={p.slug} provider={p} />
@@ -1317,6 +1033,16 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
         onClose={() => setCallbackOpen(false)}
       />
 
+      <ReviewModal
+        providerName={provider.name}
+        providerSlug={provider.slug}
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        onSubmitted={() => {
+          showToast("Thanks! Your review is pending moderation and will appear once approved.", "success");
+        }}
+      />
+
       {/* Report Modal */}
       <AnimatePresence>
         {reportOpen && (
@@ -1333,11 +1059,11 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md rounded-2xl bg-white border border-gray-200 shadow-2xl p-6"
+              className="relative w-full max-w-md rounded-2xl bg-white border border-line-200 shadow-2xl p-6"
             >
               <button
                 onClick={() => setReportOpen(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute top-4 right-4 text-ink-400 hover:text-ink-700 transition-colors"
                 aria-label="Close"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" /></svg>
@@ -1347,20 +1073,20 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                   </div>
-                  <p className="font-semibold text-gray-800">Report submitted</p>
-                  <p className="text-sm text-gray-500 mt-1">Thank you for helping keep ReferAus accurate.</p>
+                  <p className="font-semibold text-ink-900">Report submitted</p>
+                  <p className="text-sm text-ink-500 mt-1">Thank you for helping keep ReferAus accurate.</p>
                 </div>
               ) : (
                 <>
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">Report this listing</h3>
-                  <p className="text-xs text-gray-500 mb-5">Help us keep ReferAus accurate and trustworthy.</p>
+                  <h3 className="text-lg font-bold text-ink-900 mb-1">Report this listing</h3>
+                  <p className="text-xs text-ink-500 mb-5">Help us keep ReferAus accurate and trustworthy.</p>
                   <form onSubmit={handleReportSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Reason</label>
+                      <label className="block text-xs font-medium text-ink-700 mb-1.5">Reason</label>
                       <select
                         value={reportReason}
                         onChange={(e) => setReportReason(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors bg-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-line-200 text-ink-900 text-sm focus:outline-none focus:border-blue-500 transition-colors bg-white"
                       >
                         <option>Incorrect info</option>
                         <option>Suspicious</option>
@@ -1369,12 +1095,12 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1.5">Additional details (optional)</label>
+                      <label className="block text-xs font-medium text-ink-700 mb-1.5">Additional details (optional)</label>
                       <textarea
                         rows={3}
                         value={reportText}
                         onChange={(e) => setReportText(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors resize-none"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-line-200 text-ink-900 text-sm focus:outline-none focus:border-blue-500 transition-colors resize-none"
                         placeholder="Please describe the issue..."
                       />
                     </div>
@@ -1409,28 +1135,27 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-xs rounded-2xl bg-white border border-gray-200 shadow-2xl p-6 text-center"
+              className="relative w-full max-w-xs rounded-2xl bg-white border border-line-200 shadow-2xl p-6 text-center"
             >
               <button
                 onClick={() => setShowQrModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute top-4 right-4 text-ink-400 hover:text-ink-700 transition-colors"
                 aria-label="Close"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M6 18L18 6" /></svg>
               </button>
-              <h3 className="text-base font-bold text-gray-900 mb-1">Share this provider</h3>
-              <p className="text-xs text-gray-500 mb-4">Scan to view this provider</p>
+              <h3 className="text-base font-bold text-ink-900 mb-1">Share this provider</h3>
+              <p className="text-xs text-ink-500 mb-4">Scan to view this provider</p>
               <div className="flex justify-center mb-4">
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent("https://referaus.com/providers/" + provider.slug)}&size=200x200&bgcolor=ffffff&color=1e3a5f&margin=8`}
                   alt="QR code"
                   width={200}
                   height={200}
-                  loading="lazy"
-                  className="rounded-xl border border-gray-100"
+                  className="rounded-xl border border-line-100"
                 />
               </div>
-              <p className="text-xs text-gray-400 mb-4 break-all">referaus.com/providers/{provider.slug}</p>
+              <p className="text-xs text-ink-400 mb-4 break-all">referaus.com/providers/{provider.slug}</p>
               <button
                 onClick={() => window.open(`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent("https://referaus.com/providers/" + provider.slug)}&size=400x400&bgcolor=ffffff&color=1e3a5f&margin=10`, "_blank")}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all"
@@ -1445,15 +1170,15 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
 
       {/* Sticky mobile CTA bar */}
       {showStickyBar && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-gray-200 px-4 py-3 flex items-center justify-between gap-3 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-line-200 px-4 py-3 flex items-center justify-between gap-3 shadow-lg">
           <div className="flex-1 min-w-0">
-            <p className="text-[11px] text-gray-400 truncate">{provider.category}</p>
-            <p className="text-sm font-semibold text-gray-900 truncate">{provider.name}</p>
+            <p className="text-[11px] text-ink-400 truncate">{provider.category}</p>
+            <p className="text-sm font-semibold text-ink-900 truncate">{provider.name}</p>
           </div>
           <button
             onClick={() => setCallbackOpen(true)}
             aria-label={`Request a callback from ${provider.name}`}
-            className="shrink-0 min-w-[44px] min-h-[44px] px-3 py-2.5 rounded-xl text-blue-600 border border-gray-200 bg-white hover:border-blue-400 active:bg-gray-50 transition-colors flex items-center justify-center"
+            className="shrink-0 min-w-[44px] min-h-[44px] px-3 py-2.5 rounded-xl text-blue-600 border border-line-200 bg-white hover:border-blue-400 active:bg-line-100 transition-colors flex items-center justify-center"
           >
             <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />

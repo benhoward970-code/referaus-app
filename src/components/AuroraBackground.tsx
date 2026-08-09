@@ -49,6 +49,7 @@ export function AuroraBackground({ className = "" }: { className?: string }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     // Skip canvas animation on mobile — use CSS gradient fallback instead
     if (window.innerWidth < 768) return;
 

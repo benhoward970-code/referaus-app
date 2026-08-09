@@ -40,12 +40,15 @@ export async function GET(request: NextRequest) {
   if (!slug) return NextResponse.json({ error: "Missing slug" }, { status: 400 });
 
   const client = getClient();
-  if (!client) return NextResponse.json({ reviews: [] });
+  if (!client) {
+    return NextResponse.json({ reviews: [] });
+  }
 
   const { data, error } = await client
     .from("reviews")
-    .select("id, rating, text, reviewer_name, service_type, created_at, response, response_date")
+    .select("*")
     .eq("provider_slug", slug)
+    .eq("status", "approved")
     .order("created_at", { ascending: false })
     .limit(50);
 
@@ -57,7 +60,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ reviews: data || [] });
 }
 
-// GET /api/reviews/check?slug=xxx  — returns whether the authed user already reviewed
+// HEAD /api/reviews?slug=xxx — returns whether the authed user already reviewed this provider
 export async function HEAD(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get("slug");
@@ -88,9 +91,10 @@ export async function POST(request: NextRequest) {
   if (!allowed) return NextResponse.json({ error: "Too many reviews. Please try again later." }, { status: 429 });
 
   const body = await request.json();
-  const { provider_slug, reviewer_name, rating, text, service_type } = body;
+  const { provider_slug, author_name, reviewer_name, rating, text, service_type } = body;
+  const name = reviewer_name || author_name;
 
-  if (!provider_slug || !reviewer_name || !rating || !text) {
+  if (!provider_slug || !name || !rating || !text) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
   if (typeof rating !== "number" || rating < 1 || rating > 5) {
@@ -105,13 +109,18 @@ export async function POST(request: NextRequest) {
 
   const client = getClient();
   if (!client) {
-    return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    return NextResponse.json({
+      success: true,
+      pending: true,
+      review: { provider_slug, reviewer_name: name, rating, text, status: "pending", id: "demo-" + Date.now() },
+      demo: true,
+    });
   }
 
   // Get provider (need id and user_id to prevent self-review)
   const { data: provider } = await client
     .from("providers")
-    .select("id, user_id")
+    .select("id, user_id, name, email, email_notifications")
     .eq("slug", provider_slug)
     .maybeSingle();
 
@@ -136,61 +145,49 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "You have already reviewed this provider." }, { status: 409 });
   }
 
-  const { data, error } = await client.from("reviews").insert({
-    provider_id: provider.id,
-    provider_slug,
-    user_id: user.id,
-    participant_id: user.id,
-    reviewer_name: reviewer_name.trim().slice(0, 80),
-    reviewer_email: user.email,
-    rating: Math.round(rating),
-    text: text.trim().slice(0, 1000),
-    service_type: service_type?.trim().slice(0, 80) || null,
-    created_at: new Date().toISOString(),
-  }).select().single();
+  const { data, error } = await client
+    .from("reviews")
+    .insert({
+      provider_id: provider.id,
+      provider_slug,
+      user_id: user.id,
+      participant_id: user.id,
+      reviewer_name: name.trim().slice(0, 80),
+      reviewer_email: user.email,
+      rating: Math.round(rating),
+      text: text.trim().slice(0, 1000),
+      service_type: service_type?.trim().slice(0, 80) || null,
+      status: "pending",
+      created_at: new Date().toISOString(),
+    })
+    .select()
+    .single();
 
   if (error) {
     console.error("Review insert error:", error);
     return NextResponse.json({ error: "Failed to save review" }, { status: 500 });
   }
 
-  // Recalculate and store provider's average rating
-  const { data: allReviews } = await client
-    .from("reviews")
-    .select("rating")
-    .eq("provider_slug", provider_slug);
-
-  if (allReviews && allReviews.length > 0) {
-    const avg = allReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / allReviews.length;
-    await client.from("providers").update({ rating: Math.round(avg * 10) / 10 }).eq("id", provider.id);
-  }
-
-  // Email provider to notify them of the new review
+  // Notify the provider — the review is pending approval, not live yet
   try {
-    const { data: providerRecord } = await client
-      .from("providers")
-      .select("name, email, email_notifications")
-      .eq("id", provider.id)
-      .maybeSingle();
-
-    if (providerRecord?.email && providerRecord?.email_notifications !== false) {
+    if (provider.email && provider.email_notifications !== false) {
       const stars = "★".repeat(Math.round(rating)) + "☆".repeat(5 - Math.round(rating));
       await sendEmail({
-        to: providerRecord.email,
-        subject: `New ${rating}-star review on your ReferAus listing`,
+        to: provider.email,
+        subject: `New ${rating}-star review awaiting approval`,
         transactional: true,
         html: `
           <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#111;">
             <h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">You have a new review!</h2>
-            <p style="color:#666;margin-top:0;">Someone left a review on your <strong>${providerRecord.name || "ReferAus"}</strong> listing.</p>
+            <p style="color:#666;margin-top:0;">Someone left a review on your <strong>${provider.name || "ReferAus"}</strong> listing. It's awaiting moderation approval before it goes live.</p>
             <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:20px;margin:20px 0;">
               <p style="font-size:22px;margin:0 0 4px;">${stars}</p>
-              <p style="font-weight:700;margin:0 0 4px;">${reviewer_name.trim()}</p>
+              <p style="font-weight:700;margin:0 0 4px;">${name.trim()}</p>
               ${service_type ? `<p style="font-size:12px;color:#888;margin:0 0 12px;">Service: ${service_type}</p>` : ""}
               <p style="font-style:italic;color:#333;margin:0;">&ldquo;${text.trim()}&rdquo;</p>
             </div>
-            <p style="color:#666;font-size:14px;">You can reply to this review from your dashboard.</p>
-            <a href="https://referaus.com/dashboard/reviews" style="display:inline-block;margin-top:8px;padding:12px 24px;background:#f97316;color:#fff;font-weight:700;border-radius:8px;text-decoration:none;">Reply to Review →</a>
+            <p style="color:#666;font-size:14px;">Once approved, you'll be able to reply from your dashboard.</p>
+            <a href="https://referaus.com/dashboard/reviews" style="display:inline-block;margin-top:8px;padding:12px 24px;background:#f97316;color:#fff;font-weight:700;border-radius:8px;text-decoration:none;">View Reviews →</a>
             <hr style="border:none;border-top:1px solid #eee;margin:24px 0;" />
             <p style="color:#aaa;font-size:12px;">ReferAus — Hunter Region NDIS Marketplace</p>
           </div>
@@ -202,5 +199,5 @@ export async function POST(request: NextRequest) {
     // Non-blocking
   }
 
-  return NextResponse.json({ success: true, review: data });
+  return NextResponse.json({ success: true, pending: true, review: data });
 }

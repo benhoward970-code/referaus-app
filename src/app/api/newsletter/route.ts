@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(req: NextRequest) {
@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Valid email required' }, { status: 400 });
     }
 
+    // Try Supabase first
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -32,6 +33,8 @@ export async function POST(req: NextRequest) {
       if (!res.ok && res.status !== 409) {
         console.error('[Newsletter] Supabase error:', res.status);
       }
+    } else {
+      console.log('[Newsletter] No Supabase — would save:', { email });
     }
 
     return NextResponse.json({ success: true });

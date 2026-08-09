@@ -57,7 +57,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         className="w-full flex justify-between items-center py-5 text-left gap-4 hover:text-blue-600 transition-colors"
       >
         <span className="font-semibold text-gray-800 text-sm sm:text-base">{q}</span>
-        <span className={`text-xl text-gray-400 transition-transform duration-300 shrink-0 ${open ? "rotate-45" : ""}`}>+</span>
+        <span className={`text-xl text-ink-400 transition-transform duration-300 shrink-0 ${open ? "rotate-45" : ""}`}>+</span>
       </button>
       <AnimatePresence initial={false}>
         {open && (
@@ -69,7 +69,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-sm text-gray-500 leading-relaxed">{a}</p>
+            <p className="pb-5 text-sm text-ink-500 leading-relaxed">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -92,7 +92,7 @@ function FieldWrapper({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium mb-1.5 text-gray-700">
+      <label className="block text-sm font-medium mb-1.5 text-ink-700">
         {label}
         {required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
@@ -277,7 +277,7 @@ export default function ContactPage() {
   const messageField = getFieldState("message");
 
   return (
-    <div className="page-top min-h-screen pt-28 pb-14">
+    <div className="min-h-screen pt-28 pb-14">
       {/* Hero */}
       <section className="px-4 sm:px-6 pb-10">
         <div className="max-w-4xl mx-auto">
@@ -291,7 +291,7 @@ export default function ContactPage() {
             <h1 className="heading-bold text-[clamp(2.2rem,5vw,3.8rem)] leading-tight mb-4">
               Get in <span className="gradient-text">touch</span>
             </h1>
-            <p className="text-lg text-gray-500 max-w-xl leading-relaxed">
+            <p className="text-lg text-ink-500 max-w-xl leading-relaxed">
               Have a question, partnership idea, or need support? We would love to hear from you.
             </p>
           </motion.div>
@@ -315,7 +315,7 @@ export default function ContactPage() {
                   <CheckCircle className="w-12 h-12 text-green-500" />
                 </div>
                 <h3 className="font-bold text-xl mb-2">Message sent!</h3>
-                <p className="text-gray-600 text-sm mb-6">We will get back to you within 24 hours.</p>
+                <p className="text-ink-700 text-sm mb-6">We will get back to you within 24 hours.</p>
                 <button
                   onClick={() => setStatus("idle")}
                   className="text-blue-600 text-sm font-semibold hover:text-blue-700"
@@ -331,7 +331,7 @@ export default function ContactPage() {
                 className="rounded-2xl bg-white border border-gray-200 p-5 sm:p-10 shadow-sm space-y-5"
               >
                 <h2 className="text-xl font-bold mb-1">Send us a message</h2>
-                <p className="text-sm text-gray-400 mb-2">
+                <p className="text-sm text-ink-400 mb-2">
                   We typically respond within one business day.
                   Fields marked <span className="text-red-500">*</span> are required.
                 </p>
@@ -373,13 +373,13 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-1.5 text-gray-700">
+                  <label className="block text-sm font-medium mb-1.5 text-ink-700">
                     Subject <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={form.subject}
                     onChange={(e) => updateForm({ subject: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-600 transition-colors bg-white"
+                    className="w-full px-4 py-3 rounded-[3px] border border-ink-950 bg-white text-sm focus:outline-none focus:border-blue-600 transition-colors bg-white"
                   >
                     {subjects.map((s) => (
                       <option key={s}>{s}</option>
@@ -417,7 +417,7 @@ export default function ContactPage() {
                         initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="text-xs text-gray-400 shrink-0"
+                        className="text-xs text-ink-400 shrink-0"
                       >
                         Draft saved
                       </motion.span>
@@ -447,12 +447,12 @@ export default function ContactPage() {
           >
             <div className="rounded-2xl bg-white border border-gray-200 p-8 shadow-sm">
               <h3 className="font-bold text-lg mb-5">Office</h3>
-              <div className="space-y-4 text-sm text-gray-600">
+              <div className="space-y-4 text-sm text-ink-700">
                 <div className="flex gap-3">
                   <MapPin className="text-orange-500 mt-0.5 shrink-0 w-4 h-4" />
                   <div>
                     <p className="font-medium text-gray-800">Hunter Region, NSW</p>
-                    <p className="text-gray-400">Australia</p>
+                    <p className="text-ink-400">Australia</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
@@ -471,7 +471,7 @@ export default function ContactPage() {
                   <Clock className="text-orange-500 mt-0.5 shrink-0 w-4 h-4" />
                   <div>
                     <p className="font-medium text-gray-800">Response time</p>
-                    <p className="text-gray-400">Within 1 business day</p>
+                    <p className="text-ink-400">Within 1 business day</p>
                   </div>
                 </div>
               </div>
@@ -479,7 +479,7 @@ export default function ContactPage() {
 
             <div className="rounded-2xl bg-blue-50 border border-blue-100 p-8">
               <h3 className="font-bold text-lg mb-3">Are you a provider?</h3>
-              <p className="text-sm text-gray-600 leading-relaxed mb-4">
+              <p className="text-sm text-ink-700 leading-relaxed mb-4">
                 Want to list your NDIS services and connect with more participants? Create a free
                 provider account today.
               </p>
@@ -495,7 +495,7 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-4 sm:px-6 py-10 bg-gray-50">
+      <section className="px-4 sm:px-6 py-10 bg-line-100">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 24 }}

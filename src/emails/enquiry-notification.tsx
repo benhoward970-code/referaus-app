@@ -73,7 +73,7 @@ export function EnquiryNotificationEmail({
                   New Enquiry
                 </p>
                 <h1 style={{ color: '#111827', fontSize: '26px', fontWeight: '700', margin: '0 0 12px' }}>
-                  New Enquiry Received 📬
+                  New Enquiry Received ??
                 </h1>
                 <p style={{ color: '#374151', fontSize: '16px', lineHeight: '1.6', margin: '0 0 24px' }}>
                   Hi <strong>{providerName}</strong>,<br /><br />
@@ -124,9 +124,9 @@ export function EnquiryNotificationEmail({
 
                 {/* Tips */}
                 <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '20px' }}>
-                  <p style={{ color: '#166534', fontSize: '14px', fontWeight: '600', margin: '0 0 10px' }}>💡 Quick Response Tips</p>
+                  <p style={{ color: '#166534', fontSize: '14px', fontWeight: '600', margin: '0 0 10px' }}>?? Quick Response Tips</p>
                   <ul style={{ color: '#374151', fontSize: '14px', lineHeight: '1.8', margin: 0, paddingLeft: '20px' }}>
-                    <li>Respond within <strong>24 hours</strong> � participants often contact multiple providers</li>
+                    <li>Respond within <strong>24 hours</strong> — participants often contact multiple providers</li>
                     <li>Introduce yourself and your experience with their specific needs</li>
                     <li>Mention your availability and next steps clearly</li>
                     <li>Keep your tone warm, professional, and reassuring</li>
@@ -143,7 +143,7 @@ export function EnquiryNotificationEmail({
                 </p>
                 <p style={{ color: '#9ca3af', fontSize: '13px', margin: 0 }}>
                   <a href="https://referaus.com/contact" style={{ color: '#6b7280' }}>Unsubscribe</a>
-                  {' � '}
+                  {' · '}
                   <a href="https://referaus.com/privacy" style={{ color: '#6b7280' }}>Privacy Policy</a>
                 </p>
               </td>

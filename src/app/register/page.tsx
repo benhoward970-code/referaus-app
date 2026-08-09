@@ -11,15 +11,10 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (loading) return;
-    if (!termsAccepted) {
-      setError("You must accept the Terms of Service and Privacy Policy to continue.");
-      return;
-    }
     setError("");
     setLoading(true);
 
@@ -37,7 +32,8 @@ export default function RegisterPage() {
         return;
       }
 
-      // Provider profile is created automatically via database trigger (handle_new_user)
+      // The provider/participant profile row is created server-side by the
+      // handle_new_user() DB trigger on auth.users insert — no client call needed.
       setDone(true);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -56,12 +52,12 @@ export default function RegisterPage() {
             </svg>
           </div>
           <h2 className="text-2xl font-black mb-2">You&apos;re in!</h2>
-          <p className="text-gray-500 text-sm mb-6">
+          <p className="text-ink-500 text-sm mb-6">
             {isConfigured()
-              ? `Check your email to verify your account${role === "provider" ? ", then we'll walk you through setting up your listing." : "."}`
+              ? "Check your email to verify your account, then sign in."
               : "Added to the waitlist — we will be in touch soon!"}
           </p>
-          <Link href="/login" className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl text-sm hover:bg-blue-500 transition-all">
+          <Link href="/login" className="btn-block">
             Go to Sign In
           </Link>
         </div>
@@ -73,24 +69,24 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center px-6 py-20">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-black tracking-tight mb-2">Create your account</h1>
-          <p className="text-sm text-gray-500">Join ReferAus today</p>
+          <h1 className="h-editorial text-3xl mb-2">Create your <em>account.</em></h1>
+          <p className="text-sm text-ink-500">Join ReferAus today</p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+        <div className="card-flat p-8">
           {/* Role toggle */}
-          <div className="flex rounded-xl bg-gray-100 p-1 mb-6">
+          <div className="flex rounded-[3px] border border-ink-950 p-1 mb-6 bg-white">
             <button
               type="button"
               onClick={() => setRole("participant")}
-              className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${role === "participant" ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+              className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${role === "participant" ? "bg-ink-950 text-cream" : "text-ink-500 hover:text-ink-700"}`}
             >
               Participant
             </button>
             <button
               type="button"
               onClick={() => setRole("provider")}
-              className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${role === "provider" ? "bg-blue-600 text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+              className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${role === "provider" ? "bg-ink-950 text-cream" : "text-ink-500 hover:text-ink-700"}`}
             >
               Provider
             </button>
@@ -104,7 +100,7 @@ export default function RegisterPage() {
             )}
 
             <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">
+              <label className="block text-xs font-semibold text-ink-500 mb-1.5">
                 {role === "provider" ? "Business Name" : "Full Name"}
               </label>
               <input
@@ -113,64 +109,47 @@ export default function RegisterPage() {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder={role === "provider" ? "Your business name" : "Your full name"}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">Email</label>
+              <label className="block text-xs font-semibold text-ink-500 mb-1.5">Email</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">Password</label>
+              <label className="block text-xs font-semibold text-ink-500 mb-1.5">Password</label>
               <input
                 type="password"
                 required
-                minLength={8}
+                minLength={6}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="Minimum 8 characters"
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Minimum 6 characters"
+                className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
               />
             </div>
 
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={termsAccepted}
-                onChange={e => setTermsAccepted(e.target.checked)}
-                className="mt-0.5 accent-blue-600 shrink-0"
-                required
-              />
-              <span className="text-xs text-gray-500 leading-relaxed">
-                I agree to the ReferAus{" "}
-                <Link href="/terms" className="text-blue-600 hover:underline font-medium">Terms of Service</Link>{" "}
-                and{" "}
-                <Link href="/privacy" className="text-blue-600 hover:underline font-medium">Privacy Policy</Link>.
-                I understand that my personal information will be handled in accordance with the Australian Privacy Act 1988.
-              </span>
-            </label>
-
             <button
               type="submit"
-              disabled={loading || !termsAccepted}
-              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-bold text-sm transition-all"
+              disabled={loading}
+              className="w-full py-3 rounded-[3px] bg-orange-500 hover:bg-orange-400 disabled:opacity-60 text-ink-950 font-bold text-sm transition-all"
             >
               {loading ? "Creating account…" : role === "provider" ? "Create Provider Account" : "Sign Up Free"}
             </button>
           </form>
 
-          <p className="text-center text-xs text-gray-500 mt-6">
+          <p className="text-center text-xs text-ink-500 mt-6">
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 hover:text-blue-700 font-medium">Sign in</Link>
+            <Link href="/login" className="text-orange-600 hover:text-orange-500 font-medium underline underline-offset-2">Sign in</Link>
           </p>
         </div>
       </div>

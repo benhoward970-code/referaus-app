@@ -20,7 +20,6 @@ import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { MobileFAB } from "@/components/MobileFAB";
-import { SmoothScrollProvider } from "@/components/SmoothScrollProvider";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -56,13 +55,13 @@ export const metadata: Metadata = {
     siteName: "ReferAus",
     title: "ReferAus - NDIS Provider Directory",
     description: "Find trusted NDIS providers in Newcastle and the Hunter Region. Real reviews, direct messaging, free for participants.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ReferAus - NDIS Provider Directory" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "ReferAus - NDIS Provider Directory" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "ReferAus - NDIS Provider Directory",
     description: "Find trusted NDIS providers in Newcastle and the Hunter Region. Free for participants.",
-    images: ["/opengraph-image"],
+    images: ["/og-image.png"],
     creator: "@ReferAus",
   },
   robots: {
@@ -121,13 +120,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
-      <body suppressHydrationWarning className="font-sans antialiased text-gray-900">
-
+      <body suppressHydrationWarning className="font-sans antialiased bg-sky-50 text-gray-900">
+        <div className="mesh-bg" aria-hidden="true"><div className="mesh-wave-3" /></div>
+        <div className="dot-grid" aria-hidden="true" />
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:outline-none">Skip to main content</a>
-        <SmoothScrollProvider>
         <AuthProvider>
           <ToastProvider>
-            <CookieConsent />
             <OfflineIndicator />
           <AnnouncementBar />
             <ScrollProgressBar />
@@ -148,7 +146,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <MobileFAB />
           </ToastProvider>
         </AuthProvider>
-        </SmoothScrollProvider>
       </body>
     </html>
   );

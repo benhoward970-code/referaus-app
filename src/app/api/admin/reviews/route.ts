@@ -18,6 +18,30 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ reviews: data || [] });
 }
 
+export async function PATCH(request: NextRequest) {
+  const result = await verifyAdmin(request.headers.get("authorization"));
+  if (!result.ok) return result.response;
+  const { admin } = result;
+
+  const { id, status } = await request.json();
+  if (!id || !["approved", "rejected"].includes(status)) {
+    return NextResponse.json({ error: "Missing id or invalid status" }, { status: 400 });
+  }
+
+  const { data, error } = await admin
+    .from("reviews")
+    .update({ status })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ review: data });
+}
+
 export async function DELETE(request: NextRequest) {
   const result = await verifyAdmin(request.headers.get("authorization"));
   if (!result.ok) return result.response;

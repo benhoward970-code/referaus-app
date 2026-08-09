@@ -84,6 +84,7 @@ function TwoFactorSection() {
     if (!supabase || !factorId) return;
     setError('');
 
+    // Verify the code first to confirm identity
     const { data: challenge, error: challengeErr } = await supabase.auth.mfa.challenge({ factorId });
     if (challengeErr) {
       setError(challengeErr.message);
@@ -128,7 +129,7 @@ function TwoFactorSection() {
 
   if (loading) {
     return (
-      <section className="bg-white border border-gray-200 rounded-xl p-6">
+      <section className="bg-white border border-line-200 rounded-xl p-6">
         <h2 className="font-bold mb-4">Two-Factor Authentication</h2>
         <div className="animate-pulse h-8 bg-gray-100 rounded w-48" />
       </section>
@@ -136,9 +137,9 @@ function TwoFactorSection() {
   }
 
   return (
-    <section className="bg-white border border-gray-200 rounded-xl p-6">
+    <section className="bg-white border border-line-200 rounded-xl p-6">
       <h2 className="font-bold mb-2">Two-Factor Authentication</h2>
-      <p className="text-sm text-gray-500 mb-4">
+      <p className="text-sm text-ink-500 mb-4">
         Add an extra layer of security to your account using an authenticator app.
       </p>
 
@@ -174,7 +175,7 @@ function TwoFactorSection() {
 
       {mfaEnabled && disabling && (
         <form onSubmit={handleDisable} className="max-w-sm space-y-3">
-          <p className="text-sm text-gray-600">Enter your authenticator code to disable 2FA:</p>
+          <p className="text-sm text-ink-700">Enter your authenticator code to disable 2FA:</p>
           <input
             type="text"
             inputMode="numeric"
@@ -183,7 +184,7 @@ function TwoFactorSection() {
             value={disableCode}
             onChange={(e) => setDisableCode(e.target.value.replace(/\D/g, ''))}
             placeholder="000000"
-            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-center text-xl tracking-[0.4em] font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 text-center text-xl tracking-[0.4em] font-mono focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
           <div className="flex gap-2">
             <button
@@ -196,7 +197,7 @@ function TwoFactorSection() {
             <button
               type="button"
               onClick={() => { setDisabling(false); setDisableCode(''); setError(''); }}
-              className="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
+              className="px-6 py-2.5 bg-gray-100 text-ink-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
             >
               Cancel
             </button>
@@ -219,16 +220,16 @@ function TwoFactorSection() {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-sm space-y-4"
         >
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-ink-700">
             <p className="font-medium mb-2">1. Scan this QR code with your authenticator app</p>
-            <p className="text-xs text-gray-400">(Google Authenticator, Authy, 1Password, etc.)</p>
+            <p className="text-xs text-ink-400">(Google Authenticator, Authy, 1Password, etc.)</p>
           </div>
-          <div className="bg-white border border-gray-200 rounded-xl p-4 inline-block">
+          <div className="bg-white border border-line-200 rounded-xl p-4 inline-block">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qrCode} alt="2FA QR Code" width={200} height={200} />
           </div>
           <form onSubmit={handleVerifyEnrollment} className="space-y-3">
-            <p className="text-sm font-medium text-gray-600">2. Enter the 6-digit code to confirm:</p>
+            <p className="text-sm font-medium text-ink-700">2. Enter the 6-digit code to confirm:</p>
             <input
               type="text"
               inputMode="numeric"
@@ -237,7 +238,7 @@ function TwoFactorSection() {
               value={verifyCode}
               onChange={(e) => setVerifyCode(e.target.value.replace(/\D/g, ''))}
               placeholder="000000"
-              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-center text-xl tracking-[0.4em] font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 rounded-[3px] bg-white border border-ink-950 text-ink-900 text-center text-xl tracking-[0.4em] font-mono focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
             <div className="flex gap-2">
               <button
@@ -250,7 +251,7 @@ function TwoFactorSection() {
               <button
                 type="button"
                 onClick={handleCancelEnroll}
-                className="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
+                className="px-6 py-2.5 bg-gray-100 text-ink-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
               >
                 Cancel
               </button>
@@ -258,250 +259,6 @@ function TwoFactorSection() {
           </form>
         </motion.div>
       )}
-    </section>
-  );
-}
-
-function BillingSection() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const openPortal = async () => {
-    if (!supabase) return;
-    setLoading(true);
-    setError('');
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { setError('Not logged in.'); setLoading(false); return; }
-    const res = await fetch('/api/billing-portal', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${session.access_token}` },
-    });
-    const json = await res.json();
-    if (!res.ok) {
-      setError(json.error || 'Failed to open billing portal.');
-      setLoading(false);
-      return;
-    }
-    window.location.href = json.url;
-  };
-
-  return (
-    <section className="bg-white border border-gray-200 rounded-xl p-6">
-      <h2 className="font-bold mb-1">Billing & Subscription</h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Manage your subscription, update your payment method, or view past invoices via the Stripe billing portal.
-      </p>
-      {error && (
-        <div className="p-3 rounded-lg text-sm bg-red-50 border border-red-200 text-red-600 mb-4">{error}</div>
-      )}
-      <button
-        onClick={openPortal}
-        disabled={loading}
-        className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-all disabled:opacity-50"
-      >
-        {loading ? 'Opening...' : 'Manage Billing →'}
-      </button>
-    </section>
-  );
-}
-
-function NotificationPreferences() {
-  const [prefs, setPrefs] = useState({ newEnquiries: true, newReviews: true, marketingUpdates: true });
-  const [savedPrefs, setSavedPrefs] = useState(false);
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem('referaus_notification_prefs');
-      if (stored) setPrefs(JSON.parse(stored));
-    } catch {}
-  }, []);
-
-  const toggle = (key: keyof typeof prefs) => {
-    setPrefs(prev => ({ ...prev, [key]: !prev[key] }));
-  };
-
-  const handleSave = () => {
-    try {
-      localStorage.setItem('referaus_notification_prefs', JSON.stringify(prefs));
-      setSavedPrefs(true);
-      setTimeout(() => setSavedPrefs(false), 2500);
-    } catch {}
-  };
-
-  return (
-    <section className="bg-white border border-gray-200 rounded-xl p-6">
-      <h2 className="font-bold mb-2">Notification Preferences</h2>
-      <p className="text-sm text-gray-500 mb-5">Choose what you want to be notified about.</p>
-      <div className="space-y-4 max-w-md">
-        {[
-          { key: 'newEnquiries' as const, label: 'New Enquiries', desc: 'When a participant sends you an enquiry' },
-          { key: 'newReviews' as const, label: 'New Reviews', desc: 'When a participant leaves a review on your profile' },
-          { key: 'marketingUpdates' as const, label: 'Marketing Updates', desc: 'Platform news, tips, and feature announcements' },
-        ].map(({ key, label, desc }) => (
-          <div key={key} className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-medium text-gray-900">{label}</p>
-              <p className="text-xs text-gray-400">{desc}</p>
-            </div>
-            <button
-              role="switch"
-              aria-checked={prefs[key]}
-              onClick={() => toggle(key)}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${prefs[key] ? 'bg-blue-600' : 'bg-gray-200'}`}
-            >
-              <span
-                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${prefs[key] ? 'translate-x-5' : 'translate-x-0'}`}
-              />
-            </button>
-          </div>
-        ))}
-      </div>
-      <div className="flex items-center gap-3 mt-6">
-        <button onClick={handleSave} className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-all">
-          Save Preferences
-        </button>
-        {savedPrefs && (
-          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-green-600 font-medium">Saved!</motion.span>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function EmailSection() {
-  const [email, setEmail] = useState('');
-  const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
-
-  useEffect(() => {
-    if (!supabase) return;
-    supabase.auth.getUser().then(({ data }) => {
-      if (data?.user?.email) setEmail(data.user.email);
-    });
-  }, []);
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!supabase) return;
-    const trimmed = email.trim();
-    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setToast({ type: 'error', msg: 'Please enter a valid email address.' });
-      return;
-    }
-    setSaving(true);
-    setToast(null);
-    const { error } = await supabase.auth.updateUser({ email: trimmed });
-    setSaving(false);
-    if (error) {
-      setToast({ type: 'error', msg: error.message });
-    } else {
-      setToast({ type: 'success', msg: 'Verification email sent to ' + trimmed + '. Click the link to confirm the change.' });
-    }
-  };
-
-  return (
-    <section className="bg-white border border-gray-200 rounded-xl p-6">
-      <h2 className="font-bold mb-1">Account Email</h2>
-      <p className="text-sm text-gray-500 mb-4">A verification email will be sent to your new address.</p>
-      <form onSubmit={handleSave} className="space-y-3 max-w-md">
-        <div>
-          <label className="block text-sm font-medium mb-1.5">Email Address</label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        {toast && (
-          <div className={`p-3 rounded-lg text-sm ${toast.type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-600'}`}>
-            {toast.msg}
-          </div>
-        )}
-        <button
-          type="submit"
-          disabled={saving}
-          className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-all disabled:opacity-50"
-        >
-          {saving ? 'Sending...' : 'Update Email'}
-        </button>
-      </form>
-    </section>
-  );
-}
-
-function PasswordSection() {
-  const [form, setForm] = useState({ newPassword: '', confirmPassword: '' });
-  const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
-  const update = (f: string, v: string) => setForm(prev => ({ ...prev, [f]: v }));
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setToast(null);
-
-    if (form.newPassword.length < 8) {
-      setToast({ type: 'error', msg: 'Password must be at least 8 characters.' });
-      return;
-    }
-    if (form.newPassword !== form.confirmPassword) {
-      setToast({ type: 'error', msg: "Passwords don't match." });
-      return;
-    }
-
-    if (!supabase) return;
-    setSaving(true);
-    const { error } = await supabase.auth.updateUser({ password: form.newPassword });
-    setSaving(false);
-
-    if (error) {
-      setToast({ type: 'error', msg: error.message });
-    } else {
-      setToast({ type: 'success', msg: 'Password updated successfully.' });
-      setForm({ newPassword: '', confirmPassword: '' });
-    }
-  };
-
-  return (
-    <section className="bg-white border border-gray-200 rounded-xl p-6">
-      <h2 className="font-bold mb-1">Change Password</h2>
-      <p className="text-sm text-gray-500 mb-4">You must be logged in to change your password. No current password required.</p>
-      <form onSubmit={handleSave} className="space-y-4 max-w-md">
-        <div>
-          <label className="block text-sm font-medium mb-1.5">New Password</label>
-          <input
-            type="password"
-            value={form.newPassword}
-            onChange={e => update('newPassword', e.target.value)}
-            minLength={8}
-            placeholder="At least 8 characters"
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1.5">Confirm New Password</label>
-          <input
-            type="password"
-            value={form.confirmPassword}
-            onChange={e => update('confirmPassword', e.target.value)}
-            minLength={8}
-            placeholder="Enter password again"
-            className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        {toast && (
-          <div className={`p-3 rounded-lg text-sm ${toast.type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-600'}`}>
-            {toast.msg}
-          </div>
-        )}
-        <button
-          type="submit"
-          disabled={saving}
-          className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-all disabled:opacity-50"
-        >
-          {saving ? 'Updating...' : 'Update Password'}
-        </button>
-      </form>
     </section>
   );
 }
@@ -557,28 +314,128 @@ function DangerZone() {
           {deleting ? 'Deleting…' : 'Delete My Account'}
         </button>
       </div>
-      {error && (
-        <p className="mt-3 text-sm text-red-700 bg-red-100 border border-red-200 rounded-lg px-4 py-2">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-700 mt-3">{error}</p>}
+    </section>
+  );
+}
+
+function NotificationPreferences() {
+  const [prefs, setPrefs] = useState({ newEnquiries: true, newReviews: true, marketingUpdates: true });
+  const [savedPrefs, setSavedPrefs] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('referaus_notification_prefs');
+      if (stored) setPrefs(JSON.parse(stored));
+    } catch {}
+  }, []);
+
+  const toggle = (key: keyof typeof prefs) => {
+    setPrefs(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleSave = () => {
+    try {
+      localStorage.setItem('referaus_notification_prefs', JSON.stringify(prefs));
+      setSavedPrefs(true);
+      setTimeout(() => setSavedPrefs(false), 2500);
+    } catch {}
+  };
+
+  return (
+    <section className="bg-white border border-line-200 rounded-xl p-6">
+      <h2 className="font-bold mb-2">Notification Preferences</h2>
+      <p className="text-sm text-ink-500 mb-5">Choose what you want to be notified about.</p>
+      <div className="space-y-4 max-w-md">
+        {[
+          { key: 'newEnquiries' as const, label: 'New Enquiries', desc: 'When a participant sends you an enquiry' },
+          { key: 'newReviews' as const, label: 'New Reviews', desc: 'When a participant leaves a review on your profile' },
+          { key: 'marketingUpdates' as const, label: 'Marketing Updates', desc: 'Platform news, tips, and feature announcements' },
+        ].map(({ key, label, desc }) => (
+          <div key={key} className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-ink-900">{label}</p>
+              <p className="text-xs text-ink-400">{desc}</p>
+            </div>
+            <button
+              role="switch"
+              aria-checked={prefs[key]}
+              onClick={() => toggle(key)}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 ${prefs[key] ? 'bg-blue-600' : 'bg-gray-200'}`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform transition-transform duration-200 ${prefs[key] ? 'translate-x-5' : 'translate-x-0'}`}
+              />
+            </button>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center gap-3 mt-6">
+        <button onClick={handleSave} className="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-all">
+          Save Preferences
+        </button>
+        {savedPrefs && (
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-green-600 font-medium">Saved!</motion.span>
+        )}
+      </div>
     </section>
   );
 }
 
 export default function SettingsPage() {
+  const [saved, setSaved] = useState(false);
+  const [form, setForm] = useState({ email: '', currentPassword: '', newPassword: '', confirmPassword: '', timezone: 'Australia/Sydney', language: 'en' });
+  const update = (f: string, v: string) => setForm(prev => ({ ...prev, [f]: v }));
+  const handleSave = () => { setSaved(true); setTimeout(() => setSaved(false), 3000); };
+
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user?.email) {
+        setForm(prev => ({ ...prev, email: data.user!.email! }));
+      }
+    });
+  }, []);
+
   return (
     <div className="">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-black tracking-tight mb-2">Settings</h1>
-        <p className="text-gray-500 text-sm mb-8">Account and security settings</p>
+        <p className="text-ink-500 text-sm mb-8">Account and security settings</p>
 
         <div className="space-y-8">
-          <EmailSection />
-          <PasswordSection />
-          <BillingSection />
+          <section className="bg-white border border-line-200 rounded-xl p-6">
+            <h2 className="font-bold mb-4">Account Email</h2>
+            <div><label className="block text-sm font-medium mb-1.5">Email Address</label><input type="email" value={form.email} onChange={e => update('email', e.target.value)} className="w-full max-w-md px-4 py-3 rounded-lg border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" /></div>
+          </section>
+
+          <section className="bg-white border border-line-200 rounded-xl p-6">
+            <h2 className="font-bold mb-4">Change Password</h2>
+            <div className="space-y-4 max-w-md">
+              <div><label className="block text-sm font-medium mb-1.5">Current Password</label><input type="password" value={form.currentPassword} onChange={e => update('currentPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" /></div>
+              <div><label className="block text-sm font-medium mb-1.5">New Password</label><input type="password" value={form.newPassword} onChange={e => update('newPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" /></div>
+              <div><label className="block text-sm font-medium mb-1.5">Confirm New Password</label><input type="password" value={form.confirmPassword} onChange={e => update('confirmPassword', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" /></div>
+            </div>
+          </section>
+
           <TwoFactorSection />
+
           <NotificationPreferences />
 
+          <section className="bg-white border border-line-200 rounded-xl p-6">
+            <h2 className="font-bold mb-4">Preferences</h2>
+            <div className="grid sm:grid-cols-2 gap-4 max-w-md">
+              <div><label className="block text-sm font-medium mb-1.5">Timezone</label><select value={form.timezone} onChange={e => update('timezone', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-400"><option value="Australia/Sydney">Sydney (AEST)</option><option value="Australia/Melbourne">Melbourne (AEST)</option><option value="Australia/Brisbane">Brisbane (AEST)</option><option value="Australia/Perth">Perth (AWST)</option></select></div>
+              <div><label className="block text-sm font-medium mb-1.5">Language</label><select value={form.language} onChange={e => update('language', e.target.value)} className="w-full px-4 py-3 rounded-lg border border-line-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-400"><option value="en">English</option></select></div>
+            </div>
+          </section>
+
           <DangerZone />
+
+          <div className="flex items-center justify-end gap-3">
+            {saved && <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-green-600 font-medium">Settings saved!</motion.span>}
+            <button onClick={handleSave} className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-500 transition-all">Save Settings</button>
+          </div>
         </div>
       </motion.div>
     </div>

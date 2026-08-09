@@ -52,11 +52,11 @@ export function WelcomeEmail({
             <tr>
               <td style={bodyStyle}>
                 <h1 style={{ color: '#111827', fontSize: '26px', fontWeight: '700', margin: '0 0 12px' }}>
-                  Welcome to ReferAus 🎉
+                  Welcome to ReferAus ??
                 </h1>
                 <p style={{ color: '#374151', fontSize: '16px', lineHeight: '1.6', margin: '0 0 24px' }}>
                   Hi <strong>{businessName}</strong>,<br /><br />
-                  You&apos;re now listed on ReferAus � Australia&apos;s trusted directory connecting NDIS participants
+                  You&apos;re now listed on ReferAus — Australia&apos;s trusted directory connecting NDIS participants
                   with quality service providers. We&apos;re excited to have you on board!
                 </p>
 
@@ -109,7 +109,7 @@ export function WelcomeEmail({
                 </p>
                 <p style={{ color: '#9ca3af', fontSize: '13px', margin: 0 }}>
                   <a href="https://referaus.com/contact" style={{ color: '#6b7280' }}>Unsubscribe</a>
-                  {' � '}
+                  {' · '}
                   <a href="https://referaus.com/privacy" style={{ color: '#6b7280' }}>Privacy Policy</a>
                 </p>
               </td>

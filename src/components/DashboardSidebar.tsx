@@ -31,7 +31,7 @@ export function DashboardSidebar() {
             'flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all mb-1 ' +
             (pathname === '/dashboard'
               ? 'bg-blue-50 text-blue-700'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900')
+              : 'text-ink-700 hover:bg-gray-50 hover:text-ink-900')
           }
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -50,7 +50,7 @@ export function DashboardSidebar() {
                 'flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ' +
                 (active
                   ? 'bg-blue-50 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900')
+                  : 'text-ink-700 hover:bg-gray-50 hover:text-ink-900')
               }
             >
               <Icon className="w-4 h-4" />
@@ -58,7 +58,7 @@ export function DashboardSidebar() {
             </Link>
           );
         })}
-        <hr className="my-3 border-gray-100" />
+        <hr className="my-3 border-line-100" />
         <Link
           href="/pricing"
           className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-orange-600 hover:bg-orange-50 transition-all"

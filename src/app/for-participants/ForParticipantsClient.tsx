@@ -1,21 +1,22 @@
 ﻿"use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { Icon } from "@/components/Icon";
 
 const steps = [
-  { icon: "🔍", num: "01", title: "Search for what you need", desc: "Enter your suburb and the type of support you're after - whether it is a support worker, OT, physio, speech therapist, or anything else in your NDIS plan." },
-  { icon: "📋", num: "02", title: "Read real reviews", desc: "Every provider profile shows reviews from verified NDIS participants. No paid placements. No fake ratings. Just honest experiences from people like you." },
-  { icon: "💬", num: "03", title: "Message directly", desc: "Send an enquiry straight to the provider. Ask about availability, costs, and whether they're a good fit - before committing to anything." },
-  { icon: "🤝", num: "04", title: "Connect and get started", desc: "Once you've found the right match, connect and start your support journey. You stay in control every step of the way." },
+  { icon: "search" as const, num: "01", title: "Search for what you need", desc: "Enter your suburb and the type of support you're after - whether it is a support worker, OT, physio, speech therapist, or anything else in your NDIS plan." },
+  { icon: "clipboard" as const, num: "02", title: "Read real reviews", desc: "Every provider profile shows reviews from verified NDIS participants. No paid placements. No fake ratings. Just honest experiences from people like you." },
+  { icon: "message" as const, num: "03", title: "Message directly", desc: "Send an enquiry straight to the provider. Ask about availability, costs, and whether they're a good fit - before committing to anything." },
+  { icon: "handshake" as const, num: "04", title: "Connect and get started", desc: "Once you've found the right match, connect and start your support journey. You stay in control every step of the way." },
 ];
 
 const benefits = [
-  { icon: "🆓", title: "Always free for participants", desc: "No account required to browse. No premium tiers. No hidden fees. ReferAus is and always will be 100% free for NDIS participants." },
-  { icon: "✅", title: "Verified providers", desc: "Every provider on ReferAus is verified. We check registrations, qualifications, and NDIS registration status so you don't have to." },
-  { icon: "⭐", title: "Honest reviews", desc: "Real feedback from real participants. We never hide negative reviews or let providers pay to boost their ratings." },
-  { icon: "📍", title: "Find local support", desc: "Search by your suburb, region, or postcode. See which providers service your area, how far they travel, and what they charge." },
-  { icon: "🔒", title: "Your privacy protected", desc: "Your details are only shared with providers you choose to contact. We never sell your data or share it without your permission." },
-  { icon: "📞", title: "No phone tag", desc: "Message providers directly through the platform. Get answers on your schedule - not during business hours when you might be in a session." },
+  { icon: "heart" as const, title: "Always free for participants", desc: "No account required to browse. No premium tiers. No hidden fees. ReferAus is and always will be 100% free for NDIS participants." },
+  { icon: "check" as const, title: "Verified providers", desc: "Every provider on ReferAus is verified. We check registrations, qualifications, and NDIS registration status so you don't have to." },
+  { icon: "star" as const, title: "Honest reviews", desc: "Real feedback from real participants. We never hide negative reviews or let providers pay to boost their ratings." },
+  { icon: "pin" as const, title: "Find local support", desc: "Search by your suburb, region, or postcode. See which providers service your area, how far they travel, and what they charge." },
+  { icon: "shield" as const, title: "Your privacy protected", desc: "Your details are only shared with providers you choose to contact. We never sell your data or share it without your permission." },
+  { icon: "message" as const, title: "No phone tag", desc: "Message providers directly through the platform. Get answers on your schedule - not during business hours when you might be in a session." },
 ];
 
 const supportCategories = [
@@ -104,12 +105,12 @@ export default function ForParticipantsClient() {
             className="flex flex-wrap gap-6 mt-10 pt-8 border-t border-gray-100"
           >
             {[
-              { icon: "🆓", label: "100% Free for participants" },
-              { icon: "✅", label: "Verified providers" },
-              { icon: "⭐", label: "Real reviews only" },
+              { icon: "heart" as const, label: "100% Free for participants" },
+              { icon: "check" as const, label: "Verified providers" },
+              { icon: "star" as const, label: "Real reviews only" },
             ].map((b) => (
               <span key={b.label} className="flex items-center gap-2 text-sm text-gray-500">
-                <span>{b.icon}</span>
+                <Icon name={b.icon} size={16} className="text-orange-500" />
                 {b.label}
               </span>
             ))}
@@ -139,7 +140,7 @@ export default function ForParticipantsClient() {
                 {step.num}
               </div>
               <div className="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center text-xl mb-5">
-                {step.icon}
+                <Icon name={step.icon} size={20} className="text-orange-500" />
               </div>
               <h3 className="font-bold text-base mb-2">{step.title}</h3>
               <p className="text-gray-500 text-sm leading-relaxed">{step.desc}</p>
@@ -166,7 +167,7 @@ export default function ForParticipantsClient() {
               transition={{ delay: i * 0.08 }}
               className="card p-8"
             >
-              <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-xl">{b.icon}</div>
+              <div className="w-11 h-11 rounded-[3px] border border-ink-950 bg-white flex items-center justify-center mb-4 text-orange-500"><Icon name={b.icon} size={20} /></div>
               <h3 className="font-semibold text-[1.05rem] mb-2">{b.title}</h3>
               <p className="text-gray-500 text-[0.85rem] leading-relaxed">{b.desc}</p>
             </motion.div>
@@ -230,7 +231,7 @@ export default function ForParticipantsClient() {
           viewport={{ once: true }}
           className="max-w-[700px] mx-auto text-center"
         >
-          <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl mx-auto mb-6">🔍</div>
+          <div className="w-14 h-14 rounded-[3px] border border-ink-950 bg-white flex items-center justify-center text-orange-500 mx-auto"><Icon name="search" size={24} /></div>
           <h2 className="heading-bold text-[clamp(2rem,5vw,3rem)] leading-tight mb-4">
             Start searching - it&apos;s free
           </h2>

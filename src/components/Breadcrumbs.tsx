@@ -80,7 +80,7 @@ export function Breadcrumbs({ items, currentLabel, className = "" }: Breadcrumbs
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
-      <nav aria-label="Breadcrumb" className={`text-xs text-gray-400 mb-4 ${className}`}>
+      <nav aria-label="Breadcrumb" className={`text-xs text-ink-400 mb-4 ${className}`}>
         <ol className="flex flex-wrap items-center gap-1">
           {allCrumbs.map((crumb, i) => {
             const isLast = i === allCrumbs.length - 1;
@@ -101,11 +101,11 @@ export function Breadcrumbs({ items, currentLabel, className = "" }: Breadcrumbs
                   </svg>
                 )}
                 {isLast ? (
-                  <span className="text-gray-600 font-medium truncate max-w-[200px]">{crumb.label}</span>
+                  <span className="text-ink-700 font-medium truncate max-w-[200px]">{crumb.label}</span>
                 ) : (
                   <Link
                     href={crumb.href}
-                    className="hover:text-gray-600 transition-colors truncate max-w-[120px]"
+                    className="hover:text-ink-700 transition-colors truncate max-w-[120px]"
                   >
                     {crumb.label}
                   </Link>

@@ -11,26 +11,20 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, email, phone, message, type } = body;
 
-    const isReport = type === "report";
-
-    // Reports are anonymous (no name/email required) — all other submissions require both
-    if (!isReport && (!name || !email || !message)) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-    }
-    if (isReport && !message) {
+    if (!name || !email || !message) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Server-side email validation (only when email is provided)
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    // Server-side email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
     }
 
     // Length limits
-    if (name && String(name).trim().length > 120) {
+    if (String(name).trim().length > 120) {
       return NextResponse.json({ error: "Name is too long" }, { status: 400 });
     }
-    if (message && String(message).trim().length > 2000) {
+    if (String(message).trim().length > 2000) {
       return NextResponse.json({ error: "Message must be under 2000 characters" }, { status: 400 });
     }
     if (phone && !/^[\d\s\+\-\(\)]{6,20}$/.test(String(phone).trim())) {
@@ -44,8 +38,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
     }
     const { error: dbError } = await db.from("contacts").insert({
-      name: (name || "Anonymous Report").trim(),
-      email: (email || "noreply@referaus.com").trim(),
+      name: name.trim(),
+      email: email.trim(),
       subject: type || "general",
       message: phone ? `Phone: ${phone}\n\n${message}` : message,
     });
@@ -63,16 +57,14 @@ export async function POST(request: Request) {
       .replace(/'/g, '&#039;');
 
     // Send email notification to admin
-    const displayName = (name || "Anonymous").trim();
-    const displayEmail = (email || "—").trim();
     try {
       await sendEmail({
         to: 'hello@referaus.com',
-        subject: `New contact from ${esc(displayName)} — ReferAus`,
+        subject: `New contact from ${esc(name.trim())} — ReferAus`,
         html: `
           <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${esc(displayName)}</p>
-          <p><strong>Email:</strong> ${esc(displayEmail)}</p>
+          <p><strong>Name:</strong> ${esc(name.trim())}</p>
+          <p><strong>Email:</strong> ${esc(email.trim())}</p>
           ${phone ? `<p><strong>Phone:</strong> ${esc(phone)}</p>` : ''}
           <p><strong>Type:</strong> ${esc(type || 'general')}</p>
           <hr />

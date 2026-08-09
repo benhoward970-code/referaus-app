@@ -71,7 +71,7 @@ export function GalleryLightbox({ images, providerName }: GalleryLightboxProps) 
           <button
             key={i}
             onClick={() => open(i)}
-            className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
             aria-label={`View image ${i + 1} of ${images.length}`}
           >
             <Image

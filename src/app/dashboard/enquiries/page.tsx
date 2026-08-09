@@ -4,14 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   MessageSquare, Phone, Mail, Calendar, Check, Loader2, AlertCircle, Eye, Download, Clipboard,
-  Archive, Inbox, Send, X, Reply,
 } from 'lucide-react';
 import { useAuth } from '@/components/AuthProvider';
 import {
   getProviderByUserId,
   getProviderEnquiries,
   markEnquiryRead,
-  supabase,
 } from '@/lib/supabase';
 
 const REPLY_TEMPLATES = [
@@ -36,7 +34,7 @@ function ReplyTemplates() {
 
   return (
     <div className="relative">
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Quick Reply Templates</p>
+      <p className="text-xs font-semibold text-ink-400 uppercase tracking-wider mb-2">Quick Reply Templates</p>
       <div className="flex flex-wrap gap-2">
         {REPLY_TEMPLATES.map((template) => (
           <button
@@ -100,69 +98,6 @@ function Skeleton({ className = '' }: { className?: string }) {
   return <div className={`animate-pulse bg-gray-200 rounded-lg ${className}`} />;
 }
 
-function InlineReply({ enquiryId, enquiryEmail, token, onSent }: {
-  enquiryId: string;
-  enquiryEmail: string;
-  token: string;
-  onSent: (id: string) => void;
-}) {
-  const [message, setMessage] = useState('');
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSend = async () => {
-    if (!message.trim()) return;
-    setSending(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/enquiries/reply', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ enquiry_id: enquiryId, message: message.trim() }),
-      });
-      if (!res.ok) {
-        const d = await res.json();
-        setError(d.error || 'Failed to send reply');
-      } else {
-        onSent(enquiryId);
-      }
-    } catch {
-      setError('Network error — please try again');
-    }
-    setSending(false);
-  };
-
-  return (
-    <div className="mt-3 border-t border-blue-100 pt-3">
-      <p className="text-xs font-semibold text-blue-600 mb-2 flex items-center gap-1.5">
-        <Reply className="w-3 h-3" /> Replying to {enquiryEmail}
-      </p>
-      <textarea
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type your reply..."
-        rows={3}
-        maxLength={2000}
-        className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
-      />
-      <div className="flex items-center justify-between mt-2">
-        <span className="text-xs text-gray-400">{message.length}/2000</span>
-        <div className="flex gap-2">
-          {error && <span className="text-xs text-red-500">{error}</span>}
-          <button
-            onClick={handleSend}
-            disabled={sending || !message.trim()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition-colors disabled:opacity-50"
-          >
-            {sending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
-            {sending ? 'Sending...' : 'Send Reply'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function EnquiriesPage() {
   const { user, loading: authLoading } = useAuth();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -170,10 +105,6 @@ export default function EnquiriesPage() {
   const [enquiries, setEnquiries] = useState<EnquiryRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [markingRead, setMarkingRead] = useState<string | null>(null);
-  const [archiving, setArchiving] = useState<string | null>(null);
-  const [tab, setTab] = useState<'open' | 'archived'>('open');
-  const [replyingTo, setReplyingTo] = useState<string | null>(null);
-  const [authToken, setAuthToken] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     if (!user) { setLoading(false); return; }
@@ -184,18 +115,8 @@ export default function EnquiriesPage() {
       const enq = await getProviderEnquiries(p.slug);
       setEnquiries(enq);
     }
-    // Cache auth token for reply API calls
-    const { data: { session } } = await supabase!.auth.getSession();
-    if (session?.access_token) setAuthToken(session.access_token);
     setLoading(false);
   }, [user]);
-
-  const handleReplySent = (enquiryId: string) => {
-    setEnquiries((prev) =>
-      prev.map((e) => e.id === enquiryId ? { ...e, replied_at: new Date().toISOString(), read: true } : e)
-    );
-    setReplyingTo(null);
-  };
 
   useEffect(() => {
     if (!authLoading) fetchData();
@@ -212,29 +133,7 @@ export default function EnquiriesPage() {
     setMarkingRead(null);
   };
 
-  const handleArchive = async (id: string, archive: boolean) => {
-    setArchiving(id);
-    try {
-      const { data: { session } } = await supabase!.auth.getSession();
-      await fetch('/api/enquiries', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
-        },
-        body: JSON.stringify({ id, archived: archive }),
-      });
-      setEnquiries((prev) =>
-        prev.map((e) => (e.id === id ? { ...e, archived: archive, read: archive ? true : e.read } : e)),
-      );
-    } catch {}
-    setArchiving(null);
-  };
-
-  const openEnquiries = enquiries.filter((e) => !e.archived);
-  const archivedEnquiries = enquiries.filter((e) => e.archived);
-  const visibleEnquiries = tab === 'open' ? openEnquiries : archivedEnquiries;
-  const unreadCount = openEnquiries.filter((e) => !e.read).length;
+  const unreadCount = enquiries.filter((e) => !e.read).length;
 
   if (authLoading || loading) {
     return (
@@ -252,10 +151,10 @@ export default function EnquiriesPage() {
 
   if (!provider) {
     return (
-      <motion.div {...fadeUp(0)} className="bg-white rounded-2xl border border-gray-200 p-8 text-center shadow-sm">
+      <motion.div {...fadeUp(0)} className="card-flat p-8 text-center shadow-sm">
         <AlertCircle className="w-10 h-10 text-orange-400 mx-auto mb-3" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">No Provider Profile Found</h2>
-        <p className="text-sm text-gray-500 mb-4">Set up your profile first to receive enquiries.</p>
+        <h2 className="text-xl font-bold text-ink-900 mb-2">No Provider Profile Found</h2>
+        <p className="text-sm text-ink-500 mb-4">Set up your profile first to receive enquiries.</p>
         <Link href="/dashboard/profile" className="text-sm text-blue-600 hover:underline">Set Up Profile</Link>
       </motion.div>
     );
@@ -269,8 +168,8 @@ export default function EnquiriesPage() {
           <h1 className="text-3xl font-black tracking-tight" style={{ fontFamily: "'Oswald'" }}>
             Enquiries
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            {openEnquiries.length} open · {archivedEnquiries.length} archived
+          <p className="text-ink-500 text-sm mt-1">
+            {enquiries.length} total enquirie{enquiries.length !== 1 ? 's' : ''}
             {unreadCount > 0 && (
               <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-orange-600 text-xs font-semibold border border-orange-200">
                 {unreadCount} unread
@@ -281,8 +180,8 @@ export default function EnquiriesPage() {
         <div className="flex items-center gap-3">
           {enquiries.length > 0 && (
             <button
-              onClick={() => exportEnquiriesToCSV(visibleEnquiries)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium transition-colors"
+              onClick={() => exportEnquiriesToCSV(enquiries)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-ink-700 text-sm font-medium transition-colors"
             >
               <Download className="w-4 h-4" />
               Export CSV
@@ -294,78 +193,48 @@ export default function EnquiriesPage() {
         </div>
       </motion.div>
 
-      {/* Tabs */}
-      <motion.div {...fadeUp(0.02)} className="flex gap-1 p-1 bg-gray-100 rounded-xl w-fit">
-        <button
-          onClick={() => setTab('open')}
-          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-            tab === 'open' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <Inbox className="w-3.5 h-3.5" />
-          Open
-          {openEnquiries.length > 0 && (
-            <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${tab === 'open' ? 'bg-orange-100 text-orange-600' : 'bg-gray-200 text-gray-500'}`}>
-              {openEnquiries.length}
-            </span>
-          )}
-        </button>
-        <button
-          onClick={() => setTab('archived')}
-          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-            tab === 'archived' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <Archive className="w-3.5 h-3.5" />
-          Archived
-          {archivedEnquiries.length > 0 && (
-            <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${tab === 'archived' ? 'bg-gray-200 text-gray-600' : 'bg-gray-200 text-gray-500'}`}>
-              {archivedEnquiries.length}
-            </span>
-          )}
-        </button>
-      </motion.div>
-
       {/* Reply Templates */}
-      {tab === 'open' && openEnquiries.length > 0 && (
-        <motion.div {...fadeUp(0.05)} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+      {enquiries.length > 0 && (
+        <motion.div {...fadeUp(0.05)} className="bg-white rounded-[3px] border border-ink-950 bg-white p-4 shadow-sm">
           <ReplyTemplates />
         </motion.div>
       )}
 
       {/* Empty state */}
-      {visibleEnquiries.length === 0 ? (
-        <motion.div {...fadeUp(0.1)} className="bg-white rounded-2xl border border-gray-200 p-12 text-center shadow-sm">
-          <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-lg font-bold text-gray-900 mb-2">
-            {tab === 'archived' ? 'No Archived Enquiries' : 'No Enquiries Yet'}
-          </h2>
-          <p className="text-sm text-gray-500 max-w-sm mx-auto">
-            {tab === 'archived'
-              ? 'Enquiries you archive will appear here.'
-              : 'When participants send you enquiries through your listing, they will appear here.'}
+      {enquiries.length === 0 ? (
+        <motion.div {...fadeUp(0.1)} className="card-flat p-12 text-center shadow-sm">
+          <MessageSquare className="w-12 h-12 text-ink-300 mx-auto mb-4" />
+          <h2 className="text-lg font-bold text-ink-900 mb-2">No Enquiries Yet</h2>
+          <p className="text-sm text-ink-500 max-w-sm mx-auto">
+            When participants send you enquiries through your listing, they will appear here.
           </p>
         </motion.div>
       ) : (
         <>
           {/* Desktop table */}
-          <motion.div {...fadeUp(0.1)} className="hidden sm:block bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          <motion.div {...fadeUp(0.1)} className="hidden sm:block card-flat shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Participant</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Phone</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Service</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Message</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Date</th>
-                    <th className="text-left px-3 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide">Status</th>
+                  <tr className="border-b border-line-100">
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Participant</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Phone</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Service</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Message</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Date</th>
+                    <th className="text-left px-3 py-3 text-xs font-semibold text-ink-400 uppercase tracking-wide">Status</th>
                     <th className="px-3 py-3" />
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {visibleEnquiries.map((e, i) => (
-                    <tr key={e.id}>
+                  {enquiries.map((e, i) => (
+                    <motion.tr
+                      key={e.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.05 * i }}
+                      className={`hover:bg-gray-50/50 transition-colors group ${!e.read ? 'bg-orange-50/30' : ''}`}
+                    >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
@@ -374,8 +243,8 @@ export default function EnquiriesPage() {
                             {(e.name || '?').charAt(0)}
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900 text-sm">{e.name}</p>
-                            <p className="text-xs text-gray-400">{e.email}</p>
+                            <p className="font-semibold text-ink-900 text-sm">{e.name}</p>
+                            <p className="text-xs text-ink-400">{e.email}</p>
                           </div>
                         </div>
                       </td>
@@ -385,34 +254,26 @@ export default function EnquiriesPage() {
                             <Phone className="w-3 h-3" /> {e.phone}
                           </a>
                         ) : (
-                          <span className="text-xs text-gray-400">--</span>
+                          <span className="text-xs text-ink-400">--</span>
                         )}
                       </td>
                       <td className="px-3 py-4">
-                        <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-1 rounded-lg">
+                        <span className="text-xs font-medium bg-gray-100 text-ink-700 px-2 py-1 rounded-lg">
                           {e.service || 'General'}
                         </span>
                       </td>
                       <td className="px-3 py-4 max-w-[220px]">
-                        <p className="text-xs text-gray-500 line-clamp-2">{e.message}</p>
-                        {replyingTo === e.id && authToken && e.email && (
-                          <InlineReply
-                            enquiryId={e.id}
-                            enquiryEmail={e.email}
-                            token={authToken}
-                            onSent={handleReplySent}
-                          />
-                        )}
+                        <p className="text-xs text-ink-500 line-clamp-2">{e.message}</p>
                       </td>
                       <td className="px-3 py-4 whitespace-nowrap">
-                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                        <span className="text-xs text-ink-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {e.created_at ? new Date(e.created_at).toLocaleDateString() : ''}
                         </span>
                       </td>
                       <td className="px-3 py-4">
                         {e.read ? (
-                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-ink-500 border border-line-200">
                             <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
                             Read
                           </span>
@@ -424,7 +285,7 @@ export default function EnquiriesPage() {
                         )}
                       </td>
                       <td className="px-3 py-4">
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="flex gap-2">
                           {!e.read && (
                             <button
                               onClick={() => handleMarkRead(e.id)}
@@ -439,44 +300,12 @@ export default function EnquiriesPage() {
                               Mark read
                             </button>
                           )}
-                          {e.email && (
-                            <button
-                              onClick={() => setReplyingTo(replyingTo === e.id ? null : e.id)}
-                              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                                replyingTo === e.id
-                                  ? 'bg-blue-600 text-white hover:bg-blue-500'
-                                  : e.replied_at
-                                  ? 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-200'
-                                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-                              }`}
-                              title={e.replied_at ? `Replied ${new Date(e.replied_at).toLocaleDateString()}` : 'Reply'}
-                            >
-                              {replyingTo === e.id ? <X className="w-3 h-3" /> : <Reply className="w-3 h-3" />}
-                              {e.replied_at ? 'Replied' : 'Reply'}
-                            </button>
-                          )}
-                          <button
-                            onClick={() => handleArchive(e.id, !e.archived)}
-                            disabled={archiving === e.id}
-                            className={`p-1.5 rounded-lg text-xs transition-colors disabled:opacity-60 ${
-                              e.archived
-                                ? 'bg-green-50 text-green-600 hover:bg-green-100'
-                                : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
-                            }`}
-                            aria-label={e.archived ? 'Unarchive' : 'Archive'}
-                            title={e.archived ? 'Unarchive' : 'Archive'}
-                          >
-                            {archiving === e.id ? (
-                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            ) : e.archived ? (
-                              <Inbox className="w-3.5 h-3.5" />
-                            ) : (
-                              <Archive className="w-3.5 h-3.5" />
-                            )}
-                          </button>
+                          <a href={`mailto:${e.email}`} className="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                            <Mail className="w-3.5 h-3.5" />
+                          </a>
                         </div>
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
@@ -485,14 +314,14 @@ export default function EnquiriesPage() {
 
           {/* Mobile cards */}
           <div className="sm:hidden space-y-3">
-            {visibleEnquiries.map((e, i) => (
+            {enquiries.map((e, i) => (
               <motion.div
                 key={e.id}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * i, duration: 0.35 }}
                 className={`bg-white rounded-2xl border shadow-sm p-4 space-y-3 ${
-                  !e.read ? 'border-orange-200 bg-orange-50/30' : 'border-gray-200'
+                  !e.read ? 'border-orange-200 bg-orange-50/30' : 'border-line-200'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -503,8 +332,8 @@ export default function EnquiriesPage() {
                       {(e.name || '?').charAt(0)}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">{e.name}</p>
-                      <p className="text-xs text-gray-400">{e.email}</p>
+                      <p className="font-semibold text-ink-900">{e.name}</p>
+                      <p className="text-xs text-ink-400">{e.email}</p>
                     </div>
                   </div>
                   {!e.read ? (
@@ -513,7 +342,7 @@ export default function EnquiriesPage() {
                       New
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-ink-500 border border-line-200">
                       <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
                       Read
                     </span>
@@ -521,63 +350,27 @@ export default function EnquiriesPage() {
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-1 rounded-lg">
+                  <span className="text-xs font-medium bg-gray-100 text-ink-700 px-2 py-1 rounded-lg">
                     {e.service || 'General'}
                   </span>
-                  <span className="text-xs text-gray-400 flex items-center gap-1">
+                  <span className="text-xs text-ink-400 flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
                     {e.created_at ? new Date(e.created_at).toLocaleDateString() : ''}
                   </span>
                 </div>
 
-                <p className="text-sm text-gray-600 leading-relaxed">{e.message}</p>
+                <p className="text-sm text-ink-700 leading-relaxed">{e.message}</p>
 
-                {replyingTo === e.id && authToken && e.email && (
-                  <InlineReply
-                    enquiryId={e.id}
-                    enquiryEmail={e.email}
-                    token={authToken}
-                    onSent={handleReplySent}
-                  />
-                )}
-
-                <div className="flex items-center justify-between pt-1 flex-wrap gap-2">
-                  <div className="flex gap-2 flex-wrap">
+                <div className="flex items-center justify-between pt-1">
+                  <div className="flex gap-2">
                     {e.phone && (
                       <a href={`tel:${e.phone}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100 transition-colors">
                         <Phone className="w-3 h-3" /> Call
                       </a>
                     )}
-                    {e.email && (
-                      <button
-                        onClick={() => setReplyingTo(replyingTo === e.id ? null : e.id)}
-                        className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                          replyingTo === e.id
-                            ? 'bg-blue-600 text-white'
-                            : e.replied_at
-                            ? 'bg-green-50 text-green-600 border border-green-200'
-                            : 'bg-blue-50 text-blue-600'
-                        }`}
-                      >
-                        {replyingTo === e.id ? <X className="w-3 h-3" /> : <Reply className="w-3 h-3" />}
-                        {e.replied_at ? 'Replied' : 'Reply'}
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleArchive(e.id, !e.archived)}
-                      disabled={archiving === e.id}
-                      className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-60 ${
-                        e.archived ? 'bg-green-50 text-green-600 hover:bg-green-100' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                      }`}
-                    >
-                      {archiving === e.id ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
-                      ) : e.archived ? (
-                        <><Inbox className="w-3 h-3" /> Unarchive</>
-                      ) : (
-                        <><Archive className="w-3 h-3" /> Archive</>
-                      )}
-                    </button>
+                    <a href={`mailto:${e.email}`} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100 transition-colors">
+                      <Mail className="w-3 h-3" /> Email
+                    </a>
                   </div>
                   {!e.read && (
                     <button

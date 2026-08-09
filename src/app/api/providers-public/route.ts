@@ -20,7 +20,7 @@ export async function GET() {
     );
 
     if (!res.ok) {
-      // Fallback: return empty so client uses hardcoded demo data
+      // Fallback: return empty so client uses hardcoded
       return NextResponse.json([]);
     }
 

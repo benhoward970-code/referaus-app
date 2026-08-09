@@ -28,7 +28,7 @@ export function AnnouncementBar() {
       className="fixed top-0 left-0 right-0 z-[60] bg-blue-600 text-white text-xs sm:text-sm py-2 px-4 flex items-center justify-center gap-3"
     >
       <span className="text-center leading-snug">
-        🎉 Now live! Find trusted NDIS providers in Newcastle &amp; Hunter Valley
+        Now live! Find trusted NDIS providers in Newcastle &amp; Hunter Valley
       </span>
       <button
         onClick={dismiss}

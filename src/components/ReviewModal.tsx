@@ -111,11 +111,11 @@ export function ReviewModal({ providerName, providerSlug, open, onClose, onSubmi
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 z-10"
+            className="relative bg-cream border border-ink-950 rounded-[3px] shadow-[6px_6px_0_var(--color-ink-950)] w-full max-w-lg p-8 z-10"
           >
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 text-ink-400 hover:text-ink-700 transition-colors"
               aria-label="Close"
             >
               <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></svg>
@@ -126,32 +126,32 @@ export function ReviewModal({ providerName, providerSlug, open, onClose, onSubmi
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                   <svg width="32" height="32" viewBox="0 0 24 24" fill="#16a34a"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
                 </motion.div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Review submitted!</h3>
-                <p className="text-sm text-gray-500 mb-6">Thank you for helping others find the right provider.</p>
-                <button onClick={handleClose} className="px-6 py-2.5 rounded-xl bg-orange-500 text-white font-semibold text-sm hover:bg-orange-400 transition-colors">
+                <h3 className="text-xl font-bold text-ink-900 mb-2">Review submitted!</h3>
+                <p className="text-sm text-ink-500 mb-6">Thank you for helping others find the right provider.</p>
+                <button onClick={handleClose} className="px-6 py-2.5 rounded-[3px] bg-orange-500 text-white font-semibold text-sm hover:bg-orange-400 transition-colors">
                   Done
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                <h2 className="text-xl font-bold text-gray-900 mb-1">Write a Review</h2>
-                <p className="text-sm text-gray-500 mb-6">Share your experience with <span className="font-medium text-gray-700">{providerName}</span></p>
+                <h2 className="text-xl font-bold text-ink-900 mb-1">Write a Review</h2>
+                <p className="text-sm text-ink-500 mb-6">Share your experience with <span className="font-medium text-ink-700">{providerName}</span></p>
 
                 {/* Star Rating */}
                 <div className="mb-5">
-                  <label className="block text-xs font-medium text-gray-600 mb-2">Overall Rating *</label>
+                  <label className="block text-xs font-medium text-ink-700 mb-2">Overall Rating *</label>
                   <StarPicker value={rating} onChange={setRating} />
                   {rating > 0 && <p className="text-sm font-medium text-orange-500 mt-1">{LABELS[rating]}</p>}
                 </div>
 
                 {/* Name */}
                 <div className="mb-4">
-                  <label className="block text-xs font-medium text-gray-600 mb-1.5">Your Name *</label>
+                  <label className="block text-xs font-medium text-ink-700 mb-1.5">Your Name *</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-[3px] border border-ink-950 bg-white text-ink-900 text-sm focus:outline-none focus:border-orange-500 transition-colors"
                     placeholder="e.g. Sarah M."
                     maxLength={80}
                   />
@@ -159,11 +159,11 @@ export function ReviewModal({ providerName, providerSlug, open, onClose, onSubmi
 
                 {/* Service type */}
                 <div className="mb-4">
-                  <label className="block text-xs font-medium text-gray-600 mb-1.5">Service Used (optional)</label>
+                  <label className="block text-xs font-medium text-ink-700 mb-1.5">Service Used (optional)</label>
                   <select
                     value={serviceType}
                     onChange={(e) => setServiceType(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-[3px] border border-ink-950 bg-white text-ink-900 text-sm focus:outline-none focus:border-orange-500 transition-colors bg-white"
                   >
                     <option value="">Select a service...</option>
                     {SERVICE_TYPES.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -172,16 +172,16 @@ export function ReviewModal({ providerName, providerSlug, open, onClose, onSubmi
 
                 {/* Review text */}
                 <div className="mb-5">
-                  <label className="block text-xs font-medium text-gray-600 mb-1.5">Your Review *</label>
+                  <label className="block text-xs font-medium text-ink-700 mb-1.5">Your Review *</label>
                   <textarea
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     rows={4}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-gray-900 text-sm focus:outline-none focus:border-blue-500 transition-colors resize-none"
-                    placeholder="Tell others about your experience — what went well, what could improve, and who you would recommend this provider to..."
+                    className="w-full px-3.5 py-2.5 rounded-[3px] border border-ink-950 bg-white text-ink-900 text-sm focus:outline-none focus:border-orange-500 transition-colors resize-none"
+                    placeholder="Tell others about your experience â€” what went well, what could improve, and who you would recommend this provider to..."
                     maxLength={1000}
                   />
-                  <p className="text-xs text-gray-400 mt-1 text-right">{text.length}/1000</p>
+                  <p className="text-xs text-ink-400 mt-1 text-right">{text.length}/1000</p>
                 </div>
 
                 {error && (
@@ -193,7 +193,7 @@ export function ReviewModal({ providerName, providerSlug, open, onClose, onSubmi
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-400 text-white font-semibold text-sm transition-all hover:shadow-lg hover:shadow-orange-500/25 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-[3px] bg-orange-500 hover:bg-orange-400 text-ink-950 font-semibold text-sm transition-all hover:shadow-lg hover:shadow-orange-500/25 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <>
@@ -203,7 +203,7 @@ export function ReviewModal({ providerName, providerSlug, open, onClose, onSubmi
                   ) : "Submit Review"}
                 </button>
 
-                <p className="text-xs text-gray-400 text-center mt-3">
+                <p className="text-xs text-ink-400 text-center mt-3">
                   Reviews are moderated to ensure they are genuine and helpful.
                 </p>
               </form>

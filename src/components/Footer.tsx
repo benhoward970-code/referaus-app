@@ -39,7 +39,7 @@ const COLUMNS = [
 
 export function Footer() {
   return (
-    <footer className="bg-gray-50 border-t border-gray-200">
+    <footer className="bg-gray-50 border-t border-line-200">
       <div className="max-w-[1200px] mx-auto px-6 py-12">
         {/* Top: brand + columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 mb-10">
@@ -48,22 +48,22 @@ export function Footer() {
             <div className="mb-3">
               <Logo size="small" />
             </div>
-            <p className="text-sm text-gray-500 leading-relaxed">
+            <p className="text-sm text-ink-500 leading-relaxed">
               Connecting NDIS participants with trusted providers in Newcastle and the Hunter Region.
             </p>
-            <p className="text-sm text-gray-400 mt-1.5 font-medium">Free for participants. Always.</p>
+            <p className="text-sm text-ink-400 mt-1.5 font-medium">Free for participants. Always.</p>
           </div>
 
           {/* Link columns */}
           {COLUMNS.map(({ heading, links }) => (
             <div key={heading}>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">{heading}</h4>
+              <h4 className="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-orange-500 mb-3">{heading}</h4>
               <ul className="flex flex-col gap-2">
                 {links.map(({ label, href }) => (
                   <li key={label}>
                     <Link
                       href={href}
-                      className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
+                      className="text-sm text-ink-500 hover:text-ink-900 transition-colors"
                     >
                       {label}
                     </Link>
@@ -75,10 +75,11 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-          <p className="text-xs text-gray-400">
-            &copy; {new Date().getFullYear()} ReferAus. Built in the Hunter Region.
+        <div className="border-t border-line-200 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <p className="font-mono text-[11px] text-ink-400">
+            REFERAUS © {new Date().getFullYear()} — Built in the Hunter Region
           </p>
+          <p className="font-mono text-[11px] text-ink-400">32.9283° S, 151.7817° E — NEWCASTLE, NSW</p>
         </div>
       </div>
     </footer>

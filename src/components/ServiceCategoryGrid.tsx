@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { Icon } from "@/components/Icon";
 
 /* ──────────────────────────────────────────────
    Service Category Cards with icons + hover
@@ -11,91 +12,91 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 const SERVICE_CATEGORIES = [
   {
     name: "Occupational Therapy",
-    emoji: "🖐️",
+    icon: "hand" as const,
     desc: "Improve daily function, independence, and quality of life through goal-focused therapy.",
     color: "blue",
   },
   {
     name: "Speech Pathology",
-    emoji: "💬",
+    icon: "speech" as const,
     desc: "Support for communication, language, and swallowing difficulties of all ages.",
     color: "purple",
   },
   {
     name: "Physiotherapy",
-    emoji: "🦵",
+    icon: "leg" as const,
     desc: "Physical rehabilitation, pain management, and movement support.",
     color: "green",
   },
   {
     name: "Psychology",
-    emoji: "🧠",
+    icon: "brain" as const,
     desc: "Mental health assessment, therapy, and psychosocial support.",
     color: "indigo",
   },
   {
     name: "Support Coordination",
-    emoji: "🗺️",
+    icon: "map" as const,
     desc: "Expert guidance to navigate your NDIS plan and connect with the right supports.",
     color: "orange",
   },
   {
     name: "Plan Management",
-    emoji: "📋",
+    icon: "clipboard" as const,
     desc: "Professional financial management of your NDIS funding and invoices.",
     color: "teal",
   },
   {
     name: "Behaviour Support",
-    emoji: "🤝",
+    icon: "handshake" as const,
     desc: "Positive behaviour support plans and specialist intervention strategies.",
     color: "red",
   },
   {
     name: "Daily Living Support",
-    emoji: "🏠",
+    icon: "home" as const,
     desc: "Assistance with personal care, meals, household tasks, and daily routines.",
     color: "blue",
   },
   {
     name: "Community Access",
-    emoji: "🌏",
+    icon: "globe" as const,
     desc: "Support to participate in community activities, social groups, and recreation.",
     color: "green",
   },
   {
     name: "Supported Independent Living",
-    emoji: "🏘️",
+    icon: "building" as const,
     desc: "Shared or individual housing support to live as independently as possible.",
     color: "teal",
   },
   {
     name: "Transport",
-    emoji: "🚐",
+    icon: "car" as const,
     desc: "Safe, reliable transport to appointments, work, education, and community activities.",
     color: "indigo",
   },
   {
     name: "Respite Care",
-    emoji: "😌",
+    icon: "heart" as const,
     desc: "Short-term accommodation and in-home respite to support participants and carers.",
     color: "purple",
   },
   {
     name: "Early Childhood",
-    emoji: "⭐",
+    icon: "star" as const,
     desc: "Specialist support for children with developmental delays and disabilities.",
     color: "yellow",
   },
   {
     name: "Home Modifications",
-    emoji: "🔧",
+    icon: "construction" as const,
     desc: "Assessments and modifications to make your home safe and accessible.",
     color: "orange",
   },
   {
     name: "Assistive Technology",
-    emoji: "💻",
+    icon: "chart" as const,
     desc: "Equipment, devices, and technology to support independence and participation.",
     color: "red",
   },
@@ -116,7 +117,7 @@ export function ServiceCategoryGrid() {
   return (
     <section className="px-4 sm:px-6 py-12 max-w-5xl mx-auto">
       <Breadcrumbs className="mb-4" />
-      <h2 className="text-xl font-bold text-gray-800 mb-6">Browse by Category</h2>
+      <h2 className="text-xl font-bold text-ink-900 mb-6">Browse by Category</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {SERVICE_CATEGORIES.map((cat, i) => {
           const c = colorMap[cat.color] ?? colorMap.blue;
@@ -133,10 +134,10 @@ export function ServiceCategoryGrid() {
                 className={`flex flex-col gap-3 p-5 rounded-2xl border ${c.bg} ${c.border} ${c.hover} cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group`}
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{cat.emoji}</span>
+                  <Icon name={cat.icon} size={22} />
                   <span className={`font-semibold text-sm ${c.text}`}>{cat.name}</span>
                 </div>
-                <p className="text-xs text-gray-500 leading-relaxed">{cat.desc}</p>
+                <p className="text-xs text-ink-500 leading-relaxed">{cat.desc}</p>
                 <span className={`text-xs font-medium ${c.text} flex items-center gap-1 mt-auto`}>
                   Find providers
                   <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

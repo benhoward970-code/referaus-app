@@ -174,14 +174,14 @@ export function ParticleHands() {
             with Providers
           </span>
         </h2>
-        <p className="text-gray-500 text-[10px] sm:text-xs mb-4 tracking-wider uppercase text-center">
+        <p className="text-ink-500 text-[10px] sm:text-xs mb-4 tracking-wider uppercase text-center">
           Australia&apos;s NDIS Marketplace
         </p>
         <div className="flex gap-3 pointer-events-auto">
-          <a href="/providers" className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all hover:-translate-y-0.5">
+          <a href="/providers" className="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-400 text-ink-950 font-semibold text-xs transition-all hover:-translate-y-0.5">
             Find Providers
           </a>
-          <a href="/register?role=provider" className="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-400 text-white font-semibold text-xs transition-all hover:-translate-y-0.5">
+          <a href="/register?role=provider" className="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-400 text-ink-950 font-semibold text-xs transition-all hover:-translate-y-0.5">
             List Your Business
           </a>
         </div>

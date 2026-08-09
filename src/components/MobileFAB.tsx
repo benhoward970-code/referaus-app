@@ -1,19 +1,18 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
+const AUTH_PATHS = ["/login", "/register", "/forgot-password", "/reset-password", "/admin", "/dashboard"];
+
 export function MobileFAB() {
   const [hidden, setHidden] = useState(false);
-  const [onAuthPage, setOnAuthPage] = useState(false);
   const baseHeightRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    // Hide on auth/admin pages to avoid covering forms
-    const path = window.location.pathname;
-    const authPaths = ["/login", "/register", "/forgot-password", "/reset-password", "/admin", "/dashboard"];
-    setOnAuthPage(authPaths.some((p) => path.startsWith(p)));
-  }, []);
+  const pathname = usePathname();
+  // Computed synchronously on first render — avoids a flash of the FAB on
+  // auth pages before a useEffect would otherwise catch up (see ChatWidget).
+  const onAuthPage = AUTH_PATHS.some((p) => pathname?.startsWith(p));
 
   useEffect(() => {
     // Detect keyboard open via viewport height change
@@ -62,7 +61,7 @@ export function MobileFAB() {
           {/* Search button */}
           <button
             onClick={handleSearch}
-            className="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full bg-blue-600 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 hover:bg-blue-500 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            className="pointer-events-auto flex items-center gap-2 px-5 py-3 rounded-full bg-blue-600 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 hover:bg-blue-500 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
             aria-label="Search providers"
           >
             <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">

@@ -62,7 +62,7 @@ export function ActivitySocialProof() {
           transition={{ type: "spring", stiffness: 280, damping: 22 }}
           className="fixed bottom-20 left-4 z-40 max-w-[260px]"
         >
-          <div className="bg-white border border-gray-200 rounded-xl shadow-lg shadow-gray-900/8 px-3 py-2.5 flex items-center gap-2.5">
+          <div className="bg-white border border-line-200 rounded-xl shadow-lg shadow-gray-900/8 px-3 py-2.5 flex items-center gap-2.5">
             {/* Pulse dot */}
             <div className="relative shrink-0">
               <span className="block w-2.5 h-2.5 rounded-full bg-green-400" />
@@ -76,7 +76,7 @@ export function ActivitySocialProof() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.25 }}
-                  className="text-xs text-gray-700 leading-snug flex-1"
+                  className="text-xs text-ink-700 leading-snug flex-1"
                 >
                   {MESSAGES[messageIndex]}
                 </motion.p>
@@ -85,7 +85,7 @@ export function ActivitySocialProof() {
             <button
               onClick={handleDismiss}
               aria-label="Dismiss"
-              className="shrink-0 w-5 h-5 flex items-center justify-center rounded text-gray-300 hover:text-gray-500 transition-colors"
+              className="shrink-0 w-5 h-5 flex items-center justify-center rounded text-gray-300 hover:text-ink-500 transition-colors"
             >
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                 <path d="M6 6l12 12M6 18L18 6" />

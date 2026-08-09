@@ -25,7 +25,7 @@ export function GenericSkeleton({
 // Matches ProviderCard layout
 export function ProviderCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6 animate-pulse">
+    <div className="card-flat p-6 animate-pulse">
       {/* Header: avatar + name/category */}
       <div className="flex items-center gap-4 mb-4">
         <div className="w-14 h-14 rounded-xl bg-gray-200 flex-shrink-0" />
@@ -82,7 +82,7 @@ export function ProfileSkeleton() {
           <div className="h-4 bg-gray-200 rounded w-32" />
         </div>
         {/* Hero card */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 mb-6">
+        <div className="card-flat p-8 mb-6">
           <div className="flex flex-col sm:flex-row gap-6">
             <div className="w-24 h-24 rounded-2xl bg-gray-200 flex-shrink-0" />
             <div className="flex-1 space-y-3">
@@ -99,13 +99,13 @@ export function ProfileSkeleton() {
         {/* Two-column content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-3">
+            <div className="card-flat p-6 space-y-3">
               <div className="h-5 bg-gray-200 rounded w-1/3" />
               <div className="h-3 bg-gray-100 rounded w-full" />
               <div className="h-3 bg-gray-100 rounded w-5/6" />
               <div className="h-3 bg-gray-100 rounded w-4/6" />
             </div>
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-3">
+            <div className="card-flat p-6 space-y-3">
               <div className="h-5 bg-gray-200 rounded w-1/4" />
               <div className="flex flex-wrap gap-2">
                 {[24, 28, 20, 32, 22].map((w, i) => (
@@ -115,7 +115,7 @@ export function ProfileSkeleton() {
             </div>
           </div>
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-3">
+            <div className="card-flat p-6 space-y-3">
               <div className="h-5 bg-gray-200 rounded w-1/2" />
               <div className="h-10 bg-orange-100 rounded-xl w-full" />
               <div className="h-10 bg-gray-100 rounded-xl w-full" />
@@ -130,7 +130,7 @@ export function ProfileSkeleton() {
 // Simple card skeleton (blog, generic cards)
 export function CardSkeleton() {
   return (
-    <div className="border border-gray-200 rounded-xl p-6 space-y-4 animate-pulse">
+    <div className="border border-line-200 rounded-xl p-6 space-y-4 animate-pulse">
       <GenericSkeleton height="h-5" width="w-3/4" />
       <GenericSkeleton height="h-4" width="w-1/2" />
       <GenericSkeleton height="h-20" width="w-full" />
