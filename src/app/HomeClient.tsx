@@ -7,6 +7,24 @@ import { AuroraBackground } from '@/components/AuroraBackground';
 import { Icon } from "@/components/Icon";
 // ActivitySocialProof removed — no fake data
 
+/* Small ring gauge used by the hero's AI-match preview card */
+function MatchRing({ score = 92, size = 54 }: { score?: number; size?: number }) {
+  const r = (size - 6) / 2;
+  const c = 2 * Math.PI * r;
+  const off = c - (score / 100) * c;
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#e5e7eb" strokeWidth="5" />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#2563eb" strokeWidth="5" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={off} />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="font-serif font-semibold text-ink-900" style={{ fontSize: size * 0.32 }}>{score}</span>
+      </div>
+    </div>
+  );
+}
+
 /* Word-by-word blur-in text animation */
 function BlurInText({ text, className = "", delay = 0 }: { text: string; className?: string; delay?: number }) {
   const words = text.split(" ");
@@ -441,6 +459,23 @@ export default function Home() {
             )}
 
             <div className="absolute bottom-6 left-10 font-mono text-[10.5px] text-ink-500">32.9283° S, 151.7817° E</div>
+
+            {/* AI match preview card */}
+            <Link
+              href="/match"
+              className="hidden sm:block absolute bottom-6 right-6 w-64 bg-white rounded-2xl shadow-xl border border-line-200 p-4 hover:shadow-2xl transition-shadow"
+            >
+              <div className="flex items-center gap-3">
+                <MatchRing score={92} size={54} />
+                <div>
+                  <div className="text-sm font-semibold text-ink-900">AI match score</div>
+                  <div className="text-xs text-ink-500">Matched to your needs & location</div>
+                </div>
+              </div>
+              <span className="mt-3 flex items-center justify-center gap-1.5 w-full h-9 rounded-lg border border-line-200 text-sm font-medium text-ink-700 hover:border-blue-300 hover:text-blue-600 transition-colors">
+                Find my matches
+              </span>
+            </Link>
           </div>
         </section>
       </div>
