@@ -223,11 +223,12 @@ export function Navbar() {
   return (
     <>
       <nav
+        suppressHydrationWarning
         style={{ top: "var(--announcement-height, 0px)" }}
-        className={`fixed left-0 right-0 z-50 transition-all duration-200 ${
+        className={`fixed left-0 right-0 z-50 backdrop-blur-md transition-all duration-200 ${
           scrolled
-            ? "bg-white shadow-sm border-b border-line-200"
-            : "bg-white border-b border-line-100"
+            ? "bg-white/85 shadow-sm border-b border-line-200"
+            : "bg-white/85 border-b border-line-100"
         }`}
       >
         <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">

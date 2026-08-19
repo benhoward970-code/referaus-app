@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, IBM_Plex_Mono } from "next/font/google";
+import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -21,10 +21,18 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { MobileFAB } from "@/components/MobileFAB";
 
-const outfit = Outfit({
+const inter = Inter({
   variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -95,7 +103,7 @@ const organizationSchema = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${mono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${mono.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         {/* DNS prefetch for Google Fonts */}
@@ -108,10 +116,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="preload"
           as="style"
-          href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap"
           rel="stylesheet"
         />
         {/* Organization Schema (Item 18) */}
@@ -120,9 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
-      <body suppressHydrationWarning className="font-sans antialiased bg-sky-50 text-gray-900">
-        <div className="mesh-bg" aria-hidden="true"><div className="mesh-wave-3" /></div>
-        <div className="dot-grid" aria-hidden="true" />
+      <body suppressHydrationWarning className="font-sans antialiased bg-[#fafcff] text-gray-900">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:outline-none">Skip to main content</a>
         <AuthProvider>
           <ToastProvider>

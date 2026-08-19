@@ -16,7 +16,7 @@ input[type="text"], input[type="email"], input[type="password"], input[type="tel
   --color-foreground: #1a1d23;
   --font-sans: var(--font-outfit), system-ui, sans-serif;
   --font-mono: var(--font-mono), monospace;
-  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-serif: var(--font-fraunces), 'Fraunces', ui-serif, Georgia, serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -495,15 +495,15 @@ html, body {
     @apply text-sm font-medium border-b transition-colors duration-150;
   }
 
-  /* Flat card with a hard offset shadow instead of a soft blur */
+  /* Soft card — white surface, subtle border, gentle shadow lift on hover */
   .card-flat {
-    @apply bg-cream border border-ink-950 rounded-[3px];
-    box-shadow: 5px 5px 0 var(--color-line-map);
-    transition: transform 0.18s, box-shadow 0.18s;
+    @apply bg-white border border-line-200 rounded-2xl shadow-sm;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
   .card-flat:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 7px 7px 0 var(--color-orange-500);
+    transform: translateY(-2px);
+    border-color: var(--color-blue-200, #bfdbfe);
+    box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.12);
   }
 
   /* Map pin marker */
