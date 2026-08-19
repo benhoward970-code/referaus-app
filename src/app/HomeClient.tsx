@@ -338,41 +338,46 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero — dark editorial panel + Hunter Region map */}
-      <div className="bg-paper">
+      {/* Hero — light editorial panel + Hunter Region map */}
+      <div className="bg-white">
         <section ref={heroRef} className="grid lg:grid-cols-[42%_58%] min-h-[85vh]">
           {/* Left: editorial copy */}
-          <div className="relative flex flex-col justify-center bg-ink-950 text-cream px-8 sm:px-12 py-14 overflow-hidden">
+          <div className="relative flex flex-col justify-center bg-white text-ink-900 px-8 sm:px-12 py-14 overflow-hidden">
             <div className="relative z-10">
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5) }}
-                className="eyebrow-rule text-orange-500 mb-6">
-                Newcastle — Hunter Region, NSW
+                className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600 mb-6 w-fit">
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-600 animate-pulse" /> Now live · Newcastle & the Hunter
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: d(0.6), delay: d(0.1) }}
-                className="h-editorial text-[clamp(2.4rem,4vw,3.6rem)] mb-6"
+                className="font-serif text-[clamp(2.4rem,4vw,3.6rem)] font-semibold leading-[1.05] mb-6 text-ink-900"
               >
-                Support,<br />sorted by <em>people<br />who live here.</em>
+                Support for<br /><em className="italic text-orange-500">NDIS providers</em><br />sorted by people who live here.
               </motion.h1>
 
               <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.25) }}
-                className="text-[15px] leading-relaxed text-ink-soft font-light max-w-[340px] mb-8">
-                Not a national call centre. A directory built and checked by the Hunter Region community — search, compare, and message providers directly.
+                className="text-[15px] leading-relaxed text-ink-500 max-w-[420px] mb-4">
+                Not a national call centre — a directory built and checked by the Newcastle & Hunter community. Search, compare and message trusted NDIS providers, with verified reviews, transparent pricing and an AI match score.
+              </motion.p>
+
+              <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.3) }}
+                className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1.5 text-sm text-ink-700 mb-8">
+                Starting in Newcastle — <span className="font-medium">expanding nationally</span> once we take off.
               </motion.p>
 
               <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.35) }}
-                className="mb-7">
+                className="mb-5">
                 <SearchAutocomplete className="w-full max-w-[420px]" />
-                <p className="mt-2 text-xs text-ink-soft">Press <kbd className="inline-flex items-center px-1.5 py-0.5 rounded border border-line-dark font-mono text-[10px] text-ink-soft">/</kbd> to search</p>
+                <p className="mt-2 text-xs text-ink-400">Press <kbd className="inline-flex items-center px-1.5 py-0.5 rounded border border-line-200 font-mono text-[10px] text-ink-400">/</kbd> to search</p>
                 <div className="mt-4 flex flex-wrap gap-2 max-w-[420px]">
                   {["OT", "Speech", "Physio", "Psychology", "Support Coordination", "Plan Management", "Daily Living"].map((chip) => (
                     <a
                       key={chip}
                       href={`/providers?q=${encodeURIComponent(chip)}`}
-                      className="link-underline border-line-dark text-cream hover:border-orange-500 !text-xs"
+                      className="rounded-full border border-line-200 bg-white px-3 py-1.5 text-sm text-ink-700 hover:border-blue-400 hover:text-blue-600 transition-colors"
                     >
                       {chip}
                     </a>
@@ -381,27 +386,27 @@ export default function Home() {
               </motion.div>
 
               <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: d(0.5), delay: d(0.45) }}
-                className="flex items-center gap-7">
-                <a href="/providers" className="btn-block">Search the network →</a>
-                <a href="/register" className="link-underline border-line-dark text-cream hover:border-orange-500">List a business</a>
+                className="flex items-center gap-5">
+                <a href="/providers" className="btn-primary">Search the network →</a>
+                <a href="/register" className="text-sm font-medium text-ink-700 hover:text-blue-600 transition-colors">List a business</a>
               </motion.div>
             </div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: d(0.6), delay: d(0.6) }}
-              className="relative z-10 flex justify-between items-end border-t border-line-dark pt-5 mt-12">
-              <div className="font-mono">
-                <div className="text-[22px] font-medium text-cream">
+              className="relative z-10 flex items-center gap-8 mt-12">
+              <div>
+                <div className="text-[22px] font-semibold text-ink-900 font-serif">
                   {providerCount !== null ? providerCount : "—"}
                 </div>
-                <div className="text-[10.5px] text-ink-soft uppercase tracking-[0.08em] mt-0.5">Active listings</div>
+                <div className="text-[11px] text-ink-500 uppercase tracking-[0.06em] mt-0.5">Hunter providers</div>
               </div>
-              <div className="font-mono">
-                <div className="text-[22px] font-medium text-cream">100%</div>
-                <div className="text-[10.5px] text-ink-soft uppercase tracking-[0.08em] mt-0.5">Free to search</div>
+              <div>
+                <div className="text-[22px] font-semibold text-ink-900 font-serif">100%</div>
+                <div className="text-[11px] text-ink-500 uppercase tracking-[0.06em] mt-0.5">Verified reviews</div>
               </div>
-              <div className="font-mono">
-                <div className="text-[22px] font-medium text-cream">24/7</div>
-                <div className="text-[10.5px] text-ink-soft uppercase tracking-[0.08em] mt-0.5">Search anytime</div>
+              <div>
+                <div className="text-[22px] font-semibold text-ink-900 font-serif">Free</div>
+                <div className="text-[11px] text-ink-500 uppercase tracking-[0.06em] mt-0.5">For participants</div>
               </div>
             </motion.div>
           </div>
@@ -482,64 +487,22 @@ export default function Home() {
 
       <div className="divider max-w-[800px] mx-auto" />
 
-      {/* Trust Badges */}
-      <section className="py-10 px-6 max-w-[1200px] mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="bg-blue-50 border border-blue-100 rounded-2xl py-8 px-6"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {[
-              {
-                icon: (
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-blue-600">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                  </svg>
-                ),
-                label: "Verified Providers",
-                desc: "Every provider reviewed",
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-orange-500">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                  </svg>
-                ),
-                label: "Free for Participants",
-                desc: "Always. No hidden costs",
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-blue-600">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                  </svg>
-                ),
-                label: "Secure & Private",
-                desc: "Your data is protected",
-              },
-              {
-                icon: (
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-orange-500">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                ),
-                label: "Australian Owned",
-                desc: "Built in the Hunter Region",
-              },
-            ].map((badge) => (
-              <div key={badge.label} className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-[3px] bg-white border border-ink-900 flex items-center justify-center">
-                  {badge.icon}
-                </div>
-                <div className="font-semibold text-ink-900 text-sm">{badge.label}</div>
-                <div className="text-xs text-ink-500">{badge.desc}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+      {/* Trust strip — thin inline row */}
+      <section className="border-y border-line-100 bg-gray-50/60">
+        <div className="max-w-[1200px] mx-auto py-4 px-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm">
+          {[
+            { label: "Verified providers", d: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" },
+            { label: "Real participant reviews", d: "M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" },
+            { label: "Free for participants", d: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" },
+            { label: "Built in the Hunter", d: "M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" },
+          ].map((t) => (
+            <span key={t.label} className="inline-flex items-center gap-1.5 text-ink-700">
+              <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="text-blue-600 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d={t.d} /></svg>
+              {t.label}
+            </span>
+          ))}
+          <span className="text-xs text-ink-400">Independent directory · not affiliated with the NDIA</span>
+        </div>
       </section>
 
       <div className="divider max-w-[800px] mx-auto" />

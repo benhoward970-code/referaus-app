@@ -1,6 +1,10 @@
+"use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { Heart } from "lucide-react";
 import type { Provider } from "@/lib/providers";
 import { PrefetchLink } from "@/components/PrefetchOnHover";
+import { isSaved, toggleSaved } from "@/lib/saved";
 
 function isNewProvider(provider: Provider): boolean {
   // Check created_at if available (DB providers may have it)
@@ -14,6 +18,11 @@ export function ProviderCard({ provider }: { provider: Provider }) {
   const isNew = isNewProvider(provider);
   const isTopRated = provider.reviewCount >= 5;
   const cover = provider.cover_image_url;
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    setSaved(isSaved(provider.slug));
+  }, [provider.slug]);
 
   return (
     <PrefetchLink href={`/providers/${provider.slug}`}>
@@ -33,6 +42,17 @@ export function ProviderCard({ provider }: { provider: Provider }) {
             </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setSaved(toggleSaved(provider.slug));
+            }}
+            aria-label={saved ? "Remove from saved" : "Save provider"}
+            className="absolute top-2.5 right-2.5 z-10 h-8 w-8 rounded-full bg-white/95 backdrop-blur flex items-center justify-center shadow-sm hover:scale-105 transition-transform"
+          >
+            <Heart className={`w-4 h-4 ${saved ? "fill-rose-500 text-rose-500" : "text-ink-500"}`} />
+          </button>
 
           <div className="absolute top-2.5 left-2.5 flex flex-wrap gap-1.5">
             {provider.verified && (
