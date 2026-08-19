@@ -10,6 +10,7 @@ import { getAllProviders } from "@/lib/supabase";
 import { mapDbProvider } from "@/lib/map-provider";
 import { fetchWithSWR } from "@/lib/swr-cache";
 import { Icon } from "@/components/Icon";
+import { Sparkles } from "lucide-react";
 
 type SortOption = "rating" | "name" | "reviews" | "newest";
 const PAGE_SIZE = 12;
@@ -189,6 +190,21 @@ function ProvidersContent() {
           >
             List Your Organisation →
           </motion.a>
+        </div>
+
+        <div className="flex flex-wrap gap-3 mb-8 -mt-4">
+          <a
+            href="/match"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-full px-3.5 py-1.5 hover:bg-blue-100 transition-colors"
+          >
+            <Sparkles className="w-3.5 h-3.5" /> Try AI Match — get ranked recommendations
+          </a>
+          <a
+            href="/requests"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-600 bg-orange-50 border border-orange-200 rounded-full px-3.5 py-1.5 hover:bg-orange-100 transition-colors"
+          >
+            Or post a request and let providers come to you
+          </a>
         </div>
 
         <motion.div

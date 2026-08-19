@@ -7,6 +7,7 @@ import { providers } from "@/lib/providers";
 import type { Provider } from "@/lib/providers";
 import { EnquiryModal } from "@/components/EnquiryModal";
 import { CallbackModal } from "@/components/CallbackModal";
+import { AvailabilityAlertButton } from "@/components/AvailabilityAlertButton";
 import { ReviewModal } from "@/components/ReviewModal";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ShareButtons } from "@/components/ShareButtons";
@@ -707,6 +708,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 </svg>
                 Request Callback
               </button>
+              <AvailabilityAlertButton providerSlug={provider.slug} providerName={provider.name} />
             </div>
             {/* Share buttons */}
             <ShareButtons

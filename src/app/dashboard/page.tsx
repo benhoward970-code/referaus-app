@@ -18,6 +18,7 @@ import {
 } from "@/lib/supabase";
 import { Globe } from "lucide-react";
 import { Icon } from "@/components/Icon";
+import { DashboardInsights } from "@/components/DashboardInsights";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ProviderRecord = Record<string, any>;
@@ -544,6 +545,9 @@ function DashboardContent() {
 
       {/* Item 68: Provider Ranking Indicator */}
       <RankingIndicator providerId={provider.id} avgRating={Number(avgRating)} hasReviews={reviews.length > 0} />
+
+      {/* Lead scoring (hot/warm/cold) + compliance nudges */}
+      <DashboardInsights provider={provider} enquiries={enquiries} />
 
       {/* Item 58: Quick-Edit Profile */}
       <QuickEditProfile provider={provider} onSaved={(updated) => setProvider((p) => ({ ...p, ...updated }))} />

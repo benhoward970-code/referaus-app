@@ -1,6 +1,7 @@
 import { DashboardSidebar } from '@/components/DashboardSidebar';
 import { DashboardFAB } from '@/components/DashboardFAB';
 import { DashboardGuard } from '@/components/DashboardGuard';
+import { Copilot } from '@/components/Copilot';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <DashboardSidebar />
         <div className="flex-1 min-w-0">{children}</div>
         <DashboardFAB />
+        <Copilot />
       </div>
     </DashboardGuard>
   );

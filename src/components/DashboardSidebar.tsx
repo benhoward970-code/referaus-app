@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { User, Image, MessageSquare, Star, Settings, Zap, BarChart2, Bell } from 'lucide-react';
+import { User, Image, MessageSquare, Star, Settings, Zap, BarChart2, Bell, ClipboardList } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 interface NavLink {
@@ -14,6 +14,7 @@ const links: NavLink[] = [
   { href: '/dashboard/profile', label: 'Profile', icon: User },
   { href: '/dashboard/images', label: 'Images', icon: Image },
   { href: '/dashboard/enquiries', label: 'Enquiries', icon: MessageSquare },
+  { href: '/dashboard/requests', label: 'Open Requests', icon: ClipboardList },
   { href: '/dashboard/reviews', label: 'Reviews', icon: Star },
   { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart2 },
   { href: '/dashboard/notifications', label: 'Notifications', icon: Bell },
