@@ -1,5 +1,5 @@
-const CACHE_NAME = 'referaus-v1';
-const STATIC_CACHE = 'referaus-static-v1';
+const CACHE_NAME = 'referaus-v2';
+const STATIC_CACHE = 'referaus-static-v2';
 
 const APP_SHELL = [
   '/',

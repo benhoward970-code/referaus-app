@@ -261,12 +261,12 @@ export function Navbar() {
             })}
           </div>
 
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2.5 shrink-0">
             <button
               onClick={() => {
                 window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true }));
               }}
-              className="hidden lg:flex items-center gap-1.5 text-xs text-ink-400 hover:text-gray-600 transition-colors px-2 py-1 rounded-lg border border-line-200 hover:border-gray-300 bg-gray-50"
+              className="hidden xl:flex items-center gap-1.5 text-xs text-ink-400 hover:text-gray-600 transition-colors px-2 py-1 rounded-lg border border-line-200 hover:border-gray-300 bg-gray-50"
               aria-label="Open command palette"
             >
               <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -278,21 +278,15 @@ export function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="text-sm font-medium px-2 text-ink-700 hover:text-ink-900 transition-all"
+                  className="text-sm font-medium text-ink-700 hover:text-ink-900 transition-all whitespace-nowrap"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="link-underline border-line-200 text-ink-700 hover:border-orange-500 hover:text-ink-900"
+                  className="inline-flex items-center h-10 px-4 rounded-full bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors whitespace-nowrap"
                 >
-                  Sign Up
-                </Link>
-                <Link
-                  href="/register?role=provider"
-                  className="btn-block"
-                >
-                  List Your Business
+                  Sign up
                 </Link>
               </>
             )}

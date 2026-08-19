@@ -23,6 +23,15 @@ import { TrustScore } from "@/components/TrustScore";
 
 const mockReviews: ReviewData[] = [];
 
+/** provider.location often already includes the state (e.g. "Newcastle, NSW")
+ * — avoid rendering "Newcastle, NSW, NSW" by only appending state if it's not
+ * already present in the location string. */
+function locationWithState(location: string, state?: string): string {
+  const s = state || "NSW";
+  if (!location) return s;
+  return location.toLowerCase().includes(s.toLowerCase()) ? location : `${location}, ${s}`;
+}
+
 // Item 28: Provider FAQ accordion
 const PROVIDER_FAQS = [
   {
@@ -675,7 +684,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <span className="text-sm text-orange-500 font-medium">{provider.category}</span>
               <span className="hidden sm:inline text-ink-300">|</span>
-              <span className="text-sm text-ink-500">{provider.location}, {provider.state || "NSW"}</span>
+              <span className="text-sm text-ink-500">{locationWithState(provider.location, provider.state)}</span>
               <span className="hidden sm:inline text-ink-300">|</span>
               <div className="flex items-center gap-1">
                 {[1,2,3,4,5].map((star) => (
@@ -787,7 +796,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.15, duration: prefersReduced ? 0 : 0.5 }} className="bg-white rounded-2xl border border-line-200 overflow-hidden">
               <div className="px-8 pt-8 pb-4">
                 <h2 className="text-xl font-bold text-ink-900">Location</h2>
-                <p className="text-sm text-ink-500 mt-1">{provider.location}, {provider.state || "NSW"}, Australia</p>
+                <p className="text-sm text-ink-500 mt-1">{locationWithState(provider.location, provider.state)}, Australia</p>
               </div>
               <div className="relative bg-line-100 h-56 flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 opacity-30" style={{backgroundImage: "linear-gradient(#c8d6e5 1px, transparent 1px), linear-gradient(90deg, #c8d6e5 1px, transparent 1px)", backgroundSize: "40px 40px"}} />
@@ -797,7 +806,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                   </div>
                   <span className="text-sm font-semibold text-ink-700 bg-white px-3 py-1 rounded-full shadow">{provider.location}</span>
                   <a
-                    href={`https://maps.google.com/?q=${encodeURIComponent(provider.name + " " + provider.location + " " + (provider.state || "NSW"))}`}
+                    href={`https://maps.google.com/?q=${encodeURIComponent(provider.name + " " + locationWithState(provider.location, provider.state))}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs hover:underline"
@@ -981,7 +990,7 @@ export default function ProviderDetail({ params }: { params: Promise<{ slug: str
                 )}
                 <div className="flex items-center gap-3 text-ink-700">
                   <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                  {provider.location}, {provider.state || "NSW"}
+                  {locationWithState(provider.location, provider.state)}
                 </div>
               </div>
               {provider.verified && (
